@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="col-md-3 menu d-none d-md-block scroll">
+        <a class="h5" href="/articles">Feature</a>
+        <a class="h5" href="/articles/list">List</a>
+        <ol>
+            <li><a href="/articles/list">A - Z</a></li>
+            <li><a href="/articles/categories">Category</a></li>
+        </ol>
+        <a href="/articles/new">Add Article</a>
+    </div>
+        
+    <div class="col-md-9 col-lg-6 offset-md-3">
+        <div class="card bg mb-3">
+            <h1 class="card-title title-1 text-center"><%= article.name %></h1>      
+            <% if (article.image.key === 'none') { %> 
+                <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Upload Image for Article</a></p>
+            <% } %> 
+            <div class="card-body justify">        
+                <% if (article.image.key === 'none') { %> 
+                    <img src="/assets/images/articles.jfif" alt="" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
+                <% } else { %> 
+                    <img class='card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/article-img/' + article.image.key.replaceAll(" ", "+") %> alt="">
+                <% } %>           
+                <small id=<%= article._id %> class="text ta lh-lg"><br><br><span class="m-2">Loading text...</span></small>
+                <p class="small text-muted mt-3 text-end"><em><%= article.source %> </em></p>
+
+            </div>           
+        </div>
+    </div>
+
+    <script>let route; let xhttp; const idLength ={};</script>
+    <script>idLength[<%- JSON.stringify(article._id) %>] = 0;</script>
+    <script src="/javascripts/get_story.js"></script>
+
+    <script>
+        const pageTitle = "Articles";
+    </script>

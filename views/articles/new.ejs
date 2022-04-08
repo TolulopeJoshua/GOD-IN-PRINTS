@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate') %> 
+<div class="row">
+    <div class="col-md-3 menu d-none d-md-block scroll">
+        <a class="h5" href="/articles">Feature</a>
+        <a class="h5" href="/articles/list">List</a>
+        <ol>
+            <li><a href="/articles/list">A - Z</a></li>
+            <li><a href="/articles/categories">Category</a></li>
+        </ol>
+        <a href="/articles/new">Add Article</a>
+    </div>
+        
+    <div class="col-md-9 col-lg-6 offset-md-3 ps-5">
+        <h1 class="text-center">Add an Article</h1>
+        <form action="/articles/new" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="name">Title:</label>
+                <input class="form-control" type="text" id="name" name="article[name]" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="role">Category:</label>
+                <select class="form-select" id="role" name="article[role]" required>
+                    <option></option>
+                    <% for (let category of categories) { %> 
+                        <option value="<%= category %>"><%= category %></option>
+                    <% } %> 
+                </select>
+                <!-- <input class="form-control" type="text" id="role" name="article[role]" placeholder="e.g Prayer, Faith" required> -->
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="story">Text</label>
+                <textarea class="form-control" name="article[story]" id="story" cols="40" rows="20" required></textarea>
+            </div>
+            <div class="mb-5">
+                <label class="form-label" for="story">Source (<em>name or url</em>):</label>
+                <input class="form-control" type="text" id="source" name="article[source]" required>
+            </div>
+            <div class="mb-3">                
+                <button class="btn btn-success">Save Article</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Articles";
+</script>

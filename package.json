@@ -1,0 +1,31 @@
+{
+  "name": "worldchristianlibrary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tolulope Joshua",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1053.0",
+    "body-parser": "^1.19.1",
+    "browser-env": "^3.3.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^10.0.0",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.2",
+    "express-mongo-sanitize": "^2.1.0",
+    "express-session": "^1.17.2",
+    "fs": "^0.0.1-security",
+    "jimp": "^0.16.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.1.5",
+    "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
+    "nodemon": "^2.0.15",
+    "sharp": "^0.29.3",
+    "xhr2": "^0.2.1"
+  } 
+}

@@ -1,0 +1,49 @@
+<% layout('layouts/boilerplate')%>
+<div class="row">
+    <div class="col-md-3 col-lg-2 menu d-none d-md-block scroll">
+        <a class="h5" href="/biographies">Feature</a>
+        <a class="h5" href="/biographies/list">List</a>
+        <ol>
+            <li><a href="/biographies/list">A - Z</a></li>
+            <li><a href="/biographies/list">Birth Year</a></li>
+            <li><a href="/biographies/list">Role/Ministry</a></li>
+        </ol>
+        <a href="/biographies/new">Add Biography</a>
+    </div>
+        
+        
+        <div class="offset-md-3 offset-lg-2 col-md-3 col-lg-2 card text-center">
+            <% if (biography.image.key === 'none') { %> 
+                <img src="/assets/images/<%= biography.gender %>.png" alt="" class="img-fluid img-size"> <p></p>
+                <p class="ms-auto me-auto"><a href="/biographies/<%= biography._id %>/imageUpload">Upload Picture for Biography</a></p>
+            <% } else { %> 
+                <img class='card-img-top rounded-circle img-thumbnail image-size' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biography.image.key.replaceAll(" ", "+") %> alt="">
+            <% } %> 
+            <div class="card-body p-1">
+                <h5 class="card-title"></h5>
+                <p class="card-text text-muted"> </p>
+                <p> </p>
+                <ul class="list-group list-group-flush">
+                    <li class="h3 list-group-item"><%= biography.name %></li>
+                    <li class="list-group-item text-muted"><%= biography.role %></li>
+                    <li class="list-group-item">(<%= biography.birthYear %> - <%= biography.deathYear %>)</li>
+                </ul>
+            </div>
+        </div>
+        <script> let route; let xhttp; const idLength = {}; </script>
+        <div class="col-md-6 col-lg-5 card bg p-1">
+            <div class="card-body">
+                <% const title = biography.gender === 'female' ? 'Her Story' : 'His Story' %> 
+                <h1 class="card-title text-center title-1 display-3"><%= title %> </h3>
+                <p id="<%= biography._id %>" class="card-text lh-lg small text ta justify"><span class="text-muted ps-auto pe-auto my-5">Loading...</span></p>
+                <p class="small text-muted mt-3 text-end"><em><%= biography.source %> </em></p>
+                <script>idLength[<%- JSON.stringify(biography._id) %>] = 0;</script>
+                <script src="/javascripts/get_story.js"></script>
+            </div>           
+        </div>
+</div>
+
+<script>
+    const pageTitle = "Biographies";
+</script>
+

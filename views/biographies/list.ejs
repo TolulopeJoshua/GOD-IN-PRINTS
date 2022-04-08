@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/biographies">Feature</a>
+    <a class="h5" href="/biographies/list">List</a>
+    <ol>
+        <li><a href="/biographies/list?q=alpha">A - Z</a></li>
+        <li><a href="/biographies/list?q=birth">Birth Year</a></li>
+        <li><a href="/biographies/list?q=role">Role/Ministry</a></li>
+    </ol>
+    <a href="/biographies/new">Add Biography</a>
+</div>
+
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h3 class="text-center m-3"><%= category %> </h3>
+    <% const len = biographies.length < 10 ? biographies.length : 10; %> 
+    <script> let route; let xhttp; const idLength = {}; </script>
+    <% for (i = 0; i < len; i++) { %> 
+        <div class="card rounded-pill mb-3">
+            <div class="row">
+                <% if (biographies[i]) { %> 
+                <div class="col-4 col-lg-3 d-flex align-content-center">
+                    <% if (biographies[i].image.key === 'none') { %> 
+                        <img class="card-img-top rounded-circle img-thumbnail m-3" src="/assets/images/<%= biographies[0].gender %>.png" alt="" > <p></p>
+                    <% } else { %> 
+                        <img class='card-img-top rounded-circle img-thumbnail m-3' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[i].image.key.replaceAll(" ", "+") %> alt="">
+                    <% } %> 
+                </div>
+                <div class="col-8 p-4">
+                    <a class="stretched-link text-decoration-none" href="/biographies/<%= biographies[i]._id %> "><h5 class="card-title"><%= biographies[i].name %>&nbsp;&nbsp;<span class="fs-6 fst-italic text-dark">(<%= biographies[i].role %>)</span></h5></a>
+                    <p class="text-muted"> (<%= biographies[i].birthYear %> - <%= biographies[i].deathYear %>)  </p>
+                    <small id="<%= biographies[i]._id %>" class="card-text"><span class="text-muted">Loading text...</span></small><br>
+
+                    <script>idLength[<%- JSON.stringify(biographies[i]._id) %>] = 120;</script>
+                </div>
+                <% } %> 
+            </div>
+        </div>
+    <% } %> 
+</div>
+
+<script>
+    const pageTitle = "Biographies";
+</script>
+
+<script src="/javascripts/get_story.js"></script>

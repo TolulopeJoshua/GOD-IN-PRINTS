@@ -1,0 +1,62 @@
+<% layout('layouts/boilerplate') %> 
+<div class="row">
+    <div class="col-md-3 menu d-none d-md-block scroll">
+        <a class="h5" href="/biographies">Feature</a>
+        <a class="h5" href="/biographies/list">List</a>
+        <ol>
+            <li><a href="/biographies/list">A - Z</a></li>
+            <li><a href="/biographies/list">Birth Year</a></li>
+            <li><a href="/biographies/list">Role/Ministry</a></li>
+        </ol>
+        <a href="/biographies/new">Add Biography</a>
+    </div>
+    
+    <div class="col-md-9 col-lg-6 offset-md-3">
+        <h1 class="text-center">Add Biography</h1>
+        <form action="/biographies/new" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="name">Name:</label>
+                <input class="form-control" type="text" id="name" name="biography[name]" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="role">Role</label>
+                    <input class="form-control" type="text" id="role" name="biography[role]" placeholder="e.g Singer" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="gender">Gender</label>
+                    <select class="form-select form-select-lg" name="biography[gender]" id="gender" required>
+                        <option></option>
+                        <option value="male">male</option>
+                        <option value="female">female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="birthYear">Year of birth:</label>
+                    <input class="form-control" type="Number" id="birthYear" name="biography[birthYear]" required>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="deathYear">Year of death: <i>(optional)</i></label>
+                    <input class="form-control" type="Number" id="deathYear" name="biography[deathYear]">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="story">Story</label>
+                <textarea class="form-control" name="biography[story]" id="story" cols="40" rows="20" required></textarea>
+            </div>
+            <div class="mb-5">
+                <label class="form-label" for="story">Source (<em>name or url</em>):</label>
+                <input class="form-control" type="text" id="source" name="biography[source]" required>
+            </div>
+            <div class="mb-3">                
+                <button class="btn btn-success">Save biography</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Biographies";
+</script>

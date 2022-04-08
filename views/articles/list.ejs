@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate')%>
+
+
+<!-- <div id="cluster-map"></div> -->
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/articles">Feature</a>
+    <a class="h5" href="/articles/list">List</a>
+    <ol>
+        <li><a href="/articles/list">A - Z</a></li>
+        <li><a href="/articles/categories">Category</a></li>
+    </ol>
+    <a href="/articles/new">Add Article</a>
+</div>
+    
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h3 class="mt-5 text-center"><%= category %> </h3>
+
+    <ul class="mb-3">
+        <script>let route; let xhttp; const idLength ={};</script>
+        <% for (let article of articles) { %> 
+        <li class="my-5">
+            <div class="card article-list p-4 shadow">
+                <a class="streched-link h5 py-2" href="/articles/<%= article._id %>"><%= article.name %> </a>
+                <small id=<%= article._id %> class='text-truncate'><span class="text-muted">loading...</span></small>
+                
+                <script>idLength[<%- JSON.stringify(article._id) %>] = 120;</script>
+            </div>
+        </li>
+        <% } %> 
+    </ul>
+
+</div>
+
+
+<script src="/javascripts/get_story.js"></script>
+<script>
+    const pageTitle = "Articles";
+</script>

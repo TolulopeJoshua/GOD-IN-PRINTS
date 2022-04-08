@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate')%>
+
+
+<!-- <div id="cluster-map"></div> -->
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/articles">Feature</a>
+    <a class="h5" href="/articles/list">List</a>
+    <ol>
+        <li><a href="/articles/list">A - Z</a></li>
+        <li><a href="/articles/categories">Category</a></li>
+    </ol>
+    <a href="/articles/new">Add Article</a>
+</div>
+    
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h3 class="p-3 mx-4">Categories</h3>
+
+    <% for (let category of categories) { %> 
+        <ul class="mb-3">
+            <li><a class="btn btn-lg" href="/articles/category?category=<%= category %>"><%= category %> </a></li>
+        </ul>
+    <% } %> 
+
+</div>
+
+<script>
+    const pageTitle = "Articles";
+</script>

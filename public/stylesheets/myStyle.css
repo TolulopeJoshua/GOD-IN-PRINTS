@@ -1,0 +1,232 @@
+body {
+    background-color: #e8eff5;
+}
+
+table, th, td {
+    border: 10px solid #e8eff5;
+    border-collapse: collapse;
+    background-color: #F6FBFF;
+}
+
+tr {
+    min-height: 200px;
+}
+
+td {
+    min-width: 15rem;
+    max-width: 20rem;
+}
+
+td img {
+    max-width: 100px;
+}
+td div.container p {
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.book-image {
+    max-width: 15rem;
+    margin: auto;
+}
+
+.bio-image {
+    max-width: 20rem;
+    margin: auto;
+}
+
+.article-image {
+    max-width: 25rem;
+    margin: auto;
+}
+
+.text, .ta {
+    white-space: pre-line;
+}
+
+.bg {
+    background-image: url("/assets/images/burningSheet.jpeg");
+    background-size: 50% 75%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-attachment: fixed;
+}
+
+.custom-bg {
+    background: #2a2f4a;
+}
+
+.title-1 {
+    font-family: 'Neonderthaw', cursive;
+    text-shadow: 0px 0px 5px black;
+    text-decoration: underline;
+    padding: 1em;
+}
+
+.text {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.book-tab {
+    border-width: 3px;
+    border-radius: 0px 0px 100px 100px;
+}
+
+.bible-tab {
+    opacity: 0.4;
+    border-radius: 75px;
+}
+/* 
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  } */
+
+.habit-title, .growth-title {
+    background-color: #F6FBFF;
+    margin: 10px;
+}
+
+.text-white {
+    text-shadow: 1px 1px 3px rgb(114, 37, 37);
+}
+
+.menu {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-right: 1px solid #ccc;
+    padding: 2% 2%;
+    position:fixed;
+    height: calc(100vh - 170px);
+    max-width: max(16em, 15%);
+}
+
+.menu>a {
+    color: #666;
+    display: block;
+    font-weight: bolder;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.menu-list, .menu li a {
+    color: #666;
+    display: block;
+    font-size: small;
+    padding-bottom: 10px;
+}
+
+.menu-list:hover, .menu a:hover, .menu li a:hover {
+    color: #999;
+    cursor: pointer;
+}
+
+.menu a:active, .menu li a:active {
+    color: #ccc;
+}
+
+.scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 170px);
+}
+
+.image-size {
+    max-width: 15em;
+    align-self: center;
+}
+
+.card-size {
+    max-width: 30em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.bible {
+    background-image: url('/assets/images/bible.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.footer {
+    margin-top: 300px;
+    margin-bottom: 100px;
+}
+
+.footer-item {
+    max-width: 350px;
+    margin-bottom: 100px;
+}
+
+.foot-note {
+    margin: 5px;
+    color: #242943;
+}
+
+.dotted-under {
+    color: inherit; 
+    border-bottom: 1px dotted;
+}
+
+.advert {
+    background-color: blue;
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    box-shadow: 8px 8px 10px gray;
+    transition: all 1s;
+}
+
+@keyframes fade {
+    0%   {opacity: 1.0;}
+    20%  {opacity: 0.1;}
+    40%  {opacity: 1.0;}
+    50%  {filter: saturate(4);}
+    100% {filter: saturate(1);}
+}
+
+.fade-animate {
+    box-shadow: 8px 8px 10px grey;
+    animation-name: fade;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+}
+
+.navImage {
+    width: 40px;
+    height: 40px;
+}
+
+.navbar-brand {
+    text-shadow: 0px 0px 3px red, 0px 0px 5px white;
+}
+
+.inherit-color {
+    color: inherit;
+}
+
+.article-list {
+    border-radius: 50px 0px 50px 0px;
+    transform: skewX(-10deg);
+}
+
+#contact, #footer {
+    background: #242943;
+}

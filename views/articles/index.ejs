@@ -1,0 +1,39 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="row">
+    <div class="col-md-3 menu d-none d-md-block scroll">
+        <a class="h5" href="/articles">Feature</a>
+        <a class="h5" href="/articles/list">List</a>
+        <ol>
+            <li><a href="/articles/list">A - Z</a></li>
+            <li><a href="/articles/categories">Category</a></li>
+        </ol>
+        <a href="/articles/new">Add Article</a>
+    </div>
+    
+    <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+        <table class="">
+            <% for (i = 0; i < 2; i++) { %> 
+                <tr>
+                    <% for (j = 0; j < 5; j++) { %> 
+                        <td class="">
+                            <% const index = j + i * 5 %>  
+                            <h5 class="text-center"><%= categories[index] %> </h5>
+                            <ul>
+                            <% for (let article of articles) { %> 
+                                <% if (article.role === categories[index]) { %> 
+                                    <li><small><a class="text-decoration-none" href="/articles/<%= article._id %> "><%= article.name %> </a></small> </li>
+                                <% } %> 
+                            <% } %> 
+                            </ul>
+                        </td>
+                    <% } %> 
+                </tr>
+            <% } %> 
+        </table>
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Articles";
+</script>
