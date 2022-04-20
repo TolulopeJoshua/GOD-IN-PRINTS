@@ -55,7 +55,7 @@ router.post('/new', async (req, res) => {
     await putImage(biography.story, myBuffer);
 
     await biography.save();
-    req.flash('success', `${biography.name}'s biography saved. Kindly upload picture`);
+    req.flash('success', `${biography.name.toUpperCase()}'s biography saved. Kindly upload picture`);
     res.redirect(`/biographies/${biography._id}/imageUpload`)
 })
 

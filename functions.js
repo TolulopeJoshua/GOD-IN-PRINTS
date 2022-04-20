@@ -13,7 +13,7 @@ aws.config.update({
 
 const s3 = new aws.S3(); 
 
-module.exports.getImage = async (key, folder = '') => {
+module.exports.getImage = async (key) => {
     const data =  s3.getObject(
         {
             Bucket: `godinprintsdocuments`,
@@ -24,7 +24,7 @@ module.exports.getImage = async (key, folder = '') => {
     return data;
 }
 
-  module.exports.putImage = async (key, body, folder = '') => {
+  module.exports.putImage = async (key, body) => {
     //   console.log(key);
       const data =  s3.putObject(
           {
@@ -48,9 +48,9 @@ module.exports.s3 = new aws.S3();
 module.exports.upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'godinprintsdocuments/book',
+        bucket: 'godinprintsdocuments',
         key: function (req, file, cb) {
-            // console.log(file);
+            console.log(req.file);
             cb(null, 'book/' + Date.now().toString() + '_' + file.originalname); //use Date.now() for unique file keys
         },
     })

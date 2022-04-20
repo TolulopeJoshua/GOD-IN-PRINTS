@@ -98,8 +98,11 @@
 								<section>
 									<% if (myBio) { %> 
 									<a href="biographies/<%= myBio._id %>" class="image">
-										<!-- <img src="images/pic09.jpg" alt="" data-position="top center" /> -->
-										<img class='bio-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myBio.image.key.replaceAll(" ", "+") %> alt=""> 
+										<% if (myBio.image.key === 'none') { %> 
+											<img src="/assets/images/<%= myBio.gender %>.png" alt="" class="bio-image"> <p></p>
+										<% } else { %> 
+											<img class='bio-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myBio.image.key.replaceAll(" ", "+") %> alt="">
+										<% } %> 
 									</a>
 									<div class="content">
 										<div class="inner">
@@ -117,7 +120,13 @@
 								<section>
 									<% if (myArt) { %> 
 									<a href="articles/<%= myArt._id %>" class="image">
-										<img class="article-image" src="assets/images/articles.jfif" alt="" />
+
+										<% if (myArt.image.key === 'none') { %> 
+											<img class="article-image" src="assets/images/articles.jfif" alt="" />
+										<% } else { %> 
+											<img class='article-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myArt.image.key.replaceAll(" ", "+") %> alt="">
+										<% } %> 
+									
 									</a>
 									<div class="content">
 										<div class="inner">

@@ -14,11 +14,11 @@
         <div class="card text-center mb-3 card-size">
             <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
             <div class="card-body">
-                <h5 class="card-title"><%= book.title%></h5>
-                <p class="card-text text-capitalize"><em>by </em><%= book.author.toLowerCase() %></p>
+                <h5 class="card-title"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
+                <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted text-capitalize"><em>About: <%= book.keywords.toLowerCase() %></em></li>
+                <!-- <li class="list-group-item text-muted text-capitalize"><em>About: book.keywords.toLowerCase()</em></li> -->
                 <li class="list-group-item"><em>Size: </em><%=Math.round(book.document.size/1000)%> kb</li>
             </ul>
             <div class="card-body">

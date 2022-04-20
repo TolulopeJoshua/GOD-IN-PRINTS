@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { string } = require('sharp/lib/is');
 const Schema = mongoose.Schema;
 // const Review = require('./review')
 
@@ -7,22 +8,18 @@ const opts = {toJSON: {virtuals: true}};
 const BookScema = new Schema({
     title: String,
     author: String,
-    keywords: String,
-    contributor: { type: String, default: 'God-in-prints' },
-    filetype: { type: String, default: '.pdf' },
+    // keywords: String,
+    filetype: string,
     image: {
         key: String,
-        folder: String,
     },
     document: {
         key: String,
-        size: Number,
-        folder: String,
+        size: Number
     },
     datetime: {
-        type: Date, 
-        enum: Date.now(),
-        default: new Date(2022, 02, 25)
+        type: Date,
+        default: new Date(2022, 03, 15)
     },
     // contributor: {
     //     type: Schema.Types.ObjectId,

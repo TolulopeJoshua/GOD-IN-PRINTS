@@ -9,8 +9,8 @@
   "author": "Tolulope Joshua",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1053.0",
-    "body-parser": "^1.19.1",
+    "aws-sdk": "^2.1116.0",
+    "body-parser": "^1.20.0",
     "browser-env": "^3.3.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^10.0.0",
@@ -25,7 +25,11 @@
     "multer": "^1.4.4",
     "multer-s3": "^2.10.0",
     "nodemon": "^2.0.15",
+    "pdf-poppler": "^0.2.1",
     "sharp": "^0.29.3",
     "xhr2": "^0.2.1"
-  } 
+  },
+  "devDependencies": {
+    "pdf-to-png-converter": "^0.2.2"
+  }
 }

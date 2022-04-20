@@ -22,7 +22,7 @@
                             <img class='mx-5 my-2' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image.key.replaceAll(" ", "+") %> alt=""> 
                             </a>
                             <p><small class="text-muted text-capitalize"><%= books[index].author.toLowerCase() %> </small></p>
-                            <a class="text-decoration-none text-capitalize" href="/books/<%=books[index]._id%>"><strong><%= books[index].title.toLowerCase() %> </strong></a>
+                            <a class="text-decoration-none text-capitalize d-block text-truncate" href="/books/<%=books[index]._id%>"><strong><%= books[index].title.toLowerCase() %> </strong></a>
                             <% } %> 
                         </td>
                     <% } %> 

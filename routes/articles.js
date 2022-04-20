@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family Life', 
                     'Spiritual Growth', 'Commitment/Consecration', 'Grace/Conversion', 
-                    'Afterlife', 'Stories/Parables', 'Personal/Financial Development', 'Biography', 'Others'];
+                    'Afterlife', 'Personal/Financial Development', 'Biography', 'Others'];
 
 
 router.get('/', async (req, res) => {
@@ -53,7 +53,7 @@ router.post('/new', async (req, res) => {
 
 
     await article.save();
-    req.flash('success', `${article.name} saved successfully.`);
+    req.flash('success', `${article.name.toUpperCase()} saved successfully.`);
     res.redirect(`/articles/${article._id}`)
 })
 
