@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Doc = require('../models/doc')
 
-const {getImage, putImage, upload0} = require("../functions")
+const {getImage, putImage, upload0, paginate} = require("../functions")
 
 const fs = require('fs');
 
@@ -14,14 +14,15 @@ const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family Life',
 
 router.get('/', async (req, res) => {
     const articles = await Doc.find({docType: 'article'});
-    // console.log(articles)
     res.render('articles/index', {categories, articles})
 })
 
 router.get('/list', async (req, res) => {
+
     const articles = await Doc.find({docType: 'article'}).sort({name : 1});
-    // console.log(articles)
-    res.render('articles/list', {category : 'All Articles', articles})
+    const [pageDocs, pageData] = paginate(req, articles)
+
+    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData})
 })
 
 router.get('/categories', (req, res) => {
@@ -32,7 +33,9 @@ router.get('/category', async (req, res) => {
     const {category} = req.query;
     // console.log(category);
     const articles = await Doc.find({docType: 'article', role: category}).sort({name : 1});
-    res.render('articles/list', {category, articles});
+    const [pageDocs, pageData] = paginate(req, articles)
+
+    res.render('articles/list', {category, articles: pageDocs, pageData});
 })
 
 router.get('/new', (req, res) => {
@@ -64,7 +67,9 @@ router.get('/search', async (req, res) => {
     articles.forEach((article) => {
         article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
     })
-    res.render('articles/list', {category: `Search🔍: ${item}`, articles: result});
+    const [pageDocs, pageData] = paginate(req, result)
+
+    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData});
 })
 
 router.get('/:id', async (req, res) => {

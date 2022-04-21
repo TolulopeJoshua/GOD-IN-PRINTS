@@ -5,7 +5,7 @@ const Book = require('../models/book');
 
 const fs = require('fs');
 
-const {getImage, putImage, encode, s3, upload, upload0} = require("../functions")
+const {getImage, putImage, encode, s3, upload, upload0, paginate} = require("../functions")
 
 const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family Life', 
                     'Spiritual Growth', 'Commitment/Consecration', 'Grace/Conversion', 
@@ -24,8 +24,9 @@ router.get('/', async (req, res) => {
 
 router.get('/list', async (req, res) => {
     const books = await Book.find({filetype: 'pdf'}).sort({title : 1});
-    // console.log(books.length)
-    res.render('books/list', {category: 'All Books', books})
+    const [pageDocs, pageData] = paginate(req, books)
+
+    res.render('books/list', {category: 'All Books', books: pageDocs, pageData})
 });
 
 router.get('/categories', (req, res) => {
@@ -43,7 +44,9 @@ router.get('/category', async (req, res) => {
             if (title.includes(word) && !books.includes(book)) {books.push(book)};
         };
     };
-    res.render('books/list', {category, books});
+    const [pageDocs, pageData] = paginate(req, books)
+
+    res.render('books/list', {category, books: pageDocs, pageData})
 })
 
 router.get('/new', (req, res) => {
@@ -149,50 +152,6 @@ router.post('/adminUpload', upload.array('documents'), async (req, res) => {
     }
     res.send('SUCCESS');
 })
-
-const pdfConverter = require('pdf-poppler');
-router.get('/pdfImg', async (req, res) => {
-
-    const books = await Book.find({}).skip(500).limit(500);
-    // console.log(books)
-    for (const book of books) {
-        if (book.filetype === 'pdf' && book.image.key === undefined) {
-
-            book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -3) + 'jpg';
-            const pdfPath = `C:\\Users\\USER\\Desktop\\WhatsApp Documents\\${book.title}`;
-            let option = {
-                quality : 0.2,
-                format : 'jpeg',
-                out_dir : 'uploads',
-                out_prefix : path.basename(pdfPath, path.extname(pdfPath)),
-                page : 1
-            }
-
-            await pdfConverter.convert(pdfPath, option)
-
-            let files = await fs.readdirSync('uploads')
-            const image = await Jimp.read(`uploads/${files[0]}`);
-
-            await image.resize(640, Jimp.AUTO);
-            await image.quality(20);
-            await image.writeAsync('output.jpg');
-            
-            const myBuffer = await fs.readFileSync('output.jpg');
-            await putImage(book.image.key, myBuffer);
-
-            book.author = ' ';
-
-            await book.save(); 
-
-            for (const file of files) {
-              fs.unlinkSync(path.join('uploads', file));
-            }
-        }
-    }
-
-    res.send('SUCCESS'); 
-
-})
  
 router.get('/search', async (req, res) => {
     const item = req.query.search;
@@ -202,7 +161,9 @@ router.get('/search', async (req, res) => {
     books.forEach((book) => {
         book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
     })
-    res.render('books/list', {category: `Search🔍: ${item}`, books: result});
+    const [pageDocs, pageData] = paginate(req, result)
+
+    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData});
 })
 
 router.get('/:id', async (req, res) => {
@@ -230,6 +191,7 @@ router.get('/:id/imageUpload', (req, res) => {
 })
 
 var Jimp = require('jimp');
+const pdfConverter = require('pdf-poppler');
 const util = require('util');
 const path = require('path');
 const { resolve } = require('path');

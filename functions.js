@@ -66,3 +66,22 @@ module.exports.upload0 = multer({ storage: multer.diskStorage({
     })
 });
 
+module.exports.paginate = (req, docs) => {
+
+    let page = Number(req.query.page) || 1; let toSkip = (page - 1) * 10;
+    const pageDocs = docs.splice(toSkip, 10)
+
+    const pageData = {};
+    pageData.previous = page === 1 ? false : true;  
+    pageData.next = page < (docs.length / 10 + 1) ? true : false;
+    pageData.page = page;
+    pageData.pages = [page];
+    pageData.previous && pageData.pages.unshift(Number(page) - 1);
+    pageData.next && pageData.pages.push(Number(page) + 1);
+    pageData.queryString = '?';
+    for (const q in req.query) {
+        q !== 'page' && (pageData.queryString += q.replaceAll('%20', ' ') + '=' + req.query[q] + '&');
+    }
+    return [pageDocs, pageData];
+}
+

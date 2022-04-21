@@ -8,7 +8,7 @@ const multer = require('multer');
 const sharp = require("sharp");
 const fs = require('fs');
 
-const {getImage, encode, putImage, upload0} = require("../functions")
+const {getImage, encode, putImage, upload0, paginate} = require("../functions")
 
 
 router.use(express.static("./uploads"));
@@ -33,9 +33,10 @@ router.get('/list', async (req, res) => {
         default :
             searchObj = {name: 1}
     }
-    const biographies = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 10 } }]).sort(searchObj);
-    // console.log(biographies);
-    res.render('biographies/list', {category: 'Bio Gallery', biographies})
+    const biographies = await Doc.find({docType: 'biography'}).sort(searchObj);
+    const [pageDocs, pageData] = paginate(req, biographies)
+
+    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData})
 })
 
 router.get('/new', (req, res) => {
@@ -66,7 +67,9 @@ router.get('/search', async (req, res) => {
     biographies.forEach((biography) => {
         biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
     })
-    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: result});
+    const [pageDocs, pageData] = paginate(req, result)
+
+    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData});
 })
 
 router.get('/:id', async (req, res) => {
