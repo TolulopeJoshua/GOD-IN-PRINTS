@@ -34,8 +34,12 @@
 							<li><a href="/about">About us</a></li>
 						</ul>
 						<ul class="actions stacked">
-							<li><a href="#" class="button primary fit">Register</a></li>
-							<li><a href="#" class="button fit">Log In</a></li>
+						<% if (!currentUser) { %> 
+							<li><a href="/register" class="button primary fit">Register</a></li>
+							<li><a href="/login" class="button fit">Log In</a></li>
+						<% } else { %> 
+							<li><a href="/logout" class="button fit">Log Out</a></li>
+						<% } %> 
 						</ul>
 					</nav>
 

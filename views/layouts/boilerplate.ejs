@@ -36,7 +36,7 @@
 
     <script>
       const navId = pageTitle.toLowerCase();
-      document.getElementById('viewing').innerText += pageTitle;
+      document.getElementById('viewing').innerText += '  >  ' + pageTitle;
       document.getElementById(navId).classList.add('active');
       document.getElementById('searchForm').action = `/${pageTitle}/search`;
       if (navId === 'growth' || navId === 'resources')  {

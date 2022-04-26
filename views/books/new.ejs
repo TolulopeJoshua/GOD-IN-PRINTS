@@ -1,50 +1,42 @@
 <% layout('layouts/boilerplate') %> 
-<div class="row">
-    <div class="col-md-3 menu d-none d-md-block scroll">
-        <a class="h5" href="/books">Feature</a>
-        <a class="h5" href="/books/list">List</a>
-        <ol>
-            <li><a href="/books/list">A - Z</a></li>
-            <li><a href="/books/categories">Category</a></li>
-        </ol>
-        <a href="/books/new">Add Book</a>
-    </div>
-    
-    <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-        <form action="/books/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="book[title]" required>
-                <div class="valid-feedback">
-                    Looks good!
-                  </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="author">Author</label>
-                <input class="form-control" type="text" id="author" name="book[author]" required>
-                <div class="valid-feedback">
-                    Looks good!
-                  </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="document">Pdf File</label>
-                <input class="form-control" type="file" id="document" name="document" required>
-                <div class="valid-feedback">
-                    Looks good!
-                  </div>
+
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/books">Feature</a>
+    <a class="h5" href="/books/list">List</a>
+    <ol>
+        <li><a href="/books/list">A - Z</a></li>
+        <li><a href="/books/categories">Category</a></li>
+    </ol>
+    <a href="/books/new">Add Book</a>
+</div>
+
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+    <form action="/books/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" type="text" id="title" name="book[title]" required>
+            <div class="valid-feedback">
+                Looks good!
                 </div>
-            <div class="mb-3">
-                <!-- <label class="form-label" for="path">File Path</label> -->
-                <input class="form-control" type="hidden" id="path" name="path" placeholder="" readonly required>
-                <!-- <div class="valid-feedback">
-                    Looks good!
-                  </div> -->
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="author">Author</label>
+            <input class="form-control" type="text" id="author" name="book[author]" required>
+            <div class="valid-feedback">
+                Looks good!
+                </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="document">Pdf File</label>
+            <input class="form-control" type="file" id="document" name="document" required>
+            <div class="valid-feedback">
+                Looks good!
+                </div>
             </div>
-            <div class="mb-3 text-center">                
-            <button class="btn-lg btn-success">Save</button>
-            </div>
-        </form>
-    </div>
+        <div class="mb-3 text-center">                
+        <button class="btn-lg btn-success">Save</button>
+        </div>
+    </form>
 </div>
 
 <script>

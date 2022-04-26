@@ -27,19 +27,18 @@ const DocSchema = new Schema({
     },
     dateTime: {
         type: Date, 
-        enum: Date.now(),
         default: new Date(2022, 02, 25)
     },
-    // reviews: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'Review'
-    //     }
-    // ],
-    // contributor: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User'
-    // }
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ],
+    contributor: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     isApproved: {
         type: Boolean,
         default: false

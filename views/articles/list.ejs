@@ -12,18 +12,19 @@
     <a href="/articles/new">Add Article</a>
 </div>
     
+<script>let route; let xhttp; const idLength ={};</script>
+
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h3 class="mt-5 text-center"><%= category %> </h3>
 
     <ul class="mb-3">
-        <script>let route; let xhttp; const idLength ={};</script>
         <% for (let article of articles) { %> 
         <li class="my-5">
             <div class="card article-list p-4 shadow">
                 <a class="streched-link h5 py-2" href="/articles/<%= article._id %>"><%= article.name %> </a>
                 <small id=<%= article._id %> class='text-truncate'><span class="text-muted">loading...</span></small>
                 
-                <script>idLength[<%- JSON.stringify(article._id) %>] = 120;</script>
+                <script>idLength['<%= (article._id) %>'] = 120;</script>
             </div>
         </li>
         <% } %> 
@@ -32,8 +33,8 @@
 <%- include('../partials/paginate') %> 
 </div>
 
-
 <script src="/javascripts/get_story.js"></script>
+
 <script>
     const pageTitle = "Articles";
 </script>

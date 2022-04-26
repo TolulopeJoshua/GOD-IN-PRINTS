@@ -1,35 +1,34 @@
 <% layout('layouts/boilerplate')%>
-<div class="row">
-    <div class="col-md-3 menu d-none d-md-block scroll">
-        <a class="h5" href="/books">Feature</a>
-        <a class="h5" href="/books/list">List</a>
-        <ol>
-            <li><a href="/books/list">A - Z</a></li>
-            <li><a href="/books/categories">Category</a></li>
-        </ol>
-        <a href="/books/new">Add Book</a>
-    </div>
-    
-    <div class="col-md-6 col-lg-4 offset-md-4 overflow-auto">
-        <div class="card text-center mb-3 card-size">
-            <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
-            <div class="card-body">
-                <h5 class="card-title"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
-                <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
-            </div>
-            <ul class="list-group list-group-flush">
-                <!-- <li class="list-group-item text-muted text-capitalize"><em>About: book.keywords.toLowerCase()</em></li> -->
-                <li class="list-group-item"><em>Size: </em><%=Math.round(book.document.size/1000)%> kb</li>
-            </ul>
-            <div class="card-body">
-                <form class="d-inline" action="/books/<%=book._id%>/download" method="get">
-                    <button class="btn btn-lg btn-success">Download</button>
-                </form>
-            </div>
-            <!-- <div class="card-footer text-muted">
-                2 days ago
-            </div> -->
+
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/books">Feature</a>
+    <a class="h5" href="/books/list">List</a>
+    <ol>
+        <li><a href="/books/list">A - Z</a></li>
+        <li><a href="/books/categories">Category</a></li>
+    </ol>
+    <a href="/books/new">Add Book</a>
+</div>
+
+<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto">
+    <div class="card text-center mb-3 card-size">
+        <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
+        <div class="card-body">
+            <h5 class="card-title"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
+            <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>
+        <ul class="list-group list-group-flush">
+            <!-- <li class="list-group-item text-muted text-capitalize"><em>About: book.keywords.toLowerCase()</em></li> -->
+            <li class="list-group-item"><em>Size: </em><%=Math.round(book.document.size/1000)%> kb</li>
+        </ul>
+        <div class="card-body">
+            <form class="d-inline" action="/books/<%=book._id%>/download" method="get">
+                <button class="btn btn-lg btn-success">Download</button>
+            </form>
+        </div>
+        <!-- <div class="card-footer text-muted">
+            2 days ago
+        </div> -->
     </div>
 </div>
 

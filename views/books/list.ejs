@@ -1,19 +1,18 @@
 <% layout('layouts/boilerplate')%>
 
-
 <!-- <div id="cluster-map"></div> -->
-    <div class="col-md-3 menu d-none d-md-block scroll">
-        <a class="h5" href="/books">Feature</a>
-        <a class="h5" href="/books/list">List</a>
-        <ol>
-            <li><a href="/books/list">A - Z</a></li>
-            <li><a href="/books/categories">Category</a></li>
-        </ol>
-        <a href="/books/new">Add Book</a>
-    </div>
-    
-    <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-        <h3 class="text-center mt-3"><%= category %> </h3>
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/books">Feature</a>
+    <a class="h5" href="/books/list">List</a>
+    <ol>
+        <li><a href="/books/list">A - Z</a></li>
+        <li><a href="/books/categories">Category</a></li>
+    </ol>
+    <a href="/books/new">Add Book</a>
+</div>
+
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+    <h3 class="text-center mt-3"><%= category %> </h3>
     <% for (let book of books) { %>
         <div class="card border-top-0 border-primary book-tab my-5">
             <div class="row">
@@ -31,9 +30,9 @@
         </div>
     <% } %>
     
-<%- include('../partials/paginate') %> 
-    </div>
+    <%- include('../partials/paginate') %> 
+</div>
 
-    <script>
-        const pageTitle = "Books";
-    </script>
+<script>
+    const pageTitle = "Books";
+</script>

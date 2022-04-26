@@ -21,16 +21,16 @@ const BookScema = new Schema({
         type: Date,
         default: new Date(2022, 03, 15)
     },
-    // contributor: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User'
-    // },
-    // reviews: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'Review'
-    //     }
-    // ]
+    contributor: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ],
     isApproved: {
         type: Boolean,
         default: false

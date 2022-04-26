@@ -1,69 +1,33 @@
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="/stylesheets/main.css" rel="stylesheet" />
-    <link href="/stylesheets/scripture.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/stylesheets/myStyle.css">
+<% layout('layouts/boilerplate')%>
 
-    <title>God-in-prints</title>
-  </head>
-  <body class="index"> -->
-    <% layout('layouts/boilerplate')%>
-        <!-- <div class="subheader">
-            <div class="container flex">
-                <div class="subheadings">
-                    <h2>Search results for:</h2>
-                    <h3 id="viewing"><%= searchText %> </h3>
-                </div>
-                <div class="subheadings">
-                    <form action="/bible/search?offset=0" id="searchForm" method="get" class="search-area flex">
-                        <button>🔎</button>
-                        <input
-                            type="text"
-                            id="search"
-                            name="search"
-                            placeholder="ex. 'John 3:16-19' OR 'kingdom'"
-                            size="30"
-                            onkeydown="if (event.keyCode == 13) searchButton()"
-                        />
-                    </form>
-                </div>
-            </div>
-        </div> -->
-    <div class="col-md-3 menu d-none d-md-block scroll">
-        <a class="h5" href="/bible">Cover Page</a>
-        <a class="h5" href="bible/chapter?chapter=jhn.3">Passage</a>
-        <form action="/bible/chapter" id="chapterForm" method="get">
-            <div class="container">
+<div class="col-md-3 menu d-none d-md-block scroll">
+    <a class="h5" href="/bible">Cover Page</a>
+    <a class="h5" href="bible/chapter?chapter=jhn.3">Passage</a>
+    <form action="/bible/chapter" id="chapterForm" method="get">
+        <div class="container">
             <select class="menu-list p-2 search-area " name="book" id="book"></select>
             <select class="menu-list p-2 search-area " name="chapter" id="chapter"></select>
-            </div>
-        </form>
-        <!-- <ol>
-            <li><a href="/articles/list">A - Z</a></li>
-            <li><a href="/articles/list">Category</a></li>
-        </ol> -->
-        <a href="#">Version</a>
-    </div>
-    
-    <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-        <div class="subheadings">
-            <h3 class="text-truncate" id="viewing">Search: <%= searchText %> </h3>
         </div>
-        <div id="search-nav-top" class="search-nav search-nav-top"></div>
-        <div id="results-list" class="search-results-list list-container justify"></div>
-        <div id="search-nav-bottom" class="search-nav search-nav-bottom"></div>
-    </div>
-        <%-// meta.fums %> 
-        <script>
-            const data = <%- JSON.stringify(data) %>;
-            const searchText = <%- JSON.stringify(searchText) %>;
-        </script>
-        <script src="/javascripts/bible_search_data.js"></script>
+    </form>
+    <a href="#">Version</a>
+</div>
 
-        <script>
-            const pageTitle = "Bible";
-        </script>
-    <!-- </body>
-</html> -->
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+    <div class="subheadings">
+        <h3 class="text-truncate" id="viewing">Search🔍: <%= searchText %> </h3>
+    </div>
+    <div id="search-nav-top" class="search-nav search-nav-top"></div>
+    <div id="results-list" class="search-results-list list-container justify"></div>
+    <div id="search-nav-bottom" class="search-nav search-nav-bottom"></div>
+</div>
+
+<script>
+    const data = <%- JSON.stringify(data) %>;
+    const searchText = <%- JSON.stringify(searchText) %>;
+</script>
+
+<script src="/javascripts/bible_search_data.js"></script>
+
+<script>
+    const pageTitle = "Bible";
+</script>

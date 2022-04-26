@@ -17,25 +17,39 @@ module.exports.getImage = async (key) => {
     const data =  s3.getObject(
         {
             Bucket: `godinprintsdocuments`,
-            Key: key 
+            Key: key, 
         }
       
     ).promise();
     return data;
 }
 
-  module.exports.putImage = async (key, body) => {
-    //   console.log(key);
+const putImage = async (key, body) => {
       const data =  s3.putObject(
           {
               Bucket: `godinprintsdocuments`,
               Key: key,
               Body: body,
           }
-        
       ).promise();
       return data;
+}
+module.exports.putImage = putImage;
+
+module.exports.uploadCompressedImage = async (imgPath, key) => {
+    var Jimp = require('jimp');
+    const path = require('path');
+    const image = await Jimp.read(imgPath);
+    await image.resize(640, Jimp.AUTO);
+    await image.quality(20);
+    await image.writeAsync('output.jpg');
+    const myBuffer = await fs.readFileSync('output.jpg');
+    await putImage(key, myBuffer);
+    let files = await fs.readdirSync('uploads')
+    for (const file of files) {
+      fs.unlinkSync(path.join('uploads', file));
     }
+}
 
 module.exports.encode = (data) => {
       let buf = Buffer.from(data);
@@ -82,6 +96,6 @@ module.exports.paginate = (req, docs) => {
     for (const q in req.query) {
         q !== 'page' && (pageData.queryString += q.replaceAll('%20', ' ') + '=' + req.query[q] + '&');
     }
+    pageData.search = req.query.search;
     return [pageDocs, pageData];
 }
-
