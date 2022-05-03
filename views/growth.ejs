@@ -1,63 +1,66 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="row">
-    <div class="col-md-3 menu d-none d-md-block scroll">
-        <a class="h5" href="/growth">Section</a>
-        <ol>
-            <% let id = "" %> 
-            <% for (let key in growthHabits) { %>
-                <li>
-                    <a href="/growth/#<%= id %> "><%= key.replaceAll('_', ' ') %> </a>
-                </li>
-                <% id = key %> 
-            <% }; %> 
-        </ol>
-    </div>
-    
-    <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-        <ul>
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a class="h5" href="/growth">Section</a>
+    <ol>
+        <% let id = "" %> 
         <% for (let key in growthHabits) { %>
             <li>
-                <h3 class="habit-title p-2"><%= key.replaceAll('_', ' ') %> </h3>
-                <% for (let habit of growthHabits[key]) { %> 
-                    <ul>
-                        <li id="<%= key %>" class="m-3 justify"><img src="https://freepngimg.com/download/diamond/4-2-diamond-png-picture.png" height="13" class="me-2" alt="*"><small><b><%= habit %>.</b></small></li>
-                    </ul>
-                <% } %> 
+                <a href="/growth/#<%= id %> "><%= key.replaceAll('_', ' ') %> </a>
             </li>
+            <% id = key %> 
         <% }; %> 
-        </ul>
-    </div>
+    </ol>
+</div>
 
-        
-    <div class="d-none d-lg-block col-lg-3 offset-lg-9 py-5 text-center position-fixed mh-100 scroll">    
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
-        <p class="text-muted small">        
-            <strong>Check this out 👇</strong>
-        </p>
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+    <ul>
+    <% for (let key in growthHabits) { %>
+        <li>
+            <h3 class="habit-title p-2"><%= key.replaceAll('_', ' ') %> </h3>
+            <% for (let habit of growthHabits[key]) { %> 
+                <ul>
+                    <li id="<%= key %>" class="m-3 justify"><img src="https://freepngimg.com/download/diamond/4-2-diamond-png-picture.png" height="13" class="me-2" alt="*"><small><b><%= habit %>.</b></small></li>
+                </ul>
+            <% } %> 
+        </li>
+    <% }; %> 
+    </ul>
+</div>
 
-        <% if (adBook[0]) { %> 
-        <a href="/books/<%=adBook[0]._id%>" class="">
-        <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
-        </a>
-        <% } %> 
+    
+<div class="d-none d-lg-block col-lg-3 offset-lg-9 py-5 text-center position-fixed mh-100 scroll">    
 
-    </div>
+    <p class="text-muted small">        
+        <strong>Check this out 👇</strong>
+    </p>
+
+    <% if (adBook[0]) { %> 
+    <a href="/books/<%=adBook[0]._id%>" class="">
+    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    </a>
+    <% } %> 
+
+</div>
 
 
-    <div class="d-lg-none col-6 col-md-9 offset-3 py-5 my-5 text-center">    
+<div class="d-lg-none col-6 col-md-9 offset-3 py-5 my-5 text-center">    
 
-        <p class="text-muted small pt-2">        
-            <strong>Check this out 👇</strong>
-        </p>
+    <p class="text-muted small pt-2">        
+        <strong>Check this out 👇</strong>
+    </p>
 
-        <% if (adBook[0]) { %> 
-        <a href="/books/<%=adBook[0]._id%>" class="">
-        <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="75%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
-        </a>
-        <% } %> 
-
-    </div>
+    <% if (adBook[0]) { %> 
+    <a href="/books/<%=adBook[0]._id%>" class="">
+    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="75%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    </a>
+    <% } %> 
 
 </div>
 

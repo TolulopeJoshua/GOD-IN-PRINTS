@@ -1,27 +1,35 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/articles">Feature</a>
     <a class="h5" href="/articles/list">List</a>
     <ol>
-        <li><a href="/articles/list">A - Z</a></li>
+        <li><a href="/articles/list">Index</a></li>
         <li><a href="/articles/categories">Category</a></li>
     </ol>
     <a href="/articles/new">Add Article</a>
 </div>
 
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
     <table class="">
-        <% for (i = 0; i < 2; i++) { %> 
+        <% for (i = 0; i < 5; i++) { %> 
             <tr>
-                <% for (j = 0; j < 5; j++) { %> 
+                <% for (j = 0; j < 2; j++) { %> 
                     <td class="">
-                        <% const index = j + i * 5 %>  
-                        <h5 class="text-center"><%= categories[index] %> </h5>
-                        <ul>
+                        <% const index = i + j * 5 %>  
+                        <h5 class="text-center py-3"><span class="shadow-sm bg-white p-2"><%= categories[index] %></span></h5>
+                        <ul class="p-2">
+                        <% let count = 0 %> 
                         <% for (let article of articles) { %> 
-                            <% if (article.role === categories[index]) { %> 
-                                <li><small><a class="text-decoration-none" href="/articles/<%= article._id %> "><%= article.name %> </a></small> </li>
+                            <% if (article.role === categories[index] && count < 3) { %> 
+                                <li class="text-truncate p-1"><small><a class="text-decoration-none" href="/articles/<%= article._id %> "><%= article.name %> </a></small> </li>
+                                <% count++ %> 
                             <% } %> 
                         <% } %> 
                         </ul>
@@ -31,6 +39,29 @@
         <% } %> 
     </table>
 </div>
+
+<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">
+    <p class="text-muted small text-center"><strong>Click to Read</strong></p>
+    <%- include('../partials/ad/bio') %>  
+</div>
+
+<div class="" style="margin-bottom: 100px;"></div>
+
+<div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
+    <div class="footer-item">
+        <p class="text-muted small pt-2 text-center"><strong>Click to Read</strong></p>
+        <%- include('../partials/ad/bio2') %>    
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
+    <div class="footer-item p-4">
+        <p class="text-muted small pt-2 text-center"><strong>This will bless you</strong></p>
+        <%- include('../partials/ad/book') %>
+    </div>
+</div>
+
+<%- include('../partials/ad2') %>
 
 <script>
     const pageTitle = "Articles";

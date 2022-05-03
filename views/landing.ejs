@@ -33,11 +33,15 @@
 							<li><a href="/">Home</a></li>
 							<li><a href="/features">Features</a></li>
 							<li><a href="/bible">Scripture</a></li>
-							<li><a href="/about">About Us</a></li>
+							<li><a href="/about">About us</a></li>
 						</ul>
 						<ul class="actions stacked">
-							<li><a href="#" class="button primary fit">Register</a></li>
-							<li><a href="#" class="button fit">Log In</a></li>
+						<% if (!currentUser) { %> 
+							<li><a href="/register" class="button primary fit">Register</a></li>
+							<li><a href="/login" class="button fit">Log In</a></li>
+						<% } else { %> 
+							<li><a href="/logout" class="button fit">Log Out</a></li>
+						<% } %> 
 						</ul>
 					</nav>
 
@@ -195,7 +199,7 @@
 									<div class="contact-method">
 										<span class="icon solid alt fa-phone"></span>
 										<h3>Phone</h3>
-										<span>(234) 0813-848-6193</span>
+										<span>(+234) 813-848-6193</span>
 									</div>
 								</section>
 								<section>

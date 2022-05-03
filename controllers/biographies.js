@@ -8,8 +8,10 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 
 module.exports.index = async (req, res) => {
     const biographies = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 4 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
-    res.render('biographies/index', {biographies, adBook})
+    // console.log(adArt)
+    res.render('biographies/index', {biographies, adArt, adBook})
 };
 
 module.exports.list = async (req, res) => {
@@ -27,7 +29,9 @@ module.exports.list = async (req, res) => {
     }
     const biographies = await Doc.find({docType: 'biography'}).sort(searchObj);
     const [pageDocs, pageData] = paginate(req, biographies)
-    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData})
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook})
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -55,7 +59,9 @@ module.exports.search = async (req, res) => {
         biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData});
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, adArt, adBook});
 };
 
 module.exports.showBiography = async (req, res) => {
@@ -96,16 +102,6 @@ module.exports.renderImageUploadForm = (req, res) => {
 module.exports.uploadBiographyImage = async function(req, res) {
     const biography = await Doc.findById(req.params.id);
     biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
-    // const image = await Jimp.read(req.file.path);
-    // await image.resize(320,320);
-    // await image.quality(20);
-    // await image.writeAsync('output.jpg');
-    // const myBuffer = await fs.readFileSync('output.jpg');
-    // await putImage(biography.image.key, myBuffer);
-    // let files = await fs.readdirSync('uploads');
-    // for (const file of files) {
-    //   fs.unlinkSync(path.join('uploads', file));
-    // }
     await uploadCompressedImage(req.file.path, biography.image.key);
     await biography.save(); 
     req.flash('success', 'Successfully saved biography');

@@ -1,25 +1,32 @@
-const Doc = require('../models/doc');
+const Doc = require('../models/doc')
+const Book = require('../models/book');
+const Review = require('../models/review');
+
 
 const {getImage, putImage, paginate, uploadCompressedImage, encode} = require("../functions");
 
 const fs = require('fs');
 
 const categories = [
-    'Evangelism', 'Prayer/Warfare', 'Marriage/Family Life', 
-    'Spiritual Growth', 'Commitment/Consecration', 'Grace/Conversion', 
+    'Prayer/Warfare', 'Marriage/Family Life', 
+    'Spiritual Growth', 'Commitment/Consecration', 'Evangelism', 'Grace/Conversion', 
     'Afterlife', 'Personal/Financial Development', 'Biography', 'Others'
 ];
 
 
 module.exports.index = async (req, res) => {
-    const articles = await Doc.find({docType: 'article'});
-    res.render('articles/index', {categories, articles})
+    const articles = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 300 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('articles/index', {categories, articles, adBook, adBio})
 };
 
 module.exports.list = async (req, res) => {
     const articles = await Doc.find({docType: 'article'}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles)
-    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData})
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook})
 };
 
 module.exports.categories = (req, res) => {
@@ -30,7 +37,9 @@ module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
     const articles = await Doc.find({docType: 'article', role: category}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles)
-    res.render('articles/list', {category, articles: pageDocs, pageData});
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook});
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -58,27 +67,35 @@ module.exports.search = async (req, res) => {
         article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData});
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, adBio, adBook});
 };
 
 module.exports.showArticle = async (req, res) => {
-    const article = await Doc.findById(req.params.id);
+    const article = await Doc.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
     if(!article) {
         req.flash('error', 'Not in directory!');
         return res.redirect('/articles');
     }
-    article.imgSrc = async () => {
-        const data = await getImage(article.image.key);
-        const src = `data:image/png;base64,${encode(data.Body)}`;
-        return src;
-    }
-    res.render('articles/show', {article});
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    res.render('articles/show', {article, adBio, adBook});
 };
 
 module.exports.story = async (req, res) => {    
+    const q = req.query.q;
     const article = await Doc.findById(req.params.id);
     const data = await getImage(article.story);
     const story = data.Body.toString();
+    if (Number(q)) {
+        return res.send(story.substring(0, q) + '...');
+    }
     res.send(story);
 };
 
@@ -99,18 +116,21 @@ module.exports.renderImageUploadForm = (req, res) => {
 module.exports.uploadArticleImage = async function(req, res) {
     const article = await Doc.findById(req.params.id);
     article.image.key = 'article-img/' + Date.now().toString() + '_' + req.file.originalname;
-    // const image = await Jimp.read(req.file.path);
-    // await image.resize(640, Jimp.AUTO);
-    // await image.quality(20);
-    // await image.writeAsync('output.jpg');
-    // const myBuffer = await fs.readFileSync('output.jpg');
-    // await putImage(article.image.key, myBuffer);
-    // let files = await fs.readdirSync('uploads')
-    // for (const file of files) {
-    //   fs.unlinkSync(path.join('uploads', file));
-    // }
     await uploadCompressedImage(req.file.path, article.image.key);
     await article.save();
     req.flash('success', 'Successfully saved article');
+    res.redirect(`/articles/${article._id}`)
+};
+
+module.exports.addReview = async (req, res) => {
+    // console.log(req)
+    const article = await Doc.findById(req.params.id);
+    const review = new Review(req.body.review);
+    review.author = req.user._id;
+    review.category = 'articles';
+    review.dateTime = Date.now();
+    article.reviews.unshift(review);
+    await review.save();
+    await article.save();
     res.redirect(`/articles/${article._id}`)
 };

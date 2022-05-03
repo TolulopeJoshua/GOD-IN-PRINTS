@@ -23,6 +23,8 @@ const biographyRoutes = require('./routes/biographies');
 const articleRoutes = require('./routes/articles');
 const featuresRoutes = require('./routes/features');
 const bibleRoutes = require('./routes/bible');
+const reviewRoutes = require('./routes/reviews');
+
 const MongoStore = require("connect-mongo");
 
 
@@ -70,7 +72,7 @@ const sessionConfig = {
     store,
     name: 'session',
     secret,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
@@ -130,7 +132,22 @@ app.use(
                 "'self'",
                 "blob:",
                 "data:",
-                "*.amazonaws.com"
+                "*.amazonaws.com",
+                "https://freepngimg.com",
+                "https://i.swncdn.com",
+                "https://dailymanna.dclm.org",
+                "https://www.abideinchrist.com",
+                "https://www.hymnlyrics.org",
+                "https://ghs.deeperlifesermons.com.ng",
+                "https://biblemenus.com/bh14.png",
+                "https://www.bible.com",
+                "https://tpc.googlesyndication.com",
+                "https://www.kingjamesbibleonline.org",
+                "https://www.biblereward.com",
+                "https://www.christianityboard.com",
+                "https://www.christianforums.com",
+                "https://dclm.org",
+
                 // "https://res.cloudinary.com/depvtmznu/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 // "https://images.unsplash.com/",
             ],
@@ -148,6 +165,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+    // console.log(req.user)
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -161,6 +179,7 @@ app.use('/biographies', biographyRoutes)
 app.use('/articles', articleRoutes)
 app.use('/features', featuresRoutes)
 app.use('/bible', bibleRoutes)
+app.use('/reviews', reviewRoutes)
  
 
 app.get('/', async (req, res) => {
@@ -171,7 +190,7 @@ app.get('/growth', async (req, res) => {
     const growthHabits = require("./personal_growth")
 
     const Book = require('./models/book');
-    const adBook = await Book.aggregate([{ $sample: { size: 1 } }]);
+    const adBook = await Book.aggregate([{ $match: { filetype: 'pdf' } }, { $sample: { size: 1 } }]);
 
     res.render('growth', {growthHabits, adBook});
 });
@@ -191,6 +210,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+    // console.log(err)
     res.status(statusCode).render('error', { err })
 })
 

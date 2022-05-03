@@ -60,7 +60,7 @@ module.exports.validateReview = (req, res, next) => {
 module.exports.isBookAuthor = async (req, res, next) => {    
     const {id} = req.params;
     const book = await Book.findById(id);
-    if(!book.author.equals(req.user._id)) {
+    if(!book.author.equals(req.user._id) && req.user.status !== 'author') {
         req.flash('error', 'You do not have permission');
         return res.redirect(`/books/${book._id}`);
     }
@@ -70,7 +70,7 @@ module.exports.isBookAuthor = async (req, res, next) => {
 module.exports.isBiographyAuthor = async (req, res, next) => {    
     const {id} = req.params;
     const biography = await Doc.findById(id);
-    if(!biography.author.equals(req.user._id)) {
+    if(!biography.author.equals(req.user._id) && req.user.status !== 'author') {
         req.flash('error', 'You do not have permission');
         return res.redirect(`/biographies/${biography._id}`);
     }
@@ -80,7 +80,7 @@ module.exports.isBiographyAuthor = async (req, res, next) => {
 module.exports.isArticleAuthor = async (req, res, next) => {    
     const {id} = req.params;
     const article = await Doc.findById(id);
-    if(!article.author.equals(req.user._id)) {
+    if(!article.author.equals(req.user._id) && req.user.status !== 'author') {
         req.flash('error', 'You do not have permission');
         return res.redirect(`/articles/${article._id}`);
     }
@@ -90,7 +90,7 @@ module.exports.isArticleAuthor = async (req, res, next) => {
 module.exports.isReviewAuthor = async (req, res, next) => {    
     const {id, reviewId} = req.params;
     const review = await Review.findById(reviewId);
-    if(!review.author.equals(req.user._id)) {
+    if(!review.author.equals(req.user._id) && req.user.status !== 'author') {
         req.flash('error', 'You do not have permission');
         return res.redirect(`/${review.category}/${id}`);
     }

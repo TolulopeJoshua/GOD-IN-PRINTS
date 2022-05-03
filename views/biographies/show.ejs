@@ -1,15 +1,21 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="col-md-3 col-lg-2 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 col-lg-2 menu d-md-block scroll">
     <a class="h5" href="/biographies">Feature</a>
     <a class="h5" href="/biographies/list">List</a>
     <ol>
-        <li><a href="/biographies/list">A - Z</a></li>
+        <li><a href="/biographies/list">Index</a></li>
         <li><a href="/biographies/list">Birth Year</a></li>
         <li><a href="/biographies/list">Role/Ministry</a></li>
     </ol>
     <a href="/biographies/new">Add Biography</a>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
 <script> let route; let xhttp; const idLength = {};</script>
 <div class="offset-md-3 offset-lg-2 col-md-3 col-lg-2 card text-center">

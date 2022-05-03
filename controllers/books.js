@@ -1,4 +1,6 @@
+const Doc = require('../models/doc')
 const Book = require('../models/book');
+
 
 const fs = require('fs');
 const pdfConverter = require('pdf-poppler');
@@ -12,14 +14,26 @@ const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family', 'Dating/C
 
 
 module.exports.index = async (req, res) => {
-    const books = await Book.aggregate([{ $match: { filetype: "pdf" } }, { $sample: { size: 20 } }]);
-    res.render('books/index', {books})
+    let books;
+    let sessData = req.session;   
+    if (sessData.featureBooks) {
+        books = sessData.featureBooks;
+    } else {
+        books = await Book.aggregate([{ $match: { filetype: "pdf" } }, { $sample: { size: 20 } }]);
+        sessData.featureBooks = books;
+    }
+    // console.log(books.length)
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    res.render('books/index', {books, adArt, adBio})
 };
 
 module.exports.list = async (req, res) => {
     const books = await Book.find({filetype: 'pdf'}).sort({title : 1});
     const [pageDocs, pageData] = paginate(req, books)
-    res.render('books/list', {category: 'All Books', books: pageDocs, pageData})
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio})
 };
 
 module.exports.categories = (req, res) => {
@@ -37,7 +51,10 @@ module.exports.perCategory = async (req, res) => {
         };
     };
     const [pageDocs, pageData] = paginate(req, books)
-    res.render('books/list', {category, books: pageDocs, pageData})
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    res.render('books/list', {category, books: pageDocs, pageData, adArt, adBio})
+
     function words(category) {
         const word = category.toLowerCase().replaceAll(' ', '/');
         return word.split('/');
@@ -124,8 +141,9 @@ module.exports.search = async (req, res) => {
         book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
     })
     const [pageDocs, pageData] = paginate(req, result)
-
-    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData});
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, adArt, adBio});
 };
 
 module.exports.showBook = async (req, res) => {

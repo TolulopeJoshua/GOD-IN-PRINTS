@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/resources">Section</a>
     <ol>
         <li><a href="/resources/#">Devotionals</a></li>
@@ -11,6 +11,12 @@
         <li><a href="/resources/#trivia">Online Forums</a></li>
     </ol>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3">
     

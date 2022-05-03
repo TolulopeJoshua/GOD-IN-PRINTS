@@ -1,15 +1,21 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/biographies">Feature</a>
     <a class="h5" href="/biographies/list">List</a>
     <ol>
-        <li><a href="/biographies/list?q=alpha">A - Z</a></li>
+        <li><a href="/biographies/list?q=alpha">Index</a></li>
         <li><a href="/biographies/list?q=birth">Birth Year</a></li>
         <li><a href="/biographies/list?q=role">Role/Ministry</a></li>
     </ol>
     <a href="/biographies/new">Add Biography</a>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h3 class="text-center m-3"><%= category %> </h3>
@@ -38,8 +44,31 @@
         </div>
     <% } %> 
 
-    <%- include('../partials/paginate') %> 
+    <%- include('../partials/paginate') %> <hr>
 </div>
+
+<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll">
+    <p class="text-muted small text-center"><strong>Have a look 👇</strong></p>
+    <%- include('../partials/ad/book') %>  
+</div>
+
+<div class="" style="margin-bottom: 100px;"></div>
+
+<div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
+    <div class="footer-item">
+        <p class="text-muted small pt-2 text-center"><strong>Have a look 👇</strong></p>
+        <%- include('../partials/ad/book') %>    
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
+    <div class="footer-item p-4">
+        <p class="text-muted small pt-2 text-center"><strong>Short Piece for You</strong></p>
+        <%- include('../partials/ad/art') %>
+    </div>
+</div>
+
+<%- include('../partials/ad2') %>
 
 <script>
     const pageTitle = "Biographies";

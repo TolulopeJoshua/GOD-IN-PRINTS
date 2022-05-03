@@ -1,16 +1,22 @@
 <% layout('layouts/boilerplate')%>
 
 <!-- <div id="cluster-map"></div> -->
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/biographies">Feature</a>
     <a class="h5" href="/biographies/list">List</a>
     <ol>
-        <li><a href="/biographies/list">A - Z</a></li>
+        <li><a href="/biographies/list">Index</a></li>
         <li><a href="/biographies/list">Birth Year</a></li>
         <li><a href="/biographies/list">Role/Ministry</a></li>
     </ol>
     <a href="/biographies/new">Add Biography</a>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
 <script>let route; let xhttp; const idLength = {}; let txt;</script>
 <div class="col-md-9 col-lg-6 offset-md-3">
@@ -40,8 +46,8 @@
 
                 <div class="row text-center bottom-100 mx-2">
                     <% for (let i = 1; i < biographies.length; i++) { %> 
-                    <div class="col-6 offset-3 offset-lg-0 col-lg-4 text-center">
-                        <div class="card shadow top-100 translate-middle-y rounded-pill">
+                    <div class="d-flex justify-content-center offset-md-1 col-md-9 offset-lg-0 col-lg-4">
+                        <div class="card shadow top-100 translate-middle-y rounded-pill" style="max-width: 320px;">
                             <div class="row">
                                 <div class="col-6 offset-3">
                                     <% if (biographies[i].image.key === 'none') { %> 
@@ -70,39 +76,28 @@
     </div>
 </div>
 
-
-<div class="d-none d-lg-block col-lg-3 offset-lg-9 py-5 text-center position-fixed mh-100 scroll">    
-
-    <p class="text-muted small">        
-        <strong>Have you read?</strong>
-    </p>
-
-    <% if (adBook[0]) { %> 
-    <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
-    </a>
-    <% } %> 
-
+<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll">
+    <p class="text-muted small text-center"><strong>Have you read?</strong></p>
+    <%- include('../partials/ad/book') %>  
 </div>
 
+<div class="" style="margin-bottom: 300px;"></div>
 
-<div class="d-lg-none col-6 col-md-9 offset-3 py-5 my-5 text-center">    
-
-    <div class="" style="margin-bottom: 200px;"></div>
-
-    <p class="text-muted small pt-2">        
-        <strong>Have you read?</strong>
-    </p>
-
-    <% if (adBook[0]) { %> 
-    <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="75%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
-    </a>
-    <% } %> 
-
+<div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
+    <div class="footer-item">
+        <p class="text-muted small pt-2 text-center"><strong>Have you read?</strong></p>
+        <%- include('../partials/ad/book') %>    
+    </div>
 </div>
 
-<div class="d-none d-lg-block" style="margin-bottom: 200px;"></div>
+<div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
+    <div class="footer-item p-4">
+        <p class="text-muted small pt-2 text-center"><strong>Read Our Article</strong></p>
+        <%- include('../partials/ad/art') %>
+    </div>
+</div>
+
+<%- include('../partials/ad2') %>
 
 <script>
     const pageTitle = "Biographies";

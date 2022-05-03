@@ -69,20 +69,21 @@ function buildNav(offset, total, searchText) {
   }-${
     offset * 20 + 20 > total ? total : offset * 20 + 20
   }</b> of <b>${total}</b> results.</span>`;
+
   let searchNavHTML = `<span class="results-current-page"> Current page: <b>${
     offset + 1
   }</b></span>`;
 
   if (offset > 0 || total / 20 > offset + 1) {
-    searchNavHTML += `<span class="results-nav">`;
+    searchNavHTML += `<span class="results-nav d-block d-flex">`;
   }
 
   if (offset > 0) {
-    searchNavHTML += `<a class="btn btn-outline-primary me-3" href="/bible/search?search=${searchText}&offset=${offset - 1}">Previous Page</a>`;
+    searchNavHTML += `<a class="btn btn-outline-primary" href="/bible/search?search=${searchText}&offset=${offset - 1}">Previous Page</a>`;
   }
 
   if (total / 20 > offset + 1) {
-    searchNavHTML += `<a class="btn btn-outline-primary" href="/bible/search?search=${searchText}&offset=${offset + 1}">Next Page</a>`;
+    searchNavHTML += `<a class="btn btn-outline-primary ms-auto" href="/bible/search?search=${searchText}&offset=${offset + 1}">Next Page</a>`;
   }
 
   if (offset > 0 || total / 20 > offset + 1) {

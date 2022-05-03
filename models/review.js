@@ -15,6 +15,12 @@ const reviewSchema = new Schema({
         type: Date, 
         default: new Date()
     },
+    likes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 });
 
 module.exports = mongoose.model("Review", reviewSchema);

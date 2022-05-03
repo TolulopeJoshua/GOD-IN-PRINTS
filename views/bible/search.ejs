@@ -1,16 +1,29 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/bible">Cover Page</a>
     <a class="h5" href="bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
-        <div class="container">
+        <div class="container m-0 p-0">
             <select class="menu-list p-2 search-area " name="book" id="book"></select>
             <select class="menu-list p-2 search-area " name="chapter" id="chapter"></select>
         </div>
     </form>
     <a href="#">Version</a>
+    <div class="container m-0 p-0">
+        <select form="chapterForm" class="menu-list p-2 search-area " name="version" id="version">
+            <option value="de4e12af7f28f599-02">King James</option>
+            <option value="06125adad2d5898a-01">American Standard</option>
+            <option value="9879dbb7cfe39e4d-04">World English</option>
+        </select>
+    </div>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
     <div class="subheadings">
@@ -21,12 +34,14 @@
     <div id="search-nav-bottom" class="search-nav search-nav-bottom"></div>
 </div>
 
+<%- include('../partials/ad2') %>
+
 <script>
     const data = <%- JSON.stringify(data) %>;
-    const searchText = <%- JSON.stringify(searchText) %>;
+    const searchText = '<%= (searchText) %>';
 </script>
 
-<script src="/javascripts/bible_search_data.js"></script>
+<script src="/javascripts/bibleData/bible_search_data.js"></script>
 
 <script>
     const pageTitle = "Bible";

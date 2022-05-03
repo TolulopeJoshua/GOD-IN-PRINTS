@@ -1,0 +1,22 @@
+<a href="/articles/<%= adBio[1]._id %>">
+    <div class="card text-dark shadow p-4 text-center">
+        <h5 class="text-decoration-underline"><%= adBio[1].name %> </h5>
+        <p class="small justify lh-lg p-0 m-0" id=<%= adBio[1]._id %>>
+            <% if (adBio[1].image.key === 'none') { %> 
+                <img style="max-width: 8em;" class='card-img-top float-end p-2' src="/assets/images/<%= adBio[1].gender %>.png" alt="male" class="card-img-top"> <p></p>
+            <% } else { %> 
+                <img style="max-width: 8em;" class='card-img-top float-end p-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBio[1].image.key.replaceAll(" ", "+") %> alt="">
+            <% } %> 
+        </p>
+    </div>
+</a>
+                
+<script>
+    route = `/articles/<%= adBio[1]._id %>/story?q=250`;
+    xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        document.getElementById('<%= adBio[1]._id %>').innerHTML += this.responseText;
+    }
+    xhttp.open("GET", route, true);
+    xhttp.send();
+</script>

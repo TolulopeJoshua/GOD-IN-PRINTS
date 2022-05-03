@@ -1,14 +1,20 @@
 <% layout('layouts/boilerplate') %> 
 
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/articles">Feature</a>
     <a class="h5" href="/articles/list">List</a>
     <ol>
-        <li><a href="/articles/list">A - Z</a></li>
+        <li><a href="/articles/list">Index</a></li>
         <li><a href="/articles/categories">Category</a></li>
     </ol>
     <a href="/articles/new">Add Article</a>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
     
 <div class="col-md-9 col-lg-6 offset-md-3 ps-5">
     <h1 class="text-center">Add an Article</h1>

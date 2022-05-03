@@ -2,20 +2,26 @@
 
 
 <!-- <div id="cluster-map"></div> -->
-<div class="col-md-3 menu d-none d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll">
     <a class="h5" href="/articles">Feature</a>
     <a class="h5" href="/articles/list">List</a>
     <ol>
-        <li><a href="/articles/list">A - Z</a></li>
+        <li><a href="/articles/list">Index</a></li>
         <li><a href="/articles/categories">Category</a></li>
     </ol>
     <a href="/articles/new">Add Article</a>
 </div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
     
 <script>let route; let xhttp; const idLength ={};</script>
 
 <div class="col-md-9 col-lg-6 offset-md-3">
-    <h3 class="mt-5 text-center"><%= category %> </h3>
+    <h3 class="text-center m-3"><%= category %> </h3>
 
     <ul class="mb-3">
         <% for (let article of articles) { %> 
@@ -30,8 +36,31 @@
         <% } %> 
     </ul>
 
-<%- include('../partials/paginate') %> 
+<%- include('../partials/paginate') %> <hr>
 </div>
+
+<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">
+    <p class="text-muted small text-center"><strong>Click to Read</strong></p>
+    <%- include('../partials/ad/bio') %>  
+</div>
+
+<div class="" style="margin-bottom: 100px;"></div>
+
+<div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
+    <div class="footer-item">
+        <p class="text-muted small pt-2 text-center"><strong>Click to Read</strong></p>
+        <%- include('../partials/ad/bio2') %>    
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
+    <div class="footer-item p-4">
+        <p class="text-muted small pt-2 text-center"><strong>This will bless you</strong></p>
+        <%- include('../partials/ad/book') %>
+    </div>
+</div>
+
+<%- include('../partials/ad2') %>
 
 <script src="/javascripts/get_story.js"></script>
 
