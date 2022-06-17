@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const books = require('../controllers/books');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isBookAuthor, validateBook } = require('../middleware');
+const { isLoggedIn, isBookAuthor, validateBook, isReviewAuthor, validateReview, checkDownloadLimit} = require('../middleware');
 
 const {upload, upload0} = require("../functions")
 
@@ -33,6 +33,14 @@ router.get('/:id/imageUpload', isLoggedIn, books.renderImageUpload);
 
 router.post('/:id/imageUpload', isLoggedIn, upload0.single("image"), catchAsync(books.imageUpload));
 
-router.get('/:id/download', isLoggedIn, catchAsync(books.download));
+router.get('/:id/download', isLoggedIn, checkDownloadLimit, catchAsync(books.download));
+
+router.get('/:id/read', isLoggedIn, catchAsync(books.read));
+
+router.get('/:id/getPages', isLoggedIn, catchAsync(books.pagesArray));
+
+router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(books.addReview));
+
+router.delete('/:bookId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(books.deleteReview));
 
 module.exports = router;

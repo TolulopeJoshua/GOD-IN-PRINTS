@@ -29,6 +29,10 @@ a {
     text-decoration: none;
 }
 
+.texture {
+    background-image: url(../assets/images/bg-texture.png) !important;
+}
+
 .justify {
     text-align: justify;
 }
@@ -121,8 +125,9 @@ a {
     color: #666;
     display: block;
     font-weight: bolder;
-    padding-bottom: 5px;
+    padding: 3px;
     margin-top: 30px;
+    border-radius: 2px;
     /* border-bottom: 1px solid #ddd; */
 }
 
@@ -130,11 +135,18 @@ a {
     color: #666;
     display: block;
     font-size: small;
-    padding-bottom: 10px;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .menu-list:hover, .menu a:hover, .menu li a:hover {
     color: #999;
+    cursor: pointer;
+}
+
+.menu-list.active, .menu a.active, .menu li a.active {
+    color: #999;
+    background: #2a2f4a;
     cursor: pointer;
 }
 
@@ -153,10 +165,14 @@ a {
     max-height: 100vh;
 }
 
-.review-text {
-    font-family: 'Great Vibes', cursive;
-    max-height: 3.5em;
+.review-box {
+    max-height: 7em;
     overflow-y: auto;
+}
+
+.review-text {
+    font-family: "Sofia", sans-serif;
+    letter-spacing: -1px;
 }
 
 @media screen and (max-width: 767.98px) {
@@ -198,7 +214,9 @@ a {
     form {
         margin: 0;
     }
+}
 
+@media (max-width: 991.98px) {
     .review {
         position: relative;
         max-height: fit-content;
@@ -215,7 +233,6 @@ a {
     margin-left: auto;
     margin-right: auto;
 }
-
 
 .bible {
     background-image: url('/assets/images/bible.jpg');

@@ -5,7 +5,10 @@ const reviewSchema = new Schema({
     text: String,
     category: {
         type: String,
-        enum: ['books', 'biographies', 'articles', 'bible']
+        enum: ['Books', 'Biographies', 'Articles', 'Bible']
+    },
+    parentId: {
+        type: String
     },
     author: {
         type: Schema.Types.ObjectId,

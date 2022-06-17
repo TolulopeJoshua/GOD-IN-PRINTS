@@ -1,0 +1,100 @@
+<% layout('layouts/boilerplate')%>
+
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a class="h5" href="/books">Feature</a>
+    <a class="h5" href="/books/list">List</a>
+    <ol>
+        <li><a href="/books/list">Index</a></li>
+        <li><a href="/books/categories">Category</a></li>
+    </ol>
+    <a href="/books/new">Add Book</a>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<div class="col-md-9 col-lg-6 offset-1 offset-md-3 position-fixed">
+    <span class="bg-white p-1 shadow-sm">
+        <small><strong>GOTO:</strong></small> &nbsp;
+        <input class="border rounded" id="goto" type="number" style="max-width: 50px;"> &nbsp;/&nbsp;
+        <span id="pageTotal"></span>
+    </span>
+</div>
+<div id="bookContainer" class="col-md-9 col-lg-6 offset-md-3 mt-3 justify-content-center text-center">
+    <div class="d-flex vh-100 justify-content-center align-items-center">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <strong class="text-muted"> &nbsp;&nbsp; please wait</strong>
+    </div>
+</div>
+
+<script>
+    const div = document.getElementById('bookContainer');
+    axios.get(`/books/<%= book._id %>/getpages`)
+        .then(function (response) {
+            div.innerHTML = "";
+            const pageTotal = document.getElementById('pageTotal').innerHTML = response.data.length;
+            response.data.forEach((src, index) => {
+                var imgDiv = document.createElement("div");
+                imgDiv.classList.add('m-3');
+                imgDiv.id = index + 1;
+                var image = document.createElement("img");
+                image.src = src;
+                image.classList.add('img-fluid');
+                imgDiv.appendChild(image);
+                div.appendChild(imgDiv);
+            })
+        })
+        .catch(function (error) {
+            console.log(error);
+            div.classList.add('d-flex')
+            div.classList.add('vh-100')
+            div.classList.add('align-items-center')
+            div.innerHTML = error.message;
+        })
+        
+        const gotoInput = document.getElementById("goto");
+        gotoInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                const page = gotoInput.value;
+                const pageImg = document.getElementById(page);
+                if (pageImg) {
+                    pageImg.scrollIntoView();
+                }
+            }
+        });
+
+</script>
+
+<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">
+    <p class="text-muted small text-center"><strong>The story of a <%= adBio[0].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
+    <%- include('../partials/ad/bio') %>  
+</div>
+
+<div class="" style="margin-bottom: 100px;"></div>
+
+<div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
+    <div class="footer-item">
+        <p class="text-muted small pt-2 text-center"><strong>The story of a <%= adBio[1].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
+        <%- include('../partials/ad/bio2') %>    
+    </div>
+</div>
+
+<script>
+    let route; const idLength ={};
+</script>
+
+<script>
+    idLength['<%= book._id %>'] = 1000;
+</script>
+
+<script>
+    const pageTitle = "Books";
+</script>
+    
+
+ 

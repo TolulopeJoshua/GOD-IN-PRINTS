@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const biographies = require('../controllers/biographies');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isBiographyAuthor, validateBiography } = require('../middleware');
+const { isLoggedIn, isBiographyAuthor, validateBiography, isReviewAuthor, validateReview} = require('../middleware');
 
 const {upload0} = require("../functions")
 
@@ -30,4 +30,8 @@ router.get('/:id/imageUpload', biographies.renderImageUploadForm);
 
 router.post('/:id/imageUpload', isLoggedIn, upload0.single("image"), catchAsync(biographies.uploadBiographyImage));
  
+router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(biographies.addReview));
+
+router.delete('/:biographyId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(biographies.deleteReview));
+
 module.exports = router;  

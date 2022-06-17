@@ -59,6 +59,22 @@ module.exports.encode = (data) => {
  
 module.exports.s3 = new aws.S3(); 
 
+function checkFileType(file, cb){
+    const path = require('path');
+    // Allowed ext
+    const filetypes = /pdf|mobi|epub|docx/;
+    // Check ext
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if(mimetype && extname){
+        return cb(null,true);
+    } else {
+        return cb(new Error('Allowed extensions - PDF | MOBI | EPUB | DOCX'));
+    }
+  }
+
 module.exports.upload = multer({
     storage: multerS3({
         s3: s3,
@@ -67,7 +83,10 @@ module.exports.upload = multer({
             console.log(req.file);
             cb(null, 'book/' + Date.now().toString() + '_' + file.originalname); //use Date.now() for unique file keys
         },
-    })
+    }),
+    fileFilter: function(_req, file, cb){
+        checkFileType(file, cb);
+    }
 });
 
 module.exports.upload0 = multer({ storage: multer.diskStorage({
@@ -99,3 +118,14 @@ module.exports.paginate = (req, docs) => {
     pageData.search = req.query.search;
     return [pageDocs, pageData];
 }
+
+let nodeMailer = require('nodemailer');
+module.exports.transporter = nodeMailer.createTransport({
+  host: "smtp.gmail.com", // hostname
+  port: 465, // port for secure SMTP
+  secure: true, // TLS requires secureConnection to be false
+  auth: {
+      user: 'godinprintslibraries@gmail.com',
+      pass: process.env.GMAIL_PASSWORD
+  },
+});

@@ -56,3 +56,11 @@ module.exports.reviewSchema = Joi.object({
         text: Joi.string().required().escapeHTML()
     }).required()
 })
+
+module.exports.emailSchema = Joi.object({
+    email: Joi.string().required().escapeHTML()
+})
+
+module.exports.passwordSchema = Joi.object({
+    password: Joi.string().required().escapeHTML()
+})

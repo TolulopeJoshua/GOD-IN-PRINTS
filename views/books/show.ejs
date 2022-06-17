@@ -27,16 +27,61 @@
             <!-- <li class="list-group-item text-muted text-capitalize"><em>About: book.keywords.toLowerCase()</em></li> -->
             <li class="list-group-item"><em>Size: </em><%=Math.round(book.document.size/1000)%> kb</li>
         </ul>
-        <div class="card-body">
-            <form class="d-inline" action="/books/<%=book._id%>/download" method="get">
-                <button class="btn btn-lg btn-success">Download</button>
-            </form>
+        <div class="card-body d-flex justify-content-around">
+            <!-- <form class="d-inline" action="/books/<%=book._id%>/download" method="get"> -->
+                <a class="btn btn-lg btn-success" href="/books/<%=book._id%>/download">Download</a>
+                <a class="btn btn-lg btn-outline-success" href="/books/<%=book._id%>/read">&nbsp;&nbsp;Read&nbsp;&nbsp;</a>
+                <!-- <button class="btn btn-lg btn-success">Download</button>
+            </form> -->
         </div>
+        <small class="me-auto ms-5 text-secondary">Download limit: 1/day</small>
         <!-- <div class="card-footer text-muted">
             2 days ago
         </div> -->
     </div>
 </div>
+
+<div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0">
+    <% if (currentUser) { %> 
+    <form action="/books/<%= book._id %>/addReview" method="POST" novalidate class="validated-form">
+        <div class="mb-3">
+            <label class="form-label ms-2" for="text"><strong>Review:</strong></label>
+            <textarea class="form-control bg-transparent" id="text" name="review[text]" rows="3" required></textarea>
+            <button class="btn-primary btn-sm d-block ms-auto py-0 px-2">Add</button>
+        </div>
+    </form>
+    <% } else { %> 
+    <div class="p-3 text-muted"><strong>LOGIN TO ADD REVIEW</strong></div>
+    <% } %> 
+    <% for(let review of book.reviews) { %>
+    <div id="<%= review._id %>" class="card m-3 rounded-5">
+        <div class="card-body p-0">
+            <div class="review-box">
+                <p class="review-text lh-sm small fs-6 m-2"><%= review.text %></p>
+                <p class="card-title text-capitalize d-flex m-1">
+                    <em class="text-muted small ms-auto fw-lighter"> - <%= review.author.firstName.toLowerCase() %> <%= review.author.lastName.toLowerCase() %></em>
+                </p>
+            </div>
+            <div class="d-flex align-items-end small border-top m-1" style="opacity: 0.5;">
+                <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;">👍🏻</a>
+                <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
+                <% if (review.author.equals(currentUser)) { %> 
+                <a class="mx-3" href="/reviews/<%= review._id %>/edit">📝</a>
+                <a id="d<%= review._id %>" class="dreview" href="javascript:;">✖</a>
+                <% } %> 
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<script>
+    let route; let xhttp; const idLength ={};
+</script>
+
+<script>
+    idLength['<%= book._id %>'] = 1000;
+</script>
 
 <script>
     const pageTitle = "Books";

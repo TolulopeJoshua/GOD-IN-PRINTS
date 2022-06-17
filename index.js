@@ -72,7 +72,7 @@ const sessionConfig = {
     store,
     name: 'session',
     secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
@@ -105,6 +105,7 @@ const styleSrcUrls = [
     "https://cdn.jsdelivr.net",
 ];
 const connectSrcUrls = [
+    "https://api.emailjs.com/",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
@@ -114,7 +115,7 @@ const fontSrcUrls = [
     "https://fonts.gstatic.com/"
 ];
 app.use((req, res, next) => {
-//   res.removeHeader("Cross-Origin-Resource-Policy")
+  res.removeHeader("Cross-Origin-Resource-Policy")
   res.removeHeader("Cross-Origin-Embedder-Policy")
   next()
 })
@@ -127,6 +128,7 @@ app.use(
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
             workerSrc: ["'self'", "blob:"],
+            frameSrc: ["'self'", "blob:"],
             objectSrc: [],
             imgSrc: [
                 "'self'",
@@ -159,10 +161,10 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+passport.use(new LocalStrategy(User.authenticate()));
 
 app.use((req, res, next) => {
     // console.log(req.user)
@@ -174,7 +176,7 @@ app.use((req, res, next) => {
 
 
 app.use('/', userRoutes);
-app.use('/books', bookRoutes)
+app.use('/books', bookRoutes);
 app.use('/biographies', biographyRoutes)
 app.use('/articles', articleRoutes)
 app.use('/features', featuresRoutes)
@@ -210,7 +212,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
-    // console.log(err)
+    console.log(err.message)
     res.status(statusCode).render('error', { err })
 })
 

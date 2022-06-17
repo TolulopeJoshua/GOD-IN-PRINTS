@@ -1,5 +1,6 @@
 const Doc = require('../models/doc')
 const Book = require('../models/book');
+const Review = require('../models/review');
 
 const fs = require('fs');
 
@@ -7,7 +8,7 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 
 
 module.exports.index = async (req, res) => {
-    const biographies = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 4 } }]);
+    const biographies = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
     const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
     // console.log(adArt)
@@ -27,7 +28,7 @@ module.exports.list = async (req, res) => {
         default :
             searchObj = {name: 1}
     }
-    const biographies = await Doc.find({docType: 'biography'}).sort(searchObj);
+    const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
     const [pageDocs, pageData] = paginate(req, biographies)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
@@ -53,7 +54,7 @@ module.exports.createBiography = async (req, res) => {
 
 module.exports.search = async (req, res) => {
     const item = req.query.search;
-    const biographies = await Doc.find({docType: 'biography'}).sort({name: 1});
+    const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort({name: 1});
     const result = [];
     biographies.forEach((biography) => {
         biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
@@ -65,7 +66,12 @@ module.exports.search = async (req, res) => {
 };
 
 module.exports.showBiography = async (req, res) => {
-    const biography = await Doc.findById(req.params.id);
+    const biography = await Doc.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
     if(!biography) {
         req.flash('error', 'Not in directory!');
         return res.redirect('/biographies');
@@ -104,7 +110,28 @@ module.exports.uploadBiographyImage = async function(req, res) {
     biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
     await uploadCompressedImage(req.file.path, biography.image.key);
     await biography.save(); 
-    req.flash('success', 'Successfully saved biography');
+    req.flash('success', 'Successfully saved biography, awaiting approval.');
     res.redirect(`/biographies/${biography._id}`);
 };
+
+module.exports.addReview = async (req, res) => {
+    // console.log(req)
+    const biography = await Doc.findById(req.params.id);
+    const review = new Review(req.body.review);
+    review.parentId = biography._id.toString();
+    review.author = req.user._id;
+    review.category = 'Biographies';
+    review.dateTime = Date.now();
+    biography.reviews.unshift(review);
+    await review.save();
+    await biography.save();
+    res.redirect(`/biographies/${biography._id}`)
+};
+
+module.exports.deleteReview = async (req, res) => {
+    const {biographyId, reviewId} = req.params;
+    await Doc.findByIdAndUpdate(biographyId, {$pull: {reviews: reviewId} } );
+    await Review.findByIdAndDelete(reviewId);
+    res.send(reviewId);
+}
 

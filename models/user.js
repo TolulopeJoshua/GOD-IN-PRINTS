@@ -3,12 +3,22 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new Schema({
-    firstName: String,
-    lastName: String,
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
         unique: true
+    },
+    resetCode: {
+        type: String,
+        default: null
     },
     status: {
         type: String,
@@ -18,15 +28,16 @@ const UserSchema = new Schema({
         type: Date, 
         default: new Date()
     },
-    bibleNotes: [
+    reviews: [
         {
-            chapter: String,
-            note: {
-                type: Schema.Types.ObjectId,
-                ref: 'Review'
-            }
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
         }
     ],
+    lastDownloadTime: {
+        type: Date,
+        default: (new Date().getTime() - (24 * 60 * 60 * 1000))
+    }
     
 });
 

@@ -7,7 +7,7 @@
         <li><a href="/books/list">Index</a></li>
         <li><a href="/books/categories">Category</a></li>
     </ol>
-    <a href="/books/new">Add Book</a>
+    <a class="active" href="/books/new">Add Book</a>
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
@@ -18,7 +18,7 @@
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
     <h3 class="text-center p-3">Add New Book</h3>
-    <form action="/books/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+    <form action="/books/new" method="POST" novalidate class="validated-form m-3" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label" for="title">Title</label>
             <input class="form-control" type="text" id="title" name="book[title]" required>

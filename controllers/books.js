@@ -1,9 +1,15 @@
-const Doc = require('../models/doc')
+const Doc = require('../models/doc');
 const Book = require('../models/book');
-
+const Review = require('../models/review');
+const User = require('../models/user');
 
 const fs = require('fs');
 const pdfConverter = require('pdf-poppler');
+const PDFDocument = require('pdf-lib').PDFDocument;
+const pdf2img = require('pdf-img-convert');
+const pdfToPng = require('pdf-to-png-converter');
+const pdfCounter = require('pdf-page-counter');
+const {fromPath} = require('pdf2pic');
 const path = require('path');
 
 const {getImage, s3, paginate, uploadCompressedImage, encode} = require("../functions")
@@ -19,17 +25,16 @@ module.exports.index = async (req, res) => {
     if (sessData.featureBooks) {
         books = sessData.featureBooks;
     } else {
-        books = await Book.aggregate([{ $match: { filetype: "pdf" } }, { $sample: { size: 20 } }]);
+        books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
         sessData.featureBooks = books;
     }
-    // console.log(books.length)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
     res.render('books/index', {books, adArt, adBio})
 };
 
 module.exports.list = async (req, res) => {
-    const books = await Book.find({filetype: 'pdf'}).sort({title : 1});
+    const books = await Book.find({filetype: 'pdf', isApproved: true}).sort({title : 1});
     const [pageDocs, pageData] = paginate(req, books)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
@@ -42,7 +47,7 @@ module.exports.categories = (req, res) => {
 
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
-    const allBooks = await Book.find({filetype: "pdf"}).sort({name : 1});
+    const allBooks = await Book.find({filetype: "pdf", isApproved: true}).sort({name : 1});
     let books =[];
     for (let book of allBooks) {
         for (let word of words(category)) {
@@ -88,7 +93,7 @@ module.exports.createBook = async (req, res) => {
         let files = await fs.readdirSync('uploads')
         await uploadCompressedImage(`uploads/${files[0]}`, book.image.key);
         await book.save();    
-        req.flash('success', `${book.title.toUpperCase()} saved, thanks for your contribution`);
+        req.flash('success', `${book.title.toUpperCase()} saved successfully, awaiting approval.`);
         res.redirect(`/books/${book._id}`)
     } else {
         await book.save();
@@ -135,7 +140,7 @@ module.exports.adminUpload = async (req, res) => {
 module.exports.search = async (req, res) => {
     const item = req.query.search;
     // console.log(item)
-    const books = await Book.find({filetype: "pdf"}).sort({title: 1});
+    const books = await Book.find({filetype: "pdf", isApproved: true}).sort({title: 1});
     const result = [];
     books.forEach((book) => {
         book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
@@ -148,14 +153,12 @@ module.exports.search = async (req, res) => {
 
 module.exports.showBook = async (req, res) => {
 
-    const book = await Book.findById(req.params.id);
-    //     .populate({
-    //         path: 'reviews',
-    //         populate: {
-    //             path: 'author'
-    //         }
-    // }).populate('author');
-    // console.log(book)
+    const book = await Book.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
     if(!book) {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books');
@@ -182,7 +185,7 @@ module.exports.imageUpload = async (req, res) => {
     book.image.key = 'book-img/' + Date.now().toString() + '_' + req.file.originalname;
     await uploadCompressedImage(req.file.path, book.image.key);
     await book.save(); 
-    req.flash('success', 'Successfully saved book');
+    req.flash('success', 'Successfully saved book, awaiting approval.');
     res.redirect(`/books/${book._id}`)
 };
 
@@ -197,4 +200,73 @@ module.exports.download = async (req, res) => {
     res.attachment(book.title); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
+
+    const user = await User.findById(req.user._id);
+    // console.log(user);
+    user.lastDownloadTime = new Date();
+    await user.save();
 };
+
+module.exports.read = async (req, res) => {
+    const book = await Book.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    res.render('books/read', {book, adBio});
+}
+
+module.exports.pagesArray = async (req, res) => {
+
+    const book = await Book.findById(req.params.id);
+    const data = await getImage(book.document.key);
+    await fs.writeFileSync('output2.pdf', data.Body);
+
+    let files = await fs.readdirSync('uploads2')
+    for (const file of files) {
+        await fs.unlinkSync(path.join('uploads2', file));
+    }
+
+    const pdfPath = 'output2.pdf';
+    let option = {
+        format : 'jpeg',
+        out_dir : 'uploads2',
+        out_prefix : path.basename(pdfPath, path.extname(pdfPath)),
+        // page : 1
+    }
+    const jpg = await pdfConverter.convert(pdfPath, option)
+    files = await fs.readdirSync('uploads2')
+
+    const srcs = [];
+    files.forEach(file => {
+        var bitmap = fs.readFileSync(path.join('uploads2', file));
+        const base64 =  new Buffer.from(bitmap).toString('base64');
+        const src = `data:image/png;base64,${base64}`;
+        srcs.push(src);
+    })
+    
+    res.send(srcs);
+};
+
+module.exports.addReview = async (req, res) => {
+    // console.log(req)
+    const book = await Book.findById(req.params.id);
+    const review = new Review(req.body.review);
+    review.parentId = book._id.toString();
+    review.author = req.user._id;
+    review.category = 'Books';
+    review.dateTime = Date.now();
+    book.reviews.unshift(review);
+    await review.save();
+    await book.save();
+    res.redirect(`/books/${book._id}`)
+};
+
+module.exports.deleteReview = async (req, res) => {
+    const {bookId, reviewId} = req.params;
+    await Book.findByIdAndUpdate(bookId, {$pull: {reviews: reviewId} } );
+    await Review.findByIdAndDelete(reviewId);
+    res.send(reviewId);
+}

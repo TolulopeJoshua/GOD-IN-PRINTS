@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<div class="review col-lg-3 offset-lg-9 scroll p-5 p-lg-0 ps-lg-5">
+<div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0 ps-lg-5">
     <% if (currentUser) { %> 
     <form action="/articles/<%= article._id %>/addReview" method="POST" novalidate class="validated-form">
         <div class="mb-3">
@@ -47,24 +47,22 @@
     <div class="p-3 text-muted"><strong>LOGIN TO ADD COMMENT</strong></div>
     <% } %> 
     <% for(let review of article.reviews) { %>
-    <div class="card m-3 rounded-5">
+    <div id="<%= review._id %>" class="card m-3 rounded-5">
         <div class="card-body p-0">
-            <p class="review-text fs-5 m-2"><%= review.text %></p>
-            <p class="card-title text-capitalize d-flex m-1">
-                <em class="text-muted small ms-auto fw-lighter"> - <%= review.author.firstName.toLowerCase() %> <%= review.author.lastName.toLowerCase() %></em>
-            </p>
+            <div class="review-box">
+                <p class="review-text lh-sm small fs-6 m-2"><%= review.text %></p>
+                <p class="card-title text-capitalize d-flex m-1">
+                    <em class="text-muted small ms-auto fw-lighter"> - <%= review.author.firstName.toLowerCase() %> <%= review.author.lastName.toLowerCase() %></em>
+                </p>
+            </div>
             <div class="d-flex align-items-end small border-top m-1" style="opacity: 0.5;">
                 <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;">👍🏻</a>
                 <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
                 <% if (review.author.equals(currentUser)) { %> 
-                <a class="mx-3" href="">📝</a>
-                <a href="javascript:;">✖</a>
+                <a class="mx-3" href="/reviews/<%= review._id %>/edit">📝</a>
+                <a id="d<%= review._id %>" class="dreview" href="javascript:;">✖</a>
                 <% } %> 
             </div>
-            <!-- if( currentUser && review.author.equals(currentUser._id))
-            <form action="?_method=DELETE" method="POST">
-                <button class="btn btn-sm btn-danger">Delete</button>
-            </form> -->
         </div>
     </div>
     <% } %>
@@ -78,7 +76,7 @@
     idLength['<%= article._id %>'] = 0;
 </script>
 
-<script src="/javascripts/get_story.js"></script>
+<!-- <script src="/javascripts/get_story.js"></script> -->
 
 <script>
     const pageTitle = "Articles";

@@ -15,14 +15,14 @@ const categories = [
 
 
 module.exports.index = async (req, res) => {
-    const articles = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 300 } }]);
+    const articles = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
     res.render('articles/index', {categories, articles, adBook, adBio})
 };
 
 module.exports.list = async (req, res) => {
-    const articles = await Doc.find({docType: 'article'}).sort({name : 1});
+    const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles)
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
@@ -35,7 +35,7 @@ module.exports.categories = (req, res) => {
 
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
-    const articles = await Doc.find({docType: 'article', role: category}).sort({name : 1});
+    const articles = await Doc.find({docType: 'article', isApproved: true, role: category}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles)
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
@@ -55,13 +55,13 @@ module.exports.createArticle = async (req, res) => {
     const myBuffer = await fs.readFileSync('outputText.txt');
     await putImage(article.story, myBuffer);
     await article.save();
-    req.flash('success', `${article.name.toUpperCase()} saved successfully.`);
+    req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
     res.redirect(`/articles/${article._id}`)
 };
 
 module.exports.search = async (req, res) => {
     const item = req.query.search;
-    const articles = await Doc.find({docType: 'article'}).sort({name: 1});
+    const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name: 1});
     const result = [];
     articles.forEach((article) => {
         article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
@@ -126,11 +126,19 @@ module.exports.addReview = async (req, res) => {
     // console.log(req)
     const article = await Doc.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.parentId = article._id.toString();
     review.author = req.user._id;
-    review.category = 'articles';
+    review.category = 'Articles';
     review.dateTime = Date.now();
     article.reviews.unshift(review);
     await review.save();
     await article.save();
     res.redirect(`/articles/${article._id}`)
 };
+
+module.exports.deleteReview = async (req, res) => {
+    const {articleId, reviewId} = req.params;
+    await Doc.findByIdAndUpdate(articleId, {$pull: {reviews: reviewId} } );
+    await Review.findByIdAndDelete(reviewId);
+    res.send(reviewId);
+}
