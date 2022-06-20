@@ -15,13 +15,13 @@ router.get('/categories', books.categories);
 
 router.get('/category', isLoggedIn, catchAsync(books.perCategory));
 
-router.get('/new', isLoggedIn, books.renderNewForm);
+// router.get('/new', isLoggedIn, books.renderNewForm);
 
-router.post('/new', isLoggedIn, upload.single('document'), validateBook, catchAsync(books.createBook));
+// router.post('/new', isLoggedIn, upload.single('document'), validateBook, catchAsync(books.createBook));
 
-router.get('/adminUpload', isLoggedIn, books.renderAdminUpload);
+// router.get('/adminUpload', isLoggedIn, books.renderAdminUpload);
 
-router.post('/adminUpload', upload.array('documents'), catchAsync(books.adminUpload))
+// router.post('/adminUpload', upload.array('documents'), catchAsync(books.adminUpload))
  
 router.get('/search', isLoggedIn, catchAsync(books.search));
 
@@ -35,9 +35,9 @@ router.post('/:id/imageUpload', isLoggedIn, upload0.single("image"), catchAsync(
 
 router.get('/:id/download', isLoggedIn, checkDownloadLimit, catchAsync(books.download));
 
-router.get('/:id/read', isLoggedIn, catchAsync(books.read));
+// router.get('/:id/read', isLoggedIn, catchAsync(books.read));
 
-router.get('/:id/getPages', isLoggedIn, catchAsync(books.pagesArray));
+// router.get('/:id/getPages', isLoggedIn, catchAsync(books.pagesArray));
 
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(books.addReview));
 

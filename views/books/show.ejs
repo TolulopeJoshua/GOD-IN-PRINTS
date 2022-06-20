@@ -7,7 +7,7 @@
         <li><a href="/books/list">Index</a></li>
         <li><a href="/books/categories">Category</a></li>
     </ol>
-    <a href="/books/new">Add Book</a>
+    <a class="#" href="">Add Book <small class="fw-light">(soon)</small></a>
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
@@ -30,7 +30,7 @@
         <div class="card-body d-flex justify-content-around">
             <!-- <form class="d-inline" action="/books/<%=book._id%>/download" method="get"> -->
                 <a class="btn btn-lg btn-success" href="/books/<%=book._id%>/download">Download</a>
-                <a class="btn btn-lg btn-outline-success" href="/books/<%=book._id%>/read">&nbsp;&nbsp;Read&nbsp;&nbsp;</a>
+                <a class="btn btn-lg btn-outline-success disabled" href="/books/<%=book._id%>/read">&nbsp;&nbsp;Read&nbsp;&nbsp;</a>
                 <!-- <button class="btn btn-lg btn-success">Download</button>
             </form> -->
         </div>

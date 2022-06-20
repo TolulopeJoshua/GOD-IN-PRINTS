@@ -4,7 +4,7 @@ const Review = require('../models/review');
 const User = require('../models/user');
 
 const fs = require('fs');
-const pdfConverter = require('pdf-poppler');
+// const pdfConverter = require('pdf-poppler');
 const PDFDocument = require('pdf-lib').PDFDocument;
 const pdf2img = require('pdf-img-convert');
 const pdfToPng = require('pdf-to-png-converter');
