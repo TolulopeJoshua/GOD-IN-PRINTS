@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 
 <div id="menu" class="col-md-3 col-lg-2 menu d-md-block scroll">
-    <a class="h5" href="/biographies">Feature</a>
+    <a class="h5" href="/biographies/">Feature</a>
     <a class="h5" href="/biographies/list">List</a>
     <ol>
         <li><a href="/biographies/list">Index</a></li>
@@ -24,7 +24,6 @@
         <p class="ms-auto me-auto"><a href="/biographies/<%= biography._id %>/imageUpload">Upload Picture for Biography</a></p>
     <% } else { %> 
         <img class='card-img-top rounded-circle img-thumbnail image-size' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biography.image.key.replaceAll(" ", "+") %> alt="">
-        <script>imgIds.push('<%= biography._id %>-img');</script>
     <% } %> 
     <div class="card-body p-1">
         <h5 class="card-title"></h5>

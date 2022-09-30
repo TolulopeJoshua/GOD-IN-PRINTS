@@ -13,7 +13,11 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
+    },
+    facebook_id: {
+        type: String,
         unique: true
     },
     resetCode: {

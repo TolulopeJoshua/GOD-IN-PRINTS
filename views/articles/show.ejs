@@ -19,7 +19,7 @@
 <div class="col-md-9 col-lg-6 offset-md-3">
     <div class="card bg mb-3">
         <h1 class="card-title title-1 text-center"><%= article.name %></h1>      
-        <% if (article.image.key === 'none') { %> 
+        <% if (article.image.key === 'none' && currentUser && currentUser._id.equals(article.contributor)) { %> 
             <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Upload Image for Article</a></p>
         <% } %> 
         <div class="card-body justify">        

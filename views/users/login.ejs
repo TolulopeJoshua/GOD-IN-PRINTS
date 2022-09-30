@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="container d-flex justify-content-center align-items-center mt-5">
+<div class="container d-flex flex-column justify-content-center align-items-center mt-5">
     <div class="row">
         <!-- <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4"> -->
             <div style="max-width: 25em;" class="card shadow p-0">
@@ -8,36 +8,63 @@
                     alt="" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">Login</h5>
-                    <form action="/login" method="POST" class="validated-form" novalidate>
+                    <form action="/login/pwd" method="POST" class="validated-form" novalidate>
                         <div class="mb-3">
                             <label class="form-label" for="username">Email</label>
                             <input class="form-control" type="email" id="username" name="username" autofocus required>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             <label class="form-label" for="password">Password</label>
                             <input class="form-control" type="password" id="password" name="password" required>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
+                            <i role="button" class="bi bi-eye-slash position-absolute bottom-0 end-0 fs-5 p-2 me-4" id="togglePassword"></i>
                         </div>
                         <div class="d-flex align-items-center">
-                            <button class="btn btn-success btn-block me-auto">Login</button>
-                            <a class="small btn text-primary" href="/register">Register</a>
+                            <button class="btn btn-success btn-block me-auto w-50">Login</button>
+                            <a class="small btn text-primary w-50" href="/register">Register</a>
                         </div>
                     </form>
                 </div>
             </div>
-            <div style="max-width: 25em;" class="text-center mt-5 d-flex justify-content-center">
-                <a style="border-bottom:1px dotted;" class="small btn text-primary p-0" href="/changePassword">Forgot Password?</a>
-            </div>
-        <!-- </div> -->
-    </div>
+            <!-- </div> -->
+        </div>
+        <div class="loginSocials">
+            <p>
+                <em>------ OR ------</em>
+            </p>
+            <p><small>Login with</small></p>
+            <p>
+                <a href="/login/fbk" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
+                <span>|</span>
+                <a href="/login/ggl" class="btn btn-lg p-1 pb-2 ps-4 pe-4 ms-3 border-warning text-primary"><i class="fs-4">Google</i><i class="bi bi-google ps-2"></i></a>
+            </p>
+        </div>
+        <div style="max-width: 25em;" class="col-12 text-center mt-2 d-flex justify-content-center">
+            <a style="border-bottom:1px dotted;" class="small btn text-primary p-0" href="/changePassword">Forgot Password?</a>
+        </div>
 </div>
 
 <script>
     const pageTitle ='Login';
+</script>
+  
+<script>
+    const togglePassword = document
+        .querySelector('#togglePassword');
+
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', () => {
+
+        // Toggle the type attribute using
+        // getAttribure() method
+        const type = password
+            .getAttribute('type') === 'password' ?
+            'text' : 'password';
+              
+        password.setAttribute('type', type);
+
+        // Toggle the eye and bi-eye icon
+        togglePassword.classList.toggle('bi-eye');
+    });
 </script>

@@ -14,6 +14,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const ExpressError = require('./utils/ExpressError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const FacebookStrategy = require('passport-facebook');
 const User = require('./models/user');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -96,6 +97,7 @@ const scriptSrcUrls = [
     "https://cdnjs.cloudflare.comm/",
     "https://cdn.jsdelivr.net",
     "https://cdn.jsdelivr.net",
+    "https://kit.fontawesome.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -108,13 +110,15 @@ const styleSrcUrls = [
 ];
 const connectSrcUrls = [
     "https://api.emailjs.com/",
+    "https://ka-f.fontawesome.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
     // "https://events.mapbox.com/",
 ];
 const fontSrcUrls = [
-    "https://fonts.gstatic.com/"
+    "https://fonts.gstatic.com/",
+    "https://cdn.jsdelivr.net",
 ];
 app.use((req, res, next) => {
   res.removeHeader("Cross-Origin-Resource-Policy")
@@ -167,6 +171,29 @@ app.use(passport.session());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new FacebookStrategy({
+    clientID: process.env['FACEBOOK_CLIENT_ID'],
+    clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
+    callbackURL: '/redirect/fbk',
+    state: true
+  }, async function (accessToken, refreshToken, profile, cb) {
+    let user = await User.find({ facebook_id: profile.id });
+    if (user) {
+      cb(null, user); //Login if User already exists
+    } else { //else create a new User
+      user = new User({
+        facebook_id: profile.id, //pass in the id and displayName params from Facebook
+        username: profile.displayName,
+        firstName: profile.displayName.split(' ')[0],
+        lastName: profile.displayName.split(' ')[1] || 'Person',
+        email: profile.email || profile.id,
+        dateTime: Date.now(),
+        status: 'classic'
+      });
+      await user.save();
+      cb(null, user);
+    }
+  }));
 
 app.use((req, res, next) => {
     // console.log(req.user)

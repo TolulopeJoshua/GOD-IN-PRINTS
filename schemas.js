@@ -5,7 +5,7 @@ const extension = (joi) => ({
     type: 'string',
     base: joi.string(),
     messages: {
-        'string.escapeHTML': '{{#label}} must not include HTML!'
+        'string.escapeHTML': '{{#label}} must not include CODE!'
     },
     rules: {
         escapeHTML: {
@@ -63,4 +63,11 @@ module.exports.emailSchema = Joi.object({
 
 module.exports.passwordSchema = Joi.object({
     password: Joi.string().required().escapeHTML()
+})
+
+module.exports.userShema = Joi.object({
+    firstName: Joi.string().min(2).max(20).required().escapeHTML(),
+    lastName: Joi.string().min(2).max(20).required().escapeHTML(),
+    email: Joi.string().email().required().escapeHTML(),
+    password: Joi.string().min(8).max(100).required().escapeHTML(),
 })

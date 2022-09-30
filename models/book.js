@@ -6,7 +6,11 @@ const Schema = mongoose.Schema;
 const opts = {toJSON: {virtuals: true}};
 
 const BookScema = new Schema({
-    title: String,
+    title: {
+        type: String,
+        required: true,
+        unique: true
+    },
     author: String,
     // keywords: String,
     filetype: string,
