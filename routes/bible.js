@@ -8,7 +8,7 @@ const user = require('../models/user');
 
 router.get('/', bible.index);
 
-router.get('/chapter', isLoggedIn, catchAsync(bible.chapter)); 
+router.get('/chapter', catchAsync(bible.chapter)); 
   
 router.get('/search', isLoggedIn, catchAsync(bible.search));
 

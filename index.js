@@ -15,6 +15,7 @@ const ExpressError = require('./utils/ExpressError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const FacebookStrategy = require('passport-facebook');
+const GoogleStrategy = require('passport-google-oidc');
 const User = require('./models/user');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -186,7 +187,29 @@ passport.use(new FacebookStrategy({
         username: profile.displayName,
         firstName: profile.displayName.split(' ')[0],
         lastName: profile.displayName.split(' ')[1] || 'Person',
-        email: profile.email || profile.id,
+        dateTime: Date.now(),
+        status: 'classic'
+      });
+      await user.save();
+      cb(null, user);
+    }
+  }));
+
+  passport.use(new GoogleStrategy({
+    clientID: process.env['GOOGLE_CLIENT_ID'],
+    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+    callbackURL: '/oauth2/redirect/google',
+    scope: [ 'profile' ]
+  }, async function (issuer, profile, cb) {
+    let user = await User.find({ google_id: profile.id });
+    if (user) {
+      cb(null, user); //Login if User already exists
+    } else { //else create a new User
+      user = new User({
+        google_id: profile.id, //pass in the id and displayName params from Facebook
+        username: profile.displayName,
+        firstName: profile.displayName.split(' ')[0],
+        lastName: profile.displayName.split(' ')[1] || 'Person',
         dateTime: Date.now(),
         status: 'classic'
       });

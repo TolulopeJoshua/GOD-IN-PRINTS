@@ -20,6 +20,10 @@ const UserSchema = new Schema({
         type: String,
         unique: true
     },
+    google_id: {
+        type: String,
+        unique: true
+    },
     resetCode: {
         type: String,
         default: null
