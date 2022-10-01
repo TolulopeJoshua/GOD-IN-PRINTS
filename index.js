@@ -99,6 +99,7 @@ const scriptSrcUrls = [
     "https://cdn.jsdelivr.net",
     "https://cdn.jsdelivr.net",
     "https://kit.fontawesome.com",
+    "https://connect.facebook.net",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
