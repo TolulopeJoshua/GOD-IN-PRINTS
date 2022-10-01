@@ -113,7 +113,11 @@
                 loginForm.append('lastName', res.name.split()[1] || 'Person');
                 loginForm.append('password', res.id);
 
-                axios.post('/register', { loginForm })
+                axios.post('https://godinprints.org/register', loginForm,
+                    {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                    }
+                )
                 .then(function (response) {
                     console.log(response);
                 })
