@@ -8,6 +8,12 @@
         xfbml            : true,
         version          : 'v15.0'
       });
+        FB.getLoginStatus(function(response) {
+            console.log(response);
+            FB.logout(function(res) {
+                console.log(res)
+            })
+        });
     };
   </script>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
@@ -86,7 +92,6 @@
     const fbLogin = document.querySelector('#fbLogin');
 
     fbLogin.addEventListener('click', () => {
-      FB.logout();
       FB.getLoginStatus(function(response) {
           if (response.authResponse === null) {
             FB.login(function(res){
