@@ -96,7 +96,7 @@
           if (response.authResponse === null) {
             FB.login(function(res){
                 console.log(res)
-            }, {scope: 'public_profile,email'});
+            }, {scope: 'public_profile'});
           } else {
             console.log(response.authResponse)
           }
