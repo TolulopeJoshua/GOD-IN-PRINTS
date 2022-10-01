@@ -175,7 +175,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-    callbackURL: '/redirect/fbk'
+    callbackURL: '/redirect/fbk',
+    state: true
   }, async function (accessToken, refreshToken, profile, cb) {
     let user = await User.find({ facebook_id: profile.id });
     if (user) {
