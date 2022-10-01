@@ -87,10 +87,12 @@
     console.log(fbLogin);
     fbLogin.addEventListener('click', () => {
       FB.getLoginStatus(function(response) {
-          if (!response.authResponse) {
-            FB.login(function(response){
-                console.log(response)
+          if (response.authResponse === null) {
+            FB.login(function(res){
+                console.log(res)
             });
+          } else {
+            console.log(response.authResponse)
           }
       });
     })
