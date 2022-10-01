@@ -82,12 +82,16 @@
 </script>
 
 <script>
-    
+
     const fbLogin = document.querySelector('#fbLogin');
     console.log(fbLogin);
     fbLogin.addEventListener('click', () => {
       FB.getLoginStatus(function(response) {
-          console.log(response);
+          if (!response.authResponse) {
+            FB.login(function(response){
+                console.log(response)
+            });
+          }
       });
     })
 

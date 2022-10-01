@@ -113,6 +113,7 @@ const styleSrcUrls = [
 const connectSrcUrls = [
     "https://api.emailjs.com/",
     "https://ka-f.fontawesome.com",
+    "https://www.facebook.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
