@@ -116,6 +116,7 @@ const connectSrcUrls = [
     "https://www.facebook.com",
     "https://web.facebook.com",
     "https://graph.facebook.com",
+    "https://z-p3-graph.facebook.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
