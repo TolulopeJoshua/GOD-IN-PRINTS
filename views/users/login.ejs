@@ -113,7 +113,7 @@
                 loginForm.append('lastName', res.name.split()[1] || 'Person');
                 loginForm.append('password', res.id);
 
-                axios.post('/register', { body: loginForm})
+                axios.post('/register', { loginForm })
                 .then(function (response) {
                     console.log(response);
                 })
