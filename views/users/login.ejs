@@ -12,14 +12,6 @@
   </script>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-  <script>
-    function checkFblogin() {
-        FB.getLoginStatus(function(response) {
-            console.log(response);
-        });
-    }
-  </script>
-
 <div class="container d-flex flex-column justify-content-center align-items-center mt-5">
     <div class="row">
         <!-- <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4"> -->
@@ -54,7 +46,7 @@
             </p>
             <p><small>Login with</small></p>
             <p>
-                <a onclick="checkFblogin()" href="#" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
+                <a id="fbLogin" href="#" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
                 <span>|</span>
                 <a href="/login/ggl" class="btn btn-lg p-1 pb-2 ps-4 pe-4 ms-3 border-warning text-primary"><i class="fs-4">Google</i><i class="bi bi-google ps-2"></i></a>
             </p>
@@ -87,4 +79,17 @@
         // Toggle the eye and bi-eye icon
         togglePassword.classList.toggle('bi-eye');
     });
+</script>
+
+<script>
+  function checkFblogin() {
+
+    const fbLogin = document.getElementById('fbLogin');
+    fbLogin.addEventListener('click', () => {
+      FB.getLoginStatus(function(response) {
+          console.log(response);
+      });
+    })
+  }
+  
 </script>
