@@ -70,4 +70,8 @@ module.exports.userShema = Joi.object({
     lastName: Joi.string().min(2).max(20).required().escapeHTML(),
     email: Joi.string().email().required().escapeHTML(),
     password: Joi.string().min(8).max(100).required().escapeHTML(),
+    loginType: Joi.string().escapeHTML(),
+    accessToken: Joi.string().escapeHTML(),
+    facebookId: Joi.string().escapeHTML(),
+    googleId: Joi.string().escapeHTML(),
 })

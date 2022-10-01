@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Review = require('../models/review');
+const axios = require('axios');
 
 
 module.exports.renderRegister = (req, res) => {
@@ -8,12 +9,26 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res) => {
     try {
-        const {email, firstName, lastName, password} = req.body;
+        const {email, firstName, lastName, password, loginType, accessToken, facebookId, googleId} = req.body;
         const username = email;
         const status = 'classic';
         const dateTime = Date.now();
-        const user = new User({firstName, lastName, email, username, status, dateTime});
-        const registeredUser = await User.register(user, password);
+        let user, registeredUser;
+        if (loginType === 'facebook') {
+          await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
+          const registered = await User.find({username: email});
+          if (registered) {
+            registeredUser = registered;
+          } else {
+            user = new User({firstName, lastName, email, username, facebookId, status, dateTime});
+            registeredUser = await User.register(user, password);
+            sendMail();
+          }
+        } else {
+          user = new User({firstName, lastName, email, username, status, dateTime});
+          registeredUser = await User.register(user, password);
+          sendMail();
+        }
         req.login(registeredUser, err => {
             if (err) return next(err);
             // req.flash('success', 'Welcome to God-In-Prints Libraries!');
@@ -22,28 +37,30 @@ module.exports.register = async (req, res) => {
             res.redirect(redirectUrl);
         })
     
-        let mailOptions = {
-            from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
-            to: user.email, // list of receivers
-            subject: 'Welcome to GIP Library', // Subject line
-            // text: 'hello', // plain text body
-            html: `<p>Hello ${user.firstName.toUpperCase()},<p/><br>
-              <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
-              <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
-              <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
-        };
-        const {transporter} = require('../functions');
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log(error)
-              return res.render('users/changePassword', {msg: 'An error occured.'})
-            }
-            console.log(info)
-            res.render('users/changePassword', {msg: 'Check your mail (inbox / spam folder) for the password reset link.'})
-          });
+        function sendMail() {
+          let mailOptions = {
+              from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
+              to: user.email, // list of receivers
+              subject: 'Welcome to GIP Library', // Subject line
+              // text: 'hello', // plain text body
+              html: `<p>Hello ${user.firstName.toUpperCase()},<p/><br>
+                <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
+                <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
+                <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
+          };
+          const {transporter} = require('../functions');
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log(error)
+              }
+              console.log(info)
+            });
+        }
+
     } catch (e) {
-        req.flash('error', e.message)
-        res.redirect('/register')
+      const redirectUrl = req.session.returnTo || '/';
+      delete req.session.returnTo;
+      res.redirect(redirectUrl);
     }
 }
 

@@ -16,11 +16,11 @@ const UserSchema = new Schema({
         unique: true,
         required: true,
     },
-    facebook_id: {
+    facebookId: {
         type: String,
         unique: true
     },
-    google_id: {
+    googleId: {
         type: String,
         unique: true
     },
