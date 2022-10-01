@@ -84,13 +84,13 @@
 <script>
 
     const fbLogin = document.querySelector('#fbLogin');
-    console.log(fbLogin);
+    fb.logout();
     fbLogin.addEventListener('click', () => {
       FB.getLoginStatus(function(response) {
           if (response.authResponse === null) {
             FB.login(function(res){
                 console.log(res)
-            });
+            }, {scope: 'public_profile,email'});
           } else {
             console.log(response.authResponse)
           }
