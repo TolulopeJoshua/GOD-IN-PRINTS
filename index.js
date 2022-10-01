@@ -176,7 +176,7 @@ passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: '/redirect/fbk',
-    state: true
+    state: 'custom'
   }, async function (accessToken, refreshToken, profile, cb) {
     let user = await User.find({ facebook_id: profile.id });
     if (user) {
@@ -198,7 +198,7 @@ passport.use(new FacebookStrategy({
   passport.use(new GoogleStrategy({
     clientID: process.env['GOOGLE_CLIENT_ID'],
     clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-    callbackURL: '/oauth2/redirect/google',
+    callbackURL: '/redirect/ggl',
     scope: [ 'profile' ]
   }, async function (issuer, profile, cb) {
     let user = await User.find({ google_id: profile.id });
@@ -206,7 +206,7 @@ passport.use(new FacebookStrategy({
       cb(null, user); //Login if User already exists
     } else { //else create a new User
       user = new User({
-        google_id: profile.id, //pass in the id and displayName params from Facebook
+        google_id: profile.id, //pass in the id and displayName params from Google
         username: profile.displayName,
         firstName: profile.displayName.split(' ')[0],
         lastName: profile.displayName.split(' ')[1] || 'Person',
