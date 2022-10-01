@@ -84,7 +84,7 @@
 <script>
 
     const fbLogin = document.querySelector('#fbLogin');
-    fb.logout();
+    FB.logout();
     fbLogin.addEventListener('click', () => {
       FB.getLoginStatus(function(response) {
           if (response.authResponse === null) {
