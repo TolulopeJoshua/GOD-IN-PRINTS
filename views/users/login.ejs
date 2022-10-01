@@ -105,27 +105,27 @@
             loginForm.append('loginType', 'facebook');
             loginForm.append('accessToken', res.accessToken);
             loginForm.append('facebookId', res.userID);
+            
+            FB.api('/me?fields=name,email', function (res) {
+                console.log(res)
+                loginForm.append('email', res.email);
+                loginForm.append('firstName', res.name.split()[0]);
+                loginForm.append('lastName', res.name.split()[1] || 'Person');
+                loginForm.append('password', res.id);
+
+                axios.post('/register', { body: loginForm})
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    alert(error.message);
+                });
+            });
         }, {scope: 'public_profile,email'});
         //   } else {
         //     console.log(response.authResponse)
         //   }
     //   });
-      FB.api('/me?fields=name,email', function (res) {
-        console.log(res)
-        loginForm.append('email', res.email);
-        loginForm.append('firstName', res.name.split()[0]);
-        loginForm.append('lastName', res.name.split()[1] || 'Person');
-        loginForm.append('password', res.id);
-      });
-
-      axios.post('/register', { body: loginForm})
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            alert(error.message);
-        });
-
     })
 
 </script>
