@@ -1,5 +1,23 @@
 <% layout('layouts/boilerplate')%>
 
+<script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '658989752467435',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v15.0'
+      });
+    };
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+  <script>
+    FB.getLoginStatus(function(response) {
+        console.log(response);
+    });
+  </script>
+
 <div class="container d-flex flex-column justify-content-center align-items-center mt-5">
     <div class="row">
         <!-- <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4"> -->
