@@ -115,6 +115,7 @@ const connectSrcUrls = [
     "https://ka-f.fontawesome.com",
     "https://www.facebook.com",
     "https://web.facebook.com",
+    "'https://graph.facebook.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
