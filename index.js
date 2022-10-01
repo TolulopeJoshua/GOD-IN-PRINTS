@@ -157,6 +157,7 @@ app.use(
                 "https://www.christianityboard.com",
                 "https://www.christianforums.com",
                 "https://dclm.org",
+                "https://www.facebook.com",
 
                 // "https://res.cloudinary.com/depvtmznu/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 // "https://images.unsplash.com/",
