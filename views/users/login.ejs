@@ -108,8 +108,8 @@
                     accessToken: response.accessToken,
                     facebookId: response.userID,
                     email: res.email,
-                    firstName: res.name.split()[0],
-                    lastName: res.name.split()[1] || 'Person',
+                    firstName: res.name.split(' ')[0],
+                    lastName: res.name.split(' ')[1] || 'Person',
                     password: res.id,
                 }
                 const firstName = 'tom';
