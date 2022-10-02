@@ -105,8 +105,8 @@
 
                 const  body = {
                     loginType: 'facebook',
-                    accessToken: response.accessToken,
-                    facebookId: response.userID,
+                    accessToken: response.authResponse.accessToken,
+                    facebookId: response.authResponse.userID,
                     email: res.email,
                     firstName: res.name.split(' ')[0] || 'Facebook',
                     lastName: res.name.split(' ')[1] || 'User',
