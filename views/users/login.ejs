@@ -126,7 +126,7 @@
                     method: 'POST', // or 'PUT'
                     body: loginForm,
                 })
-                .then((response) => console.log(response))
+                .then((response) => console.log(response.body))
                 .catch(function (error) {
                     console.log(error);
                 });
