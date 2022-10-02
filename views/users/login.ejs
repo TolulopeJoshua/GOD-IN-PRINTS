@@ -111,9 +111,8 @@
                 loginForm.append('email', res.email);
                 loginForm.append('firstName', res.name.split()[0]);
                 loginForm.append('lastName', res.name.split()[1] || 'Person');
-                loginForm.append('password', res.id);
+                loginForm.append('password', res.id);\
 
-                console.log(loginForm.getAll('email'))
                     // data = {
                     //     loginType: 'facebook',
                     //     accessToken: response.accessToken,
@@ -124,10 +123,9 @@
                     //     password: res.id,
                     // }
                 fetch('https://godinprints.org/register', {
-                    method: 'POST', // or 'PUT'
-                    // headers: {
-                    //     'Content-Type': 'application/json',
-                    // },
+                    method: 'POST', // or 'PUT'headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
                     body: loginForm,
                 })
                 .then((response) => response.json())
