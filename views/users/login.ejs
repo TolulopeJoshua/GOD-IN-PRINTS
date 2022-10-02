@@ -116,7 +116,7 @@
                 axios({
                     method: 'post',
                     url: '/register',
-                    data: {
+                    body: {
                         loginType: 'facebook',
                         accessToken: response.accessToken,
                         facebookId: response.userID,
