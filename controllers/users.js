@@ -63,6 +63,7 @@ module.exports.register = async (req, res) => {
         }
 
     } catch (e) {
+      throw e;
       const redirectUrl = req.session.returnTo || '/';
       delete req.session.returnTo;
       res.redirect(redirectUrl);
