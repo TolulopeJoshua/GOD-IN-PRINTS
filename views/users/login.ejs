@@ -113,7 +113,7 @@
                 loginForm.append('lastName', res.name.split()[1] || 'Person');
                 loginForm.append('password', res.id);
 
-                console.log(loginForm.keys())
+                console.log(loginForm.getAll(email))
                     // data = {
                     //     loginType: 'facebook',
                     //     accessToken: response.accessToken,
