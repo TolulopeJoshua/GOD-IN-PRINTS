@@ -11,15 +11,15 @@ router.route('/register')
 
 router.get('/login', users.renderLogin)
 
-router.post('/login/pwd', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login);
+router.post('/login/pwd', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.login));
 
-router.get('/login/fbk', passport.authenticate('facebook'));
+// router.get('/login/fbk', passport.authenticate('facebook'));
 
-router.get('/redirect/fbk', passport.authenticate('facebook', { failureFlash: true, successRedirect: '/', failureRedirect: '/login' }));
+// router.get('/redirect/fbk', passport.authenticate('facebook', { failureFlash: true, successRedirect: '/', failureRedirect: '/login' }));
 
-router.get('/login/ggl', passport.authenticate('google'));
+// router.get('/login/ggl', passport.authenticate('google'));
 
-router.get('/redirect/ggl', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
+// router.get('/redirect/ggl', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
 
 router.get('/logout', users.logout);
 

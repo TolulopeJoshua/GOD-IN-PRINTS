@@ -19,7 +19,7 @@ module.exports.register = async (req, res) => {
           await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
           const registered = await User.find({username: email});
           if (!Object.keys(registered).length > 0) {
-            user = new User({firstName, lastName, email, username, facebookId, status, dateTime});
+            user = new User({firstName, lastName, email, username, loginType, facebookId, status, dateTime});
             registeredUser = await User.register(user, password);
             sendMail();
           }
@@ -34,7 +34,7 @@ module.exports.register = async (req, res) => {
           });
           return;
         } else {
-          user = new User({firstName, lastName, email, username, status, dateTime});
+          user = new User({firstName, lastName, email, username, loginType: 'password', status, dateTime});
           registeredUser = await User.register(user, password);
           sendMail();
         }
@@ -67,10 +67,7 @@ module.exports.register = async (req, res) => {
         }
 
     } catch (e) {
-      throw e;
-      const redirectUrl = req.session.returnTo || '/';
-      delete req.session.returnTo;
-      res.redirect(redirectUrl);
+      throw {message: e};
     }
 }
 
@@ -78,8 +75,15 @@ module.exports.renderLogin = (req, res) => {
     res.render('users/login')
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
     // req.flash('success', 'welcome back');
+
+    const user = await User.findById(req.user._id);
+    if (user.loginType !== 'password') {
+      req.logOut();
+      throw {message: `User initialized with ${user.loginType}, select password reset to change login method.`}
+    }
+
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);

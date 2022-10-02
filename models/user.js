@@ -16,13 +16,16 @@ const UserSchema = new Schema({
         unique: true,
         required: true,
     },
-    facebookId: {
+    loginType: {
         type: String,
-        unique: true
+        enum: ['password', 'facebook', 'google'],
+        required: true,
+    },
+    facebookId: {
+        type: String
     },
     googleId: {
-        type: String,
-        unique: true
+        type: String
     },
     resetCode: {
         type: String,

@@ -66,7 +66,7 @@ const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     secret,
-    touchAfter: 24 * 60 * 60
+    touchAfter: 30 * 24 * 60 * 60
   });
 
   store.on("error", function (e) {
@@ -82,8 +82,8 @@ const sessionConfig = {
     cookie: {
         httpOnly: true,
         // secure: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24,
-        maxAge: 1000 * 60 * 60 * 24
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 60 * 24 * 30
     }
 }
 
