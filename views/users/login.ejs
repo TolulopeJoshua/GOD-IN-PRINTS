@@ -113,8 +113,10 @@
                 // loginForm.append('lastName', res.name.split()[1] || 'Person');
                 // loginForm.append('password', res.id);
 
-                axios.post('/register', 
-                    {
+                axios({
+                    method: 'post',
+                    url: '/register',
+                    data: {
                         loginType: 'facebook',
                         accessToken: response.accessToken,
                         facebookId: response.userID,
@@ -122,11 +124,8 @@
                         firstName: res.name.split()[0],
                         lastName: res.name.split()[1] || 'Person',
                         password: res.id,
-                    },
-                    {
-                        headers: {'Content-Type': 'application/json',}
                     }
-                )
+                })
                 .then(function (response) {
                     console.log(response);
                 })
