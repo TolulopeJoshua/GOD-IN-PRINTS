@@ -16,7 +16,10 @@ module.exports.register = async (req, res) => {
         const dateTime = Date.now();
         let user, registeredUser;
         if (loginType === 'facebook') {
-          await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
+          const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
+          if (!validate.id === facebookId) {
+            throw {message: 'Validation error!'}
+          }
           const registered = await User.find({username: email});
           if (!Object.keys(registered).length > 0) {
             user = new User({firstName, lastName, email, username, loginType, facebookId, status, dateTime});
