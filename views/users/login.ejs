@@ -108,11 +108,11 @@
                     accessToken: response.accessToken,
                     facebookId: response.userID,
                     email: res.email,
-                    firstName: res.name.split(' ')[0],
-                    lastName: res.name.split(' ')[1] || 'Person',
+                    firstName: res.name.split(' ')[0] || 'Facebook',
+                    lastName: res.name.split(' ')[1] || 'User',
                     password: res.id,
                 }
-                const firstName = 'tom';
+                console.log(body)
                 axios.post('/register', body, 
                 {
                     headers: {
@@ -120,14 +120,14 @@
                     }
                 })
                 .then(function (response) {
-                    if (response.message === 'success') {
-                        alert(response.redirectUrl);
-                        window.location.href = response.redirectUrl;
+                    if (response.data.message === 'success') {
+                        console.log(response)
+                        window.location.href = response.data.redirectUrl;
                     }
                     console.log(response)
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    alert(error);
                 });
             });
         }, {scope: 'public_profile,email'});
