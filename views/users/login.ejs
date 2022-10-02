@@ -113,10 +113,7 @@
                 // loginForm.append('lastName', res.name.split()[1] || 'Person');
                 // loginForm.append('password', res.id);
 
-                axios({
-                    method: 'post',
-                    url: '/register',
-                    body: {
+                    data = {
                         loginType: 'facebook',
                         accessToken: response.accessToken,
                         facebookId: response.userID,
@@ -125,6 +122,12 @@
                         lastName: res.name.split()[1] || 'Person',
                         password: res.id,
                     }
+                fetch('https://godinprints.org/register', {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
                 })
                 .then(function (response) {
                     console.log(response);
