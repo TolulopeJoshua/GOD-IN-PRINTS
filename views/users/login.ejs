@@ -126,10 +126,7 @@
                     method: 'POST', // or 'PUT'
                     body: loginForm,
                 })
-                .then((response) => response.json())
-                .then((result) => {
-                    console.log('Success:', result);
-                })
+                .then((response) => console.log(response))
                 .catch(function (error) {
                     console.log(error);
                 });
