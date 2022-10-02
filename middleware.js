@@ -7,7 +7,7 @@ const Review = require('./models/review')
 
 module.exports.validateUser = (req, res, next) => {
 
-    throw new ExpressError(req, 400);
+    throw new ExpressError(req.toString(), 400);
     const {error} = userShema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
