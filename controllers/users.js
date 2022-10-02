@@ -24,6 +24,7 @@ module.exports.register = async (req, res) => {
             registeredUser = await User.register(user, password);
             sendMail();
           }
+          return res.status(200).send({message: 'success'})
         } else {
           user = new User({firstName, lastName, email, username, status, dateTime});
           registeredUser = await User.register(user, password);
