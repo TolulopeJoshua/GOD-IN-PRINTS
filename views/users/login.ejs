@@ -120,8 +120,11 @@
                     }
                 })
                 .then(function (response) {
-                    alert(response);
-                    window.location.href = response.redirectUrl;
+                    if (response.message === 'success') {
+                        alert(response.redirectUrl);
+                        window.location.href = response.redirectUrl;
+                    }
+                    console.log(response)
                 })
                 .catch(function (error) {
                     console.log(error);
