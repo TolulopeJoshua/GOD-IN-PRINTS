@@ -98,43 +98,44 @@
     fbLogin.addEventListener('click', () => {
     //   FB.getLoginStatus(function(response) {
     //       if (response.authResponse === null) {
-        const loginForm = new FormData();
-
         FB.login(function(response){
             console.log(response)
-            // loginForm.append('loginType', 'facebook');
-            // loginForm.append('accessToken', response.accessToken);
-            // loginForm.append('facebookId', response.userID);
             
             FB.api('/me?fields=name,email', function (res) {
                 console.log(res)
-                // loginForm.append('email', res.email);
-                // loginForm.append('firstName', res.name.split()[0]);
-                // loginForm.append('lastName', res.name.split()[1] || 'Person');
-                // loginForm.append('password', res.id);
-                // console.log(loginForm)
-                    data = {
-                        loginType: 'facebook',
-                        accessToken: response.accessToken,
-                        facebookId: response.userID,
-                        email: res.email,
-                        firstName: res.name.split()[0],
-                        lastName: res.name.split()[1] || 'Person',
-                        password: res.id,
-                    }
+                
+                const loginForm = new FormData();
+                loginForm.append('loginType', 'facebook');
+                loginForm.append('accessToken', response.accessToken);
+                loginForm.append('facebookId', response.userID);
+                loginForm.append('email', res.email);
+                loginForm.append('firstName', res.name.split()[0]);
+                loginForm.append('lastName', res.name.split()[1] || 'Person');
+                loginForm.append('password', res.id);
+
+                console.log(loginForm)
+                    // data = {
+                    //     loginType: 'facebook',
+                    //     accessToken: response.accessToken,
+                    //     facebookId: response.userID,
+                    //     email: res.email,
+                    //     firstName: res.name.split()[0],
+                    //     lastName: res.name.split()[1] || 'Person',
+                    //     password: res.id,
+                    // }
                 fetch('https://godinprints.org/register', {
                     method: 'POST', // or 'PUT'
                     // headers: {
                     //     'Content-Type': 'application/json',
                     // },
-                    body: new FormData(data),
+                    body: loginForm,
                 })
                 .then((response) => response.json())
                 .then((result) => {
                     console.log('Success:', result);
                 })
                 .catch(function (error) {
-                    alert(error.toString());
+                    console.log(error);
                 });
             });
         }, {scope: 'public_profile,email'});
