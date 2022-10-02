@@ -118,7 +118,7 @@ module.exports.paginate = (req, docs) => {
     pageData.search = req.query.search;
     return [pageDocs, pageData];
 }
-
+ 
 let nodeMailer = require('nodemailer');
 module.exports.transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com", // hostname

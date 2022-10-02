@@ -96,43 +96,38 @@
     const fbLogin = document.querySelector('#fbLogin');
 
     fbLogin.addEventListener('click', () => {
-    //   FB.getLoginStatus(function(response) {
-    //       if (response.authResponse === null) {
+
         FB.login(function(response){
             console.log(response)
             
             FB.api('/me?fields=name,email', function (res) {
                 console.log(res)
-                
-                // const loginForm = new FormData();
-                // loginForm.append('loginType', 'facebook');
-                // loginForm.append('accessToken', response.accessToken);
-                // loginForm.append('facebookId', response.userID);
-                // loginForm.append('email', res.email);
-                // loginForm.append('firstName', res.name.split()[0]);
-                // loginForm.append('lastName', res.name.split()[1] || 'Person');
-                // loginForm.append('password', res.id);
 
-                  const  body = {
-                        loginType: 'facebook',
-                        accessToken: response.accessToken,
-                        facebookId: response.userID,
-                        email: res.email,
-                        firstName: res.name.split()[0],
-                        lastName: res.name.split()[1] || 'Person',
-                        password: res.id,
+                const  body = {
+                    loginType: 'facebook',
+                    accessToken: response.accessToken,
+                    facebookId: response.userID,
+                    email: res.email,
+                    firstName: res.name.split()[0],
+                    lastName: res.name.split()[1] || 'Person',
+                    password: res.id,
+                }
+                const firstName = 'tom';
+                axios.post('/register', body, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                axios.post('register', body)
-                .then((response) => console.log(response))
+                })
+                .then(function (response) {
+                    console.log(response);
+                    window.location.href = response.redirectUrl;
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
             });
         }, {scope: 'public_profile,email'});
-        //   } else {
-        //     console.log(response.authResponse)
-        //   }
-    //   });
     })
 
 </script>

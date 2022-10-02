@@ -6,9 +6,8 @@ const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, pa
 const Review = require('./models/review')
 
 module.exports.validateUser = (req, res, next) => {
-
-    throw new ExpressError(req.body.firstName, 400);
-    const {error} = userShema.validate(req.body.Error);
+    console.log(req.body)
+    const {error} = userShema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)

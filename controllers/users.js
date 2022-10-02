@@ -8,6 +8,7 @@ module.exports.renderRegister = (req, res) => {
 }
 
 module.exports.register = async (req, res) => {
+
     try {
         const { email, firstName, lastName, password, loginType, accessToken, facebookId } = req.body;
         const username = email;
@@ -24,7 +25,7 @@ module.exports.register = async (req, res) => {
             registeredUser = await User.register(user, password);
             sendMail();
           }
-          return res.status(200).send({message: 'success'})
+          return res.status(200).send({message: 'success', redirectUrl: req.session.returnTo})
         } else {
           user = new User({firstName, lastName, email, username, status, dateTime});
           registeredUser = await User.register(user, password);

@@ -51,6 +51,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
@@ -178,51 +179,52 @@ app.use(passport.session());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.use(new FacebookStrategy({
-    clientID: process.env['FACEBOOK_CLIENT_ID'],
-    clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-    callbackURL: '/redirect/fbk',
-    state: true
-  }, async function (accessToken, refreshToken, profile, cb) {
-    let user = await User.find({ facebook_id: profile.id });
-    if (user) {
-      cb(null, user); //Login if User already exists
-    } else { //else create a new User
-      user = new User({
-        facebook_id: profile.id, //pass in the id and displayName params from Facebook
-        username: profile.displayName,
-        firstName: profile.displayName.split(' ')[0],
-        lastName: profile.displayName.split(' ')[1] || 'Person',
-        dateTime: Date.now(),
-        status: 'classic'
-      });
-      await user.save();
-      cb(null, user);
-    }
-  }));
 
-  passport.use(new GoogleStrategy({
-    clientID: process.env['GOOGLE_CLIENT_ID'],
-    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-    callbackURL: '/redirect/ggl',
-    scope: [ 'profile' ]
-  }, async function (issuer, profile, cb) {
-    let user = await User.find({ google_id: profile.id });
-    if (user) {
-      cb(null, user); //Login if User already exists
-    } else { //else create a new User
-      user = new User({
-        google_id: profile.id, //pass in the id and displayName params from Google
-        username: profile.displayName,
-        firstName: profile.displayName.split(' ')[0],
-        lastName: profile.displayName.split(' ')[1] || 'Person',
-        dateTime: Date.now(),
-        status: 'classic'
-      });
-      await user.save();
-      cb(null, user);
-    }
-  }));
+// passport.use(new FacebookStrategy({
+//     clientID: process.env['FACEBOOK_CLIENT_ID'],
+//     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
+//     callbackURL: '/redirect/fbk',
+//     state: true
+//   }, async function (accessToken, refreshToken, profile, cb) {
+//     let user = await User.find({ facebook_id: profile.id });
+//     if (user) {
+//       cb(null, user); //Login if User already exists
+//     } else { //else create a new User
+//       user = new User({
+//         facebook_id: profile.id, //pass in the id and displayName params from Facebook
+//         username: profile.displayName,
+//         firstName: profile.displayName.split(' ')[0],
+//         lastName: profile.displayName.split(' ')[1] || 'Person',
+//         dateTime: Date.now(),
+//         status: 'classic'
+//       });
+//       await user.save();
+//       cb(null, user);
+//     }
+//   }));
+
+  // passport.use(new GoogleStrategy({
+  //   clientID: process.env['GOOGLE_CLIENT_ID'],
+  //   clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+  //   callbackURL: '/redirect/ggl',
+  //   scope: [ 'profile' ]
+  // }, async function (issuer, profile, cb) {
+  //   let user = await User.find({ google_id: profile.id });
+  //   if (user) {
+  //     cb(null, user); //Login if User already exists
+  //   } else { //else create a new User
+  //     user = new User({
+  //       google_id: profile.id, //pass in the id and displayName params from Google
+  //       username: profile.displayName,
+  //       firstName: profile.displayName.split(' ')[0],
+  //       lastName: profile.displayName.split(' ')[1] || 'Person',
+  //       dateTime: Date.now(),
+  //       status: 'classic'
+  //     });
+  //     await user.save();
+  //     cb(null, user);
+  //   }
+  // }));
 
 app.use((req, res, next) => {
     // console.log(req.user)
@@ -263,7 +265,7 @@ app.get('/about', async (req, res) => {
     res.render('about');
 });
 
-app.all('*', (req, res, next) => {
+app.all('*', (req, res, next) => { 
     next(new ExpressError('Page Not Found', 404))
 })
 
