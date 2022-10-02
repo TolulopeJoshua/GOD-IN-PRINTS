@@ -112,7 +112,7 @@
                 loginForm.append('firstName', res.name.split()[0]);
                 loginForm.append('lastName', res.name.split()[1] || 'Person');
                 loginForm.append('password', res.id);
-
+                console.log(loginForm)
                     // data = {
                     //     loginType: 'facebook',
                     //     accessToken: response.accessToken,
@@ -129,8 +129,9 @@
                     // },
                     body: loginForm,
                 })
-                .then(function (response) {
-                    console.log(response);
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log('Success:', result);
                 })
                 .catch(function (error) {
                     alert(error.toString());
