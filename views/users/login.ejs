@@ -122,7 +122,7 @@
                         lastName: res.name.split()[1] || 'Person',
                         password: res.id,
                     }
-                axios.post('register', data)
+                axios.post('register', {...data})
                 .then((response) => console.log(response))
                 .catch(function (error) {
                     console.log(error);
