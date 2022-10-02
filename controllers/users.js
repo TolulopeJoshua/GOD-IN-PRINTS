@@ -18,14 +18,17 @@ module.exports.register = async (req, res) => {
         if (loginType === 'facebook') {
           await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
           const registered = await User.find({username: email});
-          if (registered) {
+          if (Object.keys(registered).length > 0) {
             registeredUser = registered;
           } else {
             user = new User({firstName, lastName, email, username, facebookId, status, dateTime});
             registeredUser = await User.register(user, password);
             sendMail();
           }
-          return res.status(200).send({message: 'success', redirectUrl: req.session.returnTo})
+          req.login(registeredUser, err => {
+            if (err) return res.status(500).send({message: 'Authorization error!'})
+            return res.status(200).send({message: 'success', redirectUrl: req.session.returnTo || '/'})
+          })
         } else {
           user = new User({firstName, lastName, email, username, status, dateTime});
           registeredUser = await User.register(user, password);
