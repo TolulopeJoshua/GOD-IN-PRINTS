@@ -9,7 +9,7 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res) => {
     try {
-        const {email, firstName, lastName, password, loginType, accessToken, facebookId, googleId} = req.body;
+        const { email, firstName, lastName, password, loginType, accessToken, facebookId } = req.body;
         const username = email;
         const status = 'classic';
         const dateTime = Date.now();
