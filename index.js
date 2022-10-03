@@ -186,7 +186,7 @@ passport.use(new FacebookStrategy({
     callbackURL: '/redirect/fbk',
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    const email = profile.emails[0].value;
+    const email = profile.id;
     let user = await User.find({ email: email });
     if (!user) {
         const newUser = new User({
