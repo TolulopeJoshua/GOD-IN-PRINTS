@@ -237,7 +237,7 @@ passport.use(new LocalStrategy(User.authenticate()));
                 dateTime: Date.now(),
                 status: 'classic'
           });
-          const registeredUser = await User.register(newUser, '0000');
+          const registeredUser = await User.register(newUser, '00000000');
           let mailOptions = {
               from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
               to: registeredUser.email, // list of receivers
@@ -258,7 +258,7 @@ passport.use(new LocalStrategy(User.authenticate()));
           cb(null, registeredUser);
         } else {
             const authenticate = User.authenticate();
-            authenticate(email, '0000', (err, result) => {
+            authenticate(email, '00000000', (err, result) => {
                 if (err) return console.log(err)
                 cb(null, result);
             }); 

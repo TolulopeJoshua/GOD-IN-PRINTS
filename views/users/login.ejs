@@ -116,7 +116,7 @@
                 email: res.email,
                 firstName: res.name.split(' ')[0] || 'Facebook',
                 lastName: res.name.split(' ')[1] || 'User',
-                password: '0000',
+                password: '00000000',
             }
             axios.post('/register', body, {
                 headers: {'Content-Type': 'application/json'}
