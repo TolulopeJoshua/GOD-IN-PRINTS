@@ -92,6 +92,14 @@ module.exports.login = async (req, res) => {
     res.redirect(redirectUrl);
 };
 
+module.exports.socialLogin = (req, res) => {
+    // req.flash('success', 'welcome back');
+
+    const redirectUrl = req.session.returnTo || '/';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
+};
+
 module.exports.logout = async (req, res) => {
     await req.logOut();
     // req.flash('success', 'Logged out successfully');

@@ -15,11 +15,11 @@ router.post('/login/pwd', passport.authenticate('local', {failureFlash: true, fa
 
 router.get('/login/fbk', passport.authenticate('facebook'));
 
-router.get('/redirect/fbk', passport.authenticate('facebook', { failureFlash: true, successRedirect: '/', failureRedirect: '/login' }));
+router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
 
 router.get('/login/ggl', passport.authenticate('google'));
 
-router.get('/redirect/ggl', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
+router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
 
 router.get('/logout', users.logout);
 

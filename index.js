@@ -184,7 +184,8 @@ passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: '/redirect/fbk',
-    scope: [ 'profile', 'email' ]
+    scope: [ 'profile', 'email' ],
+    state: true
   }, async function (issuer, profile, cb) {
     const email = profile.emails[0].value;
     let user = await User.find({ email: email });
