@@ -184,24 +184,29 @@ passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: '/redirect/fbk',
+    scope: ['public_profile', 'email'],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    const email = profile.id;
+    console.log(profile)
+    const email = profile.emails[0].value;
     let user = await User.find({ email: email });
-    if (!user) {
+    if (!user || !user.id) {
+        console.log('no user')
         const newUser = new User({
             googleId: profile.id,
-            email: profile.id,
-            username: profile.id,
+            email: email,
+            username: email,
             loginType: 'facebook',
             firstName: profile.displayName.split(' ')[0] || 'Facebook',
             lastName: profile.displayName.split(' ')[1] || 'User',
             dateTime: Date.now(),
             status: 'classic'
       });
+      console.log(newUser)
       const registeredUser = await User.register(newUser, '0000');
       cb(null, registeredUser);
     } else {
+        console.log('user found: ' + user)
         const authenticate = User.authenticate(); 
         authenticate(email, '0000', (err, result) => {
             if (err) return console.log(err)
@@ -219,7 +224,7 @@ passport.use(new FacebookStrategy({
   }, async function (issuer, profile, cb) {
         const email = profile.emails[0].value;
         let user = await User.find({ email: email });
-        if (!user) {
+        if (!user || !user.id) {
             const newUser = new User({
                 googleId: profile.id,
                 email: email,
