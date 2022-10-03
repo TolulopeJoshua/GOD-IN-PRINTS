@@ -180,42 +180,42 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
 
-passport.use(new FacebookStrategy({
-    clientID: process.env['FACEBOOK_CLIENT_ID'],
-    clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-    callbackURL: '/redirect/fbk',
-    scope: ['public_profile', 'email'],
-    state: true
-  }, async function (accessToken, refreshToken, profile, cb) {
-    try {
-        const axios = require('axios');
-        const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
-        const email = validate.data.email;
-        let user = await User.find({ email: email });
-        if (!user || !user.id) {
-            const newUser = new User({
-                facebookId: profile.id,
-                email: email,
-                username: email,
-                loginType: 'facebook',
-                firstName: profile.displayName.split(' ')[0] || 'Facebook',
-                lastName: profile.displayName.split(' ')[1] || 'User',
-                dateTime: Date.now(),
-                status: 'classic'
-          });
-          const registeredUser = await User.register(newUser, '0000');
-          cb(null, registeredUser);
-        } else {
-            const authenticate = User.authenticate(); 
-            authenticate(email, '0000', (err, result) => {
-                if (err) return console.log(err)
-                cb(null, result);
-            }); 
-        }
-    } catch (error) {
-        new ExpressError(500, error)
-    }
-  }));
+// passport.use(new FacebookStrategy({
+//     clientID: process.env['FACEBOOK_CLIENT_ID'],
+//     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
+//     callbackURL: '/redirect/fbk',
+//     scope: ['public_profile', 'email'],
+//     state: true
+//   }, async function (accessToken, refreshToken, profile, cb) {
+//     try {
+//         const axios = require('axios');
+//         const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
+//         const email = validate.data.email;
+//         let user = await User.find({ email: email });
+//         if (!user || !user.id) {
+//             const newUser = new User({
+//                 facebookId: profile.id,
+//                 email: email,
+//                 username: email,
+//                 loginType: 'facebook',
+//                 firstName: profile.displayName.split(' ')[0] || 'Facebook',
+//                 lastName: profile.displayName.split(' ')[1] || 'User',
+//                 dateTime: Date.now(),
+//                 status: 'classic'
+//           });
+//           const registeredUser = await User.register(newUser, '0000');
+//           cb(null, registeredUser);
+//         } else {
+//             const authenticate = User.authenticate(); 
+//             authenticate(email, '0000', (err, result) => {
+//                 if (err) return console.log(err)
+//                 cb(null, result);
+//             }); 
+//         }
+//     } catch (error) {
+//         new ExpressError(500, error)
+//     }
+//   }));
 
   passport.use(new GoogleStrategy({
     clientID: process.env['GOOGLE_CLIENT_ID'],
@@ -238,6 +238,23 @@ passport.use(new FacebookStrategy({
                 status: 'classic'
           });
           const registeredUser = await User.register(newUser, '0000');
+          let mailOptions = {
+              from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
+              to: registeredUser.email, // list of receivers
+              subject: 'Welcome to GIP Library', // Subject line
+              // text: 'hello', // plain text body
+              html: `<p>Hello ${registeredUser.firstName.toUpperCase()},<p/><br>
+                <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
+                <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
+                <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
+          };
+          const {transporter} = require('./functions');
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log(error)
+              }
+              console.log(info)
+            });
           cb(null, registeredUser);
         } else {
             const authenticate = User.authenticate();

@@ -8,8 +8,6 @@ module.exports.renderRegister = (req, res) => {
 }
 
 module.exports.register = async (req, res) => {
-
-    try {
         const { email, firstName, lastName, password, loginType, accessToken, facebookId } = req.body;
         const username = email;
         const status = 'classic';
@@ -68,10 +66,6 @@ module.exports.register = async (req, res) => {
               console.log(info)
             });
         }
-
-    } catch (e) {
-      throw {message: e};
-    }
 }
 
 module.exports.renderLogin = (req, res) => {

@@ -13,9 +13,9 @@ router.get('/login', users.renderLogin)
 
 router.post('/login/pwd', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.login));
 
-router.get('/login/fbk', passport.authenticate('facebook'));
+// router.get('/login/fbk', passport.authenticate('facebook'));
 
-router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
+// router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
 
 router.get('/login/ggl', passport.authenticate('google'));
 

@@ -56,7 +56,7 @@
             </p>
             <p><small>Login with</small></p>
             <p>
-                <a href="/login/fbk" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
+                <a id="fbButton" href="#" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
                 <span>|</span>
                 <a href="/login/ggl" class="btn btn-lg p-1 pb-2 ps-4 pe-4 ms-3 border-warning text-primary"><i class="fs-4">Google</i><i class="bi bi-google ps-2"></i></a>
             </p>
@@ -116,7 +116,7 @@
                 email: res.email,
                 firstName: res.name.split(' ')[0] || 'Facebook',
                 lastName: res.name.split(' ')[1] || 'User',
-                password: res.id,
+                password: '0000',
             }
             axios.post('/register', body, {
                 headers: {'Content-Type': 'application/json'}
