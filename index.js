@@ -180,51 +180,66 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
 
-// passport.use(new FacebookStrategy({
-//     clientID: process.env['FACEBOOK_CLIENT_ID'],
-//     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-//     callbackURL: '/redirect/fbk',
-//     state: true
-//   }, async function (accessToken, refreshToken, profile, cb) {
-//     let user = await User.find({ facebook_id: profile.id });
-//     if (user) {
-//       cb(null, user); //Login if User already exists
-//     } else { //else create a new User
-//       user = new User({
-//         facebook_id: profile.id, //pass in the id and displayName params from Facebook
-//         username: profile.displayName,
-//         firstName: profile.displayName.split(' ')[0],
-//         lastName: profile.displayName.split(' ')[1] || 'Person',
-//         dateTime: Date.now(),
-//         status: 'classic'
-//       });
-//       await user.save();
-//       cb(null, user);
-//     }
-//   }));
+passport.use(new FacebookStrategy({
+    clientID: process.env['FACEBOOK_CLIENT_ID'],
+    clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
+    callbackURL: '/redirect/fbk',
+    scope: [ 'profile', 'email' ]
+  }, async function (issuer, profile, cb) {
+    const email = profile.emails[0].value;
+    let user = await User.find({ email: email });
+    if (!user) {
+        const newUser = new User({
+            googleId: profile.id,
+            email: email,
+            username: email,
+            loginType: 'facebook',
+            firstName: profile.displayName.split(' ')[0] || 'Facebook',
+            lastName: profile.displayName.split(' ')[1] || 'User',
+            dateTime: Date.now(),
+            status: 'classic'
+      });
+      const registeredUser = await User.register(newUser, '0000');
+      cb(null, registeredUser);
+    } else {
+        const authenticate = User.authenticate();
+        authenticate(email, '0000', (err, result) => {
+            if (err) return console.log(err)
+            cb(null, result);
+        }); 
+    }
+  }));
 
-  // passport.use(new GoogleStrategy({
-  //   clientID: process.env['GOOGLE_CLIENT_ID'],
-  //   clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-  //   callbackURL: '/redirect/ggl',
-  //   scope: [ 'profile' ]
-  // }, async function (issuer, profile, cb) {
-  //   let user = await User.find({ google_id: profile.id });
-  //   if (user) {
-  //     cb(null, user); //Login if User already exists
-  //   } else { //else create a new User
-  //     user = new User({
-  //       google_id: profile.id, //pass in the id and displayName params from Google
-  //       username: profile.displayName,
-  //       firstName: profile.displayName.split(' ')[0],
-  //       lastName: profile.displayName.split(' ')[1] || 'Person',
-  //       dateTime: Date.now(),
-  //       status: 'classic'
-  //     });
-  //     await user.save();
-  //     cb(null, user);
-  //   }
-  // }));
+  passport.use(new GoogleStrategy({
+    clientID: process.env['GOOGLE_CLIENT_ID'],
+    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+    callbackURL: '/redirect/ggl',
+    // passReqToCallback: true,
+    scope: [ 'profile', 'email' ]
+  }, async function (issuer, profile, cb) {
+        const email = profile.emails[0].value;
+        let user = await User.find({ email: email });
+        if (!user) {
+            const newUser = new User({
+                googleId: profile.id,
+                email: email,
+                username: email,
+                loginType: 'google',
+                firstName: profile.displayName.split(' ')[0] || 'Google',
+                lastName: profile.displayName.split(' ')[1] || 'User',
+                dateTime: Date.now(),
+                status: 'classic'
+          });
+          const registeredUser = await User.register(newUser, '0000');
+          cb(null, registeredUser);
+        } else {
+            const authenticate = User.authenticate();
+            authenticate(email, '0000', (err, result) => {
+                if (err) return console.log(err)
+                cb(null, result);
+            }); 
+        }
+  }));
 
 app.use((req, res, next) => {
     // console.log(req.user)

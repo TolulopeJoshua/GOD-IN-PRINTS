@@ -148,6 +148,7 @@ module.exports.setPassword = async (req, res) => {
       if(!error) {
         console.log(info);
         user.resetCode = null;
+        user.loginType = 'password';
         await user.save();
         return res.render('users/setPassword', {userId, resetCode: '', msg: 'Password changed successfully.'})
       }
