@@ -187,29 +187,33 @@ passport.use(new FacebookStrategy({
     scope: ['public_profile', 'email'],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    const axios = require('axios');
-    const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
-    const email = validate.data.email;
-    let user = await User.find({ email: email });
-    if (!user || !user.id) {
-        const newUser = new User({
-            googleId: profile.id,
-            email: email,
-            username: email,
-            loginType: 'facebook',
-            firstName: profile.displayName.split(' ')[0] || 'Facebook',
-            lastName: profile.displayName.split(' ')[1] || 'User',
-            dateTime: Date.now(),
-            status: 'classic'
-      });
-      const registeredUser = await User.register(newUser, '0000');
-      cb(null, registeredUser);
-    } else {
-        const authenticate = User.authenticate(); 
-        authenticate(email, '0000', (err, result) => {
-            if (err) return console.log(err)
-            cb(null, result);
-        }); 
+    try {
+        const axios = require('axios');
+        const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
+        const email = validate.data.email;
+        let user = await User.find({ email: email });
+        if (!user || !user.id) {
+            const newUser = new User({
+                facebookId: profile.id,
+                email: email,
+                username: email,
+                loginType: 'facebook',
+                firstName: profile.displayName.split(' ')[0] || 'Facebook',
+                lastName: profile.displayName.split(' ')[1] || 'User',
+                dateTime: Date.now(),
+                status: 'classic'
+          });
+          const registeredUser = await User.register(newUser, '0000');
+          cb(null, registeredUser);
+        } else {
+            const authenticate = User.authenticate(); 
+            authenticate(email, '0000', (err, result) => {
+                if (err) return console.log(err)
+                cb(null, result);
+            }); 
+        }
+    } catch (error) {
+        new ExpressError(500, error)
     }
   }));
 
