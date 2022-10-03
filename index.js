@@ -186,7 +186,7 @@ passport.use(new FacebookStrategy({
     callbackURL: '/redirect/fbk',
     scope: [ 'public_profile', 'email' ],
     state: true
-  }, async function (issuer, profile, cb) {
+  }, async function (accessToken, refreshToken, profile, cb) {
     const email = profile.emails[0].value;
     let user = await User.find({ email: email });
     if (!user) {
@@ -203,7 +203,7 @@ passport.use(new FacebookStrategy({
       const registeredUser = await User.register(newUser, '0000');
       cb(null, registeredUser);
     } else {
-        const authenticate = User.authenticate();
+        const authenticate = User.authenticate(); 
         authenticate(email, '0000', (err, result) => {
             if (err) return console.log(err)
             cb(null, result);
