@@ -187,6 +187,7 @@ passport.use(new FacebookStrategy({
     scope: [ 'public_profile', 'email' ],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
+    throw {message: profile}
     const email = profile.emails[0].value;
     let user = await User.find({ email: email });
     if (!user) {
