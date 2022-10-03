@@ -187,11 +187,11 @@ passport.use(new FacebookStrategy({
     scope: ['public_profile', 'email'],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    console.log(profile)
-    const email = profile.emails[0].value;
+    const axios = require('axios');
+    const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
+    const email = validate.data.email;
     let user = await User.find({ email: email });
     if (!user || !user.id) {
-        console.log('no user')
         const newUser = new User({
             googleId: profile.id,
             email: email,
@@ -202,11 +202,9 @@ passport.use(new FacebookStrategy({
             dateTime: Date.now(),
             status: 'classic'
       });
-      console.log(newUser)
       const registeredUser = await User.register(newUser, '0000');
       cb(null, registeredUser);
     } else {
-        console.log('user found: ' + user)
         const authenticate = User.authenticate(); 
         authenticate(email, '0000', (err, result) => {
             if (err) return console.log(err)
