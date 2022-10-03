@@ -184,17 +184,15 @@ passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: '/redirect/fbk',
-    scope: [ 'public_profile', 'email' ],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    throw {message: profile}
     const email = profile.emails[0].value;
     let user = await User.find({ email: email });
     if (!user) {
         const newUser = new User({
             googleId: profile.id,
-            email: email,
-            username: email,
+            email: profile.id,
+            username: profile.id,
             loginType: 'facebook',
             firstName: profile.displayName.split(' ')[0] || 'Facebook',
             lastName: profile.displayName.split(' ')[1] || 'User',
