@@ -202,8 +202,7 @@ module.exports.download = async (req, res) => {
     fileStream.pipe(res);
 
     const user = await User.findById(req.user._id);
-    // console.log(user);
-    user.lastDownloadTime = new Date();
+    user.downloads.push({bookId: book._id, downloadTime: new Date()})
     await user.save();
 };
 

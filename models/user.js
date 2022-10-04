@@ -45,10 +45,12 @@ const UserSchema = new Schema({
             ref: 'Review'
         }
     ],
-    lastDownloadTime: {
-        type: Date,
-        default: (new Date().getTime() - (24 * 60 * 60 * 1000))
-    }
+    downloads: [
+        {
+            bookId: Schema.Types.ObjectId,
+            downloadTime: Date,
+        }
+    ],
     
 });
 

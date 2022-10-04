@@ -226,7 +226,7 @@ passport.use(new LocalStrategy(User.authenticate()));
   }, async function (issuer, profile, cb) {
         const email = profile.emails[0].value;
         let user = await User.find({ email: email });
-        if (!user) {
+        if (!user || !user._id) {
             const newUser = new User({
                 googleId: profile.id,
                 email: email,
