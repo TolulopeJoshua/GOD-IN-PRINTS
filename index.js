@@ -101,6 +101,7 @@ const scriptSrcUrls = [
     "https://cdn.jsdelivr.net",
     "https://kit.fontawesome.com",
     "https://connect.facebook.net",
+    "https://js.paystack.co",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -110,6 +111,7 @@ const styleSrcUrls = [
     "https://fonts.googleapis.com/",
     "https://use.fontawesome.com/",
     "https://cdn.jsdelivr.net",
+    "https://paystack.com",
 ];
 const connectSrcUrls = [
     "https://api.emailjs.com/",
@@ -127,6 +129,10 @@ const fontSrcUrls = [
     "https://fonts.gstatic.com/",
     "https://cdn.jsdelivr.net",
 ];
+const frameSrcUrls = [
+    "https://checkout.paystack.com",
+]
+
 app.use((req, res, next) => {
   res.removeHeader("Cross-Origin-Resource-Policy")
   res.removeHeader("Cross-Origin-Embedder-Policy")
@@ -141,7 +147,7 @@ app.use(
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
             workerSrc: ["'self'", "blob:"],
-            frameSrc: ["'self'", "blob:"],
+            frameSrc: ["'self'", "blob:", ...frameSrcUrls],
             objectSrc: [],
             imgSrc: [
                 "'self'",

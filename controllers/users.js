@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Review = require('../models/review');
 const axios = require('axios');
+const { response } = require('express');
 
 
 module.exports.renderRegister = (req, res) => {
@@ -69,7 +70,8 @@ module.exports.register = async (req, res) => {
 }
 
 module.exports.renderLogin = (req, res) => {
-    res.render('users/login')
+  if (!req.user) return  res.render('users/login')
+  res.status(200).json({response: 'logged in successfully', user: req.user.firstName + ' ' + req.user.lastName})
 };
 
 module.exports.login = async (req, res) => {
@@ -84,7 +86,7 @@ module.exports.login = async (req, res) => {
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
-};
+}; 
 
 module.exports.socialLogin = (req, res) => {
     // req.flash('success', 'welcome back');

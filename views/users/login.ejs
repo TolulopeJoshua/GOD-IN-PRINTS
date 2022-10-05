@@ -25,9 +25,8 @@
 <div class="container d-flex flex-column justify-content-center align-items-center mt-5">
     <div class="row">
         <!-- <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4"> -->
-            <div style="max-width: 25em;" class="card shadow p-0">
-                <img src="assets/images/library3.jpg"
-                    alt="" class="card-img-top" />
+            <div style="width: 25rem;" class="card shadow p-0">
+                <img src="assets/images/library3.jpg" alt="library" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">Login</h5>
                     <form action="/login/pwd" method="POST" class="validated-form" novalidate>
@@ -56,7 +55,7 @@
             </p>
             <p><small>Login with</small></p>
             <p>
-                <a id="fbButton" href="#" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
+                <a id="fbButton" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
                 <span>|</span>
                 <a href="/login/ggl" class="btn btn-lg p-1 pb-2 ps-4 pe-4 ms-3 border-warning text-primary"><i class="fs-4">Google</i><i class="bi bi-google ps-2"></i></a>
             </p>
@@ -68,6 +67,9 @@
 
 <script>
     const pageTitle ='Login';
+    setTimeout(() => {
+        window.scrollTo(0, 300);
+    }, 1500)
 </script>
   
 <script>

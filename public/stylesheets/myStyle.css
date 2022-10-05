@@ -1,5 +1,6 @@
 body {
     background-color: #e8eff5;
+    box-sizing: border-box;
 }
 
 table, th, td {
@@ -88,7 +89,7 @@ a {
 
 .book-tab {
     border-width: 3px;
-    border-radius: 0px 0px 100px 100px;
+    border-radius: 0px 0px 2rem 2rem;
 }
 
 .bible-tab {
@@ -323,4 +324,32 @@ a {
     font-size: 3rem;
     margin-bottom: 12px;
     color: gray;
+}
+
+.mymodal {
+    position: fixed;
+    z-index: -10;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 125, 255, 0.4);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: ease opacity 1s;
+}
+
+.mymodal .card {
+    transform: translateY(100vh);
+    transition: ease all 1s;
+}
+
+.mymodal.open {
+    z-index: 10000;
+    opacity: 1;
+}
+
+.mymodal.open .card {
+    transform: translateY(0);
 }
