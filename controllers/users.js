@@ -101,7 +101,7 @@ module.exports.socialLogin = async (req, res) => {
 
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    res.redirect('/');
 };
 
 module.exports.logout = async (req, res) => {
@@ -117,8 +117,8 @@ module.exports.renderSubscription = (req, res) => {
 
 const crypto = require('crypto');
 module.exports.subscription = async (req, res) => {
-  const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
-  if (hash == req.headers['x-paystack-signature']) {
+  // const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
+  // if (hash == req.headers['x-paystack-signature']) {
     const event = req.body;
     if (event.event == "subscription.create") {
       const user = await User.find({email: event.data.customer.email});
@@ -172,7 +172,7 @@ module.exports.subscription = async (req, res) => {
         user.subscription.autorenew = false;
         await user.save();
       }
-    }
+    // }
   }
   res.send(200);
 }
