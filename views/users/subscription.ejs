@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate') %> 
+
+<% const status = currentUser ? currentUser.subscription.status : 'classic' %> 
+
+<div class="container m-5">
+    <div class="d-flex justify-content-center flex-wrap gap-3">
+        <div class="card subscription disabled p-3">
+            <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
+                <h3 class="p-3 text-primary">Classic</h3>
+                <span class="text-decoration-underline pb-2">Features</span>
+                <ul class="small text-dark m-0 p-3">
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 1 book download per day.</li>
+                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> Send book request.</li>
+                </ul>
+                <span class="pb-2">Price: <i>Free</i></span>
+            </div>
+            <a href="#!" class="btn btn-success w-100 disabled"">DEFAULT</a>
+        </div>
+        <div class="card subscription <%= status !== 'classic' ? 'disabled' : '' %>  p-3">
+            <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
+                <h3 class="p-3 text-primary">Premium</h3>
+                <span class="text-decoration-underline pb-2">Features</span>
+                <ul class="small text-dark m-0 p-3">
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 3 book downloads per day.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Send book request.</li>
+                </ul>
+                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>2,535/m</i></span>
+            </div>
+            <a href="#!" id="premiumButton" class="btn btn-success w-100 <%= status !== 'classic' ? 'disabled' : '' %>">
+                <%= status === 'premium' ? 'SUBSCRIBED ' : 'SUBSCRIBE' %> 
+                <i class="<%= status === 'premium' ? 'bi bi-check2' : '' %> "></i>
+            </a>
+        </div>
+        <div class="card subscription <%= status === 'platinum' ? 'disabled' : '' %>  p-3">
+            <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
+                <h3 class="p-3 text-primary">Platinum</h3>
+                <span class="text-decoration-underline pb-2">Features</span>
+                <ul class="small text-dark m-0 p-3">
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 5 book downloads per day.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Send book request.</li>
+                </ul>
+                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>4,885/m</i></span>
+            </div>
+            <a href="#!" id="platinumButton" class="btn btn-success w-100 <%= status === 'platinum' ? 'disabled' : '' %>">
+                <%= status === 'platinum' ? 'SUBSCRIBED ' : status === 'premium' ? 'UPGRADE' : 'SUBSCRIBE' %> 
+                <i class="<%= status === 'platinum' ? 'bi bi-check2' : '' %> "></i>
+            </a>
+        </div>
+    </div>
+    <h6 class="text-secondary text-center pt-5">Want more access? <a href="/#contact">Send a message.</a></h6>
+</div>
+
+
+<script>
+    const pageTitle = "Subscription";
+</script>
+
+<script>
+
+    const premium = 'PLN_j4afr3nmayg1yct';
+    const platinum = 'PLN_24w78e16gx7ujjl';
+    document.getElementById('premiumButton').addEventListener('click', () => subscribe(premium));
+    document.getElementById('platinumButton').addEventListener('click', () => subscribe(platinum));
+
+     function subscribe(type) {
+        
+        var handler = PaystackPop.setup({
+          key: 'pk_test_706f2fa47b71762778eca6c4b3aa7f55cddec690',
+          email: '<%= currentUser.email %>',
+          plan: type,
+          callback: function(response) {
+            console.log(response)
+            // Make an AJAX call to your server with the reference to verify the transaction
+            alert('Subscription initiated successfully. Your membership status will be updated shortly.')
+          },
+          onClose: function() {
+            console.log('closed')
+          },
+        });
+        handler.openIframe();
+      }
+</script>

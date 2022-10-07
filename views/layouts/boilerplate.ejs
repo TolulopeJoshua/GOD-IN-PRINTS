@@ -80,9 +80,9 @@
     <script>
       const navId = pageTitle.toLowerCase();
       document.getElementById('viewing').innerText += '  >  ' + pageTitle;
-      document.getElementById(navId).classList.add('active');
+      document.getElementById(navId) && document.getElementById(navId).classList.add('active');
       document.getElementById('searchForm').action = `/${pageTitle}/search`;
-      if (['growth', 'resources', 'login', 'register'].includes(navId))  {
+      if (!['books', 'biographies', 'articles', 'bible'].includes(navId))  {
         document.getElementById('search').disabled = true;
         document.getElementById('searchButton').disabled = true;
       } else {
@@ -94,12 +94,14 @@
       document.getElementById('closeButton').addEventListener('click', () => {
         mymodal.classList.remove('open');
       })
+      function openSupportModal() { mymodal.classList.add('open') };
+      document.getElementById('support').addEventListener('click', openSupportModal)
 
       var paymentForm = document.getElementById('paymentForm');
       paymentForm.addEventListener('submit', payWithPaystack, false);
       function payWithPaystack(e) {
         e.preventDefault();
-
+        if (parseInt(document.getElementById('amount').value) < 1000) return;
         var handler = PaystackPop.setup({
           key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
           email: document.getElementById('email').value,

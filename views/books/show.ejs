@@ -34,7 +34,10 @@
                 <!-- <button class="btn btn-lg btn-success">Download</button>
             </form> -->
         </div>
-        <small class="me-auto ms-5 text-secondary">Download limit: 1/day</small>
+        <small class="text-secondary d-block text-center">
+            Download limit: <%= currentUser.subscription.status === 'platinum' ? '5' : currentUser.subscription.status === 'premium' ? '3' : '1' %>  per day <i class="bi bi-dot"></i> <i>
+            <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>
+        </i></small>
         <!-- <div class="card-footer text-muted">
             2 days ago
         </div> -->

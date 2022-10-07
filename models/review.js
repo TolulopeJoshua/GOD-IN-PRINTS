@@ -5,7 +5,7 @@ const reviewSchema = new Schema({
     text: String,
     category: {
         type: String,
-        enum: ['Books', 'Biographies', 'Articles', 'Bible']
+        enum: ['Books', 'Biographies', 'Articles', 'Bible', 'Review']
     },
     parentId: {
         type: String
@@ -23,7 +23,13 @@ const reviewSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         }
-    ]
+    ],
+    comments: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ],
 });
 
 module.exports = mongoose.model("Review", reviewSchema);

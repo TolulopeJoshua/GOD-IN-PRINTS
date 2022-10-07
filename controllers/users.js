@@ -11,7 +11,7 @@ module.exports.renderRegister = (req, res) => {
 module.exports.register = async (req, res) => {
         const { email, firstName, lastName, password, loginType, accessToken, facebookId } = req.body;
         const username = email;
-        const status = 'classic';
+        const subscription = { status: 'classic', expiry: null, autorenew: true }
         const dateTime = Date.now();
         let user, registeredUser;
         if (loginType === 'facebook') {
@@ -21,9 +21,12 @@ module.exports.register = async (req, res) => {
           }
           const registered = await User.find({username: email});
           if (!Object.keys(registered).length > 0) {
-            user = new User({firstName, lastName, email, username, loginType, facebookId, status, dateTime});
+            user = new User({firstName, lastName, email, username, loginType, facebookId, subscription, dateTime});
             registeredUser = await User.register(user, password);
             sendMail();
+          } else {
+            registered.lastLogin = new Date();
+            await registered.save();
           }
           
           const authenticate = User.authenticate();
@@ -36,7 +39,7 @@ module.exports.register = async (req, res) => {
           });
           return;
         } else {
-          user = new User({firstName, lastName, email, username, loginType: 'password', status, dateTime});
+          user = new User({firstName, lastName, email, username, loginType: 'password', subscription, dateTime});
           registeredUser = await User.register(user, password);
           sendMail();
         }
@@ -83,13 +86,18 @@ module.exports.login = async (req, res) => {
       throw {message: `User initialized with ${user.loginType}, select password reset to change login method.`}
     }
 
+    user.lastLogin = new Date();
+    await user.save();
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
 }; 
 
-module.exports.socialLogin = (req, res) => {
+module.exports.socialLogin = async (req, res) => {
     // req.flash('success', 'welcome back');
+    const user = await User.findById(req.user._id);
+    user.lastLogin = new Date();
+    await user.save();
 
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
@@ -101,6 +109,73 @@ module.exports.logout = async (req, res) => {
     // req.flash('success', 'Logged out successfully');
     res.redirect('/');
 };
+
+module.exports.renderSubscription = (req, res) => {
+  console.log(req.user)
+  res.render('users/subscription')
+}
+
+const crypto = require('crypto');
+module.exports.subscription = async (req, res) => {
+  const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
+  if (hash == req.headers['x-paystack-signature']) {
+    const event = req.body;
+    if (event.event == "subscription.create") {
+      const user = await User.find({email: event.data.customer.email});
+      user.subscription = {
+        status: event.data.plan.name,
+        expiry: event.data.next_payment_date,
+        autorenew: true,
+        code: event.data.subscription_code,
+      };
+      await user.save();
+    }
+    if (event.event == "invoice.update") {
+      const user = await User.find({email: event.data.customer.email});
+      if (event.data.subscription.subscription_code == user.subscription.code) {
+        if (event.data.paid) {
+          const { data } = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
+            headers: { "Authorization" : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+          })
+          user.subscription = {
+            status: data.plan.name,
+            expiry: data.next_payment_date,
+            autorenew: true,
+            code: data.subscription_code,
+          }
+        } else {
+          user.subscription = {
+            status: 'classic',
+            expiry: null,
+            autorenew: true,
+            code: user.subscription.code,
+          }
+        }
+        await user.save();
+      }
+    }
+    if (event.event == "subscription.disable") {
+      const user = await User.find({email: event.data.customer.email});
+      if (event.data.subscription_code == user.subscription.code) {
+        user.subscription = {
+          status: 'classic',
+          expiry: null,
+          autorenew: true,
+          code: '',
+        }
+        await user.save();
+      }
+    }
+    if (event.event == "subscription.not_renew") {
+      const user = await User.find({email: event.data.customer.email});
+      if (event.data.subscription_code == user.subscription.code) {
+        user.subscription.autorenew = false;
+        await user.save();
+      }
+    }
+  }
+  res.send(200);
+}
 
 module.exports.renderChangePassword = (req, res) => {
     res.render('users/changePassword', {msg: ''})

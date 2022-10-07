@@ -41,11 +41,11 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createBiography = async (req, res) => {
     const biography = new Doc(req.body.biography)
-    biography.docType = 'biography'
+    biography.docType = 'biography';
     biography.dateTime = Date.now();
-    await fs.writeFileSync('outputText.txt', biography.story);
+    fs.writeFileSync('outputText.txt', biography.story);
     biography.story = 'bio/' + Date.now().toString() + '_' + biography.name + '.txt';
-    const myBuffer = await fs.readFileSync('outputText.txt');
+    const myBuffer = fs.readFileSync('outputText.txt');
     await putImage(biography.story, myBuffer);
     await biography.save();
     req.flash('success', `${biography.name.toUpperCase()}'s biography saved. Kindly upload picture`);

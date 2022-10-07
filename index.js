@@ -198,7 +198,7 @@ passport.use(new FacebookStrategy({
         const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
         const email = validate.data.email;
         let user = await User.find({ email: email });
-        if (!user || !user[0]._id) {
+        if (!user || !user[0]) {
             const newUser = new User({
                 facebookId: profile.id,
                 email: email,
@@ -232,7 +232,7 @@ passport.use(new FacebookStrategy({
   }, async function (issuer, profile, cb) {
         const email = profile.emails[0].value;
         let user = await User.find({ username: email });
-        if (!user || !user[0]._id) {
+        if (!user || !user[0]) {
             const newUser = new User({
                 googleId: profile.id,
                 email: email,
@@ -241,7 +241,7 @@ passport.use(new FacebookStrategy({
                 firstName: profile.displayName.split(' ')[0] || 'Google',
                 lastName: profile.displayName.split(' ')[1] || 'User',
                 dateTime: Date.now(),
-                status: 'classic'
+                subscription: { status: 'classic', expiry: null, autorenew: true }
           });
           const registeredUser = await User.register(newUser, '00000000');
           let mailOptions = {

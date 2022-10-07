@@ -19,9 +19,13 @@ router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: tru
 
 router.get('/login/ggl', passport.authenticate('google'));
 
-router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
+router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.socialLogin));
 
 router.get('/logout', users.logout);
+
+router.get('/subscription', isLoggedIn, users.renderSubscription);
+
+router.post('/subscription', catchAsync(users.subscription));
 
 router.get('/changePassword', users.renderChangePassword);
 
