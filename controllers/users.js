@@ -147,7 +147,7 @@ module.exports.subscription = async (req, res) => {
           user.subscription = {
             status: 'classic',
             expiry: null,
-            autorenew: true,
+            autorenew: false,
             code: user.subscription.code,
           }
         }
