@@ -120,8 +120,14 @@ module.exports.subscription = async (req, res) => {
   // const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
   // if (hash == req.headers['x-paystack-signature']) {
     const event = req.body;
+    let user = await User.find({email: event.data.customer.email});
+    if (user && user[0]) {
+      user = user[0]
+    } else {
+      return res.send(200)
+    }
     if (event.event == "subscription.create") {
-      const user = await User.find({email: event.data.customer.email});
+      // const user = await User.find({email: event.data.customer.email});
       user.subscription = {
         status: event.data.plan.name,
         expiry: event.data.next_payment_date,
@@ -131,7 +137,7 @@ module.exports.subscription = async (req, res) => {
       await user.save();
     }
     if (event.event == "invoice.update") {
-      const user = await User.find({email: event.data.customer.email});
+      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription.subscription_code == user.subscription.code) {
         if (event.data.paid) {
           const { data } = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
@@ -155,7 +161,7 @@ module.exports.subscription = async (req, res) => {
       }
     }
     if (event.event == "subscription.disable") {
-      const user = await User.find({email: event.data.customer.email});
+      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription_code == user.subscription.code) {
         user.subscription = {
           status: 'classic',
@@ -167,7 +173,7 @@ module.exports.subscription = async (req, res) => {
       }
     }
     if (event.event == "subscription.not_renew") {
-      const user = await User.find({email: event.data.customer.email});
+      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription_code == user.subscription.code) {
         user.subscription.autorenew = false;
         await user.save();
