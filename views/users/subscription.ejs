@@ -2,7 +2,7 @@
 
 <% const status = currentUser ? currentUser.subscription.status : 'classic' %> 
 
-<div class="container m-5">
+<div class="mt-5 mb-5">
     <div class="d-flex justify-content-center flex-wrap gap-3">
         <div class="card subscription disabled p-3">
             <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
@@ -75,9 +75,11 @@
           email: '<%= currentUser.email %>',
           plan: type,
           callback: function(response) {
-            console.log(response)
-            // Make an AJAX call to your server with the reference to verify the transaction
-            alert('Subscription initiated successfully. Your membership status will be updated shortly.')
+            if (type == platinum && '<%= currentUser.subscription.status %>' == 'premium') {
+                axios.delete('/subscription/<%= currentUser.subscription.code %>')
+            }
+            alert('Subscription initiated successfully. Your membership status will be updated shortly.');
+            location.reload();
           },
           onClose: function() {
             console.log('closed')

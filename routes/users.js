@@ -27,6 +27,8 @@ router.get('/subscription', isLoggedIn, users.renderSubscription);
 
 router.post('/subscription', catchAsync(users.subscription));
 
+router.delete('/subscription/:subCode', isLoggedIn, catchAsync(users.disableSubscription));
+
 router.get('/changePassword', users.renderChangePassword);
 
 router.post('/changePassword', validateEmail, catchAsync(users.changePassword));

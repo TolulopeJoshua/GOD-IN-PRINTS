@@ -111,14 +111,14 @@ module.exports.logout = async (req, res) => {
 };
 
 module.exports.renderSubscription = (req, res) => {
-  console.log(req.user)
+  // console.log(req.user)
   res.render('users/subscription')
 }
 
 const crypto = require('crypto');
 module.exports.subscription = async (req, res) => {
-  // const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
-  // if (hash == req.headers['x-paystack-signature']) {
+  const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(JSON.stringify(req.body)).digest('hex');
+  if (hash == req.headers['x-paystack-signature']) {
     const event = req.body;
     let user = await User.find({email: event.data.customer.email});
     if (user && user[0]) {
@@ -137,17 +137,19 @@ module.exports.subscription = async (req, res) => {
       await user.save();
     }
     if (event.event == "invoice.update") {
-      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription.subscription_code == user.subscription.code) {
         if (event.data.paid) {
-          const { data } = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
-            headers: { "Authorization" : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+          let {data} = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
+            headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
           })
-          user.subscription = {
-            status: data.plan.name,
-            expiry: data.next_payment_date,
-            autorenew: true,
-            code: data.subscription_code,
+          if (data.status) {
+            data = data.data;
+            user.subscription = {
+              status: data.plan.name,
+              expiry: data.next_payment_date,
+              autorenew: true,
+              code: data.subscription_code,
+            }
           }
         } else {
           user.subscription = {
@@ -161,7 +163,6 @@ module.exports.subscription = async (req, res) => {
       }
     }
     if (event.event == "subscription.disable") {
-      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription_code == user.subscription.code) {
         user.subscription = {
           status: 'classic',
@@ -173,14 +174,38 @@ module.exports.subscription = async (req, res) => {
       }
     }
     if (event.event == "subscription.not_renew") {
-      // const user = await User.find({email: event.data.customer.email});
       if (event.data.subscription_code == user.subscription.code) {
         user.subscription.autorenew = false;
         await user.save();
       }
-    // }
+    }
   }
   res.send(200);
+}
+
+module.exports.disableSubscription = async (req, res) => {
+  const { subCode } = req.params;
+  
+  let {data} = await axios.get(`https://api.paystack.co/subscription/${subCode}`, {
+    headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+  })
+  if (data.status && data.data.customer.email == req.user.email) {
+    const token = data.data.email_token;
+    const response = axios({
+      method: 'post',
+      url: 'https://api.paystack.co/subscription/disable',
+      data: {
+        code: subCode,
+        token: token,
+      },
+      headers: { 
+        Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY,
+        'Content-Type': 'application/json',
+      }
+    });
+    return res.status(200).send("Disabled successfully.")
+  }
+  res.status(401).send("Not authorized!")
 }
 
 module.exports.renderChangePassword = (req, res) => {
