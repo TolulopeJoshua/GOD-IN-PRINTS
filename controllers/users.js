@@ -179,8 +179,9 @@ module.exports.subscription = async (req, res) => {
         await user.save();
       }
     }
+    res.send(200);
   }
-  res.send(200);
+  res.status(200).send('ip not found');
 }
 
 module.exports.disableSubscription = async (req, res) => {
