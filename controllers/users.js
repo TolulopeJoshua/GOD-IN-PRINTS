@@ -117,7 +117,7 @@ module.exports.renderSubscription = (req, res) => {
 
 // const crypto = require('crypto');
 module.exports.subscription = async (req, res) => {
-  let validIps = ['52.31.139.75', '52.49.173.169', '52.214.14.220'];
+  let validIps = ['52.31.139.75', '52.49.173.169', '52.214.14.220', '102.89.47.92'];
   if (validIps.includes(req.connection.remoteAddress)) {
     const event = req.body;
     let user = await User.find({email: event.data.customer.email});
