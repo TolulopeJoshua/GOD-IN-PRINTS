@@ -115,10 +115,10 @@ module.exports.renderSubscription = (req, res) => {
   res.render('users/subscription')
 }
 
-const crypto = require('crypto');
+// const crypto = require('crypto');
 module.exports.subscription = async (req, res) => {
-  const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
-  if (hash == req.headers['x-paystack-signature']) {
+  let validIps = ['52.31.139.75', '52.49.173.169', '52.214.14.220'];
+  if (validIps.includes(req.connection.remoteAddress)) {
     const event = req.body;
     let user = await User.find({email: event.data.customer.email});
     if (user && user[0]) {
