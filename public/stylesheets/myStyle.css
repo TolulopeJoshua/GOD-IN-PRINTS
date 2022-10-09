@@ -122,7 +122,7 @@ a {
     border-right: 1px solid #ccc;
     padding: 2% 2%;
     position:fixed;
-    height: calc(100vh - 170px);
+    height: calc(100vh - 150px);
     max-width: max(16em, 15%);
 }
 
@@ -162,7 +162,7 @@ a {
 .scroll {
     overflow-y: auto;
     overflow-x: hidden;
-    height: calc(100vh - 170px);
+    height: calc(100vh - 150px);
 }
 
 .review {
@@ -333,8 +333,8 @@ a {
 .mymodal {
     position: fixed;
     z-index: -10;
-    width: 100vw;
-    height: 100vh;
+    width: 110vw;
+    height: 110vh;
     background-color: rgba(0, 125, 255, 0.4);
     overflow: hidden;
     display: flex;
@@ -352,6 +352,7 @@ a {
 .mymodal.open {
     z-index: 10000;
     opacity: 1;
+    padding-right: 10px;
 }
 
 .mymodal.open .card {
