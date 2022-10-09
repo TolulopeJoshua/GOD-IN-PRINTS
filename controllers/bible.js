@@ -9,7 +9,7 @@ module.exports.chapter = async (req, res) => {
     const chapt = req.query.chapter || 'jhn.3';
     const version = req.query.version || 'de4e12af7f28f599-02';
     req.session.bibleVersion = version;
-    const reviews = await Review.find({author: req.user._id, parentId: chapt});
+    const reviews = req.user ? await Review.find({author: req.user._id, parentId: chapt}) : [];
     const longChapters = ["psa.119", "1ki.8", "deu.28", "deu.32", "num.7", "lev.13", "jer.51", "ezk.16", "gen.24"];
     if (longChapters.includes(chapt)) {
         const {chapter} = require(`../public/javascripts/bibleData/kjvLongTexts/${chapt}`)
