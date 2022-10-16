@@ -18,7 +18,7 @@ router.get('/new', biographies.renderNewForm);
 
 router.post('/new', isLoggedIn, validateBiography, catchAsync(biographies.createBiography));
 
-router.get('/search', isLoggedIn, catchAsync(biographies.search));
+router.get('/search', setRedirect, catchAsync(biographies.search));
 
 router.get('/:id', catchAsync(biographies.showBiography));
 

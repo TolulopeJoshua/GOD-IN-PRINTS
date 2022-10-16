@@ -9,6 +9,10 @@ body::-webkit-scrollbar {
     display: none;
 }
 
+.row, .container {
+    margin: 0;
+}
+
 table, th, td {
     border: 5px solid #e8eff5;
     /* border-collapse: collapse; */

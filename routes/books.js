@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 const books = require('../controllers/books');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isBookAuthor, validateBook, isReviewAuthor, validateReview, checkDownloadLimit} = require('../middleware');
+const { isLoggedIn, isBookAuthor, validateBook, isReviewAuthor, validateReview, checkDownloadLimit, setRedirect} = require('../middleware');
 
 const {upload, upload0} = require("../functions")
 
 
 router.get('/', catchAsync(books.index));
 
-router.get('/list', isLoggedIn, catchAsync(books.list));
+router.get('/list', setRedirect, catchAsync(books.list));
 
 router.get('/categories', books.categories);
 
-router.get('/category', isLoggedIn, catchAsync(books.perCategory));
+router.get('/category', setRedirect, catchAsync(books.perCategory));
 
 // router.get('/new', isLoggedIn, books.renderNewForm);
 
@@ -23,9 +23,9 @@ router.get('/category', isLoggedIn, catchAsync(books.perCategory));
 
 // router.post('/adminUpload', upload.array('documents'), catchAsync(books.adminUpload))
  
-router.get('/search', isLoggedIn, catchAsync(books.search));
+router.get('/search', setRedirect, catchAsync(books.search));
 
-router.get('/:id', catchAsync(books.showBook));
+router.get('/:id', setRedirect, catchAsync(books.showBook));
 
 router.get('/image', catchAsync(books.image));
 

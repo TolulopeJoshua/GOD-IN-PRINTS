@@ -2,24 +2,24 @@ const express = require('express');
 const router = express.Router();
 const articles = require('../controllers/articles');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isArticleAuthor, validateArticle, validateReview, isReviewAuthor} = require('../middleware');
+const { isLoggedIn, isArticleAuthor, validateArticle, validateReview, isReviewAuthor, setRedirect} = require('../middleware');
 
 const {upload0} = require("../functions")
 
 
 router.get('/', catchAsync(articles.index));
 
-router.get('/list', isLoggedIn, catchAsync(articles.list));
+router.get('/list', setRedirect, catchAsync(articles.list));
 
 router.get('/categories', articles.categories);
 
-router.get('/category', isLoggedIn, catchAsync(articles.perCategory));
+router.get('/category', setRedirect, catchAsync(articles.perCategory));
 
 router.get('/new', isLoggedIn, articles.renderNewForm);
 
 router.post('/new', isLoggedIn, validateArticle, catchAsync(articles.createArticle));
 
-router.get('/search', isLoggedIn, catchAsync(articles.search));
+router.get('/search', setRedirect, catchAsync(articles.search));
 
 router.get('/:id', catchAsync(articles.showArticle));
 

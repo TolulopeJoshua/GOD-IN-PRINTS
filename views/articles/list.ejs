@@ -2,7 +2,7 @@
 
 
 <!-- <div id="cluster-map"></div> -->
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5" href="/articles">Feature</a>
     <a class="h5 active" href="/articles/list">List</a>
     <ol>
@@ -13,14 +13,14 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
     
 <script>let route; let xhttp; const idLength ={};</script>
 
-<div class="col-md-9 col-lg-6 offset-md-3">
+<div class="col-md-9 col-lg-6 offset-md-3 position-relative">
     <h3 class="text-center m-3"><%= category %> </h3>
 
     <ul class="mb-3">
@@ -37,6 +37,9 @@
     </ul>
 
 <%- include('../partials/paginate') %> <hr>
+
+<%- include('../partials/loginModal') %>
+
 </div>
 
 <div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">

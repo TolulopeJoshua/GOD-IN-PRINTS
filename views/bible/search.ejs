@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5" href="/bible">Cover Page</a>
     <a class="h5" href="bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
@@ -20,18 +20,21 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto position-relative">
     <div class="subheadings">
         <h3 class="text-truncate" id="viewing">Search🔍: <%= searchText %> </h3>
     </div>
     <div id="search-nav-top" class="search-nav search-nav-top"></div>
     <div id="results-list" class="search-results-list list-container justify"></div>
     <div id="search-nav-bottom" class="search-nav search-nav-bottom"></div>
+
+    <%- include('../partials/loginModal') %>
+
 </div>
 
 <%- include('../partials/ad2') %>

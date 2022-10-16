@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5" href="/books">Feature</a>
     <a class="h5" href="/books/list">List</a>
     <ol>
@@ -11,12 +11,12 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto">
+<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto position-relative">
     <div class="card text-center mb-3 card-size">
         <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
         <div class="card-body">
@@ -44,6 +44,7 @@
             2 days ago
         </div> -->
     </div>
+    <%- include('../partials/loginModal') %> 
 </div>
 
 <div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0">

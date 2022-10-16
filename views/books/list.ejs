@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 
 <!-- <div id="cluster-map"></div> -->
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5" href="/books">Feature</a>
     <a class="h5 active" href="/books/list">List</a>
     <ol>
@@ -12,12 +12,12 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto position-relative">
     <h3 class="text-center mt-3"><%= category %> </h3>
     <% for (let book of books) { %>
         <div class="card border-top-0 border-primary book-tab my-5">
@@ -36,6 +36,8 @@
         </div>
     <% } %>
     
+    <%- include('../partials/loginModal') %>
+
     <%- include('../partials/paginate') %> <hr>
 </div>
 
