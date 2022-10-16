@@ -23,7 +23,23 @@ module.exports.register = async (req, res) => {
           if (!Object.keys(registered).length > 0) {
             user = new User({firstName, lastName, email, username, loginType, facebookId, subscription, dateTime});
             registeredUser = await User.register(user, password);
-            sendMail(registeredUser);
+            let mailOptions = {
+                from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
+                to: registeredUser.email, // list of receivers
+                subject: 'Welcome to GIP Library', // Subject line
+                // text: 'hello', // plain text body
+                html: `<p>Hello ${registeredUser.firstName.toUpperCase()},<p/><br>
+                  <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
+                  <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
+                  <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
+            };
+            const {transporter} = require('../functions');
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                  console.log(error)
+                }
+                console.log(info)
+              });
           } else {
             registered.lastLogin = new Date();
             await registered.save();
@@ -41,17 +57,6 @@ module.exports.register = async (req, res) => {
         } else {
           user = new User({firstName, lastName, email, username, loginType: 'password', subscription, dateTime});
           registeredUser = await User.register(user, password);
-          sendMail(registeredUser);
-        }
-        req.login(registeredUser, err => {
-            if (err) return next(err);
-            // req.flash('success', 'Welcome to God-In-Prints Libraries!');
-            const redirectUrl = req.session.returnTo || '/';  
-            delete req.session.returnTo;
-            res.redirect(redirectUrl);
-        })
-    
-        function sendMail(registeredUser) {
           let mailOptions = {
               from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
               to: registeredUser.email, // list of receivers
@@ -70,6 +75,13 @@ module.exports.register = async (req, res) => {
               console.log(info)
             });
         }
+        req.login(registeredUser, err => {
+            if (err) return next(err);
+            // req.flash('success', 'Welcome to God-In-Prints Libraries!');
+            const redirectUrl = req.session.returnTo || '/';  
+            delete req.session.returnTo;
+            res.redirect(redirectUrl);
+        })
 }
 
 module.exports.renderLogin = (req, res) => {
