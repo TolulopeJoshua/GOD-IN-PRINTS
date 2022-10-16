@@ -193,7 +193,6 @@ passport.use(new FacebookStrategy({
     scope: ['public_profile', 'email'],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-    try {
         const axios = require('axios');
         const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
         const email = validate.data.email;
@@ -207,20 +206,34 @@ passport.use(new FacebookStrategy({
                 firstName: profile.displayName.split(' ')[0] || 'Facebook',
                 lastName: profile.displayName.split(' ')[1] || 'User',
                 dateTime: Date.now(),
-                status: 'classic'
+                subscription: { status: 'classic', expiry: null, autorenew: true }
           });
-          const registeredUser = await User.register(newUser, '0000');
+          const registeredUser = await User.register(newUser, '00000000');
+          let mailOptions = {
+              from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
+              to: registeredUser.email, // list of receivers
+              subject: 'Welcome to GIP Library', // Subject line
+              // text: 'hello', // plain text body
+              html: `<p>Hello ${registeredUser.firstName.toUpperCase()},<p/><br>
+                <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
+                <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
+                <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
+          };
+          const {transporter} = require('./functions');
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log(error)
+              }
+              console.log(info)
+            });
           cb(null, registeredUser);
         } else {
             const authenticate = User.authenticate(); 
-            authenticate(email, '0000', (err, result) => {
+            authenticate(email, '00000000', (err, result) => {
                 if (err) return console.log(err)
                 cb(null, result);
             }); 
         }
-    } catch (error) {
-        new ExpressError(500, error)
-    }
   }));
 
   passport.use(new GoogleStrategy({

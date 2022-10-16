@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const biographies = require('../controllers/biographies');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isBiographyAuthor, validateBiography, isReviewAuthor, validateReview} = require('../middleware');
+const { isLoggedIn, isBiographyAuthor, validateBiography, isReviewAuthor, validateReview, setRedirect} = require('../middleware');
 
 const {upload0} = require("../functions")
 
@@ -12,9 +12,9 @@ router.use(express.static("./uploads"));
 
 router.get('/', catchAsync(biographies.index));
 
-router.get('/list', isLoggedIn, catchAsync(biographies.list));
+router.get('/list', setRedirect, catchAsync(biographies.list));
 
-router.get('/new', isLoggedIn, biographies.renderNewForm);
+router.get('/new', biographies.renderNewForm);
 
 router.post('/new', isLoggedIn, validateBiography, catchAsync(biographies.createBiography));
 

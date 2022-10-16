@@ -25,6 +25,13 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
+module.exports.setRedirect = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.session.returnTo = req.originalUrl;
+    }
+    next();
+}
+
 module.exports.validateBook = (req, res, next) => {
 
     const {error} = bookSchema.validate(req.body);

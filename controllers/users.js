@@ -101,7 +101,7 @@ module.exports.socialLogin = async (req, res) => {
 
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
-    res.redirect('/');
+    res.redirect(redirectUrl);
 };
 
 module.exports.logout = async (req, res) => {

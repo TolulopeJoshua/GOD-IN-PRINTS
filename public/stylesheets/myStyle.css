@@ -9,10 +9,6 @@ body::-webkit-scrollbar {
     display: none;
 }
 
-.row {
-    overflow-x: hidden;
-}
-
 table, th, td {
     border: 5px solid #e8eff5;
     /* border-collapse: collapse; */
@@ -341,13 +337,13 @@ a {
     z-index: -10;
     width: 110vw;
     height: 110vh;
-    background-color: rgba(0, 125, 255, 0.4);
+    background-color: rgba(33, 37, 41, 0.6);
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition: ease opacity 1s;
+    transition: ease all 1s;
 }
 
 .mymodal > div {
