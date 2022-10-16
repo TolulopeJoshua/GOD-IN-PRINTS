@@ -23,7 +23,7 @@ module.exports.register = async (req, res) => {
           if (!Object.keys(registered).length > 0) {
             user = new User({firstName, lastName, email, username, loginType, facebookId, subscription, dateTime});
             registeredUser = await User.register(user, password);
-            sendMail();
+            sendMail(registeredUser);
           } else {
             registered.lastLogin = new Date();
             await registered.save();
@@ -41,7 +41,7 @@ module.exports.register = async (req, res) => {
         } else {
           user = new User({firstName, lastName, email, username, loginType: 'password', subscription, dateTime});
           registeredUser = await User.register(user, password);
-          sendMail();
+          sendMail(registeredUser);
         }
         req.login(registeredUser, err => {
             if (err) return next(err);
@@ -51,7 +51,7 @@ module.exports.register = async (req, res) => {
             res.redirect(redirectUrl);
         })
     
-        function sendMail() {
+        function sendMail(registeredUser) {
           let mailOptions = {
               from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
               to: registeredUser.email, // list of receivers
