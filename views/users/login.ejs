@@ -120,7 +120,7 @@
                 lastName: res.name.split(' ')[1] || 'User',
                 password: '00000000',
             }
-            alert(body.response.authResponse.accessToken, body.response.authResponse.userID, res.name)
+            alert(body.response.authResponse.accessToken)
 
             if (!res.email) return alert('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
 
