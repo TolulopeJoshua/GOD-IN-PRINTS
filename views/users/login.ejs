@@ -120,6 +120,9 @@
                 lastName: res.name.split(' ')[1] || 'User',
                 password: '00000000',
             }
+            console.log(body)
+            if (!res.email) return alert('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
+
             axios.post('/register', body, {
                 headers: {'Content-Type': 'application/json'}
             })
@@ -128,10 +131,12 @@
                     console.log(response)
                     return window.location.href = response.data.redirectUrl;
                 }
-                alert(response)
+                console.log(response);
+                alert("Unable to log in. Kindly try again.");
             })
             .catch(function (error) {
-                alert(error);
+                console.log(error);
+                alert("An error occured.");
             });
         })
     }
