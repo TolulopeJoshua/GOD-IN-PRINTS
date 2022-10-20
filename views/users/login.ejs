@@ -120,7 +120,8 @@
                 lastName: res.name.split(' ')[1] || 'User',
                 password: '00000000',
             }
-            console.log(body)
+            alert(body.toString())
+
             if (!res.email) return alert('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
 
             axios.post('/register', body, {
