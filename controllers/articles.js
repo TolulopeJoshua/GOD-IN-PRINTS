@@ -25,7 +25,7 @@ module.exports.list = async (req, res) => {
     const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
     // for (let article of articles) {
     //     article.contributor = req.user._id;
-    //     await article.save();
+    //     await article.save(); 
     // };
     const [pageDocs, pageData] = paginate(req, articles)
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
