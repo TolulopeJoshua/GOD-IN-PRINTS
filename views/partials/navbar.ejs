@@ -58,10 +58,20 @@
   const userNavPopup = document.getElementById('userNavPopup');
   if (userNavPopup) {
     const userNavArrow = document.getElementById('userNavArrow');
-    document.getElementById('login').addEventListener('click', () => {
+    document.getElementById('login').addEventListener('click', toggleUserPopup)
+    document.getElementById('login').addEventListener('focusout', closeUserPopup)
+
+    function toggleUserPopup() {
       userNavPopup.classList.toggle('d-none');
       userNavArrow.classList.toggle('bi-caret-down-fill');
       userNavArrow.classList.toggle('bi-caret-left-fill');
-    })
+    }
+    function closeUserPopup() {
+      setTimeout(() => {
+      userNavPopup.classList.add('d-none');
+      userNavArrow.classList.remove('bi-caret-down-fill');
+      userNavArrow.classList.add('bi-caret-left-fill');
+      }, 100)
+    }
   }
 </script>
