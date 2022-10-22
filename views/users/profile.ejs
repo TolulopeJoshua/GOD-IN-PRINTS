@@ -1,0 +1,124 @@
+<% layout('layouts/boilerplate') %> 
+
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <ol>
+        <li><a class="active" href="/profile">Profile Info</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <div style="width: 400px; max-width: 90%;" class="d-flex flex-column align-items-center ms-auto me-auto small">
+        <form action="/profile" method="POST" autocomplete="off" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
+            <h6 class="mb-3">Email Address</h6>
+            <input name="email" class="mb-3 p-2 rounded-3 " type="email" value="<%= currentUser.email %>" disabled readonly>
+            <div id="changeEmailForm" class="d-none">
+                <label class="form-label mt-2" for="newEmail">New Email</label>
+                <input name="newEmail" value="" class="mb-3 p-2 form-control " type="email" required> 
+                <h6>Enter Password</h6>
+                <div class="mb-3 position-relative">
+                    <input value="" class="form-control p-1" type="password" id="password" name="password" required>
+                    <i role="button" class="bi bi-eye-slash position-absolute bottom-0 end-0 fs-5 p-1 me-4" id="togglePassword"></i>
+                </div>
+                <div class="d-flex w-100">
+                    <button class="btn btn-primary ms-auto w-50">Save Changes</button>
+                    <a id="cancelEmailButton" class="btn w-50">Cancel</a>
+                </div>
+            </div>
+            <a style="cursor: pointer;" id="changeEmailButton">Change Email Address</a>
+        </form>
+        <form action="/profile" method="POST" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
+            <h6 class="mb-4">Password</h6>
+            <h6 class="">Current Password</h6>
+            <div class="mb-3 position-relative">
+                <input class="form-control  p-1" type="password" id="password2" name="password" required>
+                <i role="button" class="bi bi-eye-slash position-absolute bottom-0 end-0 fs-5 p-1 me-4" id="togglePassword2"></i>
+            </div>
+            <h6 class="">New Password</h6>
+            <div class="mb-3 position-relative">
+                <input class="form-control  p-1" type="password" id="newPassword" name="newPassword" required>
+                <i role="button" class="bi bi-eye-slash position-absolute bottom-0 end-0 fs-5 p-1 me-4" id="toggleNewPassword"></i>
+            </div>
+            <div class="d-flex w-100">
+                <button class="btn btn-primary ms-auto w-50">Save Changes</button>
+                <a class="btn w-50" href="/changePassword">Reset Password</a>
+            </div>
+        </form>
+        <form action="/profile" method="POST" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
+            <h6 class="mb-4">Profile</h6>
+            <div class="row">
+                <div class="col-6 m-0 p-0 pe-1">
+                    <h6 class="">First Name</h6>
+                    <input name="firstName" class="form-control m-0 mb-3 p-1" value="<%= currentUser.firstName %>" required>
+                </div>
+                <div class="col-6  ms-auto p-0 ps-1">
+                    <h6 class="">Last Name</h6>
+                    <input name="lastName" class="form-control mb-3 p-1" value="<%= currentUser.lastName %>" required>
+                </div>
+            </div>
+            <h6 class="">Gender</h6>
+            <select name="gender" class="form-control mb-3 p-1">
+                <option value="undefined"></option>
+                <option value="male" <%- currentUser.gender == 'male' && 'selected' %> >Male</option>
+                <option value="female" <%- currentUser.gender == 'female' && 'selected' %> >Female</option>
+            </select>
+            <h6 class="">Phone Number</h6>
+            <input name="phone" class="form-control mb-3 p-1" type="tel" value="<%= currentUser.phone %>">
+            <h6 class="">Address</h6>
+            <input name="address" class="form-control mb-3 p-1" max="200" value="<%= currentUser.address %>">
+            <button class="btn btn-primary ms-auto w-50">Save Changes</button>
+        </form>
+        <form class="card w-100 rounded-3 p-4 m-3 shadow">
+            <h6 class="mb-4">Other</h6>
+            <h6 class="">Account Created</h6>
+            <input class="mb-3 p-2 rounded-3 " type="text" value="<%= currentUser.dateTime %>" disabled readonly>
+            <h6 class="">Subscription</h6>
+            <input class="mb-3 p-2 rounded-3 " type="text" value="<%= currentUser.subscription.status[0].toUpperCase() + currentUser.subscription.status.slice(1) %>" disabled readonly>
+            <a href="/subscription">Change Subscription</a>
+        </form>
+    </div>
+</div>
+    
+<script>
+    const pageTitle = "Profile";
+</script>
+  
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const togglePassword2 = document.querySelector('#togglePassword2');
+    const toggleNewPassword = document.querySelector('#toggleNewPassword');
+    const password = document.querySelector('#password');
+    const newPassword = document.querySelector('#newPassword');
+    togglePassword.addEventListener('click', () => {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        togglePassword.classList.toggle('bi-eye');
+    });
+    togglePassword2.addEventListener('click', () => {
+        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+        password2.setAttribute('type', type);
+        togglePassword2.classList.toggle('bi-eye');
+    });
+    toggleNewPassword.addEventListener('click', () => {
+        const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPassword.setAttribute('type', type);
+        toggleNewPassword.classList.toggle('bi-eye');
+    });
+
+    const changeEmailButton = document.getElementById('changeEmailButton');
+    const changeEmailForm = document.getElementById('changeEmailForm');
+    const cancelEmailButton = document.getElementById('cancelEmailButton');
+    changeEmailButton.addEventListener('click', () => {
+        changeEmailForm.classList.remove('d-none');
+        changeEmailButton.classList.add('d-none');
+    })
+    cancelEmailButton.addEventListener('click', () => {
+        changeEmailForm.classList.add('d-none');
+        changeEmailButton.classList.remove('d-none');
+    })
+</script>

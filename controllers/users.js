@@ -31,10 +31,11 @@ module.exports.register = async (req, res) => {
           
           const authenticate = User.authenticate();
           authenticate(email, password, function(err, result) {
-              if (err) res.status(500).send({message: err})
+              if (err) return res.status(500).send({message: err})
               req.login(result, err => {
-                if (err) res.status(500).send({message: err})
+                if (err) return res.status(500).send({message: err})
                 res.status(200).send({message: 'success', redirectUrl: req.session.returnTo || '/'})
+                delete req.session.returnTo;
               })
           });
           return;
@@ -83,7 +84,7 @@ module.exports.login = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user.loginType !== 'password') {
       req.logOut();
-      throw {message: `User initialized with ${user.loginType}, select password reset to change login method.`}
+      throw `User initialized with ${user.loginType}, select 'password reset' to change login method.`
     }
 
     user.lastLogin = new Date();
@@ -110,8 +111,44 @@ module.exports.logout = async (req, res) => {
     res.redirect('/');
 };
 
+module.exports.renderProfile = (req, res) => {
+  res.render('users/profile')
+}
+
+module.exports.updateProfile = async (req, res) => {
+  const user = req.user;
+
+  if (req.body.newEmail) {
+    if (user.loginType !== 'password') throw 'User not registered with password, use `password reset` button to set password.';
+    const authenticated = await user.authenticate(req.body.password);
+    if (authenticated.user) {
+      user.email = req.body.newEmail;
+      user.username = req.body.newEmail;
+      await user.save();
+    } else {
+      throw authenticated.error;
+    }
+    req.flash('success', 'Email changed Successfully. Refresh page to log in.');
+    return res.render('users/profile')
+  }
+
+  if (req.body.newPassword) {
+    if (user.loginType !== 'password') throw 'User not registered with password, use `password reset` instead!';
+    await user.changePassword(req.body.password, req.body.newPassword);
+    req.flash('success', 'Password changed Successfully.');
+    return res.render('users/profile')
+  }
+
+  const newProfile = req.body;
+  for (key in newProfile) {
+    user[key] = newProfile[key]
+  }
+  await user.save();
+  req.flash('success', 'Profile Updated Successfully.');
+  res.render('users/profile')
+}
+
 module.exports.renderSubscription = (req, res) => {
-  // console.log(req.user)
   res.render('users/subscription')
 }
 

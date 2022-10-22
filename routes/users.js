@@ -3,7 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users');
-const { isLoggedIn, validateReview, isReviewAuthor, validateEmail, validatePassword, validateUser } = require('../middleware');
+const { isLoggedIn, validateReview, isReviewAuthor, validateEmail, validatePassword, validateUser, validateProfile } = require('../middleware');
 
 router.route('/register')
     .get(users.renderRegister)
@@ -15,13 +15,17 @@ router.post('/login/pwd', passport.authenticate('local', {failureFlash: true, fa
 
 router.get('/login/fbk', passport.authenticate('facebook'));
 
-router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: true, failureRedirect: '/login'}), users.socialLogin);
+router.get('/redirect/fbk', passport.authenticate('facebook', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.socialLogin));
 
 router.get('/login/ggl', passport.authenticate('google'));
 
 router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.socialLogin));
 
-router.get('/logout', users.logout);
+router.get('/logout', catchAsync(users.logout));
+
+router.get('/profile', isLoggedIn, users.renderProfile);
+
+router.post('/profile', isLoggedIn, validateProfile, catchAsync(users.updateProfile));
 
 router.get('/subscription', isLoggedIn, users.renderSubscription);
 

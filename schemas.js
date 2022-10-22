@@ -75,3 +75,15 @@ module.exports.userShema = Joi.object({
     facebookId: Joi.string().escapeHTML(),
     googleId: Joi.string().escapeHTML(),
 })
+
+module.exports.profileSchema = Joi.object({
+    firstName: Joi.string().min(2).max(20).escapeHTML(),
+    lastName: Joi.string().min(2).max(20).escapeHTML(),
+    gender: Joi.string().min(0).escapeHTML(),
+    email: Joi.string().email().escapeHTML(),
+    newEmail: Joi.string().email().escapeHTML(),
+    phone: Joi.string().min(0).max(20).escapeHTML(),
+    address: Joi.string().min(0).max(200).escapeHTML(),
+    password: Joi.string().min(8).max(100).escapeHTML(),
+    newPassword: Joi.string().min(8).max(100).escapeHTML(),
+})
