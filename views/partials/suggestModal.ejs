@@ -1,0 +1,43 @@
+
+<div id="suggestModal" style="padding-top: 150px; background-color: rgba(221, 221, 221, 0.5); transform: translate(-100%, 100%); transition: ease transform 1s;" class="position-fixed d-flex justify-content-center align-items-center overflow-auto vh-100 vw-100">
+    <form id="suggestForm" style="width: 350px; max-width: 90%; height: max-content;" action="post" class="card m-5 p-3 rounded-3 position-relative">
+        <div class="card-body border rounded-3">
+            <h5 id="suggestTitle" class="card-title d-flex align-items-center justify-content-around"><span class="mx-auto">Suggestion</span><img width="50" src="/assets/images/suggestionBox.jpg" alt="suggestion box"></h5>
+            <div class="mb-3">
+                <label id="label1" for="text" class="form-label">Title</label>
+                <input type="text" name="text" class="form-control" >
+              </div>
+              <div class="mb-3">
+                <label id="label2" for="links" class="form-label">Refs</label>
+                <textarea id="suggestTA" class="form-control small" name="links" rows="4" placeholder="Any links and/or references"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </div>
+        <span id="closeSuggestModal" style="width: 2.2rem; height: 2.2rem; font-weight: bold;" class="position-absolute top-0 start-100 translate-middle rounded-circle border bg-light btn d-flex align-items-center justify-content-center">x</span>
+    </form>
+</div>
+
+<script>
+    const suggestModal = document.getElementById('suggestModal');
+    const suggestForm = document.getElementById('suggestForm');
+    const suggest = document.getElementById('suggest');
+    const closeSuggestModal = () => suggestModal.style.transform = 'translate(-100%, 100%)';
+    suggest && suggest.addEventListener('click', () => suggestModal.style.transform = 'translate(0%, 0%)');
+    document.getElementById('closeSuggestModal').addEventListener('click', closeSuggestModal);
+
+    const page = pageTitle.toLowerCase();
+    if (page == 'books') {
+        document.getElementById('suggestTitle').innerText = 'Book Request'
+        document.getElementById('label2').innerText = 'Author(s)'
+        document.getElementById('suggestTA').placeholder = 'Authors / other info...'
+    } else if (page == 'biographies') {
+        document.getElementById('label1').innerText = 'Name'
+    } else if (page == 'articles') {
+        document.getElementById('label1').innerText = 'Topic'
+    }
+
+    suggestForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Error sending request. Kindly log in or register.')
+    })
+</script>

@@ -11,8 +11,8 @@
     </ol>
     <a href="">Actions</a>
     <ol>
-        <li><a href="">Suggest a person</a></li>
-        <li><a href="/biographies/new">Post biography</a></li>
+        <li><a id="suggest" href="#!">Suggest a Person</a></li>
+        <li><a href="/biographies/new">Post Biography</a></li>
     </ol>
 </div>
 
@@ -40,7 +40,7 @@
                 <% } %> 
             </div>
             <div class="row">
-                <p class="m-3 lh-lg justify">
+                <p class="p-3 lh-lg justify">
                     <span id=<%= biographies[0]._id %>><span class="text-muted">Loading text...</span></span>
                     <a class="" href="/biographies/<%= biographies[0]._id %> ">continue</a>
                 </p>

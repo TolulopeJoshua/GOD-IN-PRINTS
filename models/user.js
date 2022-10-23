@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     username: { type: String, unique: true, },
     phone: { type: String },
     address: { type: String },
-    gender: { type: String, enum: ['male', 'female', 'undefined'], },
+    gender: { type: String, enum: ['male', 'female', ''], },
     loginType: { type: String, enum: ['password', 'facebook', 'google'], required: true, },
     facebookId: { type: String },
     googleId: { type: String },
