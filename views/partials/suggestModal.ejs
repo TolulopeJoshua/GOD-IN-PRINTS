@@ -4,12 +4,12 @@
         <div class="card-body border rounded-3">
             <h5 id="suggestTitle" class="card-title d-flex align-items-center justify-content-around"><span class="mx-auto">Suggestion</span><img width="50" src="/assets/images/suggestionBox.jpg" alt="suggestion box"></h5>
             <div class="mb-3">
-                <label id="label1" for="text" class="form-label">Title</label>
-                <input type="text" name="text" class="form-control" >
+                <label id="label1" for="text" class="form-label">Topic</label>
+                <input type="text" id="text" name="text" class="form-control" required>
               </div>
               <div class="mb-3">
-                <label id="label2" for="links" class="form-label">Refs</label>
-                <textarea id="suggestTA" class="form-control small" name="links" rows="4" placeholder="Any links and/or references"></textarea>
+                <label id="label2" for="suggestTA" class="form-label">Refs</label>
+                <textarea id="suggestTA" class="form-control small" name="info" rows="4" placeholder="Any links and/or references"></textarea>
               </div>
               <button type="submit" class="btn btn-primary w-100">Submit</button>
         </div>
@@ -30,14 +30,28 @@
         document.getElementById('suggestTitle').innerText = 'Book Request'
         document.getElementById('label2').innerText = 'Author(s)'
         document.getElementById('suggestTA').placeholder = 'Authors / other info...'
+        document.getElementById('label1').innerText = 'Title'
     } else if (page == 'biographies') {
         document.getElementById('label1').innerText = 'Name'
-    } else if (page == 'articles') {
-        document.getElementById('label1').innerText = 'Topic'
-    }
+    } 
 
     suggestForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Error sending request. Kindly log in or register.')
+        if (!(<%- JSON.stringify(currentUser) %>)) return swal('Authentication error', 'Kindly log in or register.');
+        if (page == 'books' && '<%= currentUser.subscription.status %>' == 'classic') return swal('Upgrade Status', 'Premium/Platinum membership required.');
+        
+        const data = new FormData(e.target);
+        const review = Object.fromEntries(data.entries());
+        axios.post('suggest', { review }, {
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(function (response) {
+            swal('Success', 'Suggestion sent successfully.');
+            e.target.reset();
+            closeSuggestModal();
+        })
+        .catch(function (error) {
+            swal('Error', 'An unknown error occured.');
+        });
     })
 </script>

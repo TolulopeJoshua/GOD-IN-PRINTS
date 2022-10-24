@@ -54,7 +54,7 @@ module.exports.articleSchema = Joi.object({
 module.exports.reviewSchema = Joi.object({
     review: Joi.object({
         text: Joi.string().required().escapeHTML(),
-        links: Joi.string().escapeHTML()
+        info: Joi.string().min(0).escapeHTML()
     }).required()
 })
 

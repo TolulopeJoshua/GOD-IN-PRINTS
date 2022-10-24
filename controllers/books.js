@@ -269,3 +269,22 @@ module.exports.deleteReview = async (req, res) => {
     await Review.findByIdAndDelete(reviewId);
     res.send(reviewId);
 }
+
+module.exports.suggest = async (req, res) => {
+    const review = new Review(req.body.review);
+    review.category = 'Suggest';
+    review.parentId = 'book';
+    review.author = req.user._id;
+    await review.save();
+    let mailOptions = {
+        from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', 
+        to: [req.user.email, 'gipteam@hotmail.com'],
+        subject: 'Book Request',
+        html: `<p>Hello ${req.user.firstName.toUpperCase()},<p/><br>
+          <p>Your request for the book: <b>${review.text}<b/> was successfully submitted. We will endeavour to make the requested book item available as soon as possible and revert.<p/><br>
+          <p>Best regards,<p/><br><b>GIP Library<b/>`
+    };
+    const {transporter} = require('../functions');
+    transporter.sendMail(mailOptions);
+    res.status(200).send('Success')
+}

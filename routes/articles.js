@@ -34,5 +34,7 @@ router.post('/:id/imageUpload', isLoggedIn, upload0.single('image'), catchAsync(
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(articles.addReview));
 
 router.delete('/:articleId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(articles.deleteReview));
+ 
+router.post('/suggest', isLoggedIn, validateReview, catchAsync(articles.suggest));
 
 module.exports = router;

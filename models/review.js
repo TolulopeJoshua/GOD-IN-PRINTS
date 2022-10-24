@@ -2,17 +2,21 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
-    text: String,
+    text:  { type: String, required: true, },
+    info:  { type: String },
     category: {
         type: String,
-        enum: ['Books', 'Biographies', 'Articles', 'Bible', 'Review', 'Request']
+        enum: ['Books', 'Biographies', 'Articles', 'Bible', 'Review', 'Suggest'],
+        required: true,
     },
     parentId: {
-        type: String
+        type: String,
+        required: true,
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true,
     },
     dateTime: {
         type: Date, 

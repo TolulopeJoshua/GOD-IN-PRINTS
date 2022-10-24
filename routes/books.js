@@ -42,5 +42,7 @@ router.get('/:id/download', isLoggedIn, checkDownloadLimit, catchAsync(books.dow
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(books.addReview));
 
 router.delete('/:bookId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(books.deleteReview));
+ 
+router.post('/suggest', isLoggedIn, validateReview, catchAsync(books.suggest));
 
 module.exports = router;

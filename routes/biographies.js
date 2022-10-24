@@ -33,5 +33,7 @@ router.post('/:id/imageUpload', isLoggedIn, upload0.single("image"), catchAsync(
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(biographies.addReview));
 
 router.delete('/:biographyId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(biographies.deleteReview));
+ 
+router.post('/suggest', isLoggedIn, validateReview, catchAsync(biographies.suggest));
 
 module.exports = router;  

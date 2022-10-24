@@ -102,6 +102,7 @@ const scriptSrcUrls = [
     "https://kit.fontawesome.com",
     "https://connect.facebook.net",
     "https://js.paystack.co",
+    "https://unpkg.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
