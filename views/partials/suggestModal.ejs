@@ -1,5 +1,5 @@
 
-<div id="suggestModal" style="padding-top: 150px; background-color: rgba(221, 221, 221, 0.5); transform: translate(-100%, 100%); transition: ease transform 1s;" class="position-fixed d-flex justify-content-center align-items-center overflow-auto vh-100 vw-100">
+<div id="suggestModal" style="z-index: 10000; padding-top: 150px; background-color: rgba(221, 221, 221, 0.5); transform: translate(-100%, 100%); transition: ease transform 1s;" class="position-fixed d-flex justify-content-center align-items-center overflow-auto vh-100 vw-100">
     <form id="suggestForm" style="width: 350px; max-width: 90%; height: max-content;" action="post" class="card m-5 p-3 rounded-3 position-relative">
         <div class="card-body border rounded-3">
             <h5 id="suggestTitle" class="card-title d-flex align-items-center justify-content-around"><span class="mx-auto">Suggestion</span><img width="50" src="/assets/images/suggestionBox.jpg" alt="suggestion box"></h5>
@@ -42,7 +42,7 @@
         
         const data = new FormData(e.target);
         const review = Object.fromEntries(data.entries());
-        axios.post('suggest', { review }, {
+        axios.post(`/${page}/suggest`, { review }, {
             headers: {'Content-Type': 'application/json'}
         })
         .then(function (response) {
