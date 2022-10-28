@@ -57,6 +57,7 @@
   const docuForm = document.getElementById('docuForm');
   docuForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    loadWaiting();
     const data = new FormData(e.target);
     data.append('story', document.getElementById('text-input').innerHTML)
     const article = Object.fromEntries(data.entries());
