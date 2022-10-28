@@ -161,8 +161,8 @@ a {
 }
 
 .menu-list.active, .menu a.active, .menu li a.active {
-    color: #999;
-    background: #2a2f4a;
+    color: #333;
+    background: rgba(42, 47, 74, 0.2);
     cursor: pointer;
 }
 
@@ -394,3 +394,64 @@ a {
 .subscription .border {
     user-select: none;
 }
+
+
+
+.editable .options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+  }
+.editable button {
+    height: 28px;
+    width: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 3px;
+    border: none;
+    background-color: #ffffff;
+    outline: none;
+    color: #020929;
+  }
+.editable select {
+    padding: 7px;
+    border: 1px solid #020929;
+    border-radius: 3px;
+  }
+  .editable .options label,
+  .editable .options select {
+    font-family: "Poppins", sans-serif;
+  }
+  .editable .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .editable input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    width: 40px;
+    height: 28px;
+    border: none;
+    cursor: pointer;
+  }
+  .editable input[type="color"]::-webkit-color-swatch {
+    border-radius: 15px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+  }
+  .editable input[type="color"]::-moz-color-swatch {
+    border-radius: 15px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+  }
+  .editable #text-input {
+    margin-top: 10px;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    height: 50vh;
+  }
+  .editable .active {
+    background-color: #e0e9ff;
+  }

@@ -113,6 +113,7 @@ const styleSrcUrls = [
     "https://use.fontawesome.com/",
     "https://cdn.jsdelivr.net",
     "https://paystack.com",
+    "https://cdnjs.cloudflare.com",
 ];
 const connectSrcUrls = [
     "https://api.emailjs.com/",
@@ -130,6 +131,7 @@ const connectSrcUrls = [
 const fontSrcUrls = [
     "https://fonts.gstatic.com/",
     "https://cdn.jsdelivr.net",
+    "https://cdnjs.cloudflare.com",
 ];
 const frameSrcUrls = [
     "https://checkout.paystack.com",
@@ -171,6 +173,9 @@ app.use(
                 "https://www.christianforums.com",
                 "https://dclm.org",
                 "https://www.facebook.com",
+                "https://www.google.com",
+                "en.wikipedia.org",
+                "*",
 
                 // "https://res.cloudinary.com/depvtmznu/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 // "https://images.unsplash.com/",

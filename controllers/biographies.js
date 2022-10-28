@@ -1,6 +1,7 @@
 const Doc = require('../models/doc')
 const Book = require('../models/book');
 const Review = require('../models/review');
+const sanitizeHtml = require('sanitize-html');
 
 const fs = require('fs');
 
@@ -41,15 +42,21 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createBiography = async (req, res) => {
     const biography = new Doc(req.body.biography)
-    biography.docType = 'biography';
+    const clean = sanitizeHtml(biography.story, {
+        allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
+    });
+    biography.docType = 'biography' 
     biography.dateTime = Date.now();
-    fs.writeFileSync('outputText.txt', biography.story);
+    biography.contributor = req.user._id;
+    fs.writeFileSync('outputText.txt', clean);
     biography.story = 'bio/' + Date.now().toString() + '_' + biography.name + '.txt';
     const myBuffer = fs.readFileSync('outputText.txt');
     await putImage(biography.story, myBuffer);
     await biography.save();
-    req.flash('success', `${biography.name.toUpperCase()}'s biography saved. Kindly upload picture`);
-    res.redirect(`/biographies/${biography._id}/imageUpload`)
+    req.flash('success', `${biography.name.toUpperCase()}'s biography posted. Kindly upload picture`);
+    // res.redirect(`/biographys/${biography._id}`)
+    res.status(200).send({message: 'success', redirectUrl: `/biographies/${biography._id}/imageUpload`})
 };
 
 module.exports.search = async (req, res) => {
@@ -110,7 +117,7 @@ module.exports.uploadBiographyImage = async function(req, res) {
     biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
     await uploadCompressedImage(req.file.path, biography.image.key);
     await biography.save(); 
-    req.flash('success', 'Successfully saved biography, awaiting approval.');
+    req.flash('success', 'Successfully posted biography, awaiting approval.');
     res.redirect(`/biographies/${biography._id}`);
 };
 

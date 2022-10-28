@@ -1,7 +1,10 @@
 <% layout('layouts/boilerplate') %> 
 
-<div class="offset-md-3 col-md-5">
+<div class="d-none offset-md-3 col-md-5">
 <div class="alert alert-danger" role="alert">
     <h4 class="alert-heading"><%= err %> </h4>
 </div>
 </div>
+<script>
+    swal('','<%= err %>', 'error').then(() => history.back())
+</script>

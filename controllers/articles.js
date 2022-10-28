@@ -1,6 +1,7 @@
 const Doc = require('../models/doc')
 const Book = require('../models/book');
 const Review = require('../models/review');
+const sanitizeHtml = require('sanitize-html');
 
 
 const {getImage, putImage, paginate, uploadCompressedImage, encode} = require("../functions");
@@ -52,15 +53,21 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createArticle = async (req, res) => {
     const article = new Doc(req.body.article)
+    const clean = sanitizeHtml(article.story, {
+        allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
+    });
     article.docType = 'article' 
     article.dateTime = Date.now();
-    fs.writeFileSync('outputText.txt', article.story);
+    article.contributor = req.user._id;
+    fs.writeFileSync('outputText.txt', clean);
     article.story = 'article/' + Date.now().toString() + '_' + article.name + '.txt';
     const myBuffer = await fs.readFileSync('outputText.txt');
     await putImage(article.story, myBuffer);
     await article.save();
     req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
-    res.redirect(`/articles/${article._id}`)
+    // res.redirect(`/articles/${article._id}`)
+    res.status(200).send({message: `${article.name.toUpperCase()} posted successfully, awaiting approval.`, redirectUrl: `/articles/${article._id}`})
 };
 
 module.exports.search = async (req, res) => {

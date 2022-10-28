@@ -21,50 +21,69 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-9 col-lg-6 offset-md-3">
-    <h1 class="text-center">Add Biography</h1>
-    <form action="/biographies/new" method="POST" novalidate class="validated-form">
-        <div class="mb-3">
-            <label class="form-label" for="name">Name:</label>
-            <input class="form-control" type="text" id="name" name="biography[name]" required>
-        </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label" for="role">Role</label>
-                <input class="form-control" type="text" id="role" name="biography[role]" placeholder="e.g Singer" required>
+<div class="col-md-9 col-lg-6 offset-md-3 px-3 position-relative">
+    <h1 class="text-center m-3">Post Biography</h1>
+    <form id="docuForm" action="/biographies/new" method="POST" class="card px-5 pt-4 pb-3">
+        <div class="row mb-3">
+            <div class="col-12 mb-3">
+                <label class="form-label" for="name">Name:</label>
+                <input class="form-control" type="text" id="name" name="name" required>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="gender">Gender</label>
-                <select class="form-select form-select-lg" name="biography[gender]" id="gender" required>
+            <div class="col-8 mb-3">
+                <label class="form-label" for="role">Role:</label>
+                <input class="form-control" type="text" id="role" name="role" placeholder="e.g Singer" required>
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label" for="gender">Gender</label>
+                <select class="form-select" name="gender" id="gender" required>
                     <option></option>
-                    <option value="male">male</option>
-                    <option value="female">female</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                 </select>
             </div>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-md-6">
+            <div class="mb-3 col-4">
                 <label class="form-label" for="birthYear">Year of birth:</label>
-                <input class="form-control" type="Number" id="birthYear" name="biography[birthYear]" required>
+                <input class="form-control" type="Number" id="birthYear" name="birthYear" required>
             </div>
-            <div class="mb-3 col-md-6">
-                <label class="form-label" for="deathYear">Year of death: <i>(optional)</i></label>
-                <input class="form-control" type="Number" id="deathYear" name="biography[deathYear]">
+            <div class="mb-3 col-4">
+                <label class="form-label" for="deathYear">Year of death:</label>
+                <input class="form-control" type="Number" id="deathYear" name="deathYear" placeholder="optional">
+            </div>
+            <div class="mb-3 col-4">
+                <label class="form-label" for="story">Source:</label>
+                <input class="form-control" type="text" id="source" name="source" placeholder="name or url?">
             </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label" for="story">Story</label>
-            <textarea class="form-control" name="biography[story]" id="story" cols="40" rows="20" required></textarea>
-        </div>
-        <div class="mb-5">
-            <label class="form-label" for="story">Source (<em>name or url</em>):</label>
-            <input class="form-control" type="text" id="source" name="biography[source]" required>
-        </div>
-        <div class="mb-3">                
-            <button class="btn btn-success">Save biography</button>
+        <label class="form-label" for="">Story:</label>
+        <%- include('../partials/textEditor') %> 
+
+        <div class="my-3">                
+            <button type="submit" class="btn btn-success">Post biography</button>
         </div>
     </form>
+    <%- include('../partials/loginModal') %> 
 </div>
+
+<script>
+    const docuForm = document.getElementById('docuForm');
+    docuForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      loadWaiting();
+      const data = new FormData(e.target);
+      data.append('story', document.getElementById('text-input').innerHTML)
+      const biography = Object.fromEntries(data.entries());
+      console.log(biography)
+      axios.post(`/biographies/new`, { biography }, {
+          headers: {'Content-Type': 'application/json'}
+      })
+      .then(function (response) {
+          window.location.href = response.data.redirectUrl;
+      })
+      .catch(function (error) {
+          swal('Error', 'An unknown error occured.');
+      });
+    })
+  </script>
     
 <script>
     const pageTitle = "Biographies";

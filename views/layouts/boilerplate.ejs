@@ -13,6 +13,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">  
   <link href="https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap" rel="stylesheet">    
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
 
   <link href="/stylesheets/main.css" rel="stylesheet" />
   <link href="/stylesheets/scripture.css" rel="stylesheet" />
@@ -48,6 +52,15 @@
     <script src="/javascripts/get_story.js"></script>
     <script src="/javascripts/likeReview.js"></script>
     <script src="/javascripts/deleteReview.js"></script>
+
+    <script>
+      function loadWaiting() {
+        swal('Please wait...', {
+          buttons: false,
+          closeOnClickOutside: false,
+        })
+      }
+    </script>
 
     <script>
       const navId = pageTitle.toLowerCase();

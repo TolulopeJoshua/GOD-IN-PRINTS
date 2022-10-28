@@ -23,10 +23,10 @@
 <div class="col-md-9 col-lg-6 offset-md-3">
     <div class="card bg mb-3">
         <h1 class="card-title title-1 text-center"><%= article.name %></h1>      
-        <% if (article.image.key === 'none' && currentUser && currentUser._id.equals(article.contributor)) { %> 
+        <% if (article.image.key === 'none' && currentUser && (currentUser._id.equals(article.contributor) || currentUser.admin)) { %> 
             <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Upload Image for Article</a></p>
         <% } %> 
-        <div class="card-body justify">        
+        <div class="card-body justify overflow-auto">        
             <% if (article.image.key === 'none') { %> 
                 <img src="/assets/images/articles.jfif" alt="" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
             <% } else { %> 

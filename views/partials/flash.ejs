@@ -1,13 +1,19 @@
 <% if(success.length) { %> 
-    <div class="alert alert-success alert-dismissible fade show text-center offset-md-3 col-md-5" role="alert">
+    <div class="d-none alert alert-success alert-dismissible fade show text-center offset-md-3 col-md-5" role="alert">
         <%= success %> 
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <script>
+        swal('','<%= success %>', 'success')
+    </script>
 <% } %> 
     
 <% if(error.length) { %> 
-    <div class="alert alert-danger alert-dismissible fade show text-center offset-md-3 col-md-5" role="alert">
+    <div class="d-none alert alert-danger alert-dismissible fade show text-center offset-md-3 col-md-5" role="alert">
         <%= error %> 
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <script>
+        swal('','<%= error %>', 'error')
+    </script>
 <% } %> 

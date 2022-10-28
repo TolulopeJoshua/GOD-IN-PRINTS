@@ -20,36 +20,57 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
     
-<div class="col-md-9 col-lg-6 offset-md-3 ps-5">
-    <h1 class="text-center">Add an Article</h1>
-    <form action="/articles/new" method="POST" novalidate class="validated-form">
-        <div class="mb-3">
-            <label class="form-label" for="name">Title:</label>
-            <input class="form-control" type="text" id="name" name="article[name]" required>
+<div class="col-md-9 col-lg-6 offset-md-3 px-3 position-relative">
+    <h1 class="text-center m-3">Post an Article</h1>
+    <form id="docuForm" action="/articles/new" method="POST" class="card px-5 pt-4 pb-3">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <label class="form-label" for="name">Title:</label>
+                <input class="form-control" type="text" id="name" name="name" required>
+            </div>
+            <div class="col-8 mb-3">
+                <label class="form-label" for="story">Source:</label>
+                <input class="form-control pe-2" type="text" id="source" name="source" placeholder="name or url?">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label" for="role">Category:</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option></option>
+                    <% for (let category of categories) { %> 
+                        <option class="my-2" value="<%= category %>"><%= category %></option>
+                    <% } %> 
+                </select>
+                <!-- <input class="form-control" type="text" id="role" name="article[role]" placeholder="e.g Prayer, Faith" required> -->
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label" for="role">Category:</label>
-            <select class="form-select" id="role" name="article[role]" required>
-                <option></option>
-                <% for (let category of categories) { %> 
-                    <option value="<%= category %>"><%= category %></option>
-                <% } %> 
-            </select>
-            <!-- <input class="form-control" type="text" id="role" name="article[role]" placeholder="e.g Prayer, Faith" required> -->
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="story">Text</label>
-            <textarea class="form-control" name="article[story]" id="story" cols="40" rows="20" required></textarea>
-        </div>
-        <div class="mb-5">
-            <label class="form-label" for="story">Source (<em>name or url</em>):</label>
-            <input class="form-control" type="text" id="source" name="article[source]" required>
-        </div>
-        <div class="mb-3">                
-            <button class="btn btn-success">Save Article</button>
+        <label class="form-label" for="story">Text:</label>
+        <%- include('../partials/textEditor') %> 
+        
+        <div class="my-3">                
+            <button type="submit" class="btn btn-success w-25">Post</button>
         </div>
     </form>
+    <%- include('../partials/loginModal') %> 
 </div>
+
+<script>
+  const docuForm = document.getElementById('docuForm');
+  docuForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    data.append('story', document.getElementById('text-input').innerHTML)
+    const article = Object.fromEntries(data.entries());
+    axios.post(`/articles/new`, { article }, {
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(function (response) {
+        window.location.href = response.data.redirectUrl;
+    })
+    .catch(function (error) {
+        swal('Error', 'An unknown error occured.');
+    });
+  })
+</script>
 
 <script>
     const pageTitle = "Articles";

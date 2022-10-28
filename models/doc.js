@@ -14,6 +14,9 @@ const DocSchema = new Schema({
     story: {
         type: String
     },
+    content: {
+        type: String
+    },
     source: {
         type: String,
         default: 'Anonymous'
