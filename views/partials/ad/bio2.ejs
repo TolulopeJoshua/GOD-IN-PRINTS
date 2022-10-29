@@ -8,7 +8,7 @@
                 <img style="max-width: 8em;" class='card-img-top float-end p-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBio[1].image.key.replaceAll(" ", "+") %> alt="">
             <% } %> 
         </p>
-        <canvas id="canvas" class="w-100 h-100 position-absolute start-0 top-0"></canvas>
+        <canvas id="canvas2" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
     </div>
 </a>
                 
@@ -24,7 +24,15 @@
 
 <script>
     //-----------Var Inits--------------
-canvas = document.getElementById("canvas");
+let canvas;
+if (window.innerWidth < 992 || !document.getElementById('canvas')) {
+    canvas = document.getElementById('canvas2')
+} else {
+    canvas = document.getElementById('canvas')
+}
+runConfetti();
+
+function runConfetti() {
 ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -140,4 +148,6 @@ window.addEventListener('resize', function () {
 window.addEventListener('click', function() {
   initConfetti();
 });
+    
+}
 </script>

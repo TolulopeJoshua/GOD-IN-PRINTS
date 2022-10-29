@@ -20,9 +20,9 @@
 <script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-    <ul>
+    <ul class="p-0 m-0>
     <% for (let key in growthHabits) { %>
-        <li>
+        <li">
             <h3 class="habit-title p-2"><%= key.replaceAll('_', ' ') %> </h3>
             <% for (let habit of growthHabits[key]) { %> 
                 <ul>
@@ -43,7 +43,7 @@
 
     <% if (adBook[0]) { %> 
     <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    <img class='mx-2 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
     </a>
     <% } %> 
 
@@ -58,7 +58,7 @@
 
     <% if (adBook[0]) { %> 
     <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="75%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    <img class='my-2 image-size fade-animate' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
     </a>
     <% } %> 
 
