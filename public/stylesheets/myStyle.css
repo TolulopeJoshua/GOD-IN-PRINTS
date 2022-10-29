@@ -179,6 +179,7 @@ a {
 .review {
     position: fixed;
     max-height: 100vh;
+    right: 10px;
 }
 
 .review-box {
@@ -236,6 +237,7 @@ a {
     .review {
         position: relative;
         max-height: fit-content;
+        right: 0px;
     }
 }
 

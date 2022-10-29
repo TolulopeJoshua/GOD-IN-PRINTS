@@ -3,10 +3,10 @@
 <!-- <div id="cluster-map"></div> -->
 <div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5" href="/books">Feature</a>
-    <a class="h5 active" href="/books/list">List</a>
+    <a class="h5" href="/books/list">List</a>
     <ol>
-        <li><a href="/books/list">Index</a></li>
-        <li><a href="/books/categories">Category</a></li>
+        <li><a id="list-index" href="/books/list">Index</a></li>
+        <li><a id="list-category" href="/books/categories">Category</a></li>
     </ol>
     <a href="">Actions</a>
     <ol>
@@ -20,6 +20,16 @@
     <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
+<script>
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+    if (params.category) {
+        document.getElementById('list-category').classList.add('active')
+    } else {
+        document.getElementById('list-index').classList.add('active')
+    }
+</script>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto position-relative">
     <h3 class="text-center mt-3"><%= category %> </h3>
