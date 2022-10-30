@@ -5,11 +5,6 @@ const User = require('../models/user');
 
 const fs = require('fs');
 // const pdfConverter = require('pdf-poppler');
-const PDFDocument = require('pdf-lib').PDFDocument;
-const pdf2img = require('pdf-img-convert');
-const pdfToPng = require('pdf-to-png-converter');
-const pdfCounter = require('pdf-page-counter');
-const {fromPath} = require('pdf2pic');
 const path = require('path');
 
 const {getImage, s3, paginate, uploadCompressedImage, encode} = require("../functions")
@@ -28,16 +23,16 @@ module.exports.index = async (req, res) => {
         books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
         // sessData.featureBooks = books;
     // }
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     res.render('books/index', {books, adArt, adBio})
 };
 
 module.exports.list = async (req, res) => {
     const books = await Book.find({filetype: 'pdf', isApproved: true}).sort({title : 1});
     const [pageDocs, pageData] = paginate(req, books)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio})
 };
 
@@ -56,8 +51,8 @@ module.exports.perCategory = async (req, res) => {
         };
     };
     const [pageDocs, pageData] = paginate(req, books)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     res.render('books/list', {category, books: pageDocs, pageData, adArt, adBio})
 
     function words(category) {
@@ -74,32 +69,14 @@ module.exports.createBook = async (req, res) => {
     const book = new Book(req.body.book);
     const {key, size} = req.file;
     book.document = {key, size};
-    book.title = book.title.toUpperCase() + '.PDF';
+    book.title = book.title.toUpperCase();
     book.author = book.author.toUpperCase();
-    book.filetype = req.file.mimetype.split('/')[1];
+    book.contributor = req.user._id;
+    book.filetype = req.file.mimetype.split('/')[1] || 'pdf';
     book.datetime = Date.now();
-    if (book.filetype === 'pdf') {
-        book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -3) + '.jpg';
-        const data = await getImage(book.document.key);
-        await fs.writeFileSync('output.pdf', data.Body);
-        const pdfPath = 'output.pdf';
-        let option = {
-            format : 'jpeg',
-            out_dir : 'uploads',
-            out_prefix : path.basename(pdfPath, path.extname(pdfPath)),
-            page : 1
-        }
-        await pdfConverter.convert(pdfPath, option)
-        let files = await fs.readdirSync('uploads')
-        await uploadCompressedImage(`uploads/${files[0]}`, book.image.key);
-        await book.save();    
-        req.flash('success', `${book.title.toUpperCase()} saved successfully, awaiting approval.`);
-        res.redirect(`/books/${book._id}`)
-    } else {
-        await book.save();
-        req.flash('success', `${book.title.toUpperCase()} saved, kindly upload front-page picture.`);
-        res.redirect(`/books/${book._id}/imageUpload`)
-    }
+    await book.save();
+    req.flash('success', `${book.title.toUpperCase()} saved, kindly upload front-page image.`);
+    res.redirect(`/books/${book._id}/imageUpload`)
 };
 
 module.exports.renderAdminUpload = (req, res) => {
@@ -140,14 +117,14 @@ module.exports.adminUpload = async (req, res) => {
 module.exports.search = async (req, res) => {
     const item = req.query.search;
     // console.log(item)
-    const books = await Book.find({filetype: "pdf", isApproved: true}).sort({title: 1});
+    const books = await Book.find({}).sort({title: 1});
     const result = [];
     books.forEach((book) => {
         book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, adArt, adBio});
 };
 

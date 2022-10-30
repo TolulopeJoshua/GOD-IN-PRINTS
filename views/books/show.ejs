@@ -10,7 +10,7 @@
     <a href="">Actions</a>
     <ol>
         <li><a id="suggest" href="#!">Request Book</a></li>
-        <li><a href="">Save a Book</a></li>
+        <li><a href="/books/new">Save a Book</a></li>
     </ol>
 </div>
 
@@ -21,6 +21,11 @@
 <script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-6 col-lg-4 offset-md-4 overflow-auto position-relative">
+    <% if(!book.isApproved) { %> 
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            This book is yet to be approved! 
+        </div>
+    <% } %> 
     <div class="card text-center mb-3 card-size">
         <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
         <div class="card-body">

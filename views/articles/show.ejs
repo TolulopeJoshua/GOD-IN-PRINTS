@@ -19,8 +19,14 @@
     <button id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
+
     
 <div class="col-md-9 col-lg-6 offset-md-3">
+    <% if(!article.isApproved) { %> 
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            This article is yet to be approved! 
+        </div>
+    <% } %> 
     <div class="card bg mb-3">
         <h1 class="card-title title-1 text-center"><%= article.name %></h1>      
         <% if (article.image.key === 'none' && currentUser && (currentUser._id.equals(article.contributor) || currentUser.admin)) { %> 

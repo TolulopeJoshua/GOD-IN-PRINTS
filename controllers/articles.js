@@ -17,8 +17,8 @@ const categories = [
 
 module.exports.index = async (req, res) => {
     const articles = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/index', {categories, articles, adBook, adBio})
 };
 
@@ -29,8 +29,8 @@ module.exports.list = async (req, res) => {
     //     await article.save(); 
     // };
     const [pageDocs, pageData] = paginate(req, articles)
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook})
 };
 
@@ -42,8 +42,8 @@ module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
     const articles = await Doc.find({docType: 'article', isApproved: true, role: category}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles)
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook});
 };
 
@@ -72,14 +72,14 @@ module.exports.createArticle = async (req, res) => {
 
 module.exports.search = async (req, res) => {
     const item = req.query.search;
-    const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name: 1});
+    const articles = await Doc.find({docType: 'article'}).sort({name: 1});
     const result = [];
     articles.forEach((article) => {
         article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, adBio, adBook});
 };
 
@@ -94,8 +94,8 @@ module.exports.showArticle = async (req, res) => {
         req.flash('error', 'Not in directory!');
         return res.redirect('/articles');
     }
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/show', {article, adBio, adBook});
 };
 
@@ -103,7 +103,7 @@ module.exports.story = async (req, res) => {
     const q = req.query.q;
     const article = await Doc.findById(req.params.id);
     const data = await getImage(article.story);
-    const story = data.Body.toString();
+    const story = data.Body.toString().replace(/<[^>]*>/g, " ");
     if (Number(q)) {
         return res.send(story.substring(0, q) + '...');
     }

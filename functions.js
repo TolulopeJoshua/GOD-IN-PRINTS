@@ -89,12 +89,13 @@ module.exports.upload = multer({
     }
 });
 
-module.exports.upload0 = multer({ storage: multer.diskStorage({
+module.exports.upload0 = multer({ 
+    storage: multer.diskStorage({
         destination: function (req, file, cb) {
-        cb(null, './uploads')
+            cb(null, './uploads')
         },
         filename: function (req, file, cb) {
-        cb(null, file.originalname)
+            cb(null, file.originalname)
         },
     })
 });

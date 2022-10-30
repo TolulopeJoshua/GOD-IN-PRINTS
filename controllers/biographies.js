@@ -10,29 +10,18 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 
 module.exports.index = async (req, res) => {
     const biographies = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
-    // console.log(adArt)
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('biographies/index', {biographies, adArt, adBook})
 };
 
 module.exports.list = async (req, res) => {
     const q = req.query.q;
-    let searchObj;
-    switch (q) {
-        case 'birth':
-            searchObj = {birthYear: 1};
-            break;
-        case 'role':
-            searchObj = {role: 1, name: 1};
-            break;
-        default :
-            searchObj = {name: 1}
-    }
+    const searchObj = q == 'birth' ? {birthYear: 1} : q == 'role' ? {role: 1, name: 1} : {name: 1};
     const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
     const [pageDocs, pageData] = paginate(req, biographies)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook})
 };
 
@@ -61,14 +50,14 @@ module.exports.createBiography = async (req, res) => {
 
 module.exports.search = async (req, res) => {
     const item = req.query.search;
-    const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort({name: 1});
+    const biographies = await Doc.find({docType: 'biography'}).sort({name: 1});
     const result = [];
     biographies.forEach((biography) => {
         biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article'} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf'} }, { $sample: { size: 1 } }]);
+    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, adArt, adBook});
 };
 
@@ -91,7 +80,7 @@ module.exports.story = async (req, res) => {
     // console.log(q)
     const biography = await Doc.findById(req.params.id);
     const data = await getImage(biography.story);
-    const story = data.Body.toString();
+    const story = data.Body.toString().replaceAll("<[^>]*>", " ");
     if (Number(q)) {
         return res.send(story.substring(0, q) + '...');
     }
