@@ -29,7 +29,7 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.list = async (req, res) => {
-    const books = await Book.find({filetype: 'pdf', isApproved: true}).sort({title : 1});
+    const books = await Book.find({isApproved: true}).sort({title : 1});
     const [pageDocs, pageData] = paginate(req, books)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
@@ -42,7 +42,7 @@ module.exports.categories = (req, res) => {
 
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
-    const allBooks = await Book.find({filetype: "pdf", isApproved: true}).sort({name : 1});
+    const allBooks = await Book.find({isApproved: true}).sort({name : 1});
     let books =[];
     for (let book of allBooks) {
         for (let word of words(category)) {

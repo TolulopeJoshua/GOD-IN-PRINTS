@@ -11,11 +11,20 @@ const BookScema = new Schema({
         required: true,
         unique: true
     },
-    author: String,
+    author: {
+        type: string,
+        default: ' '
+    },
     // keywords: String,
-    filetype: string,
+    filetype: {
+        type: string,
+        default: 'pdf'
+    },
     image: {
-        key: String,
+        key: {
+            type: string,
+            default: 'none'
+        },
     },
     document: {
         key: String,

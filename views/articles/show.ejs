@@ -48,8 +48,8 @@
     <% if (currentUser) { %> 
     <form action="/articles/<%= article._id %>/addReview" method="POST" novalidate class="validated-form">
         <div class="mb-3">
-            <label class="form-label ms-2" for="text"><strong>Comment:</strong></label>
-            <textarea class="form-control bg-transparent" id="text" name="review[text]" rows="3" required></textarea>
+            <label class="form-label ms-2" for="review-text"><strong>Comment:</strong></label>
+            <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
             <button class="btn-primary btn-sm d-block ms-auto py-0 px-2">Add</button>
         </div>
     </form>

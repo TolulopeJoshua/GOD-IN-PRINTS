@@ -38,8 +38,8 @@
     <% if (currentUser) { %> 
     <form action="/addReview/<%= data.id %>/<%= data.bibleId %>" method="POST" novalidate class="validated-form">
         <div class="mb-3">
-            <label class="form-label ms-2" for="text"><strong>Note:</strong></label>
-            <textarea class="form-control bg-transparent" id="text" name="review[text]" rows="3" required></textarea>
+            <label class="form-label ms-2" for="review-text"><strong>Note:</strong></label>
+            <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
             <div class="d-flex">
                 <em class="small text-white">Notes are private</em>
                 <button class="btn-primary btn-sm ms-auto py-0 px-2">Add</button>

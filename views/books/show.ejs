@@ -27,7 +27,11 @@
         </div>
     <% } %> 
     <div class="card text-center mb-3 card-size">
-        <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
+        <% if (book.image.key != 'none') { %>        
+            <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
+        <% } else { %>
+            <img class="card-img-top rounded img-thumbnail" alt="" src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
+            <% } %> 
         <div class="card-body">
             <h5 class="card-title"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
@@ -60,8 +64,8 @@
     <% if (currentUser) { %> 
     <form action="/books/<%= book._id %>/addReview" method="POST" novalidate class="validated-form">
         <div class="mb-3">
-            <label class="form-label ms-2" for="text"><strong>Review:</strong></label>
-            <textarea class="form-control bg-transparent" id="text" name="review[text]" rows="3" required></textarea>
+            <label class="form-label ms-2" for="review-text"><strong>Review:</strong></label>
+            <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
             <button class="btn-primary btn-sm d-block ms-auto py-0 px-2">Add</button>
         </div>
     </form>
