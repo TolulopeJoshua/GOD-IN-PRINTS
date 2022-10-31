@@ -103,10 +103,14 @@ module.exports.renderImageUploadForm = (req, res) => {
 
 module.exports.uploadBiographyImage = async function(req, res) {
     const biography = await Doc.findById(req.params.id);
-    biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
-    await uploadCompressedImage(req.file.path, biography.image.key);
-    await biography.save(); 
-    req.flash('success', 'Successfully posted biography, awaiting approval.');
+    if (biography.image.key == 'none') {
+        biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
+        await uploadCompressedImage(req.file.path, biography.image.key);
+        await biography.save(); 
+        req.flash('success', 'Successfully posted biography, awaiting approval.');
+    } else {
+        req.flash('error', 'Biography already has an image.');
+    }
     res.redirect(`/biographies/${biography._id}`);
 };
 

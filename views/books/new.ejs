@@ -20,9 +20,9 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
+<div class="col-md-9 col-lg-6 offset-md-3 d-flex flex-column align-items-center">
     <h3 class="text-center p-3">Add New Book</h3>
-    <form action="/books/new" method="POST" novalidate class="validated-form m-3" enctype="multipart/form-data">
+    <form id="newBookForm" style="width: 500px; max-width: 90%;" action="/books/new" method="POST" class="card p-5" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label" for="title">Title</label>
             <input class="form-control" type="text" id="title" name="book[title]" required>
@@ -44,12 +44,16 @@
                 Looks good!
                 </div>
             </div>
-        <div class="mb-3 text-center">                
-        <button class="btn-lg btn-success">Save</button>
+        <div class="mt-5 text-center">                
+            <button class="btn-lg btn-success w-25">Save</button>
         </div>
     </form>
 </div>
 
 <script>
     const pageTitle = "Books";
+</script>
+
+<script>
+    document.getElementById('newBookForm').addEventListener('submit', () => loadWaiting())
 </script>

@@ -17,7 +17,7 @@ router.get('/category', setRedirect, catchAsync(books.perCategory));
 
 router.get('/new', isLoggedIn, books.renderNewForm);
 
-router.post('/new', isLoggedIn, validateBook, upload.single('document'), catchAsync(books.createBook));
+router.post('/new', isLoggedIn, upload0.single('document'), validateBook, catchAsync(books.createBook));
 
 // router.get('/adminUpload', isLoggedIn, books.renderAdminUpload);
 

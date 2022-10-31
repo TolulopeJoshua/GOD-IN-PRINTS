@@ -7,7 +7,8 @@ const fs = require('fs');
 // const pdfConverter = require('pdf-poppler');
 const path = require('path');
 
-const {getImage, s3, paginate, uploadCompressedImage, encode} = require("../functions")
+const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
+const ExpressError = require('../utils/ExpressError');
 
 const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family', 'Dating/Courtship', 
                     'Devotion', 'Commitment/Consecration', 'Grace/Conversion', 
@@ -66,15 +67,31 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createBook = async (req, res) => {
+
+    if (!req.file) throw new ExpressError('No file attached!', 400);
+    const path = require('path');
+    const filetypes = /pdf|mobi|epub|docx/;
+    const extname = filetypes.test(path.extname(req.file.originalname).toLowerCase());
+    const mimetype = filetypes.test(req.file.mimetype);
+    if (!mimetype || !extname) {
+        fs.unlinkSync(`uploads/${req.file.originalname}`);
+        throw new ExpressError('Allowed file extensions - PDF | MOBI | EPUB | DOCX', 400);
+    }
+    
     const book = new Book(req.body.book);
-    const {key, size} = req.file;
+    const {size} = req.file;
+    const key = 'book/' + Date.now().toString() + '_' + req.file.originalname;
     book.document = {key, size};
     book.title = book.title.toUpperCase();
-    book.author = book.author.toUpperCase();
+    book.author = book.author.toLowerCase();
     book.contributor = req.user._id;
-    book.filetype = req.file.mimetype.split('/')[1] || 'pdf';
+    book.filetype = req.file.mimetype.split('/')[1];
     book.datetime = Date.now();
+    
+    const myBuffer = fs.readFileSync(`uploads/${req.file.originalname}`);
     await book.save();
+    await putImage(key, myBuffer);
+    fs.unlinkSync(`uploads/${req.file.originalname}`);
     req.flash('success', `${book.title.toUpperCase()} saved, kindly upload front-page image.`);
     res.redirect(`/books/${book._id}/imageUpload`)
 };
@@ -95,7 +112,7 @@ module.exports.adminUpload = async (req, res) => {
         book.isApproved = true;
         book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -3) + 'jpg';
         const data = await getImage(book.document.key);
-        await fs.writeFileSync('output.pdf', data.Body);
+        fs.writeFileSync('output.pdf', data.Body);
         const pdfPath = 'output.pdf';
         let option = {
             format : 'jpeg',
@@ -104,7 +121,7 @@ module.exports.adminUpload = async (req, res) => {
             page : 1
         }
         await pdfConverter.convert(pdfPath, option)
-        let files = await fs.readdirSync('uploads')
+        let files = fs.readdirSync('uploads')
         await uploadCompressedImage(`uploads/${files[0]}`, book.image.key);
         await book.save();
         for (const file of files) {
@@ -159,10 +176,14 @@ module.exports.renderImageUpload = (req, res) => {
 
 module.exports.imageUpload = async (req, res) => {
     const book = await Book.findById(req.params.id);
-    book.image.key = 'book-img/' + Date.now().toString() + '_' + req.file.originalname;
-    await uploadCompressedImage(req.file.path, book.image.key);
-    await book.save(); 
-    req.flash('success', 'Successfully saved book, awaiting approval.');
+    if (book.image.key == 'none') {
+        book.image.key = 'book-img/' + Date.now().toString() + '_' + req.file.originalname;
+        await uploadCompressedImage(req.file.path, book.image.key);
+        await book.save(); 
+        req.flash('success', 'Successfully saved book, awaiting approval.');
+    } else {
+        req.flash('error', 'This book already has an image.');
+    }
     res.redirect(`/books/${book._id}`)
 };
 
@@ -198,11 +219,11 @@ module.exports.pagesArray = async (req, res) => {
 
     const book = await Book.findById(req.params.id);
     const data = await getImage(book.document.key);
-    await fs.writeFileSync('output2.pdf', data.Body);
+    fs.writeFileSync('output2.pdf', data.Body);
 
-    let files = await fs.readdirSync('uploads2')
+    let files = fs.readdirSync('uploads2')
     for (const file of files) {
-        await fs.unlinkSync(path.join('uploads2', file));
+        fs.unlinkSync(path.join('uploads2', file));
     }
 
     const pdfPath = 'output2.pdf';
@@ -213,7 +234,7 @@ module.exports.pagesArray = async (req, res) => {
         // page : 1
     }
     const jpg = await pdfConverter.convert(pdfPath, option)
-    files = await fs.readdirSync('uploads2')
+    files = fs.readdirSync('uploads2')
 
     const srcs = [];
     files.forEach(file => {

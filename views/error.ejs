@@ -6,5 +6,11 @@
 </div>
 </div>
 <script>
-    swal('','<%= err %>', 'error').then(() => history.back())
+    let mydiv = document.createElement('div');
+    mydiv.innerHTML = '<%= err %>';
+    swal('', '', 'error', {content: mydiv}).then(() => history.back())
+</script>
+
+<script>
+    const pageTitle = '!';
 </script>

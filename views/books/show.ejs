@@ -33,7 +33,7 @@
             <img class="card-img-top rounded img-thumbnail" alt="" src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
         <div class="card-body">
-            <h5 class="card-title"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
+            <h5 class="card-title text-capitalize"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>
         <ul class="list-group list-group-flush">

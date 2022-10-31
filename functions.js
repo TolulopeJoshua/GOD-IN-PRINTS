@@ -40,15 +40,12 @@ module.exports.uploadCompressedImage = async (imgPath, key) => {
     var Jimp = require('jimp');
     const path = require('path');
     const image = await Jimp.read(imgPath);
-    await image.resize(640, Jimp.AUTO);
-    await image.quality(20);
+    image.resize(640, Jimp.AUTO);
+    image.quality(20);
     await image.writeAsync('output.jpg');
-    const myBuffer = await fs.readFileSync('output.jpg');
+    const myBuffer = fs.readFileSync('output.jpg');
     await putImage(key, myBuffer);
-    let files = await fs.readdirSync('uploads')
-    for (const file of files) {
-      fs.unlinkSync(path.join('uploads', file));
-    }
+    fs.unlinkSync(imgPath);
 }
 
 module.exports.encode = (data) => {
@@ -80,7 +77,6 @@ module.exports.upload = multer({
         s3: s3,
         bucket: 'godinprintsdocuments',
         key: function (req, file, cb) {
-            console.log(req.file);
             cb(null, 'book/' + Date.now().toString() + '_' + file.originalname); //use Date.now() for unique file keys
         },
     }),

@@ -3,7 +3,8 @@ const Doc = require('./models/doc');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
 const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema} = require('./schemas.js');
-const Review = require('./models/review')
+const Review = require('./models/review');
+const { unlinkSync } = require('fs');
 
 module.exports.validateUser = (req, res, next) => {
     // console.log(req.body)
@@ -47,6 +48,7 @@ module.exports.validateBook = (req, res, next) => {
 
     const {error} = bookSchema.validate(req.body);
     if (error) {
+        req.file && unlinkSync(`uploads/${req.file.originalname}`);
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
     } else {

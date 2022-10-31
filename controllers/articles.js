@@ -62,7 +62,7 @@ module.exports.createArticle = async (req, res) => {
     article.contributor = req.user._id;
     fs.writeFileSync('outputText.txt', clean);
     article.story = 'article/' + Date.now().toString() + '_' + article.name + '.txt';
-    const myBuffer = await fs.readFileSync('outputText.txt');
+    const myBuffer = fs.readFileSync('outputText.txt');
     await putImage(article.story, myBuffer);
     await article.save();
     req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
@@ -126,10 +126,14 @@ module.exports.renderImageUploadForm = (req, res) => {
 
 module.exports.uploadArticleImage = async function(req, res) {
     const article = await Doc.findById(req.params.id);
-    article.image.key = 'article-img/' + Date.now().toString() + '_' + req.file.originalname;
-    await uploadCompressedImage(req.file.path, article.image.key);
-    await article.save();
-    req.flash('success', 'Successfully saved article');
+    if (article.image.key == 'none') {
+        article.image.key = 'article-img/' + Date.now().toString() + '_' + req.file.originalname;
+        await uploadCompressedImage(req.file.path, article.image.key);
+        await article.save();
+        req.flash('success', 'Successfully saved article.');
+    } else {
+        req.flash('error', 'Article already has an image.');
+    }
     res.redirect(`/articles/${article._id}`)
 };
 

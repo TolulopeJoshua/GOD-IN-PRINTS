@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 
 const DocSchema = new Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     role: String,
     birthYear: Number,
     deathYear: Number,
@@ -15,7 +18,7 @@ const DocSchema = new Schema({
         type: String
     },
     content: {
-        type: String
+        type: String,
     },
     source: {
         type: String,
