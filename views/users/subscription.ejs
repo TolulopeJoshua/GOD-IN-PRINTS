@@ -11,12 +11,12 @@
                 <ul class="small text-dark m-0 p-3">
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
-                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 1 book download per day.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 2 book download per week.</li>
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> Send book request.</li>
                 </ul>
                 <span class="pb-2">Price: <i>Free</i></span>
             </div>
-            <a href="#!" class="btn btn-success w-100 disabled"">DEFAULT</a>
+            <a href="#!" class="btn btn-success w-100 disabled">DEFAULT</a>
         </div>
         <div class="card subscription <%= status !== 'classic' ? 'disabled' : '' %>  p-3">
             <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
@@ -25,10 +25,10 @@
                 <ul class="small text-dark m-0 p-3">
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
-                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 3 book downloads per day.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 8 book downloads per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Send book request.</li>
                 </ul>
-                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>2,535/m</i></span>
+                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>7,999/m</i></span>
             </div>
             <a href="#!" id="premiumButton" class="btn btn-success w-100 <%= status !== 'classic' ? 'disabled' : '' %>">
                 <%= status === 'premium' ? 'SUBSCRIBED ' : 'SUBSCRIBE' %> 
@@ -42,10 +42,10 @@
                 <ul class="small text-dark m-0 p-3">
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access feature materials.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
-                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 5 book downloads per day.</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> 15 book downloads per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Send book request.</li>
                 </ul>
-                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>4,885/m</i></span>
+                <span class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i>14,999/m</i></span>
             </div>
             <a href="#!" id="platinumButton" class="btn btn-success w-100 <%= status === 'platinum' ? 'disabled' : '' %>">
                 <%= status === 'platinum' ? 'SUBSCRIBED ' : status === 'premium' ? 'UPGRADE' : 'SUBSCRIBE' %> 
@@ -78,8 +78,14 @@
             if (type == platinum && '<%= currentUser.subscription.status %>' == 'premium') {
                 axios.delete('/subscription/<%= currentUser.subscription.code %>')
             }
-            alert('Subscription initiated successfully. Your membership status will be updated shortly.');
-            location.reload();
+            // alert('Subscription initiated successfully. Your membership status will be updated shortly.');
+            swal('Subscription initiated successfully. Please wait...', {
+                buttons: false,
+                closeOnClickOutside: false,
+            });
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
           },
           onClose: function() {
             console.log('closed')
