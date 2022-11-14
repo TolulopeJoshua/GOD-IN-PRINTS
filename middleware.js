@@ -157,7 +157,7 @@ module.exports.checkDownloadLimit = async (req, res, next) => {
     const downloadsInWeek = user.downloads.filter((download) => {
         return (new Date() - download.downloadTime) < (7 * 24 * 60 * 60 * 1000)
     })
-    const limit = {classic: 2, premium: 8, platinum: 15};
+    const limit = {classic: 1, premium: 8, platinum: 15};
     const unusedSlots = limit[user.subscription.status] - downloadsInWeek.length;
     if (unusedSlots < 1) {
         req.flash('error', 'Weekly download limit exceeded!');
