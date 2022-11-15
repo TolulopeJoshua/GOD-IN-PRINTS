@@ -22,7 +22,9 @@
 
     fbButton && fbButton.addEventListener('click', () => {
 
-        swal('Logging in...');
+        swal('Logging in...', {
+            buttons: false,
+          });
 
         FB.getLoginStatus(function(response) {
             if (response.status === 'connected') {
