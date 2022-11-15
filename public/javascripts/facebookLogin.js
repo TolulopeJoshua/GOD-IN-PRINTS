@@ -20,7 +20,7 @@
       
     const fbButton = document.querySelector('#fbButton');
 
-    fbButton.addEventListener('click', () => {
+    fbButton && fbButton.addEventListener('click', () => {
 
         swal('Logging in...');
 
