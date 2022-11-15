@@ -47,7 +47,13 @@ const BookScema = new Schema({
     isApproved: {
         type: Boolean,
         default: false
-    }
+    },
+    bin: {
+        dropped: {
+            type: Boolean,
+            default: false
+        }
+    },
 }, opts);
 
 // CampgroundScema.virtual('properties.popUpMarkup').get(function () {

@@ -48,7 +48,13 @@ const DocSchema = new Schema({
     isApproved: {
         type: Boolean,
         default: false
-    }
+    },
+    bin: {
+        dropped: {
+            type: Boolean,
+            default: false
+        }
+    },
 })
 
 

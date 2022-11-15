@@ -27,6 +27,7 @@ const articleRoutes = require('./routes/articles');
 const featuresRoutes = require('./routes/features');
 const bibleRoutes = require('./routes/bible');
 const reviewRoutes = require('./routes/reviews');
+const allDocsRoutes = require('./routes/api/allDocs')
 
 const MongoStore = require("connect-mongo");
 
@@ -307,6 +308,7 @@ app.use('/articles', articleRoutes)
 app.use('/features', featuresRoutes)
 app.use('/bible', bibleRoutes)
 app.use('/reviews', reviewRoutes)
+// app.use('/api/all', allDocsRoutes)
  
 
 app.get('/', async (req, res) => {
