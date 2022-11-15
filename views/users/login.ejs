@@ -48,6 +48,8 @@
 </script>
   
 <script>
+    window.scrollTo(0, 300)
+
     const togglePassword = document
         .querySelector('#togglePassword');
 
@@ -66,11 +68,4 @@
         // Toggle the eye and bi-eye icon
         togglePassword.classList.toggle('bi-eye');
     });
-    setTimeout(() => {
-        window.scrollTo(0, 300)
-    }, 1500)
 </script>
-
-
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-<script src="/javascripts/facebookLogin.js"></script> 
