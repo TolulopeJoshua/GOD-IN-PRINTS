@@ -160,7 +160,7 @@ module.exports.checkDownloadLimit = async (req, res, next) => {
     const downloadsInWeek = user.downloads.filter((download) => {
         return (new Date() - download.downloadTime) < (7 * 24 * 60 * 60 * 1000)
     })
-    if (user.subscription.status == 'classic' && downloadsInMonth > 0) {
+    if (user.subscription.status == 'classic' && downloadsInMonth.length > 0) {
         req.flash('error', 'Monthly downloads limit exceeded!');
         return res.redirect(`/books/${req.params.id}`);
     }
