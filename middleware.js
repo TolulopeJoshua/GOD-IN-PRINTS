@@ -154,15 +154,22 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 module.exports.checkDownloadLimit = async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
+    const downloadsInMonth = user.downloads.filter((download) => {
+        return (new Date() - download.downloadTime) < (30 * 24 * 60 * 60 * 1000)
+    })
     const downloadsInWeek = user.downloads.filter((download) => {
         return (new Date() - download.downloadTime) < (7 * 24 * 60 * 60 * 1000)
     })
+    if (user.subscription.status == 'classic' && downloadsInMonth > 0) {
+        req.flash('error', 'Monthly downloads limit exceeded!');
+        return res.redirect(`/books/${req.params.id}`);
+    }
     const limit = {classic: 1, premium: 3, platinum: 5};
     const unusedSlots = limit[user.subscription.status] - downloadsInWeek.length;
     if (unusedSlots < 1) {
-        req.flash('error', 'Weekly download limit exceeded!');
+        req.flash('error', 'Weekly downloads limit exceeded!');
         return res.redirect(`/books/${req.params.id}`);
     } else {
-        next();
+        next(); 
     }
 }

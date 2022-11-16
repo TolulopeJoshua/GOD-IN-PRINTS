@@ -5,7 +5,7 @@ const catchAsync = require('../../utils/catchAsync');
 const Doc = require('../../models/doc')
 const Book = require('../../models/book');
 
-router.get('/', catchAsync(async (req, res) => {
+router.get('/all', catchAsync(async (req, res) => {
     const articles = await Doc.find({docType: 'article'})
     const biographies = await Doc.find({docType: 'biography'})
     const books = await Book.find({})

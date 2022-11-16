@@ -308,7 +308,7 @@ app.use('/articles', articleRoutes)
 app.use('/features', featuresRoutes)
 app.use('/bible', bibleRoutes)
 app.use('/reviews', reviewRoutes)
-// app.use('/api/all', allDocsRoutes)
+app.use('/api', allDocsRoutes)
  
 
 app.get('/', async (req, res) => {
