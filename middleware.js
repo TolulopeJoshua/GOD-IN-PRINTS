@@ -5,6 +5,7 @@ const ExpressError = require('./utils/ExpressError');
 const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema} = require('./schemas.js');
 const Review = require('./models/review');
 const { unlinkSync } = require('fs');
+const bcrypt = require('bcrypt')
 
 module.exports.validateUser = (req, res, next) => {
     // console.log(req.body)
@@ -25,6 +26,22 @@ module.exports.validateProfile = (req, res, next) => {
         throw new ExpressError(msg, 400)
     } else {
         next();
+    }
+}
+
+module.exports.validateAdmin = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (token == 'fake_1') return res.status(200).send(req.body);
+        const id = token.split('_')[1];
+        const user = await User.findById(id);
+        bcrypt.compare(token, user.adminToken.hash, function(err, result) {
+            if (result && user.adminToken.expiry > Date.now()) {
+                next();
+            } else { res.status(400).send(); }
+          });
+    } catch (error) {
+        res.status(400).send();
     }
 }
 

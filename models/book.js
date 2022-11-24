@@ -9,7 +9,6 @@ const BookScema = new Schema({
     title: {
         type: String,
         required: true,
-        unique: true
     },
     author: {
         type: string,
@@ -47,12 +46,6 @@ const BookScema = new Schema({
     isApproved: {
         type: Boolean,
         default: false
-    },
-    bin: {
-        dropped: {
-            type: Boolean,
-            default: false
-        }
     },
 }, opts);
 

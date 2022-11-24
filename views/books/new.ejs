@@ -22,10 +22,10 @@
 
 <div class="col-md-9 col-lg-6 offset-md-3 d-flex flex-column align-items-center">
     <h3 class="text-center p-3">Add New Book</h3>
-    <form id="newBookForm" style="width: 500px; max-width: 90%;" action="/books/new" method="POST" class="card p-5" enctype="multipart/form-data">
+    <form id="newBookForm" style="width: 500px; max-width: 90%;" method="POST" class="card p-5" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label" for="title">Title</label>
-            <input class="form-control" type="text" id="title" name="book[title]" required>
+            <input class="form-control" type="text" id="title" name="book[title]" value="<%= title %>" required>
             <div class="valid-feedback">
                 Looks good!
                 </div>
@@ -56,4 +56,5 @@
 
 <script>
     document.getElementById('newBookForm').addEventListener('submit', () => loadWaiting())
+    document.getElementById('newBookForm').action = window.location.href;
 </script>

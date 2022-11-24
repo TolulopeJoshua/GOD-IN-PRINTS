@@ -33,7 +33,7 @@ const DocSchema = new Schema({
     },
     dateTime: {
         type: Date, 
-        default: new Date(2022, 02, 25)
+        default: new Date()
     },
     reviews: [
         {
@@ -48,12 +48,6 @@ const DocSchema = new Schema({
     isApproved: {
         type: Boolean,
         default: false
-    },
-    bin: {
-        dropped: {
-            type: Boolean,
-            default: false
-        }
     },
 })
 

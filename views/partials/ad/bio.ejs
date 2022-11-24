@@ -1,4 +1,4 @@
-<a href="/articles/<%= adBio[0]._id %>">
+<a href="/biographies/<%= adBio[0]._id %>">
     <div class="card text-dark shadow p-4 text-center">
         <h5 class="text-decoration-underline"><%= adBio[0].name %> </h5>
         <p class="small justify lh-lg p-0 m-0" id=<%= adBio[0]._id %>>
@@ -13,7 +13,7 @@
 </a>
                 
 <script>
-    route = `/articles/<%= adBio[0]._id %>/story?q=250`;
+    route = `/biographies/<%= adBio[0]._id %>/story?q=250`;
     xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         document.getElementById('<%= adBio[0]._id %>').innerHTML += this.responseText;

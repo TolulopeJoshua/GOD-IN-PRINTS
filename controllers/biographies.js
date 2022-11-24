@@ -25,8 +25,13 @@ module.exports.list = async (req, res) => {
     res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook})
 };
 
-module.exports.renderNewForm = (req, res) => {
-    res.render('biographies/new')
+module.exports.renderNewForm = async (req, res) => {
+    let title = '';
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId);
+        title = request.text;
+    }
+    res.render('biographies/new', {title})
 };
 
 module.exports.createBiography = async (req, res) => {
@@ -46,6 +51,12 @@ module.exports.createBiography = async (req, res) => {
     req.flash('success', `${biography.name.toUpperCase()}'s biography posted. Kindly upload picture`);
     // res.redirect(`/biographys/${biography._id}`)
     res.status(200).send({message: 'success', redirectUrl: `/biographies/${biography._id}/imageUpload`})
+    
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId);
+        request.likes[0] = req.user._id;
+        await request.save();
+    }
 };
 
 module.exports.search = async (req, res) => {
@@ -138,16 +149,16 @@ module.exports.deleteReview = async (req, res) => {
 module.exports.suggest = async (req, res) => {
     const review = new Review(req.body.review);
     review.category = 'Suggest';
-    review.parentId = 'biography';
+    review.parentId = 'biographies';
     review.author = req.user._id;
     await review.save();
     let mailOptions = {
         from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', 
         to: [req.user.email, 'gipteam@hotmail.com'],
         subject: 'Biography Suggestion',
-        html: `<p>Hello ${req.user.firstName.toUpperCase()},<p/><br>
-          <p>Thank you for taking out time to fill the suggestion form. We will endeavour to make the requested resource available as soon as possible.<p/><br>
-          <p>Regards,<p/><br><b>GIP Library<b/>`
+        html: `<p>Hello ${req.user.firstName.toUpperCase()},</p><br>
+          <p>Thank you for taking out time to fill the suggestion form. We will endeavour to make the requested resource available as soon as possible.</p><br>
+          <p>Regards,</p><br><b>GIP Library</b>`
     };
     const {transporter} = require('../functions');
     transporter.sendMail(mailOptions);

@@ -15,7 +15,7 @@ router.get('/categories', articles.categories);
 
 router.get('/category', setRedirect, catchAsync(articles.perCategory));
 
-router.get('/new', setRedirect, articles.renderNewForm);
+router.get('/new', setRedirect, catchAsync(articles.renderNewForm));
 
 router.post('/new', isLoggedIn, validateArticle, catchAsync(articles.createArticle));
 

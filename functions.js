@@ -24,6 +24,17 @@ module.exports.getImage = async (key) => {
     return data;
 }
 
+module.exports.deleteImage = async (key) => {
+    const data =  s3.deleteObject(
+        {
+            Bucket: `godinprintsdocuments`,
+            Key: key, 
+        }
+      
+    ).promise();
+    return data;
+}
+
 const putImage = async (key, body) => {
       const data =  s3.putObject(
           {

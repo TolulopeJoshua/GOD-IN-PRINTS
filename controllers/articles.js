@@ -47,8 +47,13 @@ module.exports.perCategory = async (req, res) => {
     res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook});
 };
 
-module.exports.renderNewForm = (req, res) => {
-    res.render('articles/new', {categories})
+module.exports.renderNewForm = async (req, res) => {
+    let title = '';
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId);
+        title = request.text; 
+    }
+    res.render('articles/new', {categories, title})
 };
 
 module.exports.createArticle = async (req, res) => {
@@ -68,6 +73,12 @@ module.exports.createArticle = async (req, res) => {
     req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
     // res.redirect(`/articles/${article._id}`)
     res.status(200).send({message: `${article.name.toUpperCase()} posted successfully, awaiting approval.`, redirectUrl: `/articles/${article._id}`})
+    
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId);
+        request.likes[0] = req.user._id;
+        await request.save();
+    }
 };
 
 module.exports.search = async (req, res) => {
@@ -161,16 +172,16 @@ module.exports.deleteReview = async (req, res) => {
 module.exports.suggest = async (req, res) => {
     const review = new Review(req.body.review);
     review.category = 'Suggest';
-    review.parentId = 'article';
+    review.parentId = 'articles';
     review.author = req.user._id;
     await review.save();
     let mailOptions = {
         from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', 
         to: [req.user.email, 'gipteam@hotmail.com'],
         subject: 'Article Suggestion',
-        html: `<p>Hello ${req.user.firstName.toUpperCase()},<p/><br>
-          <p>Thank you for taking out time to fill the suggestion form. We will endeavour to make the requested resource available as soon as possible.<p/><br>
-          <p>Regards,<p/><br><b>GIP Library<b/>`
+        html: `<p>Hello ${req.user.firstName.toUpperCase()},</p><br>
+          <p>Thank you for taking out time to fill the suggestion form. We will endeavour to make the requested resource available as soon as possible.</p><br>
+          <p>Regards,</p><br><b>GIP Library</b>`
     };
     const {transporter} = require('../functions');
     transporter.sendMail(mailOptions);

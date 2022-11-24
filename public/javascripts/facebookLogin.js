@@ -49,7 +49,7 @@
                 password: '00000000',
             }
 
-            if (!res.email) return alert('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
+            if (!res.email) return swal('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
 
             axios.post('/register', body, {
                 headers: {'Content-Type': 'application/json'}
@@ -60,11 +60,11 @@
                     return window.location.href = response.data.redirectUrl;
                 }
                 console.log(response);
-                alert("Unable to log in. Kindly try again.");
+                swal("Unable to log in. Kindly try again.");
             })
             .catch(function (error) {
                 console.log(error);
-                alert("An error occured.");
+                swal("An error occured.");
             });
         })
     }

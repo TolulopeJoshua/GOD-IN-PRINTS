@@ -62,8 +62,13 @@ module.exports.perCategory = async (req, res) => {
     }
 };
 
-module.exports.renderNewForm = (req, res) => {
-    res.render('books/new')
+module.exports.renderNewForm = async (req, res) => {
+    let title = '';
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId);
+        title = request.text;
+    }
+    res.render('books/new', { title })
 };
 
 module.exports.createBook = async (req, res) => {
@@ -94,6 +99,22 @@ module.exports.createBook = async (req, res) => {
     fs.unlinkSync(`uploads/${req.file.originalname}`);
     req.flash('success', `${book.title.toUpperCase()} saved, kindly upload front-page image.`);
     res.redirect(`/books/${book._id}/imageUpload`)
+
+    if (req.query.requestId) {
+        const request = await Review.findById(req.query.requestId).populate('author');
+        request.likes[0] = req.user._id;
+        await request.save();
+        let mailOptions = {
+            from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', 
+            to: [request.author.email, 'gipteam@hotmail.com'],
+            subject: 'Re - Book Request',
+            html: `<p>Hello ${request.author.firstName.toUpperCase()},<p/><br>
+              <p>Your request for the book: <b>${request.text}</b> has been responded to. Kindly check out the resource at https://godinprints.org/books/${book._id}.<p/><br>
+              <p>Regards,<p/><br><b>GIP Library</b>`
+        };
+        const {transporter} = require('../functions');
+        transporter.sendMail(mailOptions);
+    }
 };
 
 module.exports.renderAdminUpload = (req, res) => {
@@ -271,7 +292,7 @@ module.exports.deleteReview = async (req, res) => {
 module.exports.suggest = async (req, res) => {
     const review = new Review(req.body.review);
     review.category = 'Suggest';
-    review.parentId = 'book';
+    review.parentId = 'books';
     review.author = req.user._id;
     await review.save();
     let mailOptions = {
@@ -279,8 +300,8 @@ module.exports.suggest = async (req, res) => {
         to: [req.user.email, 'gipteam@hotmail.com'],
         subject: 'Book Request',
         html: `<p>Hello ${req.user.firstName.toUpperCase()},<p/><br>
-          <p>Your request for the book: <b>${review.text}<b/> was successfully submitted. We will endeavour to make the requested book item available as soon as possible and revert.<p/><br>
-          <p>Best regards,<p/><br><b>GIP Library<b/>`
+          <p>Your request for the book: <b>${review.text}</b> was successfully submitted. We will endeavour to make the requested book item available as soon as possible and revert.<p/><br>
+          <p>Best regards,<p/><br><b>GIP Library</b>`
     };
     const {transporter} = require('../functions');
     transporter.sendMail(mailOptions);

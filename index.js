@@ -270,10 +270,10 @@ passport.use(new FacebookStrategy({
               to: registeredUser.email, // list of receivers
               subject: 'Welcome to GIP Library', // Subject line
               // text: 'hello', // plain text body
-              html: `<p>Hello ${registeredUser.firstName.toUpperCase()},<p/><br>
+              html: `<p>Hello ${registeredUser.firstName.toUpperCase()},</p><br>
                 <p>Welcome to the God-in-prints virtual libraries. We are glad to have you.</p><br>
-                <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.<p/><br>
-                <p>Tolulope Joshua - Admin<p/><br><b>GIP Library<b/>` // html body
+                <p>Feel free to explore our little bank of resources. We'll also appreciate your feedbacks as well as contributions. Looking forward to a life-building relationship with you.</p><br>
+                <p>Tolulope Joshua - Admin</p><br><b>GIP Library</b>` // html body
           };
           const {transporter} = require('./functions');
           transporter.sendMail(mailOptions, (error, info) => {
