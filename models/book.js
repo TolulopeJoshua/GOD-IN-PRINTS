@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const { string } = require('sharp/lib/is');
 const Schema = mongoose.Schema;
-// const Review = require('./review')
+const Review = require('./review')
 
 const opts = {toJSON: {virtuals: true}};
 
@@ -11,17 +10,17 @@ const BookScema = new Schema({
         required: true,
     },
     author: {
-        type: string,
+        type: String,
         default: ' '
     },
     // keywords: String,
     filetype: {
-        type: string,
+        type: String,
         default: 'pdf'
     },
     image: {
         key: {
-            type: string,
+            type: String,
             default: 'none'
         },
     },
@@ -54,14 +53,14 @@ const BookScema = new Schema({
 //             <p>${this.description.substring(0,20)}...</p>`
 // });
 
-// BookScema.post('findOneAndDelete', async function (doc) {
-//     if (doc) {
-//         await Review.deleteMany({
-//             _id: {
-//                 $in: doc.reviews
-//             }
-//         })
-//     }
-// })
+BookScema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
 module.exports = mongoose.model('Book', BookScema);

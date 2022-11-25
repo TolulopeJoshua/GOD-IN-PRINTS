@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Review = require('./review')
 
 
 const DocSchema = new Schema({
@@ -49,6 +50,16 @@ const DocSchema = new Schema({
         type: Boolean,
         default: false
     },
+})
+
+DocSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
 })
 
 

@@ -10,8 +10,6 @@
   "author": "Tolulope Joshua",
   "license": "ISC",
   "dependencies": {
-    "@headlessui/react": "^1.7.4",
-    "@heroicons/react": "^2.0.13",
     "aws-sdk": "^2.1116.0",
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
@@ -46,9 +44,7 @@
     "pdf-img-convert": "^1.0.5",
     "pdf-lib": "^1.17.1",
     "pdf-page-counter": "^1.0.3",
-    "pdf-poppler": "^0.2.1",
     "pdf2pic": "^2.1.4",
-    "react-icons": "^4.6.0",
     "sanitize-html": "^2.7.0",
     "sharp": "^0.29.3",
     "xhr2": "^0.2.1"

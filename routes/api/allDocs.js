@@ -34,6 +34,16 @@ router.put('/doc', validateAdmin, catchAsync(async (req, res) => {
     }
 }))
 
+router.delete('/doc/:id', validateAdmin, catchAsync(async (req, res) => {
+    const doc = await Doc.findById(req.params.id);
+    if (doc.image.key != 'none') {
+        await deleteImage(doc.image.key)
+    }
+    await deleteImage(doc.story);
+    const deleted = await Doc.findByIdAndDelete(doc._id)
+    res.status(200).send(deleted);
+}))
+
 router.put('/book', validateAdmin, catchAsync(async (req, res) => {
     await Book.validate(req.body);
     const result = await Book.replaceOne({ _id: req.body._id }, req.body);
@@ -42,6 +52,16 @@ router.put('/book', validateAdmin, catchAsync(async (req, res) => {
     } else {
         return res.status(500).send('An error occured')
     } 
+}))
+
+router.delete('/book/:id', validateAdmin, catchAsync(async (req, res) => {
+    const book = await Book.findById(req.params.id);
+    if (book.image.key != 'none') {
+        await deleteImage(book.image.key)
+    }
+    await deleteImage(book.document.key);
+    const deleted = await Book.findByIdAndDelete(book._id)
+    res.status(200).send(deleted);
 }))
 
 router.put('/bookImage/:id', validateAdmin, upload0.single("image"), catchAsync(async (req, res) => {
@@ -117,7 +137,7 @@ router.post('/login', catchAsync(async (req, res) => {
                 expiry: Date.now() + (24 * 60 * 60 * 1000)
             }
             await result.save();
-            res.status(200).send({token, name: result.firstName, email: result.email})
+            res.status(200).send({token, name: result.firstName, admin: result.admin, email: result.email})
         });
     });
 }))
