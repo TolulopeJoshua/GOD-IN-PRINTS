@@ -20,7 +20,8 @@ module.exports.index = async (req, res) => {
     const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
-    res.render('articles/index', {categories, articles, adBook, adBio})
+    const title = 'GIP Library - Feature Articles on Christian Faith';
+    res.render('articles/index', {categories, articles, adBook, adBio, title})
 };
 
 module.exports.list = async (req, res) => {
@@ -28,12 +29,14 @@ module.exports.list = async (req, res) => {
     const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
-    const [pageDocs, pageData] = paginate(req, articles)
-    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook})
+    const [pageDocs, pageData] = paginate(req, articles);
+    const title = 'GIP Library - List of Articles on Christian Faith';
+    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook, title})
 };
 
 module.exports.categories = (req, res) => {
-    res.render('articles/categories', {categories})
+    const title = 'GIP Library - Articles Categories';
+    res.render('articles/categories', {categories, title})
 };
 
 module.exports.perCategory = async (req, res) => {
@@ -41,17 +44,19 @@ module.exports.perCategory = async (req, res) => {
     const articles = await Doc.find({docType: 'article', isApproved: true, role: category}).sort({name : 1});
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const [pageDocs, pageData] = paginate(req, articles)
-    res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook});
+    const [pageDocs, pageData] = paginate(req, articles);
+    const title = `Articles on ${category}`;
+    res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook, title});
 };
 
 module.exports.renderNewForm = async (req, res) => {
-    let title = '';
+    const title = 'Post an Article';
+    let name = '';
     if (req.query.requestId) {
         const request = await Review.findById(req.query.requestId);
-        title = request.text; 
+        name = request.text; 
     }
-    res.render('articles/new', {categories, title})
+    res.render('articles/new', {categories, name, title})
 };
 
 module.exports.createArticle = async (req, res) => {
@@ -89,7 +94,8 @@ module.exports.search = async (req, res) => {
     const [pageDocs, pageData] = paginate(req, result)
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, adBio, adBook});
+    const title = `Search for Articles - ${item}`;
+    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, adBio, adBook, title});
 };
 
 module.exports.showArticle = async (req, res) => {
@@ -102,7 +108,8 @@ module.exports.showArticle = async (req, res) => {
     }
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('articles/show', {article, adBio, adBook});
+    const title = `Article - ${article.name}`;
+    res.render('articles/show', {article, adBio, adBook, title});
 };
 
 module.exports.show = async (req, res) => {
@@ -116,7 +123,8 @@ module.exports.show = async (req, res) => {
         req.flash('error', 'Not in directory!');
         return res.redirect('/articles');
     }
-    res.render('articles/show', {article, adBio, adBook});
+    const title = `Article - ${article.name}`;
+    res.render('articles/show', {article, adBio, adBook, title});
 };
 
 module.exports.story = async (req, res) => {    
@@ -141,7 +149,7 @@ module.exports.renderImageUploadForm = (req, res) => {
     const id = req.params.id;
     const route = `/Articles/${id}/imageUpload`;
     const msg = 'Upload Article Image';
-    res.render('imageUpload', {route, msg});
+    res.render('imageUpload', {route, msg, title: msg});
 };
 
 module.exports.uploadArticleImage = async function(req, res) {

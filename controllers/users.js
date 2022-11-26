@@ -1,11 +1,10 @@
 const User = require('../models/user');
 const Review = require('../models/review');
 const axios = require('axios');
-const { response } = require('express');
 
 
 module.exports.renderRegister = (req, res) => {
-    res.render('users/register')
+    res.render('users/register', {title: 'GIP Library - Register'})
 }
 
 module.exports.register = async (req, res) => {
@@ -112,7 +111,7 @@ module.exports.logout = async (req, res) => {
 };
 
 module.exports.renderProfile = (req, res) => {
-  res.render('users/profile')
+  res.render('users/profile', {title: 'Profile'})
 }
 
 module.exports.updateProfile = async (req, res) => {
@@ -129,14 +128,14 @@ module.exports.updateProfile = async (req, res) => {
       throw authenticated.error;
     }
     req.flash('success', 'Email changed Successfully. Refresh page to log in.');
-    return res.render('users/profile')
+    return res.render('users/profile', {title: 'Profile'})
   }
 
   if (req.body.newPassword) {
     if (user.loginType !== 'password') throw 'User not registered with password, use `password reset` instead!';
     await user.changePassword(req.body.password, req.body.newPassword);
     req.flash('success', 'Password changed Successfully.');
-    return res.render('users/profile')
+    return res.render('users/profile', {title: 'Profile'})
   }
 
   const newProfile = req.body;
@@ -145,11 +144,11 @@ module.exports.updateProfile = async (req, res) => {
   }
   await user.save();
   req.flash('success', 'Profile Updated Successfully.');
-  res.render('users/profile')
+  res.render('users/profile', {title: 'Profile'})
 }
 
 module.exports.renderSubscription = (req, res) => {
-  res.render('users/subscription')
+  res.render('users/subscription', {title: 'Profile'})
 }
 
 // const crypto = require('crypto');
@@ -247,14 +246,14 @@ module.exports.disableSubscription = async (req, res) => {
 }
 
 module.exports.renderChangePassword = (req, res) => {
-    res.render('users/changePassword', {msg: ''})
+    res.render('users/changePassword', {msg: '', title: 'Profile'})
 };
 
 module.exports.changePassword = async (req, res) => {
     const email = req.body.email;
     const user = await User.findOne({email: email});
     if (!user) {
-      return res.render('users/changePassword', {msg: 'User not found!'})
+      return res.render('users/changePassword', {msg: 'User not found!', title: 'Profile'})
     }
     // console.log(user);
     user.resetCode = Math.random().toString(36).slice(2);
@@ -278,13 +277,13 @@ module.exports.changePassword = async (req, res) => {
           return res.render('users/changePassword', {msg: 'An error occured.'})
         }
         console.log(info)
-        res.render('users/changePassword', {msg: 'Check your mail (inbox / spam folder) for the password reset link.'})
+        res.render('users/changePassword', {msg: 'Check your mail (inbox / spam folder) for the password reset link.', title: 'Profile'})
       });
 }
 
 module.exports.renderSetPassword = (req, res) => {
   const {userId, resetCode} = req.params;
-  res.render('users/setPassword', {userId, resetCode, msg: ''})
+  res.render('users/setPassword', {userId, resetCode, msg: '', title: 'Profile'})
 };
 
 module.exports.setPassword = async (req, res) => {
@@ -298,12 +297,12 @@ module.exports.setPassword = async (req, res) => {
         user.resetCode = null;
         user.loginType = 'password';
         await user.save();
-        return res.render('users/setPassword', {userId, resetCode: '', msg: 'Password changed successfully.'})
+        return res.render('users/setPassword', {userId, resetCode: '', msg: 'Password changed successfully.', title: 'Profile'})
       }
-      res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.'})
+      res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.', title: 'Profile'})
     })
   } else {
-    res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.'})
+    res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.', title: 'Profile'})
   }
 };
 

@@ -320,12 +320,12 @@ app.get('/growth', async (req, res) => {
 
     const Book = require('./models/book');
     const adBook = await Book.aggregate([{ $match: { filetype: 'pdf' } }, { $sample: { size: 1 } }]);
-
-    res.render('growth', {growthHabits, adBook});
+    const title = 'GIP Library - Personal Growth Strategies'
+    res.render('growth', {growthHabits, adBook, title});
 });
 
 app.get('/resources', async (req, res) => {
-    res.render('resources');
+    res.render('resources', {title: 'GIP Library - Other Resources'});
 });
 
 app.get('/about', async (req, res) => {
@@ -340,7 +340,7 @@ app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     console.log(err.message)
-    res.status(statusCode).render('error', { err })
+    res.status(statusCode).render('error', { err , title: 'Error Page'})
 })
 
 

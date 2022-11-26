@@ -16,7 +16,8 @@ router.get('/:reviewId/like', isLoggedIn, catchAsync(async (req, res) => {
 
 router.get('/:reviewId/edit', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     const review = await Review.findById(req.params.reviewId);
-    res.render('reviews/edit', {review});
+    const title = 'Edit Review'
+    res.render('reviews/edit', {review, title});
 }))
 
 router.patch('/:reviewId/edit', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {

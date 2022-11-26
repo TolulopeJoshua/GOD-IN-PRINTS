@@ -10,7 +10,7 @@ const path = require('path');
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
 const ExpressError = require('../utils/ExpressError');
 
-const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family', 'Dating/Courtship', 
+const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
                     'Devotion', 'Commitment/Consecration', 'Grace/Conversion', 
                     'Afterlife', 'Growth/Development', 'Money/Wealth', 'Biography'];
 
@@ -27,7 +27,8 @@ module.exports.index = async (req, res) => {
     const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
     const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
-    res.render('books/index', {books, adArt, adBio})
+    const title = 'Feature Books on Christian Faith - Free pdf download';
+    res.render('books/index', {books, adArt, adBio, title})
 };
 
 module.exports.list = async (req, res) => {
@@ -36,11 +37,13 @@ module.exports.list = async (req, res) => {
     const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
     const [pageDocs, pageData] = paginate(req, books)
-    res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio})
+    const title = 'List of Books on Christian Faith - Free pdf download';
+    res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio, title})
 };
 
 module.exports.categories = (req, res) => {
-    res.render('books/categories', {categories})
+    const title = 'GIP Library - Books Categories';
+    res.render('books/categories', {categories, title})
 };
 
 module.exports.perCategory = async (req, res) => {
@@ -56,7 +59,8 @@ module.exports.perCategory = async (req, res) => {
     const [pageDocs, pageData] = paginate(req, books)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
-    res.render('books/list', {category, books: pageDocs, pageData, adArt, adBio})
+    const title = `Books on ${category} - Free pdf download`;
+    res.render('books/list', {category, books: pageDocs, pageData, adArt, adBio, title})
 
     function words(category) {
         const word = category.toLowerCase().replaceAll(' ', '/');
@@ -65,12 +69,13 @@ module.exports.perCategory = async (req, res) => {
 };
 
 module.exports.renderNewForm = async (req, res) => {
-    let title = '';
+    const title = 'Post a Book';
+    let booktitle = '';
     if (req.query.requestId) {
         const request = await Review.findById(req.query.requestId);
-        title = request.text;
+        booktitle = request.text;
     }
-    res.render('books/new', { title })
+    res.render('books/new', { booktitle, title })
 };
 
 module.exports.createBook = async (req, res) => {
@@ -120,7 +125,8 @@ module.exports.createBook = async (req, res) => {
 };
 
 module.exports.renderAdminUpload = (req, res) => {
-    res.render('books/adminUpload')
+    const title = 'GIP Admin'
+    res.render('books/adminUpload', {title})
 };
 
 module.exports.adminUpload = async (req, res) => {
@@ -165,7 +171,8 @@ module.exports.search = async (req, res) => {
     const [pageDocs, pageData] = paginate(req, result)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
-    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, adArt, adBio});
+    const title = `Search for Books - ${item}`;
+    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, adArt, adBio, title});
 };
 
 module.exports.showBook = async (req, res) => {
@@ -176,7 +183,8 @@ module.exports.showBook = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books');
     }
-    res.render('books/show', {book});
+    const title = `${book.title} - Free pdf download`;
+    res.render('books/show', {book, title});
 };
 
 module.exports.show = async (req, res) => {
@@ -187,7 +195,8 @@ module.exports.show = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books');
     }
-    res.render('books/show', {book});
+    const title = `${book.title} - Free pdf download`;
+    res.render('books/show', {book, title});
 };
 
 module.exports.image = async (req, res) => {    
@@ -201,7 +210,7 @@ module.exports.renderImageUpload = (req, res) => {
     const id = req.params.id;
     const route = `/Books/${id}/imageUpload`;
     const msg = 'Upload Book Front Image';
-    res.render('imageUpload', {route, msg});
+    res.render('imageUpload', {route, msg, title: msg});
 };
 
 module.exports.imageUpload = async (req, res) => {
@@ -242,7 +251,8 @@ module.exports.read = async (req, res) => {
         }
     });
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
-    res.render('books/read', {book, adBio});
+    const title = `${book.title} - Preview`;
+    res.render('books/read', {book, adBio, title});
 }
 
 module.exports.pagesArray = async (req, res) => {

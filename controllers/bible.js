@@ -2,7 +2,8 @@ const Review = require('../models/review');
 const User = require('../models/user');
 
 module.exports.index = async (req, res) => {
-    res.render('bible/index');
+    const title = `GIP Library - Multiversioned Bible`;
+    res.render('bible/index', {title});
 };
 
 module.exports.chapter = async (req, res) => {
@@ -11,10 +12,11 @@ module.exports.chapter = async (req, res) => {
     req.session.bibleVersion = version;
     const reviews = req.user ? await Review.find({author: req.user._id, parentId: chapt}) : [];
     const longChapters = ["psa.119", "1ki.8", "deu.28", "deu.32", "num.7", "lev.13", "jer.51", "ezk.16", "gen.24"];
+    const title = `Multiversioned Bible - ${chapt.toUpperCase()}`;
     if (longChapters.includes(chapt)) {
         const {chapter} = require(`../public/javascripts/bibleData/kjvLongTexts/${chapt}`)
         const {meta, data} = chapter;
-        res.render('bible/chapter', {meta, data, reviews});
+        res.render('bible/chapter', {meta, data, reviews, title});
     } else { 
         const https = require('https')
         const options = {
@@ -26,7 +28,7 @@ module.exports.chapter = async (req, res) => {
         const reqst = https.request(options, rest => {
             rest.on('data', d => {
                 const {meta, data} = JSON.parse(d);
-                res.render('bible/chapter', {meta, data, reviews});
+                res.render('bible/chapter', {meta, data, reviews, title});
             })
         })
         reqst.end() 
@@ -35,6 +37,7 @@ module.exports.chapter = async (req, res) => {
 
 module.exports.search = async (req, res) => {
     const searchText = req.query.search;
+    const title = `Multiversioned Bible Search - ${searchText}`;
     const offset = req.query.offset || 0;
     const https = require('https')
     const options = {
@@ -49,7 +52,7 @@ module.exports.search = async (req, res) => {
         rest.on('data', d => {
             // process.stdout.write(d)
                 const {data} = JSON.parse(d);
-                res.render('bible/search', {data, searchText});
+                res.render('bible/search', {data, searchText, title});
         })
     })
     reqst.on('error', error => {

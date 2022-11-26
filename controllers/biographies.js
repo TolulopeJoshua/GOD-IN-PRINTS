@@ -13,7 +13,8 @@ module.exports.index = async (req, res) => {
     const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
     const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
-    res.render('biographies/index', {biographies, adArt, adBook})
+    const title = 'GIP Library - Feature Biographies of Famous Christians';
+    res.render('biographies/index', {biographies, adArt, adBook, title})
 };
 
 module.exports.list = async (req, res) => {
@@ -24,16 +25,18 @@ module.exports.list = async (req, res) => {
     const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
     const [pageDocs, pageData] = paginate(req, biographies)
-    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook})
+    const title = 'GIP Library - List of Biographies of Famous Christians';
+    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook, title})
 };
 
 module.exports.renderNewForm = async (req, res) => {
-    let title = '';
+    const title = 'Post a Biography';
+    let name = '';
     if (req.query.requestId) {
         const request = await Review.findById(req.query.requestId);
-        title = request.text;
+        name = request.text;
     }
-    res.render('biographies/new', {title})
+    res.render('biographies/new', {name, title})
 };
 
 module.exports.createBiography = async (req, res) => {
@@ -71,7 +74,8 @@ module.exports.search = async (req, res) => {
     const [pageDocs, pageData] = paginate(req, result)
     const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, adArt, adBook});
+    const title = `Search for Biographies -${item}`;
+    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, adArt, adBook, title});
 };
 
 module.exports.showBiography = async (req, res) => {
@@ -85,7 +89,8 @@ module.exports.showBiography = async (req, res) => {
         req.flash('error', 'Not in directory!');
         return res.redirect('/biographies');
     }
-    res.render('biographies/show', {biography});
+    const title = `Biography - ${biography.name}`;
+    res.render('biographies/show', {biography, title});
 };
 
 module.exports.show = async (req, res) => {
@@ -99,7 +104,8 @@ module.exports.show = async (req, res) => {
         req.flash('error', 'Not in directory!');
         return res.redirect('/biographies');
     }
-    res.render('biographies/show', {biography});
+    const title = `Biography - ${biography.name}`;
+    res.render('biographies/show', {biography, title});
 };
 
 module.exports.story = async (req, res) => {    
@@ -125,7 +131,7 @@ module.exports.renderImageUploadForm = (req, res) => {
     const id = req.params.id;
     const route = `/Biographies/${id}/imageUpload`;
     const msg = 'Upload Picture for Bio.';
-    res.render('imageUpload', {route, msg});
+    res.render('imageUpload', {route, msg, title: msg});
 };
 
 module.exports.uploadBiographyImage = async function(req, res) {
