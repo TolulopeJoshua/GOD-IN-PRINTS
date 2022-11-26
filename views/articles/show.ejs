@@ -38,7 +38,7 @@
             <% } else { %> 
                 <img class='card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replaceAll(" ", "+") %> alt="<%= article.name %> ">
             <% } %>           
-            <small class="text ta lh-lg"><%= article.text %> </small>
+            <small class="text ta lh-lg"><%- article.text %> </small>
             <p class="small text-muted mt-3 text-end"><em><%= article.source %> </em></p>
         </div>           
     </div>
