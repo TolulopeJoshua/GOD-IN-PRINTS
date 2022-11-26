@@ -36,18 +36,18 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createBiography = async (req, res) => {
     const biography = new Doc(req.body.biography)
-    const clean = sanitizeHtml(biography.story, {
+    biography.text = sanitizeHtml(biography.story, {
         allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
     });
     biography.docType = 'biography' 
     biography.dateTime = Date.now();
     biography.contributor = req.user._id;
-    fs.writeFileSync('outputText.txt', clean);
+    fs.writeFileSync('outputText.txt', biography.text);
     biography.story = 'bio/' + Date.now().toString() + '_' + biography.name + '.txt';
     const myBuffer = fs.readFileSync('outputText.txt');
-    await putImage(biography.story, myBuffer);
     await biography.save();
+    await putImage(biography.story, myBuffer);
     req.flash('success', `${biography.name.toUpperCase()}'s biography posted. Kindly upload picture`);
     // res.redirect(`/biographys/${biography._id}`)
     res.status(200).send({message: 'success', redirectUrl: `/biographies/${biography._id}/imageUpload`})

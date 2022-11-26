@@ -58,18 +58,18 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createArticle = async (req, res) => {
     const article = new Doc(req.body.article)
-    const clean = sanitizeHtml(article.story, {
+    article.text = sanitizeHtml(article.story, {
         allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
     });
     article.docType = 'article' 
     article.dateTime = Date.now();
     article.contributor = req.user._id;
-    fs.writeFileSync('outputText.txt', clean);
+    fs.writeFileSync('outputText.txt', article.text);
     article.story = 'article/' + Date.now().toString() + '_' + article.name + '.txt';
     const myBuffer = fs.readFileSync('outputText.txt');
-    await putImage(article.story, myBuffer);
     await article.save();
+    await putImage(article.story, myBuffer);
     req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
     // res.redirect(`/articles/${article._id}`)
     res.status(200).send({message: `${article.name.toUpperCase()} posted successfully, awaiting approval.`, redirectUrl: `/articles/${article._id}`})
@@ -95,6 +95,14 @@ module.exports.search = async (req, res) => {
 };
 
 module.exports.showArticle = async (req, res) => {
+
+    // const docs = await Doc.find({});
+    // docs.forEach(async doc => {
+    //     const data = await getImage(doc.story);
+    //     doc.text = data.Body.toString();
+    //     await doc.save();
+    // })
+
     const article = await Doc.findById(req.params.id).populate({
         path: 'reviews',
         populate: {

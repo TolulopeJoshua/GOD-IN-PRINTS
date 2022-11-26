@@ -6,9 +6,8 @@
 -->
 <html>
 	<head>
-		<title>God-in-prints</title>
-		<meta name="description" content="Christian Libraries for books, biographies, articles and other resources.">
-		<meta name="keywords" content="christian library, book, article, biography, author, book store">
+		<title>GIP - Feature Book, Biography, Article on Christian Faith</title>
+		<meta name="description" content="Feature Book, Biography, Article on Christian Faith.">
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="icon" href="/assets/images/burningBook.jfif" type="image/x-icon">
@@ -54,7 +53,7 @@
 					<section id="banner" class="style2">
 						<div class="inner">
 							<span class="image">
-								<img src="assets/images/library2.jfif" alt="" />
+								<img src="assets/images/library2.jfif" alt="feature documents" />
 							</span>
 							<header class="major">
 								<h1>Features</h1>
@@ -88,7 +87,7 @@
 									<% if (myBook) { %> 
 									<a href="books/<%= myBook._id %>" class="image">
 										<!-- <img src="images/pic08.jpg" alt="" data-position="center center" /> -->
-										<img class='book-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myBook.image.key.replaceAll(" ", "+") %> alt=""> 
+										<img class='book-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myBook.image.key.replaceAll(" ", "+") %> alt="<%= myBook.title %>"> 
 									</a>
 									<div class="content">
 										<div class="inner">
@@ -107,7 +106,7 @@
 									<% if (myBio) { %> 
 									<a href="biographies/<%= myBio._id %>" class="image">
 										<% if (myBio.image.key === 'none') { %> 
-											<img src="/assets/images/<%= myBio.gender %>.png" alt="" class="bio-image"> <p></p>
+											<img src="/assets/images/<%= myBio.gender %>.png" alt="<%= myBio.name %>" class="bio-image"> <p></p>
 										<% } else { %> 
 											<img class='bio-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myBio.image.key.replaceAll(" ", "+") %> alt="">
 										<% } %> 
@@ -130,7 +129,7 @@
 									<a href="articles/<%= myArt._id %>" class="image">
 
 										<% if (myArt.image.key === 'none') { %> 
-											<img class="article-image" src="assets/images/articles.jfif" alt="" />
+											<img class="article-image" src="assets/images/articles.jfif" alt="<%= myArt.name %>" />
 										<% } else { %> 
 											<img class='article-image' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + myArt.image.key.replaceAll(" ", "+") %> alt="">
 										<% } %> 

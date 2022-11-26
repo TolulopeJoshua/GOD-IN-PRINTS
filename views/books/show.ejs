@@ -28,12 +28,12 @@
     <% } %> 
     <div class="card text-center mb-3 card-size">
         <% if (book.image.key != 'none') { %>        
-            <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt=""> 
+            <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
         <% } else { %>
-            <img class="card-img-top rounded img-thumbnail" alt="" src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
+            <img class="card-img-top rounded img-thumbnail" alt="<%= book.title %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
         <div class="card-body">
-            <h5 class="card-title text-capitalize"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h5>
+            <h1 class="h5 card-title text-capitalize"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h1>
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>
         <ul class="list-group list-group-flush">
@@ -70,7 +70,7 @@
         </div>
     </form>
     <% } else { %> 
-    <div class="p-3 text-muted"><strong>LOGIN TO ADD REVIEW</strong></div>
+    <div class="p-3 rounded-pill bg-secondary bg-gradient text-light text-center shadow"><small>LOG IN TO REVIEW</small></div>
     <% } %> 
     <% for(let review of book.reviews) { %>
     <div id="<%= review._id %>" class="card m-3 rounded-5">

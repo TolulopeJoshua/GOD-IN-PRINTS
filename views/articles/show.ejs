@@ -36,9 +36,9 @@
             <% if (article.image.key === 'none') { %> 
                 <img src="/assets/images/articles.jfif" alt="" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
             <% } else { %> 
-                <img class='card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replaceAll(" ", "+") %> alt="">
+                <img class='card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replaceAll(" ", "+") %> alt="<%= article.name %> ">
             <% } %>           
-            <small id=<%= article._id %> class="text ta lh-lg"><br><br><span class="m-2 text-muted">Loading text...</span></small>
+            <small class="text ta lh-lg"><%= article.text %> </small>
             <p class="small text-muted mt-3 text-end"><em><%= article.source %> </em></p>
         </div>           
     </div>
@@ -54,7 +54,7 @@
         </div>
     </form>
     <% } else { %> 
-    <div class="p-3 text-muted"><strong>LOGIN TO ADD COMMENT</strong></div>
+    <div class="p-3 rounded-pill bg-secondary bg-gradient text-light text-center shadow""><small>LOG IN TO COMMENT</small></div>
     <% } %> 
     <% for(let review of article.reviews) { %>
     <div id="<%= review._id %>" class="card m-3 rounded-5">

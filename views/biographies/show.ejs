@@ -29,17 +29,19 @@
 <% } %> 
 <div class="offset-md-3 offset-lg-2 col-md-3 col-lg-2 card text-center">
     <% if (biography.image.key === 'none') { %> 
-        <img src="/assets/images/<%= biography.gender %>.png" alt="" class="img-fluid img-size"> <p></p>
-        <p class="ms-auto me-auto"><a href="/biographies/<%= biography._id %>/imageUpload">Upload Picture for Biography</a></p>
+        <img src="/assets/images/<%= biography.gender %>.png" alt="<%= biography.name %> " class="img-fluid img-size"> <p></p>
+        <% if (currentUser && (currentUser._id.equals(biography.contributor) || currentUser.admin)) { %> 
+            <p class="ms-auto me-auto"><a href="/biographies/<%= biography._id %>/imageUpload">Upload Picture for Biography</a></p>
+        <% } %> 
     <% } else { %> 
-        <img class='card-img-top rounded-circle img-thumbnail image-size' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biography.image.key.replaceAll(" ", "+") %> alt="">
+        <img class='card-img-top rounded-circle img-thumbnail image-size' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biography.image.key.replaceAll(" ", "+") %> alt="<%= biography.name %> ">
     <% } %> 
     <div class="card-body p-1">
         <h5 class="card-title"></h5>
         <p class="card-text text-muted"> </p>
         <p> </p>
         <ul class="list-group list-group-flush">
-            <li class="h3 list-group-item"><%= biography.name %></li>
+            <li class="list-group-item"><h1 class="h3"><%= biography.name %></h1></li>
             <li class="list-group-item text-muted"><%= biography.role %></li>
             <li class="list-group-item">(<%= biography.birthYear %> - <%= biography.deathYear %>)</li>
         </ul>
@@ -48,7 +50,7 @@
 <div class="card bg p-3 col-md-6 col-lg-5 vh-100 overflow-auto">
     <% const title = biography.gender === 'female' ? 'Her Story' : 'His Story' %> 
     <h1 class="card-title text-center title-1 display-3"><%= title %> </h3>
-    <p id="<%= biography._id %>" class="card-text lh-lg small text ta justify"><span class="text-muted ps-auto pe-auto my-5">Loading...</span></p>
+    <p class="card-text lh-lg small text ta justify"><%= biography.text %> </p>
     <p class="small text-muted mt-3 text-end"><em><%= biography.source %> </em></p>
     <script>idLength['<%= (biography._id) %>'] = 0;</script>
     <!-- <script src="/javascripts/get_story.js"></script> -->
@@ -64,7 +66,7 @@
         </div>
     </form>
     <% } else { %> 
-    <div class="p-3 text-muted"><strong>LOGIN TO ADD COMMENT</strong></div>
+    <div class="p-3 rounded-pill bg-secondary bg-gradient text-light text-center shadow"><small>LOG IN TO COMMENT</small></div>
     <% } %> 
     <% for(let review of biography.reviews) { %>
     <div id="<%= review._id %>" class="card m-3 rounded-5">

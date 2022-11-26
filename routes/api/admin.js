@@ -10,8 +10,6 @@ const Book = require('../../models/book');
 const Review = require('../../models/review')
 const User = require('../../models/user')
 const { upload0, deleteImage, uploadCompressedImage, getImage, putImage } = require('../../functions');
-const { buffer } = require('sharp/lib/is');
-const { request } = require('http');
 const { validateAdmin } = require('../../middleware');
 
 router.get('/all', validateAdmin, catchAsync(async (req, res) => {
@@ -100,11 +98,11 @@ router.get('/text/:id', catchAsync(async (req, res) => {
 router.put('/text/:id', validateAdmin, catchAsync(async (req, res) => {
     const doc = await Doc.findById(req.params.id);
     await deleteImage(doc.story)
-    const clean = sanitizeHtml(req.body.text, {
+    doc.text = sanitizeHtml(req.body.text, {
         allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
     });
-    fs.writeFileSync('outputText.txt', clean);
+    fs.writeFileSync('outputText.txt', doc.text);
     doc.story = `${doc.docType == 'article' ? 'article' : 'bio'}/` + Date.now().toString() + '_' + doc.name + '.txt';
     const myBuffer = fs.readFileSync('outputText.txt');
     await doc.save();

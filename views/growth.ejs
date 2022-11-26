@@ -43,7 +43,7 @@
 
     <% if (adBook[0]) { %> 
     <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-2 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    <img class='mx-2 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt="<%= adBook[0].title %>"> 
     </a>
     <% } %> 
 
@@ -58,7 +58,7 @@
 
     <% if (adBook[0]) { %> 
     <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='my-2 image-size fade-animate' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
+    <img class='my-2 image-size fade-animate' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt="<%= adBook[0].title %>"> 
     </a>
     <% } %> 
 

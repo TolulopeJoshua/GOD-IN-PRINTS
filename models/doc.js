@@ -18,6 +18,9 @@ const DocSchema = new Schema({
     story: {
         type: String
     },
+    text: {
+        type: String
+    },
     content: {
         type: String,
     },
