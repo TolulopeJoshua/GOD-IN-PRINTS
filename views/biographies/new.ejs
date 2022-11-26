@@ -53,9 +53,11 @@
                 <label class="form-label" for="story">Source:</label>
                 <input class="form-control" type="text" id="source" name="source" placeholder="name or url?">
             </div>
+            <div class="col-12">
+                <label class="form-label" for="">Story:</label>
+                <%- include('../partials/textEditor') %> 
+            </div>
         </div>
-        <label class="form-label" for="">Story:</label>
-        <%- include('../partials/textEditor') %> 
 
         <div class="my-3">                
             <button type="submit" class="btn btn-success">Post biography</button>

@@ -42,9 +42,11 @@
                 </select>
                 <!-- <input class="form-control" type="text" id="role" name="article[role]" placeholder="e.g Prayer, Faith" required> -->
             </div>
+            <div class="col-12">
+                <label class="form-label" for="story">Text:</label>
+                <%- include('../partials/textEditor') %> 
+            </div>
         </div>
-        <label class="form-label" for="story">Text:</label>
-        <%- include('../partials/textEditor') %> 
         
         <div class="my-3">                
             <button type="submit" class="btn btn-success w-25">Post</button>
