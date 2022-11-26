@@ -16,24 +16,26 @@ const categories = ['Evangelism', 'Prayer/Warfare', 'Marriage/Family', 'Dating/C
 
 
 module.exports.index = async (req, res) => {
-    let books;
+    // let books;
     // let sessData = req.session;   
     // if (sessData.featureBooks) {
     //     books = sessData.featureBooks;
     // } else {
-        books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
+        const gbooks = Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
         // sessData.featureBooks = books;
     // }
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
+    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
+    const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
     res.render('books/index', {books, adArt, adBio})
 };
 
 module.exports.list = async (req, res) => {
-    const books = await Book.find({isApproved: true}).sort({title : 1});
+    const gbooks = Book.find({isApproved: true}).sort({title : 1});
+    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
+    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
+    const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
     const [pageDocs, pageData] = paginate(req, books)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio})
 };
 
@@ -167,12 +169,19 @@ module.exports.search = async (req, res) => {
 };
 
 module.exports.showBook = async (req, res) => {
-
     const book = await Book.findById(req.params.id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
+        path: 'reviews', populate: { path: 'author' }
+    });
+    if(!book) {
+        req.flash('error', 'Cannot find that book!');
+        return res.redirect('/books');
+    }
+    res.render('books/show', {book});
+};
+
+module.exports.show = async (req, res) => {
+    const book = await Book.findOne({ title: req.params.title }).populate({
+        path: 'reviews', populate: { path: 'author' }
     });
     if(!book) {
         req.flash('error', 'Cannot find that book!');

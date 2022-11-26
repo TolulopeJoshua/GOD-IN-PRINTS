@@ -23,6 +23,8 @@ router.get('/search', setRedirect, catchAsync(articles.search));
 
 router.get('/:id', catchAsync(articles.showArticle));
 
+router.get('/1/:name', catchAsync(articles.show));
+
 router.get('/:id/story', catchAsync(articles.story));
 
 router.get('/:id/image', catchAsync(articles.image));

@@ -32,7 +32,7 @@
                         <% let count = 0 %> 
                         <% for (let article of articles) { %> 
                             <% if (article.role === categories[index] && count < 3) { %> 
-                                <li class="text-truncate p-1"><small><a class="text-decoration-none" href="/articles/<%= article._id %> "><%= article.name %> </a></small> </li>
+                                <li class="text-truncate p-1"><small><a class="text-decoration-none" href="/articles/1/<%= article.name %>"><%= article.name %> </a></small> </li>
                                 <% count++ %> 
                             <% } %> 
                         <% } %> 

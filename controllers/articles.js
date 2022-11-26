@@ -16,21 +16,19 @@ const categories = [
 
 
 module.exports.index = async (req, res) => {
-    const articles = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const garticles = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
+    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
     res.render('articles/index', {categories, articles, adBook, adBio})
 };
 
 module.exports.list = async (req, res) => {
-    const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
-    // for (let article of articles) {
-    //     article.contributor = req.user._id;
-    //     await article.save(); 
-    // };
+    const garticles = Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
+    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
     const [pageDocs, pageData] = paginate(req, articles)
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook})
 };
 
@@ -41,9 +39,9 @@ module.exports.categories = (req, res) => {
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
     const articles = await Doc.find({docType: 'article', isApproved: true, role: category}).sort({name : 1});
-    const [pageDocs, pageData] = paginate(req, articles)
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const [pageDocs, pageData] = paginate(req, articles)
     res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook});
 };
 
@@ -95,19 +93,8 @@ module.exports.search = async (req, res) => {
 };
 
 module.exports.showArticle = async (req, res) => {
-
-    // const docs = await Doc.find({});
-    // docs.forEach(async doc => {
-    //     const data = await getImage(doc.story);
-    //     doc.text = data.Body.toString();
-    //     await doc.save();
-    // })
-
     const article = await Doc.findById(req.params.id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
+        path: 'reviews', populate: { path: 'author' }
     });
     if(!article) {
         req.flash('error', 'Not in directory!');
@@ -115,6 +102,20 @@ module.exports.showArticle = async (req, res) => {
     }
     const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    res.render('articles/show', {article, adBio, adBook});
+};
+
+module.exports.show = async (req, res) => {
+    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const garticle = Doc.findOne({ name: req.params.name }).populate({
+        path: 'reviews', populate: { path: 'author' }
+    });
+    const [ article, adBio, adBook ] = await Promise.all([garticle, gadBio, gadBook])
+    if(!article) { 
+        req.flash('error', 'Not in directory!');
+        return res.redirect('/articles');
+    }
     res.render('articles/show', {article, adBio, adBook});
 };
 
@@ -172,7 +173,7 @@ module.exports.addReview = async (req, res) => {
 
 module.exports.deleteReview = async (req, res) => {
     const {articleId, reviewId} = req.params;
-    await Doc.findByIdAndUpdate(articleId, {$pull: {reviews: reviewId} } );
+    await Doc.findByIdAndUpdate(articleId, { $pull: {reviews: reviewId} } );
     await Review.findByIdAndDelete(reviewId);
     res.send(reviewId);
 }

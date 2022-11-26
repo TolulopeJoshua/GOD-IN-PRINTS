@@ -9,19 +9,21 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 
 
 module.exports.index = async (req, res) => {
-    const biographies = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const gbiographies = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
+    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
+    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
     res.render('biographies/index', {biographies, adArt, adBook})
 };
 
 module.exports.list = async (req, res) => {
     const q = req.query.q;
     const searchObj = q == 'birth' ? {birthYear: 1} : q == 'role' ? {role: 1, name: 1} : {name: 1};
-    const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
+    const gbiographies = Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
+    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
+    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
     const [pageDocs, pageData] = paginate(req, biographies)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook})
 };
 
@@ -74,6 +76,20 @@ module.exports.search = async (req, res) => {
 
 module.exports.showBiography = async (req, res) => {
     const biography = await Doc.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
+    if(!biography) {
+        req.flash('error', 'Not in directory!');
+        return res.redirect('/biographies');
+    }
+    res.render('biographies/show', {biography});
+};
+
+module.exports.show = async (req, res) => {
+    const biography = await Doc.findOne({ name: req.params.name}).populate({
         path: 'reviews',
         populate: {
             path: 'author'

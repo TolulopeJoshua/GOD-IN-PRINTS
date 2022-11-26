@@ -22,6 +22,8 @@ router.get('/search', setRedirect, catchAsync(biographies.search));
 
 router.get('/:id', catchAsync(biographies.showBiography));
 
+router.get('/1/:name', catchAsync(biographies.show));
+
 router.get('/:id/story', catchAsync(biographies.story))
 
 router.get('/:id/image', catchAsync(biographies.image))

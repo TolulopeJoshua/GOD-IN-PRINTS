@@ -28,11 +28,11 @@
                     <td class="text-center p-2">
                         <% const index = i + j * 3 %> 
                         <% if (books[index]) { %> 
-                        <a href="/books/<%=books[index]._id%>">
+                        <a href="/books/1/<%= books[index].title %>">
                             <img height="150px" class='mx-3 my-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image.key.replaceAll(" ", "+") %> alt="<%= books[index].title %> "> 
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
-                        <a class="text-decoration-none text-capitalize d-block text-truncate" href="/books/<%=books[index]._id%>"><strong><%= books[index].title.toLowerCase() %> <%= books[index].author.toLowerCase() %> </strong></a>
+                        <a class="text-decoration-none text-capitalize d-block text-truncate" href="/books/1/<%= books[index].title %>"><strong><%= books[index].title.toLowerCase() %> <%= books[index].author.toLowerCase() %> </strong></a>
                         <% } %> 
                     </td>
                 <% } %> 

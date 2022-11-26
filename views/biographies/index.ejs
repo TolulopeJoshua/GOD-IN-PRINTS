@@ -42,7 +42,7 @@
             <div class="row">
                 <p class="p-3 lh-lg justify">
                     <span id=<%= biographies[0]._id %>><span class="text-muted">Loading text...</span></span>
-                    <a class="" href="/biographies/<%= biographies[0]._id %> ">continue</a>
+                    <a class="" href="/biographies/1/<%= biographies[0].name%> ">continue</a>
                 </p>
                 
                 <script>idLength['<%= (biographies[0]._id) %>'] = 750;</script>
@@ -67,7 +67,7 @@
                                     <small id=<%= biographies[i]._id %> class="card-text p-2"><span class="text-muted">text loading...</span></small><br>
                                     
                                     <script>idLength['<%= (biographies[i]._id) %>'] = 110;</script>
-                                    <a href="/biographies/<%= biographies[i]._id %> " class="btn btn-sm btn-outline-secondary mt-5">Read</a>
+                                    <a href="/biographies/1/<%= biographies[i].name %> " class="btn btn-sm btn-outline-secondary mt-5">Read</a>
                                 </div>
                             </div>
                         </div>
