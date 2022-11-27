@@ -1,16 +1,6 @@
-<a href="/articles/<%= adArt[0]._id %>">
+<a href="/articles/1/<%= adArt[0].name %>">
     <div class="card text-dark shadow p-4 text-center">
         <h5 class="text-decoration-underline"><%= adArt[0].name %> </h5>
-        <p class="small justify lh-lg p-0 m-0" id=<%= adArt[0]._id %>> </p>
+        <p class="small justify lh-lg p-0 m-0" id=<%= adArt[0]._id %>><%= adArt[0].text.replace(/<[^>]*>/g, " ").substring(0, 300) %>...</p>
     </div>
 </a>
-                
-<script>
-    route = `/articles/<%= adArt[0]._id %>/story?q=300`;
-    xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-        document.getElementById('<%= adArt[0]._id %>').innerHTML = this.responseText;
-    }
-    xhttp.open("GET", route, true);
-    xhttp.send();
-</script>

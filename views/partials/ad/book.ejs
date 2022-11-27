@@ -1,5 +1,5 @@
 <% if (adBook[0]) { %> 
-    <a href="/books/<%=adBook[0]._id%>" class="">
+    <a href="/books/1/<%=adBook[0].title%>" class="">
         <img class='mx-5 my-2 image-size opacity-75 fade-animate' width="75%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt=""> 
     </a>
 <% } %> 

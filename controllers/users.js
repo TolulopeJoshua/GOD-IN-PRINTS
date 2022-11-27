@@ -73,7 +73,7 @@ module.exports.register = async (req, res) => {
 }
 
 module.exports.renderLogin = (req, res) => {
-  if (!req.user) return  res.render('users/login')
+  if (!req.user) return  res.render('users/login', {title: 'GIP Library - Login'})
   res.status(200).json({response: 'logged in successfully', user: req.user.firstName + ' ' + req.user.lastName})
 };
 

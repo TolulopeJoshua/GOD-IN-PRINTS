@@ -6,7 +6,7 @@
         <% let id = "" %> 
         <% for (let key in growthHabits) { %>
             <li>
-                <a href="/growth/#<%= id %> "><%= key.replaceAll('_', ' ') %> </a>
+                <a href="/growth#<%= id %> "><%= key.replaceAll('_', ' ') %> </a>
             </li>
             <% id = key %> 
         <% }; %> 
@@ -20,13 +20,13 @@
 <script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-    <ul class="p-0 m-0>
+    <ul class="p-0 m-0">
     <% for (let key in growthHabits) { %>
-        <li">
+        <li>
             <h3 class="habit-title p-2"><%= key.replaceAll('_', ' ') %> </h3>
             <% for (let habit of growthHabits[key]) { %> 
-                <ul>
-                    <li id="<%= key %>" class="m-3 justify"><img src="https://freepngimg.com/download/diamond/4-2-diamond-png-picture.png" height="13" class="me-2" alt="*"><small><b><%= habit %>.</b></small></li>
+                <ul class="p-1">
+                    <li id="<%= key %>" class="m-3 justify"><img src="https://freesvg.org/img/1551445551.png" height="13" class="me-2" alt="*"><small><b><%= habit %>.</b></small></li>
                 </ul>
             <% } %> 
         </li>
@@ -35,7 +35,7 @@
 </div>
 
     
-<div class="d-none d-lg-block col-lg-3 offset-lg-9 py-5 text-center position-fixed mh-100 scroll">    
+<div class="d-none d-lg-block col-lg-5 offset-lg-8 py-5 text-center position-fixed mh-100 scroll">    
 
     <p class="text-muted small">        
         <strong>Check this out 👇</strong>
