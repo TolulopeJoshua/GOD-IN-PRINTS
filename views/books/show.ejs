@@ -20,13 +20,13 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto position-relative">
+<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto">
     <% if(!book.isApproved) { %> 
         <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
             This book is yet to be approved! 
         </div>
     <% } %> 
-    <div class="card text-center mb-3 card-size">
+    <div class="card text-center mb-3 card-size position-relative">
         <% if (book.image.key != 'none') { %>        
             <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
         <% } else { %>
@@ -48,7 +48,7 @@
             </form> -->
         </div>
         <% if (currentUser) { %>
-            <small class="text-secondary d-block text-center">
+            <small class="text-secondary d-block text-center pb-1">
                 Download limit: <%= currentUser.subscription.status === 'platinum' ? '5 per week' : currentUser.subscription.status === 'premium' ? '3 per week' : '1 per month' %> <i class="bi bi-dot"></i> <i>
                 <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>
             </i></small>
@@ -56,8 +56,18 @@
         <!-- <div class="card-footer text-muted">
             2 days ago
         </div> -->
+        <%- include('../partials/loginModal') %> 
     </div>
-    <%- include('../partials/loginModal') %> 
+    <% if (currentUser) { %> 
+    <div class="flex justify-content-center my-5">
+        <form action="/books/<%= book._id %>/download/ticket" method="post" class="border border-2 border-secondary my-5 p-3 pb-0" style="width: 300px; max-width: 90%;">
+            <h6 class="text-center">Download with Ticket!</h6>
+            <input type="text" name="ticketId" placeholder="Ticket Id" class="form-control my-3" required>
+            <button id="ticketBtn" class="btn btn-primary w-100">Download</button>
+            <p class="small text-end"><a href="/subscription#ticket">Get a ticket</a></p>
+        </form>
+    </div>
+    <% } %> 
 </div>
 
 <div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0">

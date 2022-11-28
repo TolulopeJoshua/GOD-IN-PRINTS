@@ -104,6 +104,13 @@ const scriptSrcUrls = [
     "https://connect.facebook.net",
     "https://js.paystack.co",
     "https://unpkg.com",
+    "https://pagead2.googlesyndication.com",
+    "https://www.gstatic.com",
+    "https://www.googletagmanager.com",
+    "https://partner.googleadservices.com",
+    "https://adservice.google.com.ng",
+    "https://adservice.google.com",
+    "https://tpc.googlesyndication.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -124,6 +131,10 @@ const connectSrcUrls = [
     "https://graph.facebook.com",
     "https://z-p3-graph.facebook.com",
     "https://z-m-graph.facebook.com",
+    "https://pagead2.googlesyndication.com",
+    "https://firebase.googleapis.com",
+    "https://firebaseinstallations.googleapis.com",
+    "https://www.google-analytics.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
@@ -136,6 +147,9 @@ const fontSrcUrls = [
 ];
 const frameSrcUrls = [
     "https://checkout.paystack.com",
+    "https://googleads.g.doubleclick.net",
+    "https://tpc.googlesyndication.com",
+    "https://www.google.com",
 ]
 
 app.use((req, res, next) => {

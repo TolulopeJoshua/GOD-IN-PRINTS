@@ -37,6 +37,8 @@ router.post('/:id/imageUpload', isLoggedIn, upload0.single("image"), catchAsync(
 
 router.get('/:id/download', isLoggedIn, checkDownloadLimit, catchAsync(books.download));
 
+router.post('/:id/download/ticket', isLoggedIn, catchAsync(books.ticketDownload));
+
 // router.get('/:id/read', isLoggedIn, catchAsync(books.read));
 
 // router.get('/:id/getPages', isLoggedIn, catchAsync(books.pagesArray));

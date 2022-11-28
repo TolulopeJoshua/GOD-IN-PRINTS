@@ -2,6 +2,7 @@ const Doc = require('../models/doc');
 const Book = require('../models/book');
 const Review = require('../models/review');
 const User = require('../models/user');
+const BookTicket = require('../models/bookTicket');
 
 const fs = require('fs');
 // const pdfConverter = require('pdf-poppler');
@@ -9,6 +10,7 @@ const path = require('path');
 
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
 const ExpressError = require('../utils/ExpressError');
+const bookTicket = require('../models/bookTicket');
 
 const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
                     'Devotion', 'Commitment/Consecration', 'Grace/Conversion', 
@@ -241,6 +243,25 @@ module.exports.download = async (req, res) => {
     const user = await User.findById(req.user._id);
     user.downloads.push({bookId: book._id, downloadTime: new Date()})
     await user.save();
+};
+
+module.exports.ticketDownload = async (req, res) => {
+    const ticket = await BookTicket.findOne({ticket: req.body.ticketId});
+    const tickets = await BookTicket.find({});
+    const book = await Book.findById(req.params.id);
+    if (!ticket) {
+        req.flash('error', 'Ticket not found.');
+        return res.redirect(`/books/${book._id}`);
+    }
+    const {key} = book.document;
+    const options = {
+        Bucket    : 'godinprintsdocuments',
+        Key       : key,
+    };
+    res.attachment(book.title); // Use ( + '.' + book.filetype) to add file extension
+    const fileStream = s3.getObject(options).createReadStream();
+    fileStream.pipe(res);
+    await BookTicket.findByIdAndDelete(ticket._id);
 };
 
 module.exports.read = async (req, res) => {

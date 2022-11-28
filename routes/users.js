@@ -33,6 +33,8 @@ router.post('/subscription', catchAsync(users.subscription));
 
 router.delete('/subscription/:subCode', isLoggedIn, catchAsync(users.disableSubscription));
 
+router.get('/bookTicket/:ref', isLoggedIn, catchAsync(users.bookTicket));
+
 router.get('/changePassword', users.renderChangePassword);
 
 router.post('/changePassword', validateEmail, catchAsync(users.changePassword));

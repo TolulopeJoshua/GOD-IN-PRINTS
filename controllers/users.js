@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const Review = require('../models/review');
+const BookTicket = require('../models/bookTicket');
+const bcrypt = require ('bcrypt');
 const axios = require('axios');
 
 
@@ -243,6 +245,21 @@ module.exports.disableSubscription = async (req, res) => {
     return res.status(200).send("Disabled successfully.")
   }
   res.status(401).send("Not authorized!")
+}
+
+module.exports.bookTicket = async (req, res) => {
+  let { data } = await axios.get(`https://api.paystack.co/transaction/verify/${req.params.ref}`, {
+    headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+  })
+
+  if (data.status && data.data.status == "success") {
+    const ticket = (Math.random()).toString(36).slice(2);
+    const bookTicket = new BookTicket({ticket, userId: req.user?._id})
+    await bookTicket.save();
+    res.status(200).send(ticket)
+  } else {
+    res.status(400).send('Payment could not be verified.')
+  }
 }
 
 module.exports.renderChangePassword = (req, res) => {

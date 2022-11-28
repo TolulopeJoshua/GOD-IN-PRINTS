@@ -91,7 +91,6 @@
       paymentForm.addEventListener('submit', payWithPaystack, false);
       function payWithPaystack(e) {
         e.preventDefault();
-        if (parseInt(document.getElementById('amount').value) < 1000) return;
         var handler = PaystackPop.setup({
           key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
           email: document.getElementById('email').value,

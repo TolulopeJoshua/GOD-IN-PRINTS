@@ -53,7 +53,17 @@
             </a>
         </div>
     </div>
-    <h6 class="text-secondary text-center pt-5">Want more access? <a href="/#contact">Send a message.</a></h6>
+
+    <div id="ticket" class="flex justify-content-center my-5">
+        <div class="border border-2 border-secondary my-5 p-3" style="width: 300px; max-width: 90%;">
+            <h6 class="text-center">Buy a ticket instead?</h6>
+            <em class="small">Tickets are used for a single book download.</em><br>
+            <em class="small d-block text-end">Price: <span style="text-decoration: line-through double">N</span>700</em>
+            <button id="ticketBtn" class="btn btn-primary w-100">Get Ticket</button>
+        </div>
+    </div>
+
+    <h6 class="text-secondary text-center">Want more access? <a href="/#contact">Send a message.</a></h6>
 </div>
 
 
@@ -69,7 +79,6 @@
     document.getElementById('platinumButton').addEventListener('click', () => subscribe(platinum));
 
      function subscribe(type) {
-        
         var handler = PaystackPop.setup({
           key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547',
           email: '<%= currentUser.email %>',
@@ -86,6 +95,28 @@
             setTimeout(() => {
                 location.reload();
             }, 5000);
+          },
+          onClose: function() {
+            console.log('closed')
+          },
+        });
+        handler.openIframe();
+      }
+
+      document.getElementById('ticketBtn').addEventListener('click', getTicket, false);
+      function getTicket() {
+        var handler = PaystackPop.setup({
+          key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
+          email: "<%= currentUser.email %>",
+          amount: 700 * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+          currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+          callback: function(res) {
+            // Make an AJAX call to your server with the reference to verify the transaction
+            axios.get(`/bookTicket/${res.reference}`).then(function(response) {
+                swal('Ticket Id:', response.data, {closeOnClickOutside: false});
+            }).catch(function(error) {
+                swal('', 'Could not generate ticket. Please contact gipteam@hotmail.com.', 'error')
+            })
           },
           onClose: function() {
             console.log('closed')
