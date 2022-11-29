@@ -42,8 +42,8 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createBiography = async (req, res) => {
     const biography = new Doc(req.body.biography)
     biography.text = sanitizeHtml(biography.story, {
-        allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
-        allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
+        allowedTags: ['h4', 'h5', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     biography.docType = 'biography' 
     biography.dateTime = Date.now();

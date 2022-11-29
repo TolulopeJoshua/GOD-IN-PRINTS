@@ -99,8 +99,8 @@ router.put('/text/:id', validateAdmin, catchAsync(async (req, res) => {
     const doc = await Doc.findById(req.params.id);
     await deleteImage(doc.story)
     doc.text = sanitizeHtml(req.body.text, {
-        allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
-        allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
+        allowedTags: ['h4', 'h5', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     fs.writeFileSync('outputText.txt', doc.text);
     doc.story = `${doc.docType == 'article' ? 'article' : 'bio'}/` + Date.now().toString() + '_' + doc.name + '.txt';
