@@ -9,8 +9,8 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 const fs = require('fs');
 
 const categories = [
-    'Prayer/Warfare', 'Marriage/Family Life', 
-    'Spiritual Growth', 'Commitment/Consecration', 'Evangelism', 'Grace/Conversion', 
+    'Daily Living', 'Prayer/Warfare', 'Evangelism', 
+    'Spiritual Growth', 'Commitment/Consecration', 'Marriage/Family Life', 'Grace/Conversion', 
     'Afterlife', 'Personal/Financial Development', 'Biography', 'Others'
 ];
 
@@ -62,12 +62,13 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createArticle = async (req, res) => {
     const article = new Doc(req.body.article)
     article.text = sanitizeHtml(article.story, {
-        allowedTags: ['h4', 'h5', 'a', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
-        allowedAttributes: { 'a': ['href'], 'img': ['src'], '*': ['style'] },
+        allowedTags: ['h4', 'h5', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     article.docType = 'article' 
     article.dateTime = Date.now();
     article.contributor = req.user._id;
+    article.isApproved = (req.user.admin == 5);
     fs.writeFileSync('outputText.txt', article.text);
     article.story = 'article/' + Date.now().toString() + '_' + article.name + '.txt';
     const myBuffer = fs.readFileSync('outputText.txt');
