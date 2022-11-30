@@ -166,6 +166,13 @@ module.exports.uploadArticleImage = async function(req, res) {
     res.redirect(`/articles/${article._id}`)
 };
 
+module.exports.imageLink = async function(req, res) {
+    const article = await Doc.findById(req.params.id);
+    article.image.link = req.body.link;
+    await article.save();
+    res.redirect(`/articles/${article._id}`)
+};
+
 module.exports.addReview = async (req, res) => {
     // console.log(req)
     const article = await Doc.findById(req.params.id);

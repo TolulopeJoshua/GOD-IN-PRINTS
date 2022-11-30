@@ -30,6 +30,7 @@ const DocSchema = new Schema({
     },
     image: {
             key: {type: String, default: "none"},
+            link: { type: String },
     },
     docType: {
         type: String,

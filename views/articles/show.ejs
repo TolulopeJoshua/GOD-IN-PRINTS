@@ -29,14 +29,16 @@
     <% } %> 
     <div class="card bg mb-3">
         <h1 class="card-title title-1 text-center"><%= article.name %></h1>      
-        <% if (article.image.key === 'none' && currentUser && (currentUser._id.equals(article.contributor) || currentUser.admin)) { %> 
-            <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Upload Image for Article</a></p>
+        <% if (!article.image.link && article.image.key === 'none' && currentUser && (currentUser._id.equals(article.contributor) || currentUser.admin)) { %> 
+            <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Add Article Image</a></p>
         <% } %> 
         <div class="card-body justify overflow-auto">        
-            <% if (article.image.key === 'none') { %> 
-                <img src="/assets/images/articles.jfif" alt="" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
-            <% } else { %> 
+            <% if (article.image.key !== 'none') { %> 
                 <img class='card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replaceAll(" ", "+") %> alt="<%= article.name %> ">
+            <% } else if (article.image.link) { %> 
+                <img src="<%= article.image.link %>" alt="<%= article.name %>" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
+            <% } else { %>
+                <img src="/assets/images/articles.jfif" alt="<%= article.name %>" class="card-img-top image-size d-block ms-auto me-auto float-sm-end ps-3">
             <% } %>           
             <p class="text ta lh-lg"><%- article.text %> </p>
             <p class="small text-muted mt-3 text-end"><em><%= article.source %> </em></p>

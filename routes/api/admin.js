@@ -107,7 +107,7 @@ router.put('/text/:id', validateAdmin, catchAsync(async (req, res) => {
     const myBuffer = fs.readFileSync('outputText.txt');
     await doc.save();
     await putImage(doc.story, myBuffer);
-    res.status(200).send(doc);
+    res.status(200).send(doc); 
 }))
 
 router.put('/admin', validateAdmin, catchAsync(async (req, res) => {

@@ -11,6 +11,17 @@
                 <button class="btn btn-success w-25">Upload</button>
             </div>
         </form>
+        <% if (route.split('/')[1] == 'Articles') { %>
+            <form id="imageLinkForm" style="width: 450px; max-width: 90%;" action="/articles/<%= route.split('/')[2] %>/imageLink" method="POST" class="card">
+                <div class="m-5">
+                    <label class="form-label" for="link">Or Add Link:</label>
+                    <input class="form-control" type="url" id="link" name="link" required>
+                </div>
+                <div class="mb-5 text-center">
+                    <button class="btn btn-success w-25">Save</button>
+                </div>
+            </form>
+        <% } %>
     </div>
 </div>
 
@@ -19,5 +30,6 @@
 </script>
 
 <script>
-    document.getElementById('imageUploadForm').addEventListener('submit', () => loadWaiting())
+    document.getElementById('imageUploadForm').addEventListener('submit', () => loadWaiting());
+    document.getElementById('imageLinkForm').addEventListener('submit', () => loadWaiting());
 </script>

@@ -33,6 +33,8 @@ router.get('/:id/imageUpload', isLoggedIn, articles.renderImageUploadForm);
 
 router.post('/:id/imageUpload', isLoggedIn, upload0.single('image'), catchAsync(articles.uploadArticleImage));
 
+router.post('/:id/imageLink', isLoggedIn, catchAsync(articles.imageLink));
+
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(articles.addReview));
 
 router.delete('/:articleId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(articles.deleteReview));
