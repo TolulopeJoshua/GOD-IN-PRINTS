@@ -292,7 +292,7 @@ module.exports.changePassword = async (req, res) => {
           <p>Regards,<p/><br><b>GIP Team<b/>` // html body
     };
     const {transporter} = require('../functions');
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, async (error, info) => {
         if (error) {
           console.log(error)
           await req.flash('error', 'An error occured.');
@@ -313,7 +313,7 @@ module.exports.setPassword = async (req, res) => {
   const {userId, resetCode} = req.params;
   const {password} = req.body;
   const user = await User.findById(userId);
-  bcrypt.compare(resetCode, user.resetCode, function(err, result) {
+  bcrypt.compare(resetCode, user.resetCode, async function(err, result) {
       if (result) {
         user.setPassword(password, async (error, info) => {
           if(!error) {
