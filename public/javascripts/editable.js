@@ -35,7 +35,7 @@ const initializer = () => {
     let option = document.createElement("option");
     option.value = value;
     option.innerHTML = value;
-    fontName.appendChild(option);
+    fontName?.appendChild(option);
   });
 
   //fontSize allows only till 7
@@ -43,11 +43,11 @@ const initializer = () => {
     let option = document.createElement("option");
     option.value = i;
     option.innerHTML = i;
-    fontSizeRef.appendChild(option);
+    fontSizeRef?.appendChild(option);
   }
 
   //default size
-  fontSizeRef.value = 3;
+  fontSizeRef?.value = 3;
 };
 
 //main logic
