@@ -62,7 +62,7 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createArticle = async (req, res) => {
     const article = new Doc(req.body.article)
     article.text = sanitizeHtml(article.story, {
-        allowedTags: ['h4', 'h5', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     article.docType = 'article' 

@@ -99,7 +99,7 @@ router.put('/text/:id', validateAdmin, catchAsync(async (req, res) => {
     const doc = await Doc.findById(req.params.id);
     await deleteImage(doc.story)
     doc.text = sanitizeHtml(req.body.text, {
-        allowedTags: ['h4', 'h5', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+        allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     fs.writeFileSync('outputText.txt', doc.text);
