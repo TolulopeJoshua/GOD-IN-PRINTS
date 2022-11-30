@@ -295,11 +295,11 @@ module.exports.changePassword = async (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error)
-          req.flash('error', 'An error occured.');
+          await req.flash('error', 'An error occured.');
           return res.render('users/changePassword', {title: 'Profile'})
         }
         console.log(info)
-        req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
+        await req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
         res.render('users/changePassword', {title: 'Profile'})
       });
 }
@@ -321,14 +321,15 @@ module.exports.setPassword = async (req, res) => {
             user.resetCode = null;
             user.loginType = 'password';
             await user.save();
-            req.flash('success', 'Password changed successfully.');
-            return res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
+            await req.flash('success', 'Password changed successfully.');
+            res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'});
+            return
           }
-          req.flash('error', 'An error occured.');
+          await req.flash('error', 'An error occured.');
           res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
         })
       } else { 
-        req.flash('error', 'An error occured.');
+        await req.flash('error', 'An error occured.');
         res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
       }
     });
