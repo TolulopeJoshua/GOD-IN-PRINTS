@@ -57,21 +57,21 @@ const modifyText = (command, defaultUi, value) => {
 };
 
 //For basic operations which don't need value parameter
-optionsButtons.forEach((button) => {
+optionsButtons?.forEach((button) => {
   button.addEventListener("click", () => {
     modifyText(button.id, false, null);
   });
 });
 
 //options that require value parameter (e.g colors, fonts)
-advancedOptionButton.forEach((button) => {
+advancedOptionButton?.forEach((button) => {
   button.addEventListener("change", () => {
     modifyText(button.id, false, button.value);
   });
 });
 
 //image
-imageButton.addEventListener("click", () => {
+imageButton?.addEventListener("click", () => {
   let userLink = prompt("Enter a URL");
   //if link has http then pass directly else add https
   if (/http/i.test(userLink)) {
@@ -83,7 +83,7 @@ imageButton.addEventListener("click", () => {
 });
 
 //link
-linkButton.addEventListener("click", () => {
+linkButton?.addEventListener("click", () => {
   let userLink = prompt("Enter a URL");
   //if link has http then pass directly else add https
   if (/http/i.test(userLink)) {
