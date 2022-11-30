@@ -47,7 +47,7 @@ const initializer = () => {
   }
 
   //default size
-  fontSizeRef?.value = 3;
+  fontSizeRef && (fontSizeRef.value = 3);
 };
 
 //main logic
