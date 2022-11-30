@@ -263,18 +263,22 @@ module.exports.bookTicket = async (req, res) => {
 }
 
 module.exports.renderChangePassword = (req, res) => {
-    res.render('users/changePassword', {msg: '', title: 'Profile'})
+    res.render('users/changePassword', {title: 'Profile'})
 };
 
 module.exports.changePassword = async (req, res) => {
     const email = req.body.email;
     const user = await User.findOne({email: email});
     if (!user) {
-      return res.render('users/changePassword', {msg: 'User not found!', title: 'Profile'})
+      req.flash('error', 'User not found!');
+      return res.render('users/changePassword', {title: 'Profile'})
     }
     // console.log(user);
-    user.resetCode = Math.random().toString(36).slice(2);
-    await user.save();
+    const token = Math.random().toString(36).slice(2);
+    bcrypt.hash(token, 10, async function(err, hash) {
+      user.resetCode = hash;
+      await user.save();
+    });
     
     let mailOptions = {
         from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
@@ -282,8 +286,8 @@ module.exports.changePassword = async (req, res) => {
         subject: 'GIP Library Password Reset', // Subject line
         // text: 'hello', // plain text body
         html: `<p>Hello ${user.firstName.toUpperCase()}<p/><br>
-          <p>Click <a href="https://www.godinprints.org/changePassword/${user._id}/${user.resetCode}">reset</a> to set a new password for your account
-          or paste the link: https://www.godinprints.org/changePassword/${user._id}/${user.resetCode} to your brower.</p><br>
+          <p>Click <a href="https://www.godinprints.org/changePassword/${user._id}/${token}">reset</a> to set a new password for your account
+          or paste the link: https://www.godinprints.org/changePassword/${user._id}/${token} to your brower.</p><br>
           <p>If you did not initiate the request, kindly reply with "Password change request not initiated by me" to this mail.<p/><br>
           <p>Regards,<p/><br><b>GIP Team<b/>` // html body
     };
@@ -291,36 +295,43 @@ module.exports.changePassword = async (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error)
-          return res.render('users/changePassword', {msg: 'An error occured.'})
+          req.flash('error', 'An error occured.');
+          return res.render('users/changePassword', {title: 'Profile'})
         }
         console.log(info)
-        res.render('users/changePassword', {msg: 'Check your mail (inbox / spam folder) for the password reset link.', title: 'Profile'})
+        req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
+        res.render('users/changePassword', {title: 'Profile'})
       });
 }
 
 module.exports.renderSetPassword = (req, res) => {
   const {userId, resetCode} = req.params;
-  res.render('users/setPassword', {userId, resetCode, msg: '', title: 'Profile'})
+  res.render('users/setPassword', {userId, resetCode, title: 'Profile'})
 };
 
 module.exports.setPassword = async (req, res) => {
   const {userId, resetCode} = req.params;
   const {password} = req.body;
   const user = await User.findById(userId);
-  if (resetCode === user.resetCode) {
-    user.setPassword(password, async (error, info) => {
-      if(!error) {
-        console.log(info);
-        user.resetCode = null;
-        user.loginType = 'password';
-        await user.save();
-        return res.render('users/setPassword', {userId, resetCode: '', msg: 'Password changed successfully.', title: 'Profile'})
+  bcrypt.compare(resetCode, user.resetCode, function(err, result) {
+      if (result) {
+        user.setPassword(password, async (error, info) => {
+          if(!error) {
+            console.log(info);
+            user.resetCode = null;
+            user.loginType = 'password';
+            await user.save();
+            req.flash('success', 'Password changed successfully.');
+            return res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
+          }
+          req.flash('error', 'An error occured.');
+          res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
+        })
+      } else { 
+        req.flash('error', 'An error occured.');
+        res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
       }
-      res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.', title: 'Profile'})
-    })
-  } else {
-    res.render('users/setPassword', {userId, resetCode: '', msg: 'An error occured.', title: 'Profile'})
-  }
+    });
 };
 
 module.exports.addReview = async (req, res) => {

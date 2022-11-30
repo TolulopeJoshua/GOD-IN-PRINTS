@@ -65,7 +65,7 @@ module.exports.createArticle = async (req, res) => {
         allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
-    article.name = article.name.toLowerCase();
+    article.name = article.name.toLowerCase().replace('?', '');
     article.docType = 'article' 
     article.dateTime = Date.now();
     article.contributor = req.user._id;
