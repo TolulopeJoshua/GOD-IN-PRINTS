@@ -271,7 +271,7 @@ module.exports.changePassword = async (req, res) => {
     const user = await User.findOne({email: email});
     if (!user) {
       req.flash('error', 'User not found!');
-      return res.render('users/changePassword', {title: 'Profile'})
+      return res.redirect('/changePassword')
     }
     // console.log(user);
     const token = Math.random().toString(36).slice(2);
@@ -296,11 +296,11 @@ module.exports.changePassword = async (req, res) => {
         if (error) {
           console.log(error)
           await req.flash('error', 'An error occured.');
-          return res.render('users/changePassword', {title: 'Profile'})
+          return res.redirect('/changePassword')
         }
         console.log(info)
         await req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
-        res.render('users/changePassword', {title: 'Profile'})
+        res.redirect('/changePassword')
       });
 }
 
@@ -322,15 +322,15 @@ module.exports.setPassword = async (req, res) => {
             user.loginType = 'password';
             await user.save();
             await req.flash('success', 'Password changed successfully.');
-            res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'});
+            res.redirect(`users/setPassword${userId}/${resetCode}`);
             return
           }
           await req.flash('error', 'An error occured.');
-          res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
+          res.redirect(`users/setPassword${userId}/${resetCode}`);
         })
       } else { 
         await req.flash('error', 'An error occured.');
-        res.render('users/setPassword', {userId, resetCode: '', title: 'Profile'})
+        res.redirect(`users/setPassword${userId}/${resetCode}`);
       }
     });
 };
