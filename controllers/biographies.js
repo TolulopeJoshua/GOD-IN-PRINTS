@@ -45,7 +45,7 @@ module.exports.createBiography = async (req, res) => {
         allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
-    biography.name = biography.name.toLowerCase().replace('?', '');
+    biography.name = biography.name.replace('?', '');
     biography.docType = 'biography' 
     biography.dateTime = Date.now();
     biography.contributor = req.user._id;

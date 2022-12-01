@@ -41,7 +41,7 @@
         <% for (let article of articles) { %> 
         <li class="my-5">
             <div class="card article-list p-4 shadow">
-                <a class="streched-link h5 py-2" href="/articles/1/<%= article.name %>"><%= article.name %> </a>
+                <a class="streched-link h5 py-2 text-capitalize" href="/articles/1/<%= article.name %>"><%= article.name %> </a>
                 <small id=<%= article._id %> class='text-truncate'><span class="text-muted"><%= article.text.replace(/<[^>]*>/g, " ").substring(0, 120) %>...</span></small>
                 
             </div>
