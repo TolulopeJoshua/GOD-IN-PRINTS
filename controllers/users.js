@@ -322,15 +322,15 @@ module.exports.setPassword = async (req, res) => {
             user.loginType = 'password';
             await user.save();
             await req.flash('success', 'Password changed successfully.');
-            res.redirect(`users/setPassword${userId}/${resetCode}`);
+            res.redirect(`users/changePassword${userId}/${resetCode}`);
             return
           }
           await req.flash('error', 'An error occured.');
-          res.redirect(`users/setPassword${userId}/${resetCode}`);
+          res.redirect(`users/changePassword${userId}/${resetCode}`);
         })
       } else { 
         await req.flash('error', 'An error occured.');
-        res.redirect(`users/setPassword${userId}/${resetCode}`);
+        res.redirect(`users/changePassword${userId}/${resetCode}`);
       }
     });
 };
