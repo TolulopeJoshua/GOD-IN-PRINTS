@@ -27,7 +27,7 @@
             This article is yet to be approved! 
         </div>
     <% } %> 
-    <div class="card bg mb-3">
+    <div class="card bg px-3 mb-3">
         <h1 class="card-title title-1 text-center text-capitalize"><%= article.name %></h1>      
         <% if (!article.image.link && article.image.key === 'none' && currentUser && (currentUser._id.equals(article.contributor) || currentUser.admin)) { %> 
             <p class="ms-auto me-auto me-sm-3 mb-0"><a href="/articles/<%= article._id %>/imageUpload">Add Article Image</a></p>
