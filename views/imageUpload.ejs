@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate') %> 
 <div class="row">
-    <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 d-flex flex-column align-items-center">
-        <h3 class="text-center m-5"><%= msg %> </h3>
+    <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 d-flex flex justify-content-center gap-3 align-items-center">
         <form id="imageUploadForm" style="width: 450px; max-width: 90%;" action="<%= route %>" method="POST" class="card" enctype="multipart/form-data">
+            <h5 class="text-center m-5"><%= msg %> </h5>
             <div class="m-5">
                 <!-- <label class="form-label" for="image">Image:</label> -->
                 <input class="form-control" type="file" id="image" name="image" required>
@@ -12,15 +12,15 @@
             </div>
         </form>
         <% if (route.split('/')[1] == 'Articles') { %>
-            <form id="imageLinkForm" style="width: 450px; max-width: 90%;" action="/articles/<%= route.split('/')[2] %>/imageLink" method="POST" class="card">
-                <div class="m-5">
-                    <label class="form-label" for="link">Or Add Link:</label>
-                    <input class="form-control" type="url" id="link" name="link" required>
-                </div>
-                <div class="mb-5 text-center">
-                    <button class="btn btn-success w-25">Save</button>
-                </div>
-            </form>
+        <form id="imageLinkForm" style="width: 450px; max-width: 90%;" action="/articles/<%= route.split('/')[2] %>/imageLink" method="POST" class="card">
+            <div class="m-5">
+                <label class="form-label" for="link">Or Add Link:</label>
+                <input class="form-control" type="url" id="link" name="link" required>
+            </div>
+            <div class="mb-5 text-center">
+                <button class="btn btn-success w-25">Save</button>
+            </div>
+        </form>
         <% } %>
     </div>
 </div>
