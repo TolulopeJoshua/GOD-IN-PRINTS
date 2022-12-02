@@ -9,8 +9,8 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 const fs = require('fs');
 
 const categories = [
-    'Daily Living', 'Prayer/Warfare', 'Evangelism', 
-    'Spiritual Growth', 'Commitment/Consecration', 'Dating/Courtship', 'Marriage/Family Life', 'Grace/Conversion', 
+    'Daily Living', 'Dating/Courtship', 'Prayer/Warfare',
+    'Spiritual Growth', 'Commitment/Consecration', 'Evangelism', 'Marriage/Family Life', 'Grace/Conversion', 
     'Afterlife', 'Personal/Financial Development', 'Biography', 'Others'
 ];
 
