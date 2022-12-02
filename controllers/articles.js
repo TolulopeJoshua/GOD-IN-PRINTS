@@ -10,7 +10,7 @@ const fs = require('fs');
 
 const categories = [
     'Daily Living', 'Prayer/Warfare', 'Evangelism', 
-    'Spiritual Growth', 'Commitment/Consecration', 'Marriage/Family Life', 'Grace/Conversion', 
+    'Spiritual Growth', 'Commitment/Consecration', 'Dating/Courtship', 'Marriage/Family Life', 'Grace/Conversion', 
     'Afterlife', 'Personal/Financial Development', 'Biography', 'Others'
 ];
 
