@@ -346,6 +346,14 @@ app.get('/about', async (req, res) => {
     res.render('about');
 });
 
+app.get('/terms', async (req, res) => {
+    res.render('terms');
+});
+
+app.get('/privacy', async (req, res) => {
+    res.render('privacy');
+});
+
 app.all('*', (req, res, next) => { 
     next(new ExpressError('Page Not Found', 404))
 })
