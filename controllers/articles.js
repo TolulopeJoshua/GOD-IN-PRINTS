@@ -16,10 +16,10 @@ const categories = [
 
 
 module.exports.index = async (req, res) => {
-    const garticles = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
-    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
+    const articles = await Doc.find({docType: 'article', isApproved: true}) // Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
+    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    // const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
     const title = 'GIP Library - Feature Articles on Christian Faith';
     res.render('articles/index', {categories, articles, adBook, adBio, title})
 };

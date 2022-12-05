@@ -49,7 +49,7 @@
 </div>
 <div class="card bg p-3 col-md-6 col-lg-5 vh-100 overflow-auto">
     <% const title = biography.gender === 'female' ? 'Her Story' : 'His Story' %> 
-    <h1 class="card-title text-center title-1 display-3"><%= title %> </h3>
+    <h1 class="card-title text-center title-1 display-3"><%= title %> </h1>
     <pre class="card-text lh-lg text ta justify"><%- biography.text %> </pre>
     <p class="small text-muted mt-3 text-end"><em><%= biography.source %> </em></p>
     <script>idLength['<%= (biography._id) %>'] = 0;</script>
