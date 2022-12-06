@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-none d-md-block scroll">
     <a class="h5 active" href="/bible">Cover Page</a>
     <a class="h5" href="/bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
@@ -16,14 +16,15 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
 <div class="col-md-9 col-lg-6 offset-md-3">
     <div class="row">
         <div class="col-10  offset-1">
+            <h1 class="p-3 text-center">The Bible</h1>
             <div style="border-radius: 3rem;" class="bible text-center m-3">
                 <p class="text-white h3 p-3">The statutes of the LORD are right,</p> 
                 <p class="text-white h3 p-3">rejoicing the heart:</p> 
@@ -31,16 +32,35 @@
                 <p class="text-white h3 p-3">enlightening the eyes.</p>
                 <a id="bibleLink" class="btn btn-light shadow text-dark m-3" href=''>OPEN</a>
             </div>
+            <div class="d-none" id="links"></div>
         </div>
     </div>
 </div>
 
+
+<!-- <script src="/javascripts/bibleData/bible_chapters_data.js"></script> -->
 <script>
     const chapter = localStorage.getItem('bibleChapter') || 'jhn.3';
     const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
     const bibleUrl = `/bible/chapter?chapter=${chapter}&version=${version}`;
     const aButton = document.getElementById('bibleLink');
     aButton.href = bibleUrl;
+
+    const links = document.getElementById('links');
+    fetch('/javascripts/bibleData/chapters.json')
+    .then((response) => response.json())
+    .then((json) => {
+        json.data.forEach(book => {
+            const name = book.name;
+            const chapters = book.chapters;
+            chapters.forEach(chapter => {
+                const anchor = document.createElement('a');
+                anchor.href = `/bible/chapter?chapter=${chapter.id.toLowerCase()}`;
+                anchor.innerText = `${name} ${chapter.number}`;
+                links.appendChild(anchor);
+            })
+        })
+    })
 </script>
 
 <script>
