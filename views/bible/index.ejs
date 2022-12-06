@@ -40,30 +40,14 @@
 </div>
 
 
-<!-- <script src="/javascripts/bibleData/bible_chapters_data.js"></script> -->
 <script>
     const chapter = localStorage.getItem('bibleChapter') || 'jhn.3';
     const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
     const bibleUrl = `/bible/chapter?chapter=${chapter}&version=${version}`;
     const aButton = document.getElementById('bibleLink');
     aButton.href = bibleUrl;
-
-    const links = document.getElementById('links');
-    fetch('/javascripts/bibleData/chapters.json')
-    .then((response) => response.json())
-    .then((json) => {
-        json.data.forEach(book => {
-            const name = book.name;
-            const chapters = book.chapters;
-            chapters.forEach(chapter => {
-                const anchor = document.createElement('a');
-                anchor.href = `/bible/chapter?chapter=${chapter.id.toLowerCase()}`;
-                anchor.innerText = `${name} ${chapter.number}`;
-                links.appendChild(anchor);
-            })
-        })
-    })
 </script>
+<script src="/javascripts/bibleData/bible_index.js"></script>
 
 <script>
     const pageTitle = "Bible";
