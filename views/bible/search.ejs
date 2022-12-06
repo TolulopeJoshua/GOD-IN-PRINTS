@@ -32,7 +32,8 @@
     <div id="search-nav-top" class="search-nav search-nav-top px-3"></div>
     <div id="results-list" class="search-results-list list-container justify"></div>
     <div id="search-nav-bottom" class="search-nav search-nav-bottom"></div>
-
+    
+    <div class="d-none" id="links"></div>
     <%- include('../partials/loginModal') %>
 
 </div>
@@ -42,6 +43,22 @@
 <script>
     const data = <%- JSON.stringify(data) %>;
     const searchText = '<%= (searchText) %>';
+    
+    const links = document.getElementById('links');
+    fetch('/javascripts/bibleData/chapters.json')
+    .then((response) => response.json())
+    .then((json) => {
+        json.data.forEach(book => {
+            const name = book.name;
+            const chapters = book.chapters;
+            chapters.forEach(chapter => {
+                const anchor = document.createElement('a');
+                anchor.href = `/bible/chapter?chapter=${chapter.id.toLowerCase()}`;
+                anchor.innerText = `${name} ${chapter.number}`;
+                links.appendChild(anchor);
+            })
+        })
+    })
 </script>
 
 <script src="/javascripts/bibleData/bible_search_data.js"></script>
