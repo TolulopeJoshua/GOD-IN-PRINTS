@@ -1,17 +1,7 @@
 html, body {
     width: 100vw;
     overflow-x: hidden;
-}
-
-body {
     background-color: #e8eff5;
-    overflow-x: hidden;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-body::-webkit-scrollbar {
-    display: none;
 }
 
 .row, .container {
@@ -130,7 +120,7 @@ a {
 .menu {
     background-color: rgba(255, 255, 255, 0.3);
     border-right: 1px solid #ccc;
-    padding: 2% 2%;
+    padding: 2% 2% 2% 3%;
     position:fixed;
     height: calc(100vh - 150px);
     max-width: max(16em, 15%);
@@ -173,6 +163,14 @@ a {
     overflow-y: auto;
     overflow-x: hidden;
     height: calc(100vh - 150px);
+    transform: translateX(-15px);
+}
+.scroll::-webkit-scrollbar {
+    width: 5px;
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 3px;
 }
 
 .review {
