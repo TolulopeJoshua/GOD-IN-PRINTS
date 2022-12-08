@@ -26,6 +26,7 @@ const biographyRoutes = require('./routes/biographies');
 const articleRoutes = require('./routes/articles');
 const featuresRoutes = require('./routes/features');
 const bibleRoutes = require('./routes/bible');
+const mediaRoutes = require('./routes/media');
 const reviewRoutes = require('./routes/reviews');
 const adminRoutes = require('./routes/api/admin')
 
@@ -321,6 +322,7 @@ app.use('/biographies', biographyRoutes)
 app.use('/articles', articleRoutes)
 app.use('/features', featuresRoutes)
 app.use('/bible', bibleRoutes)
+app.use('/media', mediaRoutes)
 app.use('/reviews', reviewRoutes)
 app.use('/admin', adminRoutes)
  
