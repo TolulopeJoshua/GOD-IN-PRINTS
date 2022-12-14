@@ -150,6 +150,10 @@ module.exports.updateProfile = async (req, res) => {
 }
 
 module.exports.renderSubscription = (req, res) => {
+  if (!req.isAuthenticated()) {
+      req.session.returnTo = req.originalUrl;
+      return res.redirect('/login');
+  }
   res.render('users/subscription', {title: 'Profile'})
 }
 

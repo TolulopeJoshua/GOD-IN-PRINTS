@@ -1,0 +1,92 @@
+<% layout('layouts/boilerplate')%>
+
+<!-- <div id="cluster-map"></div> -->
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a href="/media/movies">Movies</a>
+    <ol>
+        <li><a href="/media/movies">Feature</a></li>
+        <li><a href="/media/movies/playlists">Playlists</a></li>
+    </ol>
+    <a href="/media/music">Songs</a>
+    <ol>
+        <li><a href="/media/music/playlists">Playlists</a></li>
+        <li><a href="/media/music/artists">Artists</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .playlists-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://cdn.shopify.com/s/files/1/1294/2141/products/filmpettapeclassic_2400x.jpg?v=1630653031');
+        background-size: contain;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    body, div {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+    
+<div class="playlists-bg"></div>
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h1 class="h3 p-3 text-center d-none">Feature Songs</h1>
+    <div class="mt-5 ratio ratio-16x9">
+        <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/X6jEFAqZeYQ" title="The Secrets of Jonathan Sperry | Inspiration for all!   | Gavin MacLeod | Jansen Panettiere" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
+
+<div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0 ps-lg-5">
+    <% if (currentUser) { %> 
+    <form action="/media/movies/:id/addReview" method="POST">
+        <div class="mb-3">
+            <label class="form-label ms-2" for="review-text"><strong>Comment:</strong></label>
+            <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
+            <button class="btn-primary btn-sm d-block ms-auto py-0 px-2">Post</button>
+        </div>
+    </form>
+    <% } else { %> 
+    <div class="p-3 rounded-3 bg-secondary bg-gradient text-light text-center shadow"><small>LOG IN TO COMMENT</small></div>
+    <% } %> 
+    <% for(let review of reviews) { %>
+    <div id="<%= review._id %>" class="card m-3 rounded-5">
+        <div class="card-body p-0">
+            <div class="review-box">
+                <p class="review-text lh-sm small fs-6 m-2"><%= review.text %></p>
+                <p class="card-title text-capitalize d-flex m-1">
+                    <em class="text-muted small ms-auto fw-lighter"> - <%= review.author.firstName.toLowerCase() %> <%= review.author.lastName.toLowerCase() %></em>
+                </p>
+            </div>
+            <div class="d-flex align-items-end small border-top m-1" style="opacity: 0.5;">
+                <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;">👍🏻</a>
+                <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
+                <% if (review.author.equals(currentUser)) { %> 
+                <a class="mx-3" href="/reviews/<%= review._id %>/edit">📝</a>
+                <a id="d<%= review._id %>" class="dreview" href="javascript:;">✖</a>
+                <% } %> 
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<script>
+    const pageTitle = "Media";
+</script>
+
+<script>
+    setTimeout(() => {
+        const title = document.querySelector('iframe').querySelector('.ytp-chrome-top');
+        console.log(title)
+    }, 2000)
+</script>

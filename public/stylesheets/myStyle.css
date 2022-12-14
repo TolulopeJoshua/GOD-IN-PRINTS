@@ -1,6 +1,6 @@
 html, body {
     width: 100vw;
-    overflow-x: hidden;
+    overflow-x: clip;
     background-color: #e8eff5;
 }
 
@@ -216,7 +216,7 @@ a {
     .scroll {
         height: fit-content;
     }
-    
+
     ol {
         list-style:none;
         padding-left:0;
@@ -237,6 +237,10 @@ a {
         position: relative;
         max-height: fit-content;
         right: 0px;
+    }
+    
+    .scroll:not(.menu) {
+        transform: translateX(0px);
     }
 }
 

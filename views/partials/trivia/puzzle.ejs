@@ -1,0 +1,273 @@
+
+<style>
+    .puzzle {
+        cursor:default;
+        position: relative;
+        user-select: none;
+        position: sticky;
+        top: 200px;
+        background-image: linear-gradient(to top right, #AE8625, #F7EF8A, #D2AC47, #EDC967);
+    }
+    .puzzle em {
+        transition: transform 0.3s ease;
+        display: flex;
+        width: 96%;
+        height: 96%;
+        margin: 2%;
+    }
+    .puzzle-image:hover {
+        transform: scale(2) translate(-25%, -25%);
+        transition: transform 0.3s ease;
+    }
+    .puzzle em small {
+        background-color: black;
+        color: white;
+        width: min-content;
+        height: min-content;
+        padding: 2px;
+        border-radius: 4px;
+    }
+    .puzzle.solved {
+        background-image: linear-gradient(to top right, rgba(174, 134, 37, 0.2), rgba(247, 239, 138, 0.2), rgba(210, 172, 71, 0.2), rgba(237, 201, 103, 0.2));
+        transition: all 0.5s ease;
+    }
+    .puzzle.solved div:not(.congrats) {
+        opacity: 0.2;
+        pointer-events: none;
+        transition: all 0.5s ease;
+    } 
+    .congrats {
+        opacity: 0;
+        z-index: -1;
+    }
+    .solved .congrats {
+        z-index: 10;
+        opacity: 1;
+        transition: all 0.5s ease;
+    }
+
+</style>
+
+<div class="puzzle p-3 shadow">
+    <div class="w-100 d-flex justify-content-between mb-3">
+        <em class="text-light h3">Puzz!</em>
+        <img class="puzzle-image" width="50px" height="50px" src="" alt="puzzle image">
+    </div>
+    <div style="width: 200px; height: 200px;" class="bg-secondary bg-gradient d-flex flex-wrap">
+        <span id="0" class="w-25 h-25 bg-light"><em class="1"><small>1</small></em></span>
+        <span id="1" class="w-25 h-25 bg-light"><em class="2"><small>2</small></em></span>
+        <span id="2" class="w-25 h-25 bg-light"><em class="3"><small>3</small></em></span>
+        <span id="3" class="w-25 h-25 bg-light"><em class="4"><small>4</small></em></span>
+        <span id="4" class="w-25 h-25 bg-light"><em class="5"><small>5</small></em></span>
+        <span id="5" class="w-25 h-25 bg-light"><em class="6"><small>6</small></em></span>
+        <span id="6" class="w-25 h-25 bg-light"><em class="7"><small>7</small></em></span>
+        <span id="7" class="w-25 h-25 bg-light"><em class="8"><small>8</small></em></span>
+        <span id="8" class="w-25 h-25 bg-light"><em class="9"><small>9</small></em></span>
+        <span id="9" class="w-25 h-25 bg-light"><em class="10"><small>10</small></em></span>
+        <span id="10" class="w-25 h-25 bg-light"><em class="11"><small>11</small></em></span>
+        <span id="11" class="w-25 h-25 bg-light"><em class="12"><small>12</small></em></span>
+        <span id="12" class="w-25 h-25 bg-light"><em class="13"><small>13</small></em></span>
+        <span id="13" class="w-25 h-25 bg-light"><em class="14"><small>14</small></em></span>
+        <span id="14" class="w-25 h-25 bg-light"><em class="15"><small>15</small></em></span>
+        <span id="15" class="w-25 h-25 bg-light"></span>
+    </div> 
+    <div style="opacity: 0.7;" class="mt-3 d-flex justify-content-evenly">
+        <em id="shuffle" class="small btn btn-sm rounded-pill border border-2 bg-light text-secondary d-block">Shuffle</em>
+        <em id="hint" class="small btn btn-sm rounded-pill border border-2 bg-light text-secondary d-block px-3">Hint</em>
+    </div>
+    <div class="congrats position-absolute top-50 start-50 translate-middle text-center">
+        <img style="opacity: 0.9;" class="rounded" src="/images/congrats.jpg" alt="congratulation">
+        <em id="next" class="small shadow btn btn-sm rounded-pill border border-2 bg-secondary bg-gradient text-light d-block px-3 mt-3">Next</em>
+    </div>
+    <canvas class="w-100 h-100 position-absolute d-none start-0 top-0 canvas"></canvas>
+</div>      
+<script>
+    const puzzle = document.querySelector('.puzzle'); 
+    loadPuzzle(puzzle);
+    function loadPuzzle(puzzle) {
+        const images = 30;
+        let imageUrls = [];
+        loadImage();
+        let canvas;
+
+        const cardsArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];
+        const comparator = JSON.stringify(cardsArray);
+        let shuffling = false;
+
+        const boxes = puzzle.querySelectorAll('span');
+        boxes.forEach((box) => {
+            box.addEventListener('click', e => {
+                const card = box.querySelector('em');
+                !shuffling && card && move(card);
+                if (JSON.stringify(cardsArray) == comparator) {
+                    puzzle.classList.add('solved')
+                    canvas = puzzle.querySelector('.canvas');
+                    canvas.classList.remove('d-none');
+                    runConfetti();
+                };
+            })
+        })
+        puzzle.querySelector('#hint').addEventListener('click', hint);
+        puzzle.querySelector('#shuffle').addEventListener('click', () => !shuffling && shuffle(100));
+        puzzle.querySelector('#next').addEventListener('click', () => {
+            loadImage();
+            puzzle.classList.remove('solved')
+            canvas.classList.add('d-none');
+            puzzle.querySelectorAll('.puzzle em small').forEach(e => e.classList.add('d-none'));
+            shuffle();
+        });
+
+        function loadImage() {
+            !imageUrls.length && (imageUrls = [...Array(images).keys()].map(n => `/images/puzzle/image${n}.jpg`));
+            const index = Math.floor(Math.random() * imageUrls.length);
+            const random = imageUrls[index];
+            const blocks = ['0 0','-50px 0', '-100px 0', '-150px 0','0 -50px','-50px -50px','-100px -50px','-150px -50px','0 -100px','-50px -100px','-100px -100px','-150px -100px','0 -150px','-50px -150px','-100px -150px','-150px -150px'];
+            const backgrounds = blocks.map(block => `url(${random}) ${block}`);
+            puzzle.querySelector('.puzzle-image').src = random;
+            puzzle.querySelector('.congrats img').src = random;
+            imageUrls.splice(index, 1);
+            const slots = puzzle.querySelectorAll('span em');
+            slots.forEach((slot, index) => {
+                slot.style.background = backgrounds[index]
+            })
+        }
+        function move(element, duration=300) {
+            const position = parseInt(element.parentElement.id);
+            const zeroPosition = cardsArray.indexOf(0);
+            const side = [
+                position-4, 
+                [4,8,12].includes(position+1) ? -1 : position+1, 
+                position+4, 
+                [3,7,11].includes(position-1) ? -1 : position-1, 
+            ].indexOf(zeroPosition);
+            if (side == -1) return;
+            cardsArray[position] = 0;
+            cardsArray[zeroPosition] = parseInt(element.classList[0]);
+            switch (side) {
+                case 0:
+                    element.style.transform = 'translateY(-50px)';
+                    break;
+                case 1:
+                    element.style.transform = 'translateX(50px)';
+                    break;
+                case 2:
+                    element.style.transform = 'translateY(50px)';
+                    break;
+                case 3:
+                    element.style.transform = 'translateX(-50px)';
+                    break;
+            }
+            setTimeout(() => {
+                boxes[zeroPosition].appendChild(element);
+                element.style.transitionDuration = duration;
+                element.style.transform = 'translate(0px, 0px)';
+            }, duration);
+        }
+
+        function shuffle(num=200) {
+            shuffling = true;
+            if (num <= 0) return shuffling = false;
+            const zeroPosition = cardsArray.indexOf(0);
+            const sideIndices = [
+                zeroPosition-4, 
+                [3,7,11].includes(zeroPosition-1) ? -1 : zeroPosition-1, 
+                [4,8,12].includes(zeroPosition+1) ? -1 : zeroPosition+1, 
+                zeroPosition+4
+            ].filter(side => side >= 0 && side < cardsArray.length);
+            const random = sideIndices[Math.floor(Math.random() * sideIndices.length)];
+            const card = boxes[random].querySelector('em');
+            card && move(card, 20);
+            setTimeout(() => {
+                shuffle(num-=1)
+            }, 20);
+        }
+        shuffle();
+        function hint() {
+            puzzle.querySelectorAll('.puzzle em small').forEach(e => e.classList.toggle('d-none'));
+        }
+        hint();
+
+        function runConfetti() {
+            ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cx = ctx.canvas.width/2;
+            cy = ctx.canvas.height/2;
+
+            let confetti = [];
+            const confettiCount = 300;
+            const gravity = 0.5;
+            const terminalVelocity = 5;
+            const drag = 0.075;
+            const colors = [
+                { front : 'red', back: 'darkred'},
+                { front : 'green', back: 'darkgreen'},
+                { front : 'blue', back: 'darkblue'},
+                { front : 'yellow', back: 'darkyellow'},
+                { front : 'orange', back: 'darkorange'},
+                { front : 'pink', back: 'darkpink'},
+                { front : 'purple', back: 'darkpurple'},
+                { front : 'turquoise', back: 'darkturquoise'},
+            ];
+            resizeCanvas = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                cx = ctx.canvas.width/2;
+                cy = ctx.canvas.height/2;
+            }
+            randomRange = (min, max) => Math.random() * (max - min) + min
+            initConfetti = () => {
+                for (let i = 0; i < confettiCount; i++) {
+                    confetti.push({
+                        color      : colors[Math.floor(randomRange(0, colors.length))],
+                        dimensions : {
+                            x: randomRange(10, 20),
+                            y: randomRange(10, 30),
+                        },
+                        position   : {
+                            x: randomRange(0, canvas.width),
+                            y: canvas.height - 1,
+                        },
+                        rotation   : randomRange(0, 2 * Math.PI),
+                        scale      : {
+                            x: 1,
+                            y: 1,
+                        },
+                        velocity   : {
+                            x: randomRange(-25, 25),
+                            y: randomRange(0, -50),
+                        },
+                    });
+                }
+            }
+            render = () => {  
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                confetti.forEach((confetto, index) => {
+                    let width = (confetto.dimensions.x * confetto.scale.x);
+                    let height = (confetto.dimensions.y * confetto.scale.y);
+                    ctx.translate(confetto.position.x, confetto.position.y);
+                    ctx.rotate(confetto.rotation);
+                    confetto.velocity.x -= confetto.velocity.x * drag;
+                    confetto.velocity.y = Math.min(confetto.velocity.y + gravity, terminalVelocity);
+                    confetto.velocity.x += Math.random() > 0.5 ? Math.random() : -Math.random();
+                    confetto.position.x += confetto.velocity.x;
+                    confetto.position.y += confetto.velocity.y;
+                    if (confetto.position.y >= canvas.height) confetti.splice(index, 1);
+                    if (confetto.position.x > canvas.width) confetto.position.x = 0;
+                    if (confetto.position.x < 0) confetto.position.x = canvas.width;
+                    confetto.scale.y = Math.cos(confetto.position.y * 0.1);
+                    ctx.fillStyle = confetto.scale.y > 0 ? confetto.color.front : confetto.color.back;
+                    ctx.fillRect(-width / 2, -height / 2, width, height);
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                });
+                window.requestAnimationFrame(render);
+            }
+            initConfetti();
+            render();
+            window.addEventListener('resize', function () {
+                resizeCanvas(); 
+            });
+        }
+    }
+</script>

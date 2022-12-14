@@ -1,0 +1,261 @@
+<% layout('layouts/boilerplate')%>
+
+<!-- <div id="cluster-map"></div> -->
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a href="/media/movies">Movies</a>
+    <ol>
+        <li><a href="/media/movies">Feature</a></li>
+        <li><a class="active" href="/media/movies/playlists">Playlists</a></li>
+    </ol>
+    <a href="/media/music">Songs</a>
+    <ol>
+        <li><a href="/media/music/playlists">Playlists</a></li>
+        <li><a href="/media/music/artists">Artists</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .upgrade {
+        border-radius: 5px;
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPO_1-e3gFQDpG6ziKGHKLlQdiJmp0sY8_tQ&usqp=CAU');
+        background-size: contain;
+    }
+    .upgrade article {
+        opacity: 0.9;
+        background-color: white;
+        color: gray;
+        transition: all 0.3s ease;
+    }
+    .upgrade:hover article {
+        background-color: gray;
+        color: white;
+    }
+    article .play {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    article:hover .play {
+        opacity: 0.7;
+    }
+    .list > li {
+        height: 0px;
+        padding-top: 0px;
+        overflow: hidden;
+    }
+    .open .list > li {
+        height: 105px;
+        padding-top: 10px;
+        overflow: visible;
+    }
+    .openBtn, .list > li {
+        transition: all 0.3s ease;
+    }
+    .open .openBtn {
+        transform: rotateZ(90deg);
+    }
+    .playlist {
+        cursor: pointer;
+    }
+    .playlist h5 {
+        vertical-align: middle;
+    }
+    .optionsList {
+        display: none;
+        z-index: 1000;
+    }
+    .options:hover ~ .optionsList {
+        display: block;
+    }
+    .optionsList:hover {
+        display: block;
+    }
+    .optionsList li:hover {
+        background-color: #ccc;
+    }
+    .playlists-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://cdn.shopify.com/s/files/1/1294/2141/products/filmpettapeclassic_2400x.jpg?v=1630653031');
+        background-size: contain;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    body, div {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+    
+<div class="playlists-bg"></div>
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h1 class="h3 p-3 text-center d-none">Movies Playlists</h1>
+    <section class="border-bottom pt-2 playlist">
+        <div class="bg-secondary bg-gradient text-light rounded-3 d-flex align-items-center p-2">
+            <span class="h1 openBtn"><i class="bi bi-play-fill mx-auto my-auto"></i></span>
+            <h5 class="m-0 ms-2">Playlist Title</h5>
+            <div class="position-relative rounded-2 overflow-hidden ms-auto">
+                <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                <div style="opacity: 0.9;" class="position-absolute top-0 end-0 w-50 h-100 d-flex flex-column justify-content-center align-items-center bg-dark text-light">
+                    <span class="pb-2">6</span>
+                    <span><i class="bi bi-list"></i></span>
+                </div>
+            </div>
+        </div>
+        <ul class="list mb-2">
+            <li id="1" class="movie">
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 bg-light border d-flex position-relative">
+                    <div class="position-relative">            
+                        <img class="w-100 rounded-start" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                        <span class="position-absolute top-50 end-0 translate-middle-y play options">
+                            <i class="bi bi-three-dots-vertical h5 p-2"></i>
+                        </span>
+                        <ol class="optionsList bg-light text-dark position-absolute top-50 end-0 border rounded-3 p-1 m-3">
+                            <li class="p-2 later"><i class="bi bi-clock pe-2"></i><small>Save to Watch Later</small></li>
+                        </ol>
+                    </div>
+                </article></a>
+            </li>
+            <li>
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 overflow-hidden bg-light border d-flex">
+                    <div class="position-relative">            
+                        <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                    </div>
+                </article></a>
+            </li>
+            <li>
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 overflow-hidden bg-light border d-flex">
+                    <div class="position-relative">            
+                        <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                    </div>
+                </article></a>
+            </li>
+        </ul>
+    </section>
+    <section class="border-bottom pt-2 playlist">
+        <div class="bg-secondary bg-gradient text-light rounded-3 d-flex align-items-center p-2">
+            <span class="h1 openBtn"><i class="bi bi-play-fill mx-auto my-auto"></i></span>
+            <h5 class="m-0 ms-2">Playlist Title</h5>
+            <div class="position-relative rounded-2 overflow-hidden ms-auto">
+                <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                <div style="opacity: 0.9;" class="position-absolute top-0 end-0 w-50 h-100 d-flex flex-column justify-content-center align-items-center bg-dark text-light">
+                    <span class="pb-2">6</span>
+                    <span><i class="bi bi-list"></i></span>
+                </div>
+            </div>
+        </div>
+        <ul class="list">
+            <li id="1" class="movie">
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 bg-light border d-flex position-relative">
+                    <div class="position-relative">            
+                        <img class="w-100 rounded-start" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                        <span class="position-absolute top-50 end-0 translate-middle-y text-dark play options">
+                            <i class="bi bi-three-dots-vertical h5 p-2"></i>
+                        </span>
+                        <ol class="optionsList bg-light text-dark position-absolute top-50 end-0 border rounded-3 p-1 m-3">
+                            <li class="p-2 later"><i class="bi bi-clock pe-2"></i><small>Save to Watch Later</small></li>
+                        </ol>
+                    </div>
+                </article></a>
+            </li>
+            <li>
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 overflow-hidden bg-light border d-flex">
+                    <div class="position-relative">            
+                        <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                    </div>
+                </article></a>
+            </li>
+            <li>
+                <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson"><article class="rounded-3 overflow-hidden bg-light border d-flex">
+                    <div class="position-relative">            
+                        <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                        <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    </div>
+                    <div class="px-2 d-flex flex-column justify-content-around">
+                        <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
+                        <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                    </div>
+                </article></a>
+            </li>
+        </ul>
+    </section>
+    <a class="d-block upgrade" href="/subscription"><article class="text-center border border-2 border-secondary rounded-3">
+        <h3 class="p-3">Upgrade Account</h3>
+        <h5 class="pb-3">to view more movies!</h5>
+    </article></a>
+</div>
+<div class="toast position-fixed bottom-0 start-0 m-3" style="z-index: 11" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+    <div class="toast-header">
+        <img src="/assets/images/burningBook.jfif" width="24px" class="rounded me-2" alt="God In Prints icon">
+        <strong class="me-auto">GIP Library</strong>
+        <!-- <small class="text-muted">11 mins ago</small> -->
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body text-secondary">
+        Movies requiring <a class="text-secondary text-decoration-underline" href="/subscription">subscription</a> are not shown.</span>
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Media";
+</script>
+
+<script>
+    setTimeout(() => {
+        const toast = new bootstrap.Toast(document.querySelector('.toast'))
+        toast.show();
+    }, 5000);
+
+    const playlists = document.querySelectorAll('.playlist');
+    playlists.forEach(playlist => {
+        playlist.querySelector('div').addEventListener('click', () => playlist.classList.toggle('open'));
+    })
+
+    const movies = document.querySelectorAll('.movie');
+    const watchList = playlists[0].querySelector('.list');
+    movies.forEach(movie => {
+        movie.querySelector('.later').addEventListener('click', (e) => {
+            e.preventDefault();
+            // [...watchList.children].includes(movie) ? watchList.removeChild(movie) : watchList.appendChild(movie);
+            if ([...watchList.children].includes(movie)) {
+                watchList.removeChild(movie);
+            } else {
+                watchList.appendChild(movie.cloneNode(true));
+            }
+        })
+    })
+</script>
+

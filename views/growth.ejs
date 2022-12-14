@@ -34,34 +34,13 @@
     </ul>
 </div>
 
-    
-<div class="d-none d-lg-block col-lg-5 offset-lg-8 py-5 text-center position-fixed mh-100 scroll">    
+<div class="d-lg-none" style="margin-bottom: 100px;"></div>
 
-    <p class="text-muted small">        
-        <strong>Check this out 👇</strong>
-    </p>
-
-    <% if (adBook[0]) { %> 
-    <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='mx-2 my-2 image-size opacity-75 fade-animate' width="60%" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt="<%= adBook[0].title %>"> 
-    </a>
-    <% } %> 
-
-</div>
-
-
-<div class="d-lg-none col-6 col-md-9 offset-3 py-5 my-5 text-center">    
-
-    <p class="text-muted small pt-2">        
-        <strong>Check this out 👇</strong>
-    </p>
-
-    <% if (adBook[0]) { %> 
-    <a href="/books/<%=adBook[0]._id%>" class="">
-    <img class='my-2 image-size fade-animate' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBook[0].image.key.replaceAll(" ", "+") %> alt="<%= adBook[0].title %>"> 
-    </a>
-    <% } %> 
-
+<div class="col-md-3 d-lg-none"></div>
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0">
+    <div class="w-100 h-100 d-flex flex-column align-items-center">
+        <%- include('./partials/trivia/puzzle') %>  
+    </div>
 </div>
 
 <script>

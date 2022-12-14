@@ -151,6 +151,8 @@ const frameSrcUrls = [
     "https://googleads.g.doubleclick.net",
     "https://tpc.googlesyndication.com",
     "https://www.google.com",
+    "https://www.youtube.com",
+    "https://www.boomplay.com",
 ]
 
 app.use((req, res, next) => {
@@ -169,6 +171,7 @@ app.use(
             workerSrc: ["'self'", "blob:"],
             frameSrc: ["'self'", "blob:", ...frameSrcUrls],
             objectSrc: [],
+            mediaSrc: ["'self'", "https://youtu.be", "https://www.youtube.com"],
             imgSrc: [
                 "'self'",
                 "blob:",
@@ -309,7 +312,7 @@ passport.use(new FacebookStrategy({
 
 app.use((req, res, next) => {
     // console.log(req.user)
-    res.locals.currentUser = req.user;
+    res.locals.currentUser = req.user || null;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();

@@ -1,0 +1,172 @@
+<% layout('layouts/boilerplate')%>
+
+<!-- <div id="cluster-map"></div> -->
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a href="/media/movies">Movies</a>
+    <ol>
+        <li><a href="/media/movies">Feature</a></li>
+        <li><a href="/media/movies/playlists">Playlists</a></li>
+    </ol>
+    <a href="/media/music">Songs</a>
+    <ol>
+        <li><a href="/media/music/playlists">Playlists</a></li>
+        <li><a class="active" href="/media/music/artists">Artists</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .mic {
+        display: none;
+    }
+    .playing .mic {
+        display: block;
+    }
+    .artist {
+        border-radius: 1.5rem 0 0 1.5rem;
+    }
+    .albums li {
+        color: gray;
+        background-color: white;
+        border-radius: 1.5rem 0 0 1.5rem;
+        transition: all 0.2s ease;
+    }
+    .albums li:hover {
+        color: rgba(64, 64, 64, 1);
+        background-color: rgba(64, 64, 64, 0.1);
+    }
+
+    .openbtn {
+        width: 2rem;
+        height: 2rem;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .openbtn i {
+        padding-bottom: 3px;
+    }
+    /* .open .openbtn i {
+        padding-top: 2px;
+        padding-bottom: 2px;
+    } */
+    section .openbtn {
+        transform: rotateZ(0deg);
+        transition: all 0.3s ease;
+    }
+    section.open .openbtn {
+        transform: rotateZ(90deg);
+    }
+    section a {
+        display: block;
+        height: 0px;
+        overflow: hidden;
+        transition: height 0.3s ease;
+    }
+    section.open a {
+        display: block;
+        height: 45px;
+        overflow: hidden;
+    }
+    .playlists-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://cdn.shopify.com/s/files/1/1294/2141/products/filmpettapeclassic_2400x.jpg?v=1630653031');
+        background-size: contain;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    body, div {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+    
+<div class="playlists-bg"></div>
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h1 class="h3 p-3 text-center d-none">Feature Songs</h1>
+    <!-- <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %> -->
+    <div class="row ">
+        <div class="col-md-6">
+            <section>
+                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
+                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
+                    <span class="p-2">Artist</span>
+                </div>
+                <ul class="ps-4 mb-0 albums">
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between playing"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                </ul>
+            </section>
+            <section>
+                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
+                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
+                    <span class="p-2">Artist</span>
+                </div>
+                <ul class="ps-4 mb-0 albums">
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between playing"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                </ul>
+            </section>
+            <section>
+                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
+                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
+                    <span class="p-2">Artist</span>
+                </div>
+                <ul class="ps-4 mb-0 albums">
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between playing"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                </ul>
+            </section>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center pt-4 pt-md-2 pb-1 overflow-auto"> 
+            <iframe style="height: 100%; min-height: 494px;" src="https://www.boomplay.com/embed/29990/COL" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="d-lg-none" style="margin-bottom: 100px;"></div>
+
+<div class="col-md-3 d-lg-none"></div>
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0">
+    <div class="w-100 h-100 d-flex flex-column align-items-center">
+        <%- include('../partials/trivia/puzzle') %>  
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Media";
+</script>
+
+<script>
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        section.querySelector('.openbtn').addEventListener('click', () => section.classList.toggle('open'));
+    })
+
+    const user = JSON.parse('<%- JSON.stringify(currentUser) %>');
+    // !user || user.subscription.status == 'classic' && swal('Kindly subscribe to use this service!').then(() => history.back())
+</script>

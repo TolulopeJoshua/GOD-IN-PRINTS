@@ -1,0 +1,94 @@
+<% layout('layouts/boilerplate')%>
+
+<!-- <div id="cluster-map"></div> -->
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <a href="/media/movies">Movies</a>
+    <ol>
+        <li><a href="/media/movies">Feature</a></li>
+        <li><a href="/media/movies/playlists">Playlists</a></li>
+    </ol>
+    <a href="/media/music">Songs</a>
+    <ol>
+        <li><a class="active" href="/media/music/playlists">Playlists</a></li>
+        <li><a href="/media/music/artists">Artists</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none" id="fastDownButton">⏬</button>
+    <button id="fastUpButton">⏫</button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .h5.title {
+        border-radius: 2rem 0 0 2rem;
+    }
+    .mic {
+        display: none;
+    }
+    .playing .mic {
+        display: block;
+    }
+    .playlists li {
+        color: #ccc;
+        background-color: #333;
+        border-radius: 1.5rem 0 0 1.5rem;
+        transition: all 0.2s ease;
+    }
+    .playlists li:hover {
+        color: rgba(64, 64, 64, 1);
+        background-color: rgba(64, 64, 64, 0.1);
+    }
+    .playlists-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://cdn.shopify.com/s/files/1/1294/2141/products/filmpettapeclassic_2400x.jpg?v=1630653031');
+        background-size: contain;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    body, div {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="playlists-bg"></div>
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h1 class="h3 p-3 text-center d-none">Feature Songs</h1>
+    <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-2"><i class="bi bi-music-note-list rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Playlists</div>
+    <div class="row">
+        <ul class="col-md-6 px-4 pe-md-1 playlists">
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center playing"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+        </ul>
+        <div class="col-md-6 d-flex justify-content-center pt-3 overflow-auto"> 
+            <iframe src="https://www.boomplay.com/embed/29990/COL" height="484px" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="d-lg-none" style="margin-bottom: 100px;"></div>
+
+<div class="col-md-3 d-lg-none"></div>
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0">
+    <div class="w-100 h-100 d-flex flex-column align-items-center">
+        <%- include('../partials/trivia/puzzle') %>  
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Media";
+</script>

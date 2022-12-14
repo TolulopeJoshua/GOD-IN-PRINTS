@@ -9,8 +9,8 @@
     </ol>
     <a href="/media/music">Songs</a>
     <ol>
-        <li><a href="/media/music">Artists</a></li>
         <li><a href="/media/music/playlists">Playlists</a></li>
+        <li><a href="/media/music/artists">Artists</a></li>
     </ol>
 </div>
 
@@ -19,12 +19,98 @@
     <button id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
-    
-<div class="col-md-9 col-lg-6 offset-md-3">
-    <h1 class="h3 p-3 text-center d-none">Feature Movies</h1>
 
+<style>
+    article .play {
+        opacity: 0;
+        transition: all 0.3s;
+    }
+    article:hover .play {
+        opacity: 0.7;
+    }
+    .optionsList li:hover {
+        background-color: #ccc;
+    }
+    .playlists-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://cdn.shopify.com/s/files/1/1294/2141/products/filmpettapeclassic_2400x.jpg?v=1630653031');
+        background-size: contain;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    body, div {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+    
+<div class="playlists-bg"></div>
+<div class="col-md-9 col-lg-6 offset-md-3">
+    <h1 class="h3 p-4 text-center bg-secondary bg-gradient rounded-3 mb-3">Feature Movies</h1><hr class="mb-3">
+    <!-- <div class="d-flex justify-content-center gap-3 p-3 pb-4">
+        <a href="/media/movies?order=popular" class="btn btn-sm rounded-3 border border-secondary bg-secondary text-light">Popular</a>
+        <a href="/media/movies?order=recent" class="btn btn-sm rounded-3 border border-secondary">Recent</a>
+    </div> -->
+    <div class="d-flex flex-wrap justify-content-around px-3 gap-3">
+        <a href="/media/movies/God On Trial | Full Movie | Jerry Thompson">
+            <article style="width: 300px;" class="mb-2 rounded-3 overflow-hidden bg-dark text-light border d-flex flex-column">
+                <div class="position-relative">            
+                    <img class="w-100" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
+                    <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
+                    <span class="position-absolute top-100 end-0 translate-middle-y bg-light text-dark border rounded-circle py-1 me-2">
+                        <i class="bi bi-three-dots-vertical h5 p-2 options"></i>
+                    </span>
+                    <ol class="optionsList d-none bg-light text-dark position-absolute top-100 end-0 border rounded-3 p-1 m-3">
+                        <li class="p-2 later"><i class="bi bi-clock pe-2"></i><small>Save to Watch Later</small></li>
+                    </ol>
+                </div>
+                <div class="p-2 pt-3">
+                    <p class="small m-0 p-0">God On Trial | Full Movie | Jerry Thompson</p>
+                    <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
+                </div>
+            </article>
+        </a>
+        <article style="width: 300px; height: auto;" class="mb-2 rounded-3 overflow-hidden  bg-dark border d-flex flex-column">
+            <div class="position-relative">
+                <span style="opacity: 0.5; height: 167px;" class="w-100 bg-secondary d-block"></span>
+                <span class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-secondary h1">
+                    <i class="bi bi-lock-fill"></i>
+                </span>
+                <span style="transform: rotateZ(-30deg); user-select: none;" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-light">
+                    <h4>Subscription</h4>
+                    <h6>required!</h6>
+                </span>
+                <a href="/subscription" class=" small position-absolute bottom-0 end-0 pe-2">Subscribe</a>
+            </div>
+            <div style="opacity: 0.8;" class="px-2">
+                <h6 class="small m-0 p-0 mt-3 bg-light bg-gradient w-75 text-light">|</h6>
+                <p class="small m-0 p-0  mt-2 mb-1 bg-secondary bg-gradient w-50 text-secondary">|</p>
+            </div>
+        </article>
+    </div>
 </div>
 
 <script>
     const pageTitle = "Media";
+</script>
+
+<script>
+    const movieArticles = document.querySelectorAll('a article');
+    const optionbuttons = document.querySelectorAll('.options');
+    document.addEventListener('click', (e) => {
+        if ([...optionbuttons].includes(e.target)) {
+            e.preventDefault();
+            e.target.parentNode.parentNode.querySelector('.optionsList').classList.toggle('d-none');
+        }
+    })
+    movieArticles.forEach(article => {
+        article.querySelector('.later').addEventListener('click', e => {
+            e.preventDefault();
+            article.querySelector('.optionsList').classList.add('d-none');
+        })
+    })
 </script>

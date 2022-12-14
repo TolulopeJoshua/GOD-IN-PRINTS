@@ -27,7 +27,7 @@ router.get('/profile', isLoggedIn, users.renderProfile);
 
 router.post('/profile', isLoggedIn, validateProfile, catchAsync(users.updateProfile));
 
-router.get('/subscription', isLoggedIn, users.renderSubscription);
+router.get('/subscription', users.renderSubscription);
 
 router.post('/subscription', catchAsync(users.subscription));
 
