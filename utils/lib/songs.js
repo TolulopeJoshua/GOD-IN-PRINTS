@@ -613,31 +613,31 @@ module.exports.artists = [
         albums: [
             {
                 title: "Na God I dey Praise",
-                id: 'https://www.boomplay.com/albums/32577440?from=genres'
+                id: '32577440'
             },
             {
                 title: "Next Level",
-                id: 'https://www.boomplay.com/albums/25674092?from=genres'
+                id: '25674092'
             },
             {
                 title: "Miracle God",
-                id: 'https://www.boomplay.com/albums/14510608?from=genres'
+                id: '14510608'
             },
             {
                 title: "Prophetic Praise",
-                id: 'https://www.boomplay.com/albums/14088755?from=genres'
+                id: '14088755'
             },
             {
                 title: "Bulldozer",
-                id: 'https://www.boomplay.com/albums/8116254?from=genres'
+                id: '8116254'
             },
             {
                 title: "Okemmuo",
-                id: 'https://www.boomplay.com/albums/4041035?from=genres'
+                id: '4041035'
             },
             {
                 title: "Testimony",
-                id: 'https://www.boomplay.com/albums/93074?from=genres'
+                id: '93074'
             },
         ]
     },
