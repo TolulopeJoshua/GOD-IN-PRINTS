@@ -84,16 +84,17 @@
 <script>
     const puzzle = document.querySelector('.puzzle'); 
     loadPuzzle(puzzle);
+
     function loadPuzzle(puzzle) {
-        const images = 30;
+        const images = 32;
         let imageUrls = [];
         loadImage();
-        let canvas;
-
+        
         const cardsArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];
         const comparator = JSON.stringify(cardsArray);
         let shuffling = false;
-
+        
+        const canvas = puzzle.querySelector('.canvas');
         const boxes = puzzle.querySelectorAll('span');
         boxes.forEach((box) => {
             box.addEventListener('click', e => {
@@ -101,7 +102,6 @@
                 !shuffling && card && move(card);
                 if (JSON.stringify(cardsArray) == comparator) {
                     puzzle.classList.add('solved')
-                    canvas = puzzle.querySelector('.canvas');
                     canvas.classList.remove('d-none');
                     runConfetti();
                 };
@@ -143,6 +143,7 @@
             if (side == -1) return;
             cardsArray[position] = 0;
             cardsArray[zeroPosition] = parseInt(element.classList[0]);
+            element.style.transitionDuration = duration;
             switch (side) {
                 case 0:
                     element.style.transform = 'translateY(-50px)';
@@ -159,7 +160,7 @@
             }
             setTimeout(() => {
                 boxes[zeroPosition].appendChild(element);
-                element.style.transitionDuration = duration;
+                element.style.transitionDuration = 0;
                 element.style.transform = 'translate(0px, 0px)';
             }, duration);
         }

@@ -91,6 +91,13 @@
         position: relative;
         z-index: 1;
     }
+    .bg2 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 50%;
+    }
 </style>
     
 <div class="playlists-bg"></div>
@@ -99,51 +106,23 @@
     <!-- <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %> -->
     <div class="row ">
         <div class="col-md-6">
-            <section>
-                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
-                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
-                    <span class="p-2">Artist</span>
-                </div>
-                <ul class="ps-4 mb-0 albums">
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between playing"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-2 mt-2 d-flex justify-content-between"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                </ul>
-            </section>
-            <section>
-                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
-                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
-                    <span class="p-2">Artist</span>
-                </div>
-                <ul class="ps-4 mb-0 albums">
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between playing"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                </ul>
-            </section>
-            <section>
-                <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
-                    <span class="openbtn"><i class="bi bi-play-fill"></i></span>
-                    <span class="p-2">Artist</span>
-                </div>
-                <ul class="ps-4 mb-0 albums">
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between playing"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                    <a href="/media/music/artists?artist=1&album=2"><li class="border py-1 px-3 mt-2 d-flex justify-content-between"><span>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-                </ul>
-            </section>
+            <% for( art of artists ) { %>
+                <section class="<%= art.name == artist && 'open' %>">
+                    <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
+                        <span class="openbtn"><i class="bi bi-play-fill"></i></span>
+                        <span class="p-2"><%= art.name %></span>
+                    </div>
+                    <ul class="ps-4 mb-0 albums">
+                        <% for( alb of art.albums ) { %>
+                            <a href="/media/music/artists?artist=<%= art.name %>&album=<%= alb.title %>&albumId=<%= alb.id %>"><li class="border small py-1 px-2 mt-2 d-flex justify-content-between <%= alb.title == album && 'playing' %>"><span class="text-truncate"><i class="bi bi-dot h5"></i><%= alb.title %></span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                        <% } %>
+                    </ul>
+                </section>
+            <% } %>
         </div>
         <div class="col-md-6 d-flex justify-content-center pt-4 pt-md-2 pb-1 overflow-auto"> 
-            <iframe style="height: 100%; min-height: 494px;" src="https://www.boomplay.com/embed/29990/COL" frameborder="0"></iframe>
+            <iframe style="height: 100%; min-height: 70vh;" src="https://www.boomplay.com/embed/<%= albumId %>/COL" frameborder="0"></iframe>
+            <div class="bg2"></div>
         </div>
     </div>
 </div>
@@ -164,7 +143,10 @@
 <script>
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
-        section.querySelector('.openbtn').addEventListener('click', () => section.classList.toggle('open'));
+        section.querySelector('.openbtn').addEventListener('click', () => {
+            sections.forEach(sec => sec != section && sec.classList.remove('open'))
+            section.classList.toggle('open')
+        });
     })
 
     const user = JSON.parse('<%- JSON.stringify(currentUser) %>');

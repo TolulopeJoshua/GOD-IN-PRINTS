@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 
 <!-- <div id="cluster-map"></div> -->
-<div id="menu" class="col-md-3 menu d-md-block scroll">
+<div id="menu" class="col-md-3 menu d-md-block scroll d-none">
     <a href="/media/movies">Movies</a>
     <ol>
         <li><a href="/media/movies">Feature</a></li>
@@ -15,8 +15,8 @@
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none" id="fastDownButton">⏬</button>
-    <button id="fastUpButton">⏫</button>
+    <button id="fastDownButton">⏬</button>
+    <button class="d-none" id="fastUpButton">⏫</button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
@@ -32,13 +32,17 @@
     }
     .playlists li {
         color: #ccc;
-        background-color: #333;
         border-radius: 1.5rem 0 0 1.5rem;
+        width: 25%;
+        margin-left: auto;
+        overflow-x: auto;
+        background-image: radial-gradient(rgba(37, 4, 9, 0.8), rgba(37, 4, 9, 0.7), rgba(37, 4, 9, 0.8));
         transition: all 0.2s ease;
     }
     .playlists li:hover {
         color: rgba(64, 64, 64, 1);
-        background-color: rgba(64, 64, 64, 0.1);
+        transform: scale(1.05);
+        background-image: radial-gradient(rgba(37, 4, 9, 0.4), rgba(37, 4, 9, 0.3), rgba(37, 4, 9, 0.4));
     }
     .playlists-bg {
         position: fixed;
@@ -55,6 +59,20 @@
         position: relative;
         z-index: 1;
     }
+    .bg1 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 85px;
+    }
+    .bg2 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 40%;
+    }
 </style>
 
 <div class="playlists-bg"></div>
@@ -62,20 +80,15 @@
     <h1 class="h3 p-3 text-center d-none">Feature Songs</h1>
     <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-2"><i class="bi bi-music-note-list rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Playlists</div>
     <div class="row">
-        <ul class="col-md-6 px-4 pe-md-1 playlists">
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center playing"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
-            <a href="/media/music/playlists?list=1"><li class="py-1 px-2 mt-3 d-flex justify-content-between align-items-center"><span><i class="bi bi-dot h5"></i>Title 1</span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+        <ul style="height: 60vh; transform: translateX(0);" class="col-md-6 px-4 pt-0 mt-3 pe-md-1 playlists scroll">
+            <% for( playlist of playlists ) { %>
+                <a href="/media/music/playlists?list=<%= playlist.id %>"><li class="pb-1 px-2 mb-3 d-flex justify-content-between align-items-center <%= (list == playlist.id) && 'playing' %>"><small><i class="bi bi-dot h5"></i><%= playlist.title %> </small><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+            <% } %>
         </ul>
-        <div class="col-md-6 d-flex justify-content-center pt-3 overflow-auto"> 
-            <iframe src="https://www.boomplay.com/embed/29990/COL" height="484px" frameborder="0"></iframe>
+        <div class="col-md-6 d-flex justify-content-center mt-3 position-relative overflow-hidden"> 
+            <iframe style="transform: translateY(-120px); height: calc(60vh + 120px);" src="https://www.boomplay.com/embed/<%= list %>/COL" frameborder="0"></iframe>
+            <div class="bg1"></div>
+            <div class="bg2"></div>
         </div>
     </div>
 </div>
@@ -91,4 +104,12 @@
 
 <script>
     const pageTitle = "Media";
+</script>
+
+<script>
+    document.querySelectorAll('.playlists li').forEach((el, index) => {
+        setTimeout(() => {
+            el.style.width = '100%';
+        }, index * 50);
+    });
 </script>

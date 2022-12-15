@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const {isLoggedIn, isReviewAuthor} = require('../middleware');
+const { playlists, artists } = require('../utils/lib/songs');
 
 const Review = require('../models/review');
 
@@ -18,11 +19,13 @@ router.get('/movies/:id', (req, res) => {
 }); 
 
 router.get('/music/artists', (req, res) => {
-    res.render('media/musicArtists', {title: 'Songs Artists and Albums | God In Prints'})
+    const { artist = 'Mercy Chinwo', album = "Suddenly : Amazing God (Double Single)", albumId = '30968022' } = req.query;
+    res.render('media/musicArtists', {title: 'Songs Artists and Albums | God In Prints', artists, artist, album, albumId})
 }); 
 
 router.get('/music/playlists', (req, res) => {
-    res.render('media/musicPlaylists', {title: 'Songs Playlists | God In Prints'})
+    const { list= 29990 } = req.query;
+    res.render('media/musicPlaylists', {title: 'Songs Playlists | God In Prints', playlists, list})
 }); 
 
 module.exports = router;

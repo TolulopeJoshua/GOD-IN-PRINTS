@@ -117,7 +117,7 @@
                         <img class="w-100 rounded-start" src="https://i.ytimg.com/vi/KjCy6eyCF08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBTaq_zuynXiYr6JvTxH2Mgw555iA" alt="">
                         <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
                     </div>
-                    <div class="px-2 d-flex flex-column justify-content-around">
+                    <span class="px-2 d-flex flex-column justify-content-around">
                         <h6 class="small m-0 p-0 text-dark">God On Trial | Full Movie | Jerry Thompson</h6>
                         <span class="text-muted small">2:48:30<i class="bi bi-dot h5"></i>4.8K views</span>
                         <span class="position-absolute top-50 end-0 translate-middle-y play options">
@@ -126,7 +126,7 @@
                         <ol class="optionsList bg-light text-dark position-absolute top-50 end-0 border rounded-3 p-1 m-3">
                             <li class="p-2 later"><i class="bi bi-clock pe-2"></i><small>Save to Watch Later</small></li>
                         </ol>
-                    </div>
+                    </span>
                 </article></a>
             </li>
             <li>
@@ -225,8 +225,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body text-secondary">
-        Movies requiring <a class="text-secondary text-decoration-underline" href="/subscription">subscription</a> are not shown.</span>
+        Movies requiring <a class="text-secondary text-decoration-underline" href="/subscription">subscription</a> are hidden!</span>
     </div>
+    <script>
+        setTimeout(() => {
+            const toast = new bootstrap.Toast(document.querySelector('.toast'))
+            toast.show();
+        }, 5000);
+    </script>
 </div>
 
 <script>
@@ -234,10 +240,6 @@
 </script>
 
 <script>
-    setTimeout(() => {
-        const toast = new bootstrap.Toast(document.querySelector('.toast'))
-        toast.show();
-    }, 5000);
 
     const playlists = document.querySelectorAll('.playlist');
     playlists.forEach(playlist => {
