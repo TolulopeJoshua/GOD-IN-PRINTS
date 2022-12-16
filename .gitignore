@@ -2,8 +2,7 @@ node_modules
 admin
 admin2
 .env
-output.jpg
-outputText.txt
-output.pdf
-godinprints.pub
-godinprints
+# output.jpg
+# outputText.txt
+# output.pdf
+output*

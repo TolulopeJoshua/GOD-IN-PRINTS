@@ -105,10 +105,10 @@
     <h1 class="h3 p-3 text-center">Artists Albums</h1>
     <!-- <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %> -->
     <div class="row ">
-        <div class="col-md-6">
+        <div style="height: 70vh; transform: translateX(0);" class="col-md-6 scroll mt-2">
             <% for( art of artists ) { %>
                 <section class="<%= art.name == artist && 'open' %>">
-                    <div class="artist bg-secondary bg-gradient text-light px-2 py-2 my-2">
+                    <div class="artist bg-secondary bg-gradient text-light px-2 py-2 mb-2">
                         <span class="openbtn"><i class="bi bi-play-fill"></i></span>
                         <span class="p-2"><%= art.name %></span>
                     </div>
@@ -121,7 +121,7 @@
             <% } %>
         </div>
         <div class="col-md-6 d-flex justify-content-center pt-4 pt-md-2 pb-1 overflow-auto"> 
-            <iframe style="height: 100%; min-height: 70vh;" src="https://www.boomplay.com/embed/<%= albumId %>/COL" frameborder="0"></iframe>
+            <iframe style="height: 70vh;" src="https://www.boomplay.com/embed/<%= albumId %>/COL" frameborder="0"></iframe>
             <div class="bg2"></div>
         </div>
     </div>
