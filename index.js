@@ -31,6 +31,7 @@ const reviewRoutes = require('./routes/reviews');
 const adminRoutes = require('./routes/api/admin')
 
 const MongoStore = require("connect-mongo");
+const { readFileSync, writeFileSync } = require('fs');
 
 
 const dbUrl = process.env.DB_URL; // || 'mongodb://localhost:27017/christian-world-libraries';
@@ -367,6 +368,9 @@ app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     console.log(err.message)
+    const errors = JSON.parse(readFileSync('console.json'));
+    errors.push(err.message)
+    writeFileSync('console.json', JSON.stringify(errors));
     res.status(statusCode).render('error', { err , title: 'Error Page'})
 })
 
