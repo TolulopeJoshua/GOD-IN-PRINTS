@@ -72,7 +72,7 @@
                 <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
                 <% if (review.author.equals(currentUser)) { %> 
                 <a class="mx-3" href="/reviews/<%= review._id %>/edit">📝</a>
-                <a id="d<%= review._id %>" class="dreview" href="javascript:;">✖</a>
+                <a id="d<%= review._id %>" class="<%= article._id %> dreview" href="javascript:;">✖</a>
                 <% } %> 
             </div>
         </div>

@@ -22,6 +22,7 @@ const UserSchema = new Schema({
     lastLogin: { type: Date, default: new Date() },
     reviews: [ { type: Schema.Types.ObjectId, ref: 'Review' } ],
     downloads: [ { bookId: { type: Schema.Types.ObjectId, ref: 'Book' }, downloadTime: Date, } ], 
+    watchLater: [ { type: String } ],
     isApproved: { type: Boolean, default: true },
 });
 

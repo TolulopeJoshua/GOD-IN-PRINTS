@@ -161,7 +161,7 @@ a {
 
 .scroll {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     height: calc(100vh - 150px);
 }
 .scroll:not(.menu) {
@@ -169,6 +169,7 @@ a {
 }
 .scroll::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
 }
 .scroll::-webkit-scrollbar-thumb {
   background: gray;

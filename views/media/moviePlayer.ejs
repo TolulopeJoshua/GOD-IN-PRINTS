@@ -21,7 +21,7 @@
 <script src="/javascripts/toggleMenu.js"></script>
 
 <style>
-    .playlists-bg {
+    /* .playlists-bg {
         position: fixed;
         top: 0;
         left: 0;
@@ -31,7 +31,7 @@
         background-size: contain;
         opacity: 0.1;
         z-index: 0;
-    }
+    } */
     body, div {
         position: relative;
         z-index: 1;
@@ -47,24 +47,74 @@
         position: absolute;
         top: calc(100% - 150px);
         left: calc(100% - 60px);
-        height: 150px;
+        height: 100px;
         width: 60px;
     }
+    .movie-header {
+        width: max-content;
+        animation: slide 12s linear 2s infinite;
+    }
+    .other {
+        width: max-content;
+        animation: video-slide 12s linear 0s infinite;
+    }
+    .other:hover {
+        animation-play-state: paused;
+    }
+    .other article img:hover {
+        transition: 0.3s ease all;
+        transform: scale(1.2);
+    }
+
+    @keyframes slide {
+        0%  {transform: translateX(0);}
+        20%  {transform: translateX(-0);}
+        100% {transform: translateX(calc(-20% - 4px));}
+    }
+    /* @keyframes video-slide {
+        0%  {transform: translateX(0);}
+        100% {transform: translateX(-50%);}
+    } */
 </style>
     
-<div class="playlists-bg"></div>
-<div class="col-md-9 col-lg-6 offset-md-3">
-    <h1 class="h3 p-3 text-center d-none">Feature Songs</h1>
-    <div class="mt-5 ratio ratio-16x9 position-relative">
-        <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/X6jEFAqZeYQ" title="The Secrets of Jonathan Sperry | Inspiration for all!   | Gavin MacLeod | Jansen Panettiere" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<!-- <div class="playlists-bg"></div> -->
+<div class="col-md-9 col-lg-6 offset-md-3 position-relative">
+    <div class="pt-3 mb-3 border-bottom border-2 overflow-hidden">
+        <em class="small">Playing:</em>
+        <div class="d-flex movie-header">
+            <h1 style="min-width: 350px;" class="h5 pt-3"><%= movie.title %></h1>
+            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.title %></h1>
+            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.title %></h1>
+            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.title %></h1>
+            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.title %></h1>
+        </div>
+    </div>
+    <div class="ratio ratio-16x9 position-relative">
+        <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/<%= movie.id %>" title="<%= movie.title %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div class="bg1"></div>
         <div class="bg2"></div>
     </div>
+    <div>
+        <h6 class="py-2 m-0"><%= movie.views %> views</h6>
+        <small style="cursor: default;" class="text-truncate justify d-block"><%= movie.description %></small>
+        <p id="more" style="cursor: pointer;" class="m-0 p-0 h6">more</p>
+    </div>
+    <p style="margin-top: 50px;" class="h5 bg-dark text-white rounded-top p-2 mb-0">More Videos</p>
+    <div style="background-color: rgba(42, 47, 74, 0.7); height: 200px;overflow: hidden;" class="border-top border-bottom border-dark border-3">
+        <div style="transform: translateX(0);" class="w-100 h-100 d-flex pe-5 align-items-center other scroll">
+            <% for( mov of otherMovies ) { %>
+                <a href="/media/movies/<%= mov.id %>/<%= mov.title %>" class="ms-5 border"><article>
+                    <img style="height: 100px;" src="<%= mov.thumbnails.medium.url %>" alt="<%= mov.title %>">
+                </article></a>
+            <% } %>
+        </div>
+    </div>
+    <%- include('../partials/loginModal') %>
 </div>
 
 <div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0 ps-lg-5">
     <% if (currentUser) { %> 
-    <form action="/media/movies/:id/addReview" method="POST">
+    <form action="/media/movies/<%= movie.id %>/review" method="POST">
         <div class="mb-3">
             <label class="form-label ms-2" for="review-text"><strong>Comment:</strong></label>
             <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
@@ -75,20 +125,20 @@
     <div class="p-3 rounded-3 bg-secondary bg-gradient text-light text-center shadow"><small>LOG IN TO COMMENT</small></div>
     <% } %> 
     <% for(let review of reviews) { %>
-    <div id="<%= review._id %>" class="card m-3 rounded-5">
-        <div class="card-body p-0">
-            <div class="review-box">
-                <p class="review-text lh-sm small fs-6 m-2"><%= review.text %></p>
+    <div class="card my-3 p-0 rounded-3">
+        <div class="card-body p-1 m-0">
+            <div class="">
+                <p class="lh-sm small"><%= review.text %></p>
                 <p class="card-title text-capitalize d-flex m-1">
                     <em class="text-muted small ms-auto fw-lighter"> - <%= review.author.firstName.toLowerCase() %> <%= review.author.lastName.toLowerCase() %></em>
                 </p>
             </div>
             <div class="d-flex align-items-end small border-top m-1" style="opacity: 0.5;">
-                <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;">👍🏻</a>
+                <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;"><i class="bi bi-hand-thumbs-up-fill text-primary"></i></a>
                 <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
                 <% if (review.author.equals(currentUser)) { %> 
-                <a class="mx-3" href="/reviews/<%= review._id %>/edit">📝</a>
-                <a id="d<%= review._id %>" class="dreview" href="javascript:;">✖</a>
+                <a class="mx-3" href="/reviews/<%= review._id %>/edit"><i class="bi bi-pencil-fill text-primary"></i></a>
+                <a id="d<%= review._id %>" class="delete-review =" href="javascript:;"><i class="bi bi-trash-fill text-danger"></i></a>
                 <% } %> 
             </div>
         </div>
@@ -103,13 +153,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body text-secondary">
-        Enjoy great movies without ads!
+        Watch great movies without ads!
     </div>
     <script>
         setTimeout(() => {
             const toast = new bootstrap.Toast(document.querySelector('.toast'))
             toast.show();
-        }, 5000);
+        }, 10000);
     </script>
 </div>
 
@@ -118,8 +168,22 @@
 </script>
 
 <script>
-    setTimeout(() => {
-        const title = document.querySelector('iframe').querySelector('.ytp-chrome-top');
-        console.log(title)
-    }, 2000)
+    const more = document.getElementById('more');
+    more.addEventListener('click', () => {
+        more.parentElement.querySelector('small').classList.toggle('text-truncate');
+        const text = more.innerText;
+        more.innerText = text == 'more' ? 'less' : 'more';
+    })
+
+    document.querySelectorAll('.delete-review').forEach(btn => btn.addEventListener('click', () => {
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+        const url = `/media/movies/review/${btn.id.slice(1)}`;
+        axios.delete(url).then(response => {
+            btn.parentElement.parentElement.classList.add('d-none');
+        }).catch(error => {
+            console.log(error);
+            toaster('An error occured!');
+            btn.innerHTML = '<i class="bi bi-trash-fill"></i>';
+        })
+    }))
 </script>

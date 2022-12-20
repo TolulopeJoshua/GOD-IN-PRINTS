@@ -6,7 +6,7 @@ const reviewSchema = new Schema({
     info:  { type: String },
     category: {
         type: String,
-        enum: ['Books', 'Biographies', 'Articles', 'Bible', 'Review', 'Suggest'],
+        enum: ['Books', 'Biographies', 'Articles', 'Bible', 'Review', 'Suggest', 'media/movies'],
         required: true,
     },
     parentId: {
