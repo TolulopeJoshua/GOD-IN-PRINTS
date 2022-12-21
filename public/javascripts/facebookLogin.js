@@ -42,7 +42,7 @@
         FB.api('/me?fields=name,email', function (res) {
 
             console.log(res)
-            if (!res.authResponse) return swal('Could not retrieve data from Facebook. Please try again later.')
+            if (!res.authResponse) return swal('Could not retrieve data from Facebook. Please use a different browser or try again later.')
             if (!res.email) return swal('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
 
             const body = {
