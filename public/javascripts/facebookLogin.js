@@ -32,7 +32,7 @@
             } else {
                 FB.login(function(response){
                     console.log(response);
-                    if (!res.authResponse) return swal('Could not retrieve data. Kindly clear cookies for this site or use a different browser.')
+                    if (!response.authResponse) return swal('Could not retrieve data. Kindly clear cookies for this site or use a different browser.')
                     fbLogin(response);
                 }, {scope: 'public_profile,email'});
             }
