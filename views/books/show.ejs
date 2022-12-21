@@ -49,7 +49,7 @@
         </div>
         <% if (currentUser) { %>
             <small class="text-secondary d-block text-center pb-1">
-                Download limit: <%= currentUser.subscription.status === 'platinum' ? '5 per week' : currentUser.subscription.status === 'premium' ? '3 per week' : '1 per month' %> <i class="bi bi-dot"></i> <i>
+                Download limit: <%= currentUser.subscription.status === 'premium' ? '3 per week' : currentUser.subscription.status === 'medium' ? '2 per week' : : currentUser.subscription.status === 'starter' ? '1 per week' '1 per month' %> <i class="bi bi-dot"></i> <i>
                 <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>
             </i></small>
         <% } %>
