@@ -149,6 +149,8 @@
             article.querySelector('.optionsList').classList.toggle('d-none');
         })
         later && later.addEventListener('click', e => {
+            const currentUser = JSON.parse('<%- JSON.stringify(currentUser) %>')
+            if (!currentUser) return toaster('You need to log in first!')
             const url = `/media/movies/watchlater/${later.id}`;
             axios.post(url).then((response) => {
                 toaster('Added to Watch Later (Playlists)')
