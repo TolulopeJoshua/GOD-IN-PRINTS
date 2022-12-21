@@ -132,7 +132,7 @@
             </ul>
         </section>
     <% } %>
-    <% if (currentUser && currentUser.subscription.status !== 'premium') { %>
+    <% if (!currentUser || currentUser.subscription.status !== 'premium') { %>
         <a class="d-block mt-3 upgrade" href="/subscription"><article class="text-center border border-2 border-secondary rounded-3">
             <h3 class="p-3">Upgrade Account</h3>
             <h5 class="pb-3">to view <%- !currentUser || currentUser.subscription.status == 'classic' ? '600+ <em>premium</em>' : 'more' %> movies!</h5>
