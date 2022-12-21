@@ -28,6 +28,7 @@
 
         FB.getLoginStatus(function(response) {
             if (response.status === 'connected') {
+                console.log(response);
                 fbLogin(response);
             } else {
                 FB.login(function(response){
