@@ -32,6 +32,7 @@
             } else {
                 FB.login(function(response){
                     console.log(response);
+                    if (!res.authResponse) return swal('Could not retrieve data. Kindly clear cookies for this site or use a different browser.')
                     fbLogin(response);
                 }, {scope: 'public_profile,email'});
             }
@@ -42,7 +43,6 @@
         FB.api('/me?fields=name,email', function (res) {
 
             console.log(res)
-            if (!res.authResponse) return swal('Could not retrieve data from Facebook. Please use a different browser or try again later.')
             if (!res.email) return swal('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
 
             const body = {
