@@ -101,7 +101,7 @@
 </style>
     
 <!-- <div class="playlists-bg"></div> -->
-<div class="col-md-9 col-lg-6 offset-md-3 <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %>">
+<div class="col-md-9 col-lg-6 offset-md-3 <%= (currentUser == null || currentUser.subscription.status == 'classic') && 'invisible vh-100' %>">
     <h1 class="h3 p-3 text-center">Artists Albums</h1>
     
     <div class="row">
@@ -131,7 +131,7 @@
 <div class="d-lg-none" style="margin-bottom: 100px;"></div>
 
 <div class="col-md-3 d-lg-none"></div>
-<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0 <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible' %>">
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0 <%= (!currentUser || currentUser.subscription.status == 'classic') && 'invisible' %>">
     <div class="w-100 h-100 d-flex flex-column align-items-center">
         <%- include('../partials/trivia/puzzle') %>  
     </div>
@@ -142,6 +142,7 @@
 </script>
 
 <script>
+
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
         section.querySelector('.openbtn').addEventListener('click', () => {
@@ -151,7 +152,9 @@
     })
 
     const user = JSON.parse('<%- JSON.stringify(currentUser) %>');
-    !user || user.subscription.status == 'classic' && swal('Kindly subscribe to use this service!').then(() => history.back())
+    let mydiv = document.createElement('div');
+    mydiv.innerHTML = "<span>Kindly <a href='/subscription'>subscribe</a> to use this service!</span>";
+    (!user || user.subscription.status == 'classic') && swal('', '', 'error', {content: mydiv}).then(() => history.back())
     
     const anchors = document.querySelectorAll('.albums a');
     const iframe = document.querySelector('iframe');
