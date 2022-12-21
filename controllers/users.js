@@ -154,19 +154,26 @@ module.exports.renderSubscription = (req, res) => {
       req.session.returnTo = req.originalUrl;
       return res.redirect('/login');
   }
-  res.render('users/subscription', {title: 'Profile'})
+  const limits = require('../utils/lib/limits');
+  const videos = require('../utils/lib/videos.json');
+  res.render('users/subscription', {title: 'Profile', limits, numVideos: videos.length})
 }
 
 // const crypto = require('crypto');
 module.exports.subscription = async (req, res) => {
-  // let validIps = ['52.31.139.75', '52.49.173.169', '52.214.14.220', '102.89.47.92'];
-  // if (validIps.includes(req.connection.remoteAddress)) {
     const event = req.body;
     let user = await User.find({email: event.data.customer.email});
     if (user && user[0]) {
       user = user[0]
     } else {
       return res.send(200)
+    }
+    if (["subscription.create","invoice.update","subscription.disable"].includes(event.event)) {
+      const subId = event.event == 'invoice.update' ? event.data.subscription.subscription_code : event.data.subscription_code;
+      let confirmation = await axios.get(`https://api.paystack.co/subscription/${subId}`, {
+        headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' } // process.env.PAYSTACK_SECRET_KEY
+      })
+      if (!confirmation.status) return;
     }
     if (event.event == "subscription.create") {
       // const user = await User.find({email: event.data.customer.email});
@@ -182,7 +189,7 @@ module.exports.subscription = async (req, res) => {
       if (event.data.subscription.subscription_code == user.subscription.code) {
         if (event.data.paid) {
           let {data} = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
-            headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+            headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' } // process.env.PAYSTACK_SECRET_KEY
           })
           if (data.status) {
             data = data.data;
@@ -222,15 +229,13 @@ module.exports.subscription = async (req, res) => {
       }
     }
     res.send(200);
-  // }
-  // res.status(200).send('ip not found');
 }
 
 module.exports.disableSubscription = async (req, res) => {
   const { subCode } = req.params;
   
   let {data} = await axios.get(`https://api.paystack.co/subscription/${subCode}`, {
-    headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }
+    headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' }  // process.env.PAYSTACK_SECRET_KEY
   })
   if (data.status && data.data.customer.email == req.user.email) {
     const token = data.data.email_token;
@@ -242,7 +247,7 @@ module.exports.disableSubscription = async (req, res) => {
         token: token,
       },
       headers: { 
-        Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY,
+        Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e',  // process.env.PAYSTACK_SECRET_KEY
         'Content-Type': 'application/json',
       }
     });

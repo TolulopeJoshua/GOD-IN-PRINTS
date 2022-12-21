@@ -76,7 +76,7 @@
         height: 45px;
         overflow: hidden;
     }
-    .playlists-bg {
+    /* .playlists-bg {
         position: fixed;
         top: 0;
         left: 0;
@@ -90,7 +90,7 @@
     body, div {
         position: relative;
         z-index: 1;
-    }
+    } */
     .bg2 {
         position: absolute;
         top: 0;
@@ -100,11 +100,11 @@
     }
 </style>
     
-<div class="playlists-bg"></div>
-<div class="col-md-9 col-lg-6 offset-md-3">
+<!-- <div class="playlists-bg"></div> -->
+<div class="col-md-9 col-lg-6 offset-md-3 <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %>">
     <h1 class="h3 p-3 text-center">Artists Albums</h1>
-    <!-- <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible vh-100' %> -->
-    <div class="row ">
+    
+    <div class="row">
         <div style="height: 70vh; transform: translateX(0);" class="col-md-6 scroll mt-2">
             <% for( art of artists ) { %>
                 <section class="<%= art.name == artist && 'open' %>">
@@ -114,12 +114,13 @@
                     </div>
                     <ul class="ps-4 mb-0 albums">
                         <% for( alb of art.albums ) { %>
-                            <a href="/media/music/artists?artist=<%= art.name %>&album=<%= alb.title %>&albumId=<%= alb.id %>"><li class="border small py-1 px-2 my-1 d-flex justify-content-between <%= alb.title == album && 'playing' %>"><span class="text-truncate"><i class="bi bi-dot h5"></i><%= alb.title %></span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                            <a id="<%= alb.id %>" href="/media/music/artists?artist=<%= art.name %>&album=<%= alb.title %>&albumId=<%= alb.id %>"><li class="border small py-1 px-2 my-1 d-flex justify-content-between <%= alb.title == album && 'playing' %>"><span class="text-truncate"><i class="bi bi-dot h5"></i><%= alb.title %></span><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
                         <% } %>
                     </ul>
                 </section>
             <% } %>
         </div>
+        <div id="scroll" style="height: 100px;" class="d-md-none"></div>
         <div class="col-md-6 d-flex justify-content-center pt-4 pt-md-2 pb-1 overflow-auto"> 
             <iframe style="height: 70vh;" src="https://www.boomplay.com/embed/<%= albumId %>/COL" frameborder="0"></iframe>
             <div class="bg2"></div>
@@ -130,7 +131,7 @@
 <div class="d-lg-none" style="margin-bottom: 100px;"></div>
 
 <div class="col-md-3 d-lg-none"></div>
-<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0">
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0 <%= !currentUser || currentUser.subscription.status == 'classic' && 'invisible' %>">
     <div class="w-100 h-100 d-flex flex-column align-items-center">
         <%- include('../partials/trivia/puzzle') %>  
     </div>
@@ -150,5 +151,15 @@
     })
 
     const user = JSON.parse('<%- JSON.stringify(currentUser) %>');
-    // !user || user.subscription.status == 'classic' && swal('Kindly subscribe to use this service!').then(() => history.back())
+    !user || user.subscription.status == 'classic' && swal('Kindly subscribe to use this service!').then(() => history.back())
+    
+    const anchors = document.querySelectorAll('.albums a');
+    const iframe = document.querySelector('iframe');
+    anchors.forEach(anchor => anchor.addEventListener('click', e => {
+        e.preventDefault();
+        anchors.forEach(el => el.querySelector('li').classList.remove('playing'));
+        anchor.querySelector('li').classList.add('playing');
+        iframe.src = `https://www.boomplay.com/embed/${anchor.id}/COL`;
+        window.innerWidth < 767.98 && document.getElementById('scroll').scrollIntoView()
+    }))
 </script>

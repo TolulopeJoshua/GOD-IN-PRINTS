@@ -83,11 +83,11 @@
       document.getElementById('viewing').innerText += '  >  ' + pageTitle;
       document.getElementById(navId) && document.getElementById(navId).classList.add('active');
       document.getElementById('searchForm').action = `/${pageTitle}/search`;
-      if (!['books', 'biographies', 'articles', 'bible'].includes(navId))  {
+      if (!['books', 'biographies', 'articles', 'bible', 'media'].includes(navId))  {
         document.getElementById('search').disabled = true;
         document.getElementById('searchButton').disabled = true;
       } else {
-        document.getElementById('search').placeholder = 'search ' + pageTitle;
+        document.getElementById('search').placeholder = 'search ' + (pageTitle == 'Media' ? 'movies' : pageTitle);
       }
 
       const mymodal = document.getElementById('mymodal');

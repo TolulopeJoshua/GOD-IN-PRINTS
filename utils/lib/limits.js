@@ -1,14 +1,14 @@
 module.exports = {
     books: {
-        classic: 2,
-        starter: 8,
-        medium: 16,
-        premium: 24,
+        classic: 1,
+        starter: 4,
+        medium: 8,
+        premium: 12,
     },
     videos: {
         classic: 3,
-        starter: 33,
-        medium: 66,
+        starter: 34,
+        medium: 67, 
         premium: 100,
     },
     prices: {

@@ -32,7 +32,7 @@
         cursor: default;
         background-color: #ccc;
     }
-    .playlists-bg {
+    /* .playlists-bg {
         position: fixed;
         top: 0;
         left: 0;
@@ -46,7 +46,7 @@
     body, div {
         position: relative;
         z-index: 1;
-    }
+    } */
     .upgrade {
         border-radius: 5px;
         background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPO_1-e3gFQDpG6ziKGHKLlQdiJmp0sY8_tQ&usqp=CAU');
@@ -64,7 +64,7 @@
     }
 </style>
     
-<div class="playlists-bg"></div>
+<!-- <div class="playlists-bg"></div> -->
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h1 class="h3 p-4 text-center bg-secondary bg-gradient rounded-3 mb-3">Feature Movies</h1><hr class="mb-3">
     <!-- <div class="d-flex justify-content-center gap-3 p-3 pb-4">
@@ -81,7 +81,7 @@
                             <i class="bi bi-lock-fill"></i>
                         </span>
                         <span style="transform: rotateZ(-30deg); user-select: none;" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-light">
-                            <h4>Subscription</h4>
+                            <h4><%= currentUser && currentUser.subscription.status != 'classic' ? 'Upgrade' : 'Subscription' %> </h4>
                             <h6>required!</h6>
                         </span>
                         <a href="/subscription" class=" small position-absolute bottom-0 end-0 pe-2">Subscribe</a>

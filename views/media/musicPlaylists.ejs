@@ -44,7 +44,7 @@
         transform: scale(1.05);
         background-image: radial-gradient(rgba(37, 4, 9, 0.4), rgba(37, 4, 9, 0.3), rgba(37, 4, 9, 0.4));
     }
-    .playlists-bg {
+    /* .playlists-bg {
         position: fixed;
         top: 0;
         left: 0;
@@ -58,13 +58,13 @@
     body, div {
         position: relative;
         z-index: 1;
-    }
+    } */
     .bg1 {
         position: absolute;
         top: 0;
         right: 0;
         width: 100%;
-        height: 85px;
+        height: 50px;
     }
     .bg2 {
         position: absolute;
@@ -75,18 +75,19 @@
     }
 </style>
 
-<div class="playlists-bg"></div>
+<!-- <div class="playlists-bg"></div> -->
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h1 class="h3 p-3 text-center d-none">Music Playlists</h1>
     <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-2"><i class="bi bi-music-note-list rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Playlists</div>
     <div class="row">
         <ul style="height: 70vh; transform: translateX(0);" class="col-md-6 px-4 pt-0 mt-3 pe-md-1 playlists scroll">
             <% for( playlist of playlists ) { %>
-                <a href="/media/music/playlists?list=<%= playlist.id %>"><li class="pb-1 px-2 mb-3 d-flex justify-content-between align-items-center <%= (list == playlist.id) && 'playing' %>"><small><i class="bi bi-dot h5"></i><%= playlist.title %> </small><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
+                <a id="<%= playlist.id %>" href="/media/music/playlists?list=<%= playlist.id %>"><li class="pb-1 px-2 mb-3 d-flex justify-content-between align-items-center <%= (list == playlist.id) && 'playing' %>"><small><i class="bi bi-dot h5"></i><%= playlist.title %> </small><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>
             <% } %>
         </ul>
+        <div id="scroll" style="height: 100px;" class="d-md-none"></div>
         <div class="col-md-6 d-flex justify-content-center mt-3 position-relative overflow-hidden"> 
-            <iframe style="transform: translateY(-120px); height: calc(70vh + 120px);" src="https://www.boomplay.com/embed/<%= list %>/COL" frameborder="0"></iframe>
+            <iframe style="transform: translateY(-160px); height: calc(70vh + 160px);" src="https://www.boomplay.com/embed/<%= list %>/COL" frameborder="0"></iframe>
             <div class="bg1"></div>
             <div class="bg2"></div>
         </div>
@@ -112,4 +113,13 @@
             el.style.width = '100%';
         }, index * 50);
     });
+    const anchors = document.querySelectorAll('.playlists a');
+    const iframe = document.querySelector('iframe');
+    anchors.forEach(anchor => anchor.addEventListener('click', e => {
+        e.preventDefault();
+        anchors.forEach(el => el.querySelector('li').classList.remove('playing'));
+        anchor.querySelector('li').classList.add('playing');
+        iframe.src = `https://www.boomplay.com/embed/${anchor.id}/COL`;
+        window.innerWidth < 767.98 && document.getElementById('scroll').scrollIntoView()
+    }))
 </script>

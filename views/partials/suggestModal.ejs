@@ -38,7 +38,7 @@
     suggestForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if ('<%- JSON.stringify(currentUser) %>' == '') return swal('Authentication error', 'Kindly log in or register.');
-        if (page == 'books' && '<%= currentUser && currentUser.subscription.status %>' == 'classic') return swal('Upgrade Status', 'Premium/Platinum membership required.');
+        // if (page == 'books' && '<%= currentUser && currentUser.subscription.status %>' == 'classic') return swal('Upgrade Status', 'Premium/Platinum membership required.');
         
         const data = new FormData(e.target);
         const review = Object.fromEntries(data.entries());

@@ -4,7 +4,7 @@
     <div class="row">
         <!-- <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4"> -->
             <div style="width: 25rem;" class="card shadow p-0">
-                <img src="assets/images/library3.jpg" alt="library" class="card-img-top" />
+                <img style="height: 100px; object-fit: cover;" src="assets/images/library3.jpg" alt="library" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">Login</h5>
                     <form action="/login/pwd" method="POST" class="validated-form" novalidate>
@@ -31,7 +31,7 @@
             <p>
                 <em>------ OR ------</em>
             </p>
-            <p><small>Login with</small></p>
+            <!-- <p><small>Login with</small></p> -->
             <p>
                 <a id="fbButton" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
                 <span>|</span>
@@ -48,7 +48,7 @@
 </script>
   
 <script>
-    window.scrollTo(0, 300)
+    document.querySelector('.card-body').scrollIntoView();
 
     const togglePassword = document
         .querySelector('#togglePassword');
