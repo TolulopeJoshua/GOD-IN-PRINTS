@@ -32,7 +32,6 @@
             } else {
                 FB.login(function(response){
                     console.log(response);
-                    response.authResponse == null && FB.logout();
                     fbLogin(response);
                 }, {scope: 'public_profile,email'});
             }
