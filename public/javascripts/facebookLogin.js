@@ -39,6 +39,11 @@
 
     function fbLogin(response) {
         FB.api('/me?fields=name,email', function (res) {
+
+            if (!res.email) return swal('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
+            if (!res.authResponse) return swal('Could not retrieve data from Facebook. Please try again later.')
+            console.log(res)
+
             const body = {
                 loginType: 'facebook',
                 accessToken: response.authResponse.accessToken,
@@ -48,10 +53,6 @@
                 lastName: res.name.split(' ')[1] || 'User',
                 password: '00000000',
             }
-
-            if (!res.email) return swal('There is no email attached to this Facebook account. Kindly use the Google or Password login.')
-            if (!res.authResponse) return swal('Could not retrieve data from Facebook. Please try again later.')
-            console.log(res)
 
             axios.post('/register', body, {
                 headers: {'Content-Type': 'application/json'}
