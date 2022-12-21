@@ -94,9 +94,9 @@
 
 <script>
 
-    const starter = 'PLN_51rzrgt7auexbv9' // 'PLN_dfjawf7e7k2w043';
-    const medium = 'PLN_jxf1hkio1s1ymb4' // 'PLN_11goi761rd5njlg';
-    const premium = 'PLN_oj3ffvu9tf307tx' // 'PLN_dhyh9vxrdgpc1yw';
+    const starter = 'PLN_dfjawf7e7k2w043' // '';
+    const medium = 'PLN_11goi761rd5njlg' // '';
+    const premium = 'PLN_dhyh9vxrdgpc1yw' // '';
     // const platinum = 'PLN_vv0s6d9ctjfyqh1';
     document.getElementById('starterButton').addEventListener('click', () => subscribe(starter));
     document.getElementById('mediumButton').addEventListener('click', () => subscribe(medium));
@@ -105,7 +105,7 @@
 
      function subscribe(type) {
         var handler = PaystackPop.setup({
-          key: 'pk_test_706f2fa47b71762778eca6c4b3aa7f55cddec690', // 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547',
+          key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // '',
           email: '<%= currentUser.email %>',
           plan: type,
           callback: function(response) {

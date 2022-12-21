@@ -171,7 +171,7 @@ module.exports.subscription = async (req, res) => {
     if (["subscription.create","invoice.update","subscription.disable"].includes(event.event)) {
       const subId = event.event == 'invoice.update' ? event.data.subscription.subscription_code : event.data.subscription_code;
       let confirmation = await axios.get(`https://api.paystack.co/subscription/${subId}`, {
-        headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' } // process.env.PAYSTACK_SECRET_KEY
+        headers: { Authorization : "Bearer " + 'process.env.PAYSTACK_SECRET_KEY' } // 
       })
       if (!confirmation.status) return;
     }
@@ -189,7 +189,7 @@ module.exports.subscription = async (req, res) => {
       if (event.data.subscription.subscription_code == user.subscription.code) {
         if (event.data.paid) {
           let {data} = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
-            headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' } // process.env.PAYSTACK_SECRET_KEY
+            headers: { Authorization : "Bearer " + 'process.env.PAYSTACK_SECRET_KEY' } // 
           })
           if (data.status) {
             data = data.data;
@@ -235,7 +235,7 @@ module.exports.disableSubscription = async (req, res) => {
   const { subCode } = req.params;
   
   let {data} = await axios.get(`https://api.paystack.co/subscription/${subCode}`, {
-    headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e' }  // process.env.PAYSTACK_SECRET_KEY
+    headers: { Authorization : "Bearer " + 'process.env.PAYSTACK_SECRET_KEY' }  // 
   })
   if (data.status && data.data.customer.email == req.user.email) {
     const token = data.data.email_token;
@@ -247,7 +247,7 @@ module.exports.disableSubscription = async (req, res) => {
         token: token,
       },
       headers: { 
-        Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e',  // process.env.PAYSTACK_SECRET_KEY
+        Authorization : "Bearer " + 'process.env.PAYSTACK_SECRET_KEY',  // 
         'Content-Type': 'application/json',
       }
     });
