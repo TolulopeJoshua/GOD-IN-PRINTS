@@ -17,15 +17,15 @@ module.exports.playlists = [
     },
     {
         title: 'Top Songs 4',
-        id: '26536216'
+        id: '8385829'
     },
     {
         title: 'Top Songs 5',
-        id: '35046839'
+        id: '3813255'
     },
     {
         title: 'Top Songs 6',
-        id: '45684749'
+        id: '1255974'
     },
     {
         title: 'Top Songs 7',
@@ -33,7 +33,7 @@ module.exports.playlists = [
     },
     {
         title: 'Top Songs 8',
-        id: '2803721'
+        id: '2427522'
     },
     {
         title: 'Top Songs 9',
@@ -41,11 +41,15 @@ module.exports.playlists = [
     },
     {
         title: 'Top Songs 10',
-        id: '27806768'
+        id: '5342215'
+    },
+    {
+        title: 'Igbo Gospel Medley',
+        id: '2654455'
     },
     {
         title: 'Top Songs 11',
-        id: '43876145'
+        id: '1443479'
     },
     {
         title: 'Top Songs 12',
@@ -53,11 +57,75 @@ module.exports.playlists = [
     },
     {
         title: 'Top Songs 13',
-        id: '14642039'
+        id: '4136835'
     },
     {
         title: 'Top Songs 14',
         id: '4543344'
+    },
+    {
+        title: 'Top Songs 15',
+        id: '47875076'
+    },
+    {
+        title: 'Top Songs 16',
+        id: '24330938'
+    },
+    {
+        title: 'Top Songs 17',
+        id: '16273796'
+    },
+    {
+        title: 'Top Songs 18',
+        id: '31217665'
+    },
+    {
+        title: 'Top Songs 19',
+        id: '2611358'
+    },
+    {
+        title: 'Top Songs 20',
+        id: '1133537'
+    },
+    {
+        title: 'Top Songs 21',
+        id: '25119662'
+    },
+    {
+        title: 'Top Songs 22',
+        id: '2491647'
+    },
+    {
+        title: 'Top Songs 23',
+        id: '3575855'
+    },
+    {
+        title: 'Top Songs 24',
+        id: '17889758'
+    },
+    {
+        title: 'Top Songs 25',
+        id: '14105987'
+    },
+    {
+        title: 'Top Songs 26',
+        id: '13321032'
+    },
+    {
+        title: 'Top Songs 27',
+        id: '3330998'
+    },
+    {
+        title: 'Top Songs 28',
+        id: '29095139'
+    },
+    {
+        title: 'Top Songs 29',
+        id: '4436199'
+    },
+    {
+        title: 'Top Songs 30',
+        id: '20777571'
     },
 ]
 

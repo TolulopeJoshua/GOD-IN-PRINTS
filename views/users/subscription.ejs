@@ -79,7 +79,7 @@
         <div class="border border-2 border-secondary my-5 p-3" style="width: 300px; max-width: 90%;">
             <h6 class="text-center">Buy book ticket.</h6>
             <em class="small">Tickets are used for a single book download.</em><br>
-            <em class="small d-block text-end">Price: <span style="text-decoration: line-through double">N</span>700</em>
+            <em class="small d-block text-end">Price: <span style="text-decoration: line-through double">N</span>500</em>
             <button id="ticketBtn" class="btn btn-primary w-100">Get Ticket</button>
         </div>
     </div>
@@ -133,7 +133,7 @@
         var handler = PaystackPop.setup({
           key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
           email: "<%= currentUser.email %>",
-          amount: 700 * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+          amount: 500 * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
           currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
           callback: function(res) {
             // Make an AJAX call to your server with the reference to verify the transaction

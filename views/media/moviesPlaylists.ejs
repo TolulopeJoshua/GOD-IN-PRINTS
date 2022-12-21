@@ -149,12 +149,14 @@
     <div class="toast-body text-secondary">
         Movies requiring <a class="text-secondary text-decoration-underline" href="/subscription">subscription</a> are hidden!</span>
     </div>
-    <script>
-        setTimeout(() => {
-            const toast = new bootstrap.Toast(document.querySelector('.toast'))
-            toast.show();
-        }, 10000);
-    </script>
+    <% if (currentUser && currentUser.subscription.status != 'premium') { %>
+        <script>
+            setTimeout(() => {
+                const toast = new bootstrap.Toast(document.querySelector('.toast'))
+                toast.show();
+            }, 10000);
+        </script>
+    <% } %>
 </div>
 
 <div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll">

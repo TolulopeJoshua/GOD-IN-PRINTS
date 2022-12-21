@@ -65,16 +65,16 @@
         transition: 0.3s ease all;
         transform: scale(1.2);
     }
-
+    
+    @keyframes video-slide {
+        0%  {transform: translateX(-0);}
+        100% {transform: translateX(calc(-25% + 12px));}
+    }
     @keyframes slide {
         0%  {transform: translateX(0);}
         20%  {transform: translateX(-0);}
         100% {transform: translateX(calc(-20% - 4px));}
     }
-    /* @keyframes video-slide {
-        0%  {transform: translateX(0);}
-        100% {transform: translateX(-50%);}
-    } */
 </style>
     
 <!-- <div class="playlists-bg"></div> -->
@@ -101,7 +101,22 @@
     </div>
     <p style="margin-top: 50px;" class="h5 bg-dark text-white rounded-top p-2 mb-0">More Videos</p>
     <div style="background-color: rgba(42, 47, 74, 0.7); height: 200px;overflow: hidden;" class="border-top border-bottom border-dark border-3">
-        <div style="transform: translateX(0);" class="w-100 h-100 d-flex pe-5 align-items-center other scroll">
+        <div style="transform: translateX(0); width: max-content;" class="h-100 d-flex pe-5 align-items-center other">
+            <% for( mov of otherMovies ) { %>
+                <a href="/media/movies/<%= mov.id %>/<%= mov.title %>" class="ms-5 border"><article>
+                    <img style="height: 100px;" src="<%= mov.thumbnails.medium.url %>" alt="<%= mov.title %>">
+                </article></a>
+            <% } %>
+            <% for( mov of otherMovies ) { %>
+                <a href="/media/movies/<%= mov.id %>/<%= mov.title %>" class="ms-5 border"><article>
+                    <img style="height: 100px;" src="<%= mov.thumbnails.medium.url %>" alt="<%= mov.title %>">
+                </article></a>
+            <% } %>
+            <% for( mov of otherMovies ) { %>
+                <a href="/media/movies/<%= mov.id %>/<%= mov.title %>" class="ms-5 border"><article>
+                    <img style="height: 100px;" src="<%= mov.thumbnails.medium.url %>" alt="<%= mov.title %>">
+                </article></a>
+            <% } %>
             <% for( mov of otherMovies ) { %>
                 <a href="/media/movies/<%= mov.id %>/<%= mov.title %>" class="ms-5 border"><article>
                     <img style="height: 100px;" src="<%= mov.thumbnails.medium.url %>" alt="<%= mov.title %>">
