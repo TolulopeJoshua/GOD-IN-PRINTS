@@ -27,6 +27,7 @@
     "express-mongo-sanitize": "^2.1.0",
     "express-session": "^1.17.2",
     "fs": "^0.0.1-security",
+    "geoip-lite": "^1.4.6",
     "helmet": "^5.0.2",
     "jimp": "^0.16.1",
     "joi": "^17.6.0",
@@ -47,6 +48,7 @@
     "pdf2pic": "^2.1.4",
     "sanitize-html": "^2.7.0",
     "sharp": "^0.29.3",
+    "tinyduration": "^3.2.3",
     "xhr2": "^0.2.1"
   },
   "devDependencies": {

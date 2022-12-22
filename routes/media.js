@@ -6,6 +6,7 @@ const { playlists, artists } = require('../utils/lib/songs');
 const {playlistsVideo} = require('../utils/lib/videos');
 let movies = require('../utils/lib/videos.json');
 const limits = require('../utils/lib/limits');
+const { sortVideos } = require('../utils/lib/videos_functions');
 
 
 const Review = require('../models/review');
@@ -23,18 +24,24 @@ const reduced = playlistsVideo.reduce((joined, playlist) => {
 }, [])
 
 router.get('/movies', catchAsync(async (req, res) => {
-    const userStatus = req.user?.subscription.status || 'classic';
-    const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
-    const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
-    const features = userMovies.sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
+
+    const { userFeatures }= sortVideos(req);
+
+    // const userStatus = req.user?.subscription.status || 'classic';
+    // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
+    // const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
+    // const features = userMovies.sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('media/movies', {title: 'Feature Movies | God In Prints', features, adBook})
+    res.render('media/movies', {title: 'Feature Movies | God In Prints', features: userFeatures, adBook})
 })); 
 
 router.get('/movies/playlists', catchAsync(async (req, res) => {
-    const userStatus = req.user?.subscription.status || 'classic';
-    const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
-    const playlists = playlistsVideo.map(list => ({name: list.name, videos: [...userMovies.filter(movie => movie.playlist == list.name)]}))
+
+    const { userPlaylists: playlists }= sortVideos(req);
+
+    // const userStatus = req.user?.subscription.status || 'classic';
+    // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
+    // const playlists = playlistsVideo.map(list => ({name: list.name, videos: [...userMovies.filter(movie => movie.playlist == list.name)]}))
     let watchLater = {name: 'Watch Later', videos: []};
     if (req.user) {
         watchLater.videos = req.user.watchLater.map(id => userMovies.find(movie => movie.id == id) || null).filter(movie => movie != null);
@@ -45,8 +52,9 @@ router.get('/movies/playlists', catchAsync(async (req, res) => {
 })); 
 
 router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
-    const userStatus = req.user?.subscription.status || 'classic';
-    const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
+
+    const { userMovies }= sortVideos(req);
+    
     const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
         req.flash('error', 'Movie not found!');
@@ -55,12 +63,13 @@ router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
     let reviews = await Review.find({ parentId: movie.id }).populate('author');
     reviews.reverse();
     const otherMovies = userMovies.filter(mov => mov.id != movie.id).sort(() => 0.5 - Math.random()).slice(0, 5);
-    res.render('media/moviePlayer', {title: `Playing: ${movie.title} | God In Prints`, movie, reviews, otherMovies})
+    res.render('media/moviePlayer', {title: `Playing: ${movie.snippet.title} | God In Prints`, movie, reviews, otherMovies})
 })); 
 
 router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
-    const userStatus = req.user?.subscription.status || 'classic';
-    const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
+
+    const { userMovies }= sortVideos(req);
+    
     const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
         req.flash('error', 'Movie not found!');
@@ -116,28 +125,3 @@ router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
 }))
 
 module.exports = router;
-
-
-
-// const { default: axios } = require('axios');
-// const { writeFileSync, readFileSync } = require('fs');
-// async function getYoutubeVideoById() {
-//     const computed = [];
-//     for (movie of movies) {
-//         const { data } = await axios.get(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=contentDetails&part=statistics&id=${movie.resourceId.videoId}&key=${process.env.YOUTUBE_API_KEY}`)
-//         const {id, snippet, contentDetails: {duration}, statistics: {viewCount}} = data.items[0];
-//         const [hr, mn, sc] = [duration.substring(duration.indexOf('T') + 1, duration.indexOf('H')), duration.substring(duration.indexOf('H') + 1, duration.indexOf('M')), duration.substring(duration.indexOf('M') + 1, duration.indexOf('S'))]
-//         const views = viewCount > 1000000 ? `${Math.round(viewCount / 100000) / 10}M` : `${Math.round(viewCount / 100) / 10}K`
-//         computed.push({
-//             id,
-//             duration: `${hr ? hr + ':' : ''}${mn}:${sc}`, // PT1H36M32S
-//             views,
-//             ...snippet
-//         })
-//     };
-
-//     writeFileSync('utils/lib/videos.json', JSON.stringify(computed))
-//     data = readFileSync('utils/lib/videos.json')
-//     console.log(JSON.parse(data)[0])
-
-// }

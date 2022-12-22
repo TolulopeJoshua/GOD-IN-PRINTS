@@ -95,7 +95,7 @@
                 <h5 class="m-0 ms-2"><%= playlist.name %> </h5>
                 <div class="position-relative rounded-2 overflow-hidden ms-auto">
                     <% if (playlist.videos.length) { %>
-                        <img src="<%= playlist.videos[0].thumbnails.default.url %> " alt="<%= playlist.name %> ">
+                        <img src="<%= playlist.videos[0].snippet.thumbnails.default.url %> " alt="<%= playlist.name %> ">
                     <% } else { %>
                         <div style="width: 120px; height: 90px;" class="bg-light text-dark rounded-2 text-center d-flex justify-content-center align-items-center h6"><span><%= playlist.name == 'Watch Later' ? 'Add Movies to Watch Later' : 'Upgrade Account' %></span></div>
                     <% } %>
@@ -106,16 +106,20 @@
                 </div>
             </div>
             <ul class="list mb-2">
+                <% if (playlist.name == 'Watch on Youtube') { %>
+                    <li><a style="height: 90px;" class="border border-2 border-success rounded-3 bg-light text-success small d-flex justify-content-center align-items-center"><i class="bi bi-bookmark-star me-2 fw-bold"></i>You will be redirected to a Youtube page to view movies in this list!</a></li>
+                <% } %>
                 <% for( video of playlist.videos ) { %>
                     <li id="<%= video.id %> " class="movie">
-                        <a href="/media/movies/<%= video.id %>/<%= video.title %>"><article class="rounded-3 bg-light border d-flex position-relative">
+                        <% const url = playlist.name == 'Watch on Youtube' ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
+                        <a href="<%= url %>" target="<%= playlist.name == 'Watch on Youtube' ? '_blank' : '' %>"><article class="rounded-3 bg-light border d-flex position-relative">
                             <div class="position-relative">            
-                                <img class="rounded-start" src="<%= video.thumbnails.default.url %> " alt="<%= video.title %> ">
+                                <img class="rounded-start" src="<%= video.snippet.thumbnails.default.url %> " alt="<%= video.snippet.title %> ">
                                 <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
                             </div>
                             <span class="px-2 d-flex flex-column justify-content-around">
-                                <h6 class="small m-0 p-0 text-dark"><%= video.title.slice(0, 130) %> </h6>
-                                <span class="text-muted small"><%= video.duration.split(':').map(i => i.length < 2 ? '0' + i : i).join(':') %><i class="bi bi-dot h5"></i><%= video.views %> views</span>
+                                <h6 class="small m-0 p-0 text-dark"><%= video.snippet.title.slice(0, 130) %> </h6>
+                                <span class="text-muted small"><%= (video.duration.hours ? video.duration.hours + ":" : "") + video.duration.minutes + ":" + video.duration.seconds %><i class="bi bi-dot h5"></i><%= video.views %> views<em class="ps-2"><%= !video.availableInCountry ? `(This movie may not be allowed in your country - ${video.country || ''})` : '' %> </em></span>
                                 <span class="position-absolute top-50 end-0 translate-middle-y play options">
                                     <i class="bi bi-three-dots-vertical h5 p-2"></i>
                                 </span>
@@ -135,7 +139,7 @@
     <% if (!currentUser || currentUser.subscription.status !== 'premium') { %>
         <a class="d-block mt-3 upgrade" href="/subscription"><article class="text-center border border-2 border-secondary rounded-3">
             <h3 class="p-3">Upgrade Account</h3>
-            <h5 class="pb-3">to view <%- !currentUser || currentUser.subscription.status == 'classic' ? '600+ <em>premium</em>' : 'more' %> movies!</h5>
+            <h5 class="pb-3">to view <%- !currentUser || currentUser.subscription.status == 'classic' ? '900+ <em>premium</em>' : 'more' %> movies!</h5>
         </article></a>
     <% } %>
 </div>

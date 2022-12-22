@@ -94,8 +94,8 @@
             <% } else { %>
                     <article style="width: 300px;" class="mb-2 rounded-3 overflow-hidden bg-dark text-light border d-flex flex-column">
                         <div class="position-relative">          
-                            <a href="/media/movies/<%= feature.id %>/<%= feature.title %>">  
-                                <img class="w-100" src="<%= feature.thumbnails.medium.url %>" alt="<%= feature.title %>">
+                            <a href="/media/movies/<%= feature.id %>/<%= feature.snippet.title %>">  
+                                <img class="w-100" src="<%= feature.snippet.thumbnails.medium.url %>" alt="<%= feature.snippet.title %>">
                                 <span class="play position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
                             </a>
                             <span class="position-absolute top-100 end-0 translate-middle-y bg-light text-dark border rounded-circle py-1 me-2">
@@ -105,10 +105,10 @@
                                 <li id="<%= feature.id %>" class="p-2 later"><i class="bi bi-clock pe-2"></i><small>Save to Watch Later</small></li>
                             </ol>
                         </div>
-                        <a class="p-2 pt-3" href="/media/movies/<%= feature.id %>/<%= feature.title %>">
+                        <a class="p-2 pt-3" href="/media/movies/<%= feature.id %>/<%= feature.snippet.title %>">
                             <span>
-                                <p class="text-light small m-0 p-0"><%= feature.title.slice(0, 80) %><%= feature.title.length > 80 ? '...' : '' %> </p>
-                                <span class="text-muted small"><%= feature.duration.split(':').map(i => i.length < 2 ? '0' + i : i).join(':') %><i class="bi bi-dot h5"></i><%= feature.views %> views</span>
+                                <p class="text-light small m-0 p-0"><%= feature.snippet.title.slice(0, 80) %><%= feature.snippet.title.length > 80 ? '...' : '' %> </p>
+                                <span class="text-muted small"><%= (feature.duration.hours ? feature.duration.hours + ":" : "") + feature.duration.minutes + ":" + feature.duration.seconds %><i class="bi bi-dot h5"></i><%= feature.views %> views</span>
                             </span>
                         </a>
                     </article>

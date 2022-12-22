@@ -155,7 +155,8 @@ module.exports.renderSubscription = (req, res) => {
       return res.redirect('/login');
   }
   const limits = require('../utils/lib/limits');
-  const videos = require('../utils/lib/videos.json');
+  const { sortVideos } = require('../utils/lib/videos_functions');
+  const { videos } = sortVideos(req);
   res.render('users/subscription', {title: 'Profile', limits, numVideos: videos.length})
 }
 
