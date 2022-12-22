@@ -37,7 +37,7 @@ router.get('/movies', catchAsync(async (req, res) => {
 
 router.get('/movies/playlists', catchAsync(async (req, res) => {
 
-    const { userPlaylists: playlists }= sortVideos(req);
+    const { userPlaylists: playlists, userMovies }= sortVideos(req);
 
     // const userStatus = req.user?.subscription.status || 'classic';
     // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
@@ -69,7 +69,7 @@ router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
 router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
 
     const { userMovies }= sortVideos(req);
-    
+
     const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
         req.flash('error', 'Movie not found!');
