@@ -151,14 +151,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body text-secondary">
-        Some Movies may not be available in your country!</span>
+        Some movies may not be available in your country!</span>
     </div>
     <% if (currentUser && currentUser.subscription.status != 'premium') { %>
         <script>
             setTimeout(() => {
                 const toast = new bootstrap.Toast(document.querySelector('.toast'))
                 toast.show();
-            }, 2000);
+            }, 1000);
         </script>
     <% } %>
 </div>
