@@ -30,7 +30,8 @@ function sortVideos(req) {
     const orderedByDate = filteredVideos.sort((a,b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
     
     const userStatus = req.user?.subscription.status || 'classic';
-    const userMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[userStatus]);
+    let userMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[userStatus]);
+    userMovies = userMovies.filter(movie => movie.id != 'GykgCvYsNJw' && movie.id != 'E_8cFo_MXpU')
     const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
     const userFeatures = userMovies.filter(movie => movie.embeddable && movie.availableInCountry && !movie.forKids).sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
 
