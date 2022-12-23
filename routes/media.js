@@ -113,7 +113,9 @@ router.post('/movies/watchlater/:id', catchAsync(async (req, res) => {
     if (!user) return res.status(404).send()
     !user.watchLater.includes(req.params.id) && user.watchLater.unshift(req.params.id);
     await user.save();
-    res.status(200).send(user.watchLater.length.toString()); 
+    const { userMovies }= sortVideos(req);
+    const watchLater = user.watchLater.filter(later => userMovies.find(movie => movie.id == later));
+    res.status(200).send(watchLater.length.toString()); 
 }))
 
 router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
@@ -121,7 +123,9 @@ router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
     if (!user) return res.status(404).send()
     user.watchLater = user.watchLater.filter(id => id != req.params.id);
     await user.save();
-    res.status(200).send(user.watchLater.length.toString()); 
+    const { userMovies }= sortVideos(req);
+    const watchLater = user.watchLater.filter(later => userMovies.find(movie => movie.id == later));
+    res.status(200).send(watchLater.length.toString()); 
 }))
 
 module.exports = router;
