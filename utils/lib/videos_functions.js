@@ -42,7 +42,7 @@ function sortVideos(req) {
         const videos = userMovies.map(movie => playlist.ids.includes(movie.id) ? movie : null).filter(movie => movie != null && movie.embeddable && !movie.forKids);
         return { name: playlist.name, videos };
     })
-    const forKids = userMovies.filter(movie => movie.forKids);
+    const forKids = userMovies.filter(movie => movie.forKids && movie.embeddable);
     forKids.length && userPlaylists.push({name: 'For Kids', videos: forKids});
     const nonEmbeddable = userMovies.filter(movie => !movie.embeddable);
     nonEmbeddable.length && userPlaylists.push({name: 'Watch on Youtube', videos: nonEmbeddable});
