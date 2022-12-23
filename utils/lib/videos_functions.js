@@ -25,7 +25,7 @@ function sortVideos(req) {
             if (video.contentDetails.regionRestriction.allowed && !video.contentDetails.regionRestriction.allowed.includes(country)) video.availableInCountry = false;
             if (video.contentDetails.regionRestriction.blocked && video.contentDetails.regionRestriction.blocked.includes(country)) video.availableInCountry = false;
         }
-        // if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 3) return false;
+        if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 3) return false;
         return JSON.stringify(video.snippet.thumbnails) != '{}' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
     })
     const orderedByDate = filteredVideos.sort((a,b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
