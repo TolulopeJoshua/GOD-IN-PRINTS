@@ -79,7 +79,7 @@
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h1 class="h3 p-3 text-center d-none">Music Playlists</h1>
     <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-4"><i class="bi bi-music-note-list rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Playlists</div>
-    <div class="row">
+    <div style="opacity: 0.5;" class="row">
         <ul style="height: 70vh; transform: translateX(0);" class="col-md-6 px-4 pt-0 mt-3 pe-md-1 playlists scroll">
             <% for( playlist of playlists ) { %>
                 <a id="<%= playlist.id %>" href="/media/music/playlists?list=<%= playlist.id %>"><li class="pb-1 px-2 mb-3 d-flex justify-content-between align-items-center <%= (list == playlist.id) && 'playing' %>"><small><i class="bi bi-dot h5"></i><%= playlist.title %> </small><span class="mic"><i class="bi bi-mic-fill"></i></span></li></a>

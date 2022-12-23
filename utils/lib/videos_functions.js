@@ -25,7 +25,7 @@ function sortVideos(req) {
             if (video.contentDetails.regionRestriction.allowed && !video.contentDetails.regionRestriction.allowed.includes(country)) video.availableInCountry = false;
             if (video.contentDetails.regionRestriction.blocked && video.contentDetails.regionRestriction.blocked.includes(country)) video.availableInCountry = false;
         }
-        if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 3) return false;
+        if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 10) return false;
         return JSON.stringify(video.snippet.thumbnails) != '{}' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
     })
     filteredVideos = [...new Set(filteredVideos.map(video => JSON.stringify(video)))].map(video => JSON.parse(video));
@@ -33,7 +33,7 @@ function sortVideos(req) {
     
     const userStatus = req.user?.subscription.status || 'classic';
     let userMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[userStatus]);
-    userMovies = userMovies.filter(movie => !['Bm0gGEZXAbo', 'sc8qQKxdTnA', '7Wv8Mz9VXSo', 'QrQVzDTa5Bc', 'QHULfBhM4dU', 'mpwgeE7koPE', 'Xdx-qAgySwQ', 'GykgCvYsNJw', 'E_8cFo_MXpU'].includes(movie.id))
+    // userMovies = userMovies.filter(movie => !['Bm0gGEZXAbo', 'sc8qQKxdTnA', '7Wv8Mz9VXSo', 'QrQVzDTa5Bc', 'QHULfBhM4dU', 'mpwgeE7koPE', 'Xdx-qAgySwQ', 'GykgCvYsNJw', 'E_8cFo_MXpU'].includes(movie.id))
     const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
     const userFeatures = userMovies.filter(movie => movie.embeddable && movie.availableInCountry && !movie.forKids).sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
  
