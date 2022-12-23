@@ -6,7 +6,7 @@ module.exports = {
         premium: 12,
     },
     videos: {
-        classic: 10,
+        classic: 8,
         starter: 40,
         medium: 70, 
         premium: 100,
