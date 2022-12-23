@@ -6,9 +6,9 @@ module.exports = {
         premium: 12,
     },
     videos: {
-        classic: 4,
-        starter: 34,
-        medium: 67, 
+        classic: 3,
+        starter: 33,
+        medium: 66, 
         premium: 100,
     },
     prices: {
