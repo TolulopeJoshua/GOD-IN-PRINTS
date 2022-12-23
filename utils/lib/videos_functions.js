@@ -28,7 +28,7 @@ function sortVideos(req) {
         if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 3) return false;
         return JSON.stringify(video.snippet.thumbnails) != '{}' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
     })
-    filteredVideos = [...new Set(filteredVideos)];
+    filteredVideos = [...new Set(filteredVideos.map(video => JSON.stringify(video)))].map(video => JSON.parse(video));
     const orderedByDate = filteredVideos.sort((a,b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
     
     const userStatus = req.user?.subscription.status || 'classic';
