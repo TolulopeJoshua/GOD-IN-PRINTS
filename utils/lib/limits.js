@@ -7,7 +7,7 @@ module.exports = {
     },
     videos: {
         classic: 3,
-        starter: 33,
+        starter: 34,
         medium: 66, 
         premium: 100,
     },
