@@ -9,7 +9,7 @@ function sortVideos(req) {
     const td = require("tinyduration")
     const { lookup } = require('geoip-lite');
 
-    const filteredVideos = allVideos.filter(video => {
+    let filteredVideos = allVideos.filter(video => {
         let { hours, minutes, seconds } = td.parse(video.contentDetails.duration);
         hours = hours ? hours.toString() : '';
         minutes = minutes ? minutes > 9 ? minutes.toString() : `0${minutes}` : '00';
@@ -28,6 +28,7 @@ function sortVideos(req) {
         if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 3) return false;
         return JSON.stringify(video.snippet.thumbnails) != '{}' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
     })
+    filteredVideos = [...new Set(filteredVideos)];
     const orderedByDate = filteredVideos.sort((a,b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
     
     const userStatus = req.user?.subscription.status || 'classic';
