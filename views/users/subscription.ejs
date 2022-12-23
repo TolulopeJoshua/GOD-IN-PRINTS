@@ -13,7 +13,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.books[Object.keys(limits.books)[0]] %> book download(s) per month.</li>
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> Songs playlists.</li>
-                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[0]] + Math.floor(limits.videos[Object.keys(limits.books)[0]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= Math.floor(limits.videos[Object.keys(limits.books)[0]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
                 </ul>
                 <span class="pb-2">Price: <i class="text-capitalize"><%= limits.prices[Object.keys(limits.books)[0]] %></i></span>
             </div>
