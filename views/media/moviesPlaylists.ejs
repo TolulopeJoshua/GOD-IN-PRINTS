@@ -111,7 +111,7 @@
                 <% } %>
                 <% for( video of playlist.videos ) { %>
                     <li id="<%= video.id %> " class="movie">
-                        <% const url = playlist.name == 'Watch on Youtube' ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
+                        <% const url = !video.embeddable ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
                         <a href="<%= url %>" target="<%= playlist.name == 'Watch on Youtube' ? '_blank' : '' %>"><article class="rounded-3 bg-light border d-flex position-relative">
                             <div class="position-relative">            
                                 <img class="rounded-start" src="<%= video.snippet.thumbnails.default.url %> " alt="<%= video.snippet.title %> ">
