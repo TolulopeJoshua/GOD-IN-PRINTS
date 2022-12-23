@@ -36,7 +36,7 @@ function sortVideos(req) {
     userMovies = userMovies.filter(movie => !['Bm0gGEZXAbo', 'sc8qQKxdTnA', '7Wv8Mz9VXSo', 'QrQVzDTa5Bc', 'QHULfBhM4dU', 'mpwgeE7koPE', 'Xdx-qAgySwQ', 'GykgCvYsNJw', 'E_8cFo_MXpU'].includes(movie.id))
     const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
     const userFeatures = userMovies.filter(movie => movie.embeddable && movie.availableInCountry && !movie.forKids).sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
-
+ 
     const playlists = require('./video_ids.json');
     const userPlaylists = playlists.map(playlist => {
         const videos = userMovies.map(movie => playlist.ids.includes(movie.id) ? movie : null).filter(movie => movie != null && movie.embeddable && !movie.forKids);
@@ -51,7 +51,7 @@ function sortVideos(req) {
 }
 
 async function getVideoIdsFromVideoPlaylists() {
-    let videoIds = [];
+    let videoIds = []; 
     let videoPlaylists = require('./video_playlists.json');
     for (vp of videoPlaylists) {
         let list = {name: vp.name, ids: []};
