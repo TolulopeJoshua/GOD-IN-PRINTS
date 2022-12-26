@@ -136,7 +136,7 @@ router.get('/search', catchAsync(async (req, res) => {
         videos.forEach(video => video.snippet.title.toLowerCase().includes(search.toLowerCase()) && result.push(video));
     }
     result = [...new Set(result)];
-    result.map(movie => userMovies.includes(movie) ? movie : null);
+    result = result.map(movie => userMovies.includes(movie) ? movie : null);
     const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     res.render('media/movies', {title: 'Search results | God In Prints', features: result, adBook, search});
 }))
