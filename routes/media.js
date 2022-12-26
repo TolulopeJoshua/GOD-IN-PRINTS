@@ -35,7 +35,7 @@ router.get('/movies', catchAsync(async (req, res) => {
     res.render('media/movies', {title: 'Feature Movies | God In Prints', features: userFeatures, adBook})
 })); 
 
-router.get('/movies/playlists', catchAsync(async (req, res) => {
+router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
 
     const { userPlaylists: playlists, userMovies }= sortVideos(req);
 
@@ -127,5 +127,19 @@ router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
     const watchLater = user.watchLater.filter(later => userMovies.find(movie => movie.id == later));
     res.status(200).send(watchLater.length.toString()); 
 }))
+
+router.get('/search', catchAsync(async (req, res) => {
+    let result = [];
+    const search = req.query.search;
+    const { userMovies, videos } = sortVideos(req);
+    if (search.trim()) {
+        videos.forEach(video => video.snippet.title.toLowerCase().includes(search.toLowerCase()) && result.push(video));
+    }
+    result = [...new Set(result)];
+    result.map(movie => userMovies.includes(movie) ? movie : null);
+    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
+    res.render('media/movies', {title: 'Search results | God In Prints', features: result, adBook, search});
+}))
+
 
 module.exports = router;

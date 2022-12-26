@@ -93,11 +93,11 @@
         <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/<%= movie.id %>" title="<%= movie.snippet.title %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div class="bg1"></div>
         <div class="bg2"></div>
-    </div>
+    </div> 
     <div>
         <h6 class="py-2 m-0"><%= movie.views %> views</h6>
-        <small style="cursor: default;" class="text-truncate justify d-block"><%- movie.snippet.description %></small>
-        <p id="more" style="cursor: pointer;" class="m-0 p-0 h6">more</p>
+        <small style="cursor: default;" class="text-truncate justify d-block"><%- movie.snippet.description.split('\n')[0] %></small>
+        <p id="more" style="cursor: pointer;" class="m-0 p-0 h6 more">more</p>
     </div>
     <p style="margin-top: 50px;" class="h5 bg-dark text-white rounded-top p-2 mb-0">More Videos</p>
     <div style="background-color: rgba(42, 47, 74, 0.7); height: 200px;overflow: hidden;" class="border-top border-bottom border-dark border-3">
@@ -184,10 +184,17 @@
 
 <script>
     const more = document.getElementById('more');
+    const description = `<%= movie.snippet.description%>`;
+    // console.log(movie)
     more.addEventListener('click', () => {
         more.parentElement.querySelector('small').classList.toggle('text-truncate');
         const text = more.innerText;
         more.innerText = text == 'more' ? 'less' : 'more';
+        more.classList.contains('more') ?
+        (more.parentElement.querySelector('small').innerHTML = description.split('\n').join('<br>')) &&
+        more.classList.remove('more') :
+        (more.parentElement.querySelector('small').innerHTML = description.split('\n')[0]) &&
+        more.classList.add('more')
     })
 
     document.querySelectorAll('.delete-review').forEach(btn => btn.addEventListener('click', () => {

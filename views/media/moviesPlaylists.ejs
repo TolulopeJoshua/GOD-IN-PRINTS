@@ -111,8 +111,8 @@
                 <% } %>
                 <% for( video of playlist.videos ) { %>
                     <li id="<%= video.id %> " class="movie">
-                        <% const url = !video.embeddable ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
-                        <a href="<%= url %>" target="<%= !video.embeddable ? '_blank' : '' %>"><article class="rounded-3 bg-light border d-flex position-relative">
+                        <% const url = !currentUser ? '/login' : !video.embeddable ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
+                        <a href="<%= url %>" target="<%= !video.embeddable && currentUser ? '_blank' : '' %>"><article class="rounded-3 bg-light border d-flex position-relative">
                             <div class="position-relative">            
                                 <img class="rounded-start" src="<%= video.snippet.thumbnails.default.url %> " alt="<%= video.snippet.title %> ">
                                 <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>

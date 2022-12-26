@@ -66,7 +66,7 @@
     
 <!-- <div class="playlists-bg"></div> -->
 <div class="col-md-9 col-lg-6 offset-md-3">
-    <h1 class="h3 p-4 text-center bg-secondary bg-gradient rounded-3 mb-3">Feature Movies</h1><hr class="mb-3">
+    <h1 class="h3 p-4 text-center bg-secondary bg-gradient rounded-3 mb-3"><%= title.split('|')[0] %></h1><hr class="mb-3">
     <!-- <div class="d-flex justify-content-center gap-3 p-3 pb-4">
         <a href="/media/movies?order=popular" class="btn btn-sm rounded-3 border border-secondary bg-secondary text-light">Popular</a>
         <a href="/media/movies?order=recent" class="btn btn-sm rounded-3 border border-secondary">Recent</a>
@@ -185,4 +185,7 @@
             document.querySelectorAll('.optionsList').forEach(list => list.classList.add('d-none'));
         }
     })
+
+    let params = (new URL(document.location)).searchParams;
+    document.getElementById('search').value = params.get("search");
 </script>
