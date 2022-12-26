@@ -64,7 +64,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= limits.books[Object.keys(limits.books)[3]] / 4 %> book download(s) per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li>
-                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= Math.ceil(limits.videos[Object.keys(limits.books)[3]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= 55 + Math.ceil(limits.videos[Object.keys(limits.books)[3]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
                 </ul>
                 <span id="ticket"  class="pb-2">Price: <i><span style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[3]] %>/m</i></span>  <!-- the id attached is for scroll -->
             </div>
