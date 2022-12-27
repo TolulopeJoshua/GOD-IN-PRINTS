@@ -30,10 +30,23 @@
     .playing .mic {
         display: block;
     }
+    .hymns li {
+        background-color: #ccc;
+        border-radius: 1.5rem 0 0 1.5rem;
+        width: 25%;
+        margin-left: auto;
+        overflow-x: auto;
+        color: rgba(37, 4, 9, 0.8);
+        transition: all 0.2s ease;
+    }
+    .hymns li:hover {
+        background-color: #aaa;
+        transform: scale(1.05);
+        color: rgba(37, 4, 9, 1);
+    }
     .playlists li {
         color: #ccc;
         border-radius: 1.5rem 0 0 1.5rem;
-        width: 25%;
         margin-left: auto;
         overflow-x: auto;
         background-image: radial-gradient(rgba(37, 4, 9, 0.8), rgba(37, 4, 9, 0.7), rgba(37, 4, 9, 0.8));
@@ -78,6 +91,15 @@
 <!-- <div class="playlists-bg"></div> -->
 <div class="col-md-9 col-lg-6 offset-md-3">
     <h1 class="h3 p-3 text-center d-none">Music Playlists</h1>
+    <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-4"><i class="bi bi-book rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Hymns</div>
+    <ul style="height: 70vh; transform: translateX(0);" class="px-4 pt-0 mt-3 pe-md-1 hymns scroll">
+        <% for ( hymn of hymns ) { %>
+            <a id="<%= hymn.id %>" href=""><li class="pb-1 px-2 mb-3 d-flex justify-content-between align-items-center <%= (hymn == hymns[0]) && 'playing' %>"><small class="text-capitalize text-truncate"><i class="bi bi-dot h5"></i><%= hymn.snippet.title.toLowerCase() %> </small><span class="mic ps-3"><i class="bi bi-mic-fill"></i></span></li></a>
+        <% } %>
+    </ul>
+    <div id="scroll2" style="height: 70px;"></div>
+    <div class="p-3 d-flex justify-content-center"><div style="max-width: 450px;" id="hymnPlayer" class="ratio ratio-16x9"><%- hymns[0].player.embedHtml %></div></div>
+    <div id="scroll2" style="height: 100px;"></div>
     <div class="title h5 bg-secondary bg-gradient text-light py-3 px-2 my-4"><i class="bi bi-music-note-list rounded-circle bg-dark p-2 px-3 ms-1 me-2 small"></i>Playlists</div>
     <div style="opacity: 0.5;" class="row">
         <ul style="height: 70vh; transform: translateX(0);" class="col-md-6 px-4 pt-0 mt-3 pe-md-1 playlists scroll">
@@ -86,7 +108,7 @@
             <% } %>
         </ul>
         <div id="scroll" style="height: 100px;" class="d-md-none"></div>
-        <div class="col-md-6 d-flex justify-content-center mt-3 position-relative overflow-hidden"> 
+        <div class="col-md-6 d-flex justify-content-center mt-3 position-relative overflow-hidden playlists"> 
             <iframe style="transform: translateY(-160px); height: calc(70vh + 160px);" src="https://www.boomplay.com/embed/<%= list %>/COL" frameborder="0"></iframe>
             <div class="bg1"></div>
             <div class="bg2"></div>
@@ -108,18 +130,31 @@
 </script>
 
 <script>
-    document.querySelectorAll('.playlists li').forEach((el, index) => {
+    document.querySelectorAll('.hymns li').forEach((el, index) => {
         setTimeout(() => {
             el.style.width = '100%';
         }, index * 50);
     });
+
+    const hymnsAnchors = document.querySelectorAll('.hymns a');
+    const player = document.querySelector('#hymnPlayer');
+    const hymns = <%- JSON.stringify(hymns) %>
+    console.log(hymns)
+    hymnsAnchors.forEach(anchor => anchor.addEventListener('click', e => {
+        e.preventDefault();
+        hymnsAnchors.forEach(el => el.querySelector('li').classList.remove('playing'));
+        anchor.querySelector('li').classList.add('playing');
+        player.innerHTML = hymns.find(hymn => hymn.id == anchor.id).player.embedHtml;
+        document.getElementById('scroll2').scrollIntoView()
+    }))
+
     const anchors = document.querySelectorAll('.playlists a');
-    const iframe = document.querySelector('iframe');
+    const playlistIframe = document.querySelector('.playlists iframe');
     anchors.forEach(anchor => anchor.addEventListener('click', e => {
         e.preventDefault();
         anchors.forEach(el => el.querySelector('li').classList.remove('playing'));
         anchor.querySelector('li').classList.add('playing');
-        iframe.src = `https://www.boomplay.com/embed/${anchor.id}/COL`;
+        playlistIframe.src = `https://www.boomplay.com/embed/${anchor.id}/COL`;
         window.innerWidth < 767.98 && document.getElementById('scroll').scrollIntoView()
     }))
 </script>

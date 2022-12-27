@@ -154,7 +154,7 @@
     const user = JSON.parse('<%- JSON.stringify(currentUser) %>');
     let mydiv = document.createElement('div');
     mydiv.innerHTML = "<span>Kindly <a href='/subscription'>subscribe</a> to use this service!</span>";
-    (!user || user.subscription.status == 'classic') && swal('', '', 'error', {content: mydiv}).then(() => history.back())
+    (!user || user.subscription.status == 'classic') && swal('', '', 'error', {content: mydiv}).then(() => window.location.replace('/media/music/playlists'))
     
     const anchors = document.querySelectorAll('.albums a');
     const iframe = document.querySelector('iframe');

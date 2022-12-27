@@ -3,25 +3,29 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const {isLoggedIn, isReviewAuthor, setRedirect} = require('../middleware');
 const { playlists, artists } = require('../utils/lib/songs');
-const {playlistsVideo} = require('../utils/lib/videos');
-let movies = require('../utils/lib/videos.json');
-const limits = require('../utils/lib/limits');
+// const {playlistsVideo} = require('../utils/lib/videos');
+// let movies = require('../utils/lib/videos.json');
+// const limits = require('../utils/lib/limits');
+let hymns = require('../utils/lib/hymns.json');
+const td = require("tinyduration")
 const { sortVideos } = require('../utils/lib/videos_functions');
 
 
 const Review = require('../models/review');
 const Book = require('../models/book');
+const { default: axios } = require('axios');
+const { writeFileSync } = require('fs');
 
-movies = movies.filter(movie => JSON.stringify(movie.thumbnails) != '{}');
+// movies = movies.filter(movie => JSON.stringify(movie.thumbnails) != '{}');
 
-const reduced = playlistsVideo.reduce((joined, playlist) => {
-    playlist.videos.forEach(video => video.snippet.playlist = playlist.name);
-    playlist.videos.forEach(video => {
-        const movie = movies.find(movie => movie.id == video.snippet.resourceId.videoId)
-        movie && (movie.playlist = playlist.name);
-    });
-    return joined.concat(playlist.videos.map(video => video.snippet)).filter(movie => JSON.stringify(movie.thumbnails) != '{}').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-}, [])
+// const reduced = playlistsVideo.reduce((joined, playlist) => {
+//     playlist.videos.forEach(video => video.snippet.playlist = playlist.name);
+//     playlist.videos.forEach(video => {
+//         const movie = movies.find(movie => movie.id == video.snippet.resourceId.videoId)
+//         movie && (movie.playlist = playlist.name);
+//     });
+//     return joined.concat(playlist.videos.map(video => video.snippet)).filter(movie => JSON.stringify(movie.thumbnails) != '{}').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+// }, [])
 
 router.get('/movies', catchAsync(async (req, res) => {
 
@@ -103,10 +107,20 @@ router.get('/music/artists', (req, res) => {
     res.render('media/musicArtists', {title: 'Songs Artists and Albums | God In Prints', artists, artist, album, albumId})
 }); 
 
-router.get('/music/playlists', (req, res) => {
+router.get('/music/playlists', catchAsync(async (req, res) => {
+    // await getHymns();
+
+    hymns = hymns.filter(hymn => {
+        let { hours, minutes, seconds } = td.parse(hymn.contentDetails.duration);
+        hours = hours ? hours.toString() : '';
+        minutes = minutes ? minutes > 9 ? minutes.toString() : `0${minutes}` : '00';
+        seconds = seconds ? seconds > 9 ? seconds.toString() : `0${seconds}` : '00';
+        hymn.duration = `${hours ? hours+':' : ''}${minutes}:${seconds}`;
+        return JSON.stringify(hymn.thumbnails) != '{}' && hymn.status.embeddable && hymn.id != 'hCogaiSJQ0c';
+    })
     const { list= 29990 } = req.query;
-    res.render('media/musicPlaylists', {title: 'Songs Playlists | God In Prints', playlists, list})
-}); 
+    res.render('media/musicPlaylists', {title: 'Songs Playlists | God In Prints', hymns, playlists, list})
+})) 
 
 router.post('/movies/watchlater/:id', catchAsync(async (req, res) => {
     const user = req.user;
@@ -143,3 +157,29 @@ router.get('/search', catchAsync(async (req, res) => {
 
 
 module.exports = router;
+
+
+async function getHymns() {
+    const playlists = ['PLLmJgJT4qHJC_o86qKt5uf9FojNBmyqlc'];
+    let hymns = [];
+    for (playlist of playlists) {
+        let result = await axios.get(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlist}&key=${process.env.YOUTUBE_API_KEY}`)
+        let hymnsId = result.data.items.map(item => item.snippet.resourceId.videoId)
+        await getSet(hymnsId)
+        while(result.data.nextPageToken) {
+            result = await axios.get(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken=${result.data.nextPageToken}&playlistId=${playlist}&key=${process.env.YOUTUBE_API_KEY}`)
+            hymnsId = result.data.items.map(item => item.snippet.resourceId.videoId)
+            await getSet(hymnsId)
+        }
+    }
+    writeFileSync('utils/lib/hymns.json', JSON.stringify(hymns));
+    return;
+
+    async function getSet(set) {
+        const url = `https://youtube.googleapis.com/youtube/v3/videos?part=id&part=snippet&part=contentDetails&part=status&part=statistics&part=player&part=topicDetails${set.map(id => `&id=${id}`).join('')}&maxResults=50&key=${process.env.YOUTUBE_API_KEY}`
+        const { data } = await axios.get(url);
+        console.log(data.items.length);
+        data.items.forEach(item => hymns.push(item));
+        if (data.pageInfo.totalResults != data.pageInfo.resultsPerPage) console.log('something went wrong');
+    }
+}
