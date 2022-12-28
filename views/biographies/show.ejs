@@ -47,8 +47,8 @@
         </ul>
     </div>
 </div>
-<div class="card bg p-3 col-md-6 col-lg-5 vh-100">
-    <div style="height: max-content;" class="scroll">
+<div class="card bg col-md-6 col-lg-5 vh-100">
+    <div style="height: max-content;" class="scroll p-3">
         <% const title = biography.gender === 'female' ? 'Her Story' : 'His Story' %> 
         <h1 class="card-title text-center title-1 display-3"><%= title %> </h1>
         <pre class="card-text lh-lg text ta justify"><%- biography.text %> </pre>
