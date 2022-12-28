@@ -55,6 +55,14 @@
 </div>  
 
 <script>
+  const searchForm = document.getElementById('searchForm');
+  searchForm.addEventListener('submit', e => {
+    console.log(searchForm.querySelector('input').value.trim().length)
+    if (searchForm.querySelector('input').value.trim().length < 3) {
+      e.preventDefault()
+      return swal('', 'Search parameter should not be less than 3 characters!', 'error', )
+    }
+  })
   const userNavPopup = document.getElementById('userNavPopup');
   if (userNavPopup) {
     const userNavArrow = document.getElementById('userNavArrow');
