@@ -3,7 +3,7 @@
     </a>
 
 <script>
-    const bookAds = document.getElementsByClassName('bookAd');
+    var bookAds = document.getElementsByClassName('bookAd');
     axios.get('/books/random').then(response => {
         for (bookAd of bookAds) {
             bookAd.parentElement.href = `/books/1/${response.data.title}`;
