@@ -1,15 +1,11 @@
-<a href="/biographies/1/<%= adBio[0].name %>">
-    <div class="card text-dark shadow p-4 text-center">
-        <h5 class="text-decoration-underline"><%= adBio[0].name %> </h5>
-        <p class="small justify lh-lg p-0 m-0" id=<%= adBio[0]._id %>>
-            <% if (adBio[0].image.key === 'none') { %> 
-                <img style="max-width: 8em;" class='card-img-top float-end p-2' src="/assets/images/<%= adBio[0].gender %>.png" alt="" class="card-img-top"> <p></p>
-            <% } else { %> 
-                <img style="max-width: 8em;" class='card-img-top float-end p-2' class='card-img-top float-end' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBio[0].image.key.replaceAll(" ", "+") %> alt="">
-            <% } %> 
-            <%= adBio[0].text.replace(/<[^>]*>/g, " ").substring(0, 250) %>...
-        </p>
+<a>
+    <div class="bioAd card text-dark shadow p-4 text-center">
+        <h5 class="text-decoration-underline"> </h5>
+        <p class="small justify lh-lg p-0 m-0"></p>
         <canvas id="canvas" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
     </div>
 </a>
+
+<script>
+</script>
 

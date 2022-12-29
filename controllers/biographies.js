@@ -9,25 +9,24 @@ const {getImage, putImage, paginate, uploadCompressedImage, encode} = require(".
 
 
 module.exports.index = async (req, res) => {
-    const gbiographies = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
-    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
-    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
+    const biographies = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 4 } }]);
     const title = 'GIP Library - Feature Biographies of Famous Christians';
-    res.render('biographies/index', {biographies, adArt, adBook, title})
+    res.render('biographies/index', {biographies, title})
 };
 
 module.exports.list = async (req, res) => {
     const q = req.query.q;
     const searchObj = q == 'birth' ? {birthYear: 1} : q == 'role' ? {role: 1, name: 1} : {name: 1};
-    const gbiographies = Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
-    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
-    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const [ biographies, adArt, adBook ] = await Promise.all([gbiographies, gadArt, gadBook]);
+    const biographies = await Doc.find({docType: 'biography', isApproved: true}).sort(searchObj);
     const [pageDocs, pageData] = paginate(req, biographies)
     const title = 'GIP Library - List of Biographies of Famous Christians';
-    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, adArt, adBook, title})
+    res.render('biographies/list', {category: 'Bio Gallery', biographies: pageDocs, pageData, title})
 };
+
+module.exports.random = async (req, res) => {
+    const [random] = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 1 } }]);
+    res.status(200).send(random);
+}
 
 module.exports.renderNewForm = async (req, res) => {
     const title = 'Post a Biography';
@@ -73,10 +72,8 @@ module.exports.search = async (req, res) => {
         biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const title = `Search for Biographies -${item}`;
-    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, adArt, adBook, title});
+    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, title});
 };
 
 module.exports.showBiography = async (req, res) => {

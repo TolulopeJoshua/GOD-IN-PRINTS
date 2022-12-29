@@ -23,25 +23,24 @@ module.exports.index = async (req, res) => {
     // if (sessData.featureBooks) {
     //     books = sessData.featureBooks;
     // } else {
-        const gbooks = Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
+        const books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
         // sessData.featureBooks = books;
     // }
-    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
-    const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
     const title = 'Feature Books on Christian Faith - Free pdf download';
-    res.render('books/index', {books, adArt, adBio, title})
+    res.render('books/index', {books, title})
 };
 
 module.exports.list = async (req, res) => {
-    const gbooks = Book.find({isApproved: true}).sort({title : 1});
-    const gadArt = Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
-    const [ books, adArt, adBio ] = await Promise.all([gbooks, gadArt, gadBio]);
+    const books = await Book.find({isApproved: true}).sort({title : 1});
     const [pageDocs, pageData] = paginate(req, books)
     const title = 'List of Books on Christian Faith - Free pdf download';
-    res.render('books/list', {category: 'All Books', books: pageDocs, pageData, adArt, adBio, title})
+    res.render('books/list', {category: 'All Books', books: pageDocs, pageData, title})
 };
+
+module.exports.random = async (req, res) => {
+    const [random] = await Book.aggregate([{ $match: { filetype: 'pdf', isApproved: true } }, { $sample: { size: 1 } }]);
+    res.status(200).send(random);
+}
 
 module.exports.categories = (req, res) => {
     const title = 'GIP Library - Books Categories';
@@ -59,10 +58,8 @@ module.exports.perCategory = async (req, res) => {
         };
     };
     const [pageDocs, pageData] = paginate(req, books)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     const title = `Books on ${category} - Free pdf download`;
-    res.render('books/list', {category, books: pageDocs, pageData, adArt, adBio, title})
+    res.render('books/list', {category, books: pageDocs, pageData, title})
 
     function words(category) {
         const word = category.toLowerCase().replaceAll(' ', '/');
@@ -171,10 +168,8 @@ module.exports.search = async (req, res) => {
         book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adArt = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true } }, { $sample: { size: 2 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true } }, { $sample: { size: 2 } }]);
     const title = `Search for Books - ${item}`;
-    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, adArt, adBio, title});
+    res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, title});
 };
 
 module.exports.showBook = async (req, res) => {
@@ -247,12 +242,12 @@ module.exports.download = async (req, res) => {
 
 module.exports.ticketDownload = async (req, res) => {
     const ticket = await BookTicket.findOne({ticket: req.body.ticketId});
-    const tickets = await BookTicket.find({});
-    const book = await Book.findById(req.params.id);
+    // const tickets = await BookTicket.find({});
     if (!ticket) {
         req.flash('error', 'Ticket not found.');
-        return res.redirect(`/books/${book._id}`);
+        return res.redirect(`/books/${req.params.id}`);
     }
+    const book = await Book.findById(req.params.id);
     const {key} = book.document;
     const options = {
         Bucket    : 'godinprintsdocuments',
@@ -271,9 +266,8 @@ module.exports.read = async (req, res) => {
             path: 'author'
         }
     });
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography'} }, { $sample: { size: 2 } }]);
     const title = `${book.title} - Preview`;
-    res.render('books/read', {book, adBio, title});
+    res.render('books/read', {book, title});
 }
 
 module.exports.pagesArray = async (req, res) => {

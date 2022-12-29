@@ -11,6 +11,8 @@ router.get('/', catchAsync(articles.index));
 
 router.get('/list', setRedirect, catchAsync(articles.list));
 
+router.get('/random', catchAsync(articles.random));
+
 router.get('/categories', articles.categories);
 
 router.get('/category', setRedirect, catchAsync(articles.perCategory));

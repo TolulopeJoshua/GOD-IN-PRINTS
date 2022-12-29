@@ -16,22 +16,17 @@ const categories = [
 
 
 module.exports.index = async (req, res) => {
-    const articles = await Doc.find({docType: 'article', isApproved: true}) // Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    // const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
+    let articles = await Doc.find({docType: 'article', isApproved: true}) // Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
+    articles = articles.sort(() => 0.5 - Math.random());
     const title = 'GIP Library - Feature Articles on Christian Faith';
-    res.render('articles/index', {categories, articles, adBook, adBio, title})
+    res.render('articles/index', {categories, articles, title})
 };
 
 module.exports.list = async (req, res) => {
-    const garticles = Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
-    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const [ articles, adBio, adBook ] = await Promise.all([garticles, gadBio, gadBook]);
+    const articles = await Doc.find({docType: 'article', isApproved: true}).sort({name : 1});
     const [pageDocs, pageData] = paginate(req, articles);
     const title = 'GIP Library - List of Articles on Christian Faith';
-    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, adBio, adBook, title})
+    res.render('articles/list', {category : 'All Articles', articles: pageDocs, pageData, title})
 };
 
 module.exports.categories = (req, res) => {
@@ -42,12 +37,15 @@ module.exports.categories = (req, res) => {
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
     const articles = await Doc.find({docType: 'article', isApproved: true, role: category}).sort({name : 1});
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const [pageDocs, pageData] = paginate(req, articles);
     const title = `Articles on ${category}`;
-    res.render('articles/list', {category, articles: pageDocs, pageData, adBio, adBook, title});
+    res.render('articles/list', {category, articles: pageDocs, pageData, title});
 };
+
+module.exports.random = async (req, res) => {
+    const [random] = await Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 1 } }])
+    res.status(200).send(random);
+}
 
 module.exports.renderNewForm = async (req, res) => {
     const title = 'Post an Article';
@@ -94,10 +92,8 @@ module.exports.search = async (req, res) => {
         article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
     })
     const [pageDocs, pageData] = paginate(req, result)
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const title = `Search for Articles - ${item}`;
-    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, adBio, adBook, title});
+    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, title});
 };
 
 module.exports.showArticle = async (req, res) => {
@@ -108,25 +104,20 @@ module.exports.showArticle = async (req, res) => {
         req.flash('error', 'Not in directory!');
         return res.redirect('/articles');
     }
-    const adBio = await Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
     const title = `Article - ${article.name}`;
-    res.render('articles/show', {article, adBio, adBook, title});
+    res.render('articles/show', {article, title});
 };
 
 module.exports.show = async (req, res) => {
-    const gadBio = Doc.aggregate([{ $match: {docType: 'biography', isApproved: true} }, { $sample: { size: 2 } }]);
-    const gadBook = Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    const garticle = Doc.findOne({ name: req.params.name }).populate({
+    const article = await Doc.findOne({ name: req.params.name }).populate({
         path: 'reviews', populate: { path: 'author' }
     });
-    const [ article, adBio, adBook ] = await Promise.all([garticle, gadBio, gadBook])
     if(!article) { 
         req.flash('error', 'Not in directory!');
         return res.redirect('/articles');
     }
     const title = `Article - ${article.name}`;
-    res.render('articles/show', {article, adBio, adBook, title});
+    res.render('articles/show', {article, title});
 };
 
 module.exports.story = async (req, res) => {    

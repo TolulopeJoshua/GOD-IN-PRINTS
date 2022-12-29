@@ -1,19 +1,26 @@
-<a href="/biographies/1/<%= adBio[1].name %>">
-    <div class="card text-dark shadow p-4 text-center">
-        <h5 class="text-decoration-underline"><%= adBio[1].name %> </h5>
-        <p class="small justify lh-lg p-0 m-0" id=<%= adBio[1]._id %>>
-            <% if (adBio[1].image.key === 'none') { %> 
-                <img style="max-width: 8em;" class='card-img-top float-end p-2' src="/assets/images/<%= adBio[1].gender %>.png" alt="male" class="card-img-top"> <p></p>
-            <% } else { %> 
-                <img style="max-width: 8em;" class='card-img-top float-end p-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + adBio[1].image.key.replaceAll(" ", "+") %> alt="">
-            <% } %> 
-            <%= adBio[1].text.replace(/<[^>]*>/g, " ").substring(0, 250) %>...
-        </p>
+<a>
+    <div class="bioAd card text-dark shadow p-4 text-center">
+        <h5 class="text-decoration-underline"> </h5>
+        <p class="small justify lh-lg p-0 m-0"></p>
         <canvas id="canvas2" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
     </div>
 </a>
 
 <script>
+  const bioAds = document.getElementsByClassName('bioAd');
+  axios.get('/biographies/random').then(response => {
+      for (bioAd of bioAds) {
+          bioAd.parentElement.href = `/biographies/1/${response.data.name}`;
+          const gender = bioAd.parentElement.parentElement.querySelector('#gender');
+          if (gender) gender.innerText = `There was a ${ response.data.gender === 'male' ? 'Man' : 'Woman' }`;
+          bioAd.querySelector('h5').innerText = response.data.name;
+          bioAd.querySelector('p').innerHTML = (
+              response.data.image.key == 'none' ? 
+              `<img style="max-width: 8em;" class='card-img-top float-end p-2' src="/assets/images/${response.data.gender}.png" alt="${response.data.name}" class="card-img-top">` :
+              `<img style="max-width: 8em;" class='card-img-top float-end p-2' class='card-img-top float-end' src=${'https://godinprintsdocuments.s3.amazonaws.com/' + response.data.image.key.replaceAll(" ", "+")} alt="${response.data.name}">`
+          ) + response.data.text.replace(/<[^>]*>/g, " ").substring(0, 280) + '...';
+      }
+  })
     //-----------Var Inits--------------
 let canvas;
 if (window.innerWidth < 992 || !document.getElementById('canvas')) {
