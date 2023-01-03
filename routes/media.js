@@ -35,8 +35,7 @@ router.get('/movies', catchAsync(async (req, res) => {
     // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
     // const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
     // const features = userMovies.sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('media/movies', {title: 'Feature Movies | God In Prints', features: userFeatures, adBook})
+    res.render('media/movies', {title: 'Feature Movies | God In Prints', features: userFeatures, })
 })); 
 
 router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
@@ -51,8 +50,7 @@ router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
         watchLater.videos = req.user.watchLater.map(id => userMovies.find(movie => movie.id == id) || null).filter(movie => movie != null);
     }
     playlists.unshift(watchLater);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('media/moviesPlaylists', {title: 'Movies Playlists | God In Prints', playlists, adBook})
+    res.render('media/moviesPlaylists', {title: 'Movies Playlists | God In Prints', playlists, })
 })); 
 
 router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
@@ -151,8 +149,7 @@ router.get('/search', catchAsync(async (req, res) => {
     }
     result = [...new Set(result)];
     result = result.map(movie => userMovies.includes(movie) ? movie : null).slice(0,10);
-    const adBook = await Book.aggregate([{ $match: {filetype: 'pdf', isApproved: true} }, { $sample: { size: 1 } }]);
-    res.render('media/movies', {title: 'Search results | God In Prints', features: result, adBook, search});
+    res.render('media/movies', {title: 'Search results | God In Prints', features: result, search});
 }))
 
 

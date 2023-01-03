@@ -191,7 +191,7 @@
         const text = more.innerText;
         more.innerText = text == 'more' ? 'less' : 'more';
         more.classList.contains('more') ?
-        (more.parentElement.querySelector('small').innerHTML = description.split('\n').join('<br>')) &&
+        (more.parentElement.querySelector('small').innerHTML = description.split('\n').slice(0,5).join('<br>')) &&
         more.classList.remove('more') :
         (more.parentElement.querySelector('small').innerHTML = description.split('\n')[0]) &&
         more.classList.add('more')
