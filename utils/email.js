@@ -20,7 +20,7 @@ const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) =
             <a href="https://godinprints.org"><img style="width: 32px;" src="https://godinprints.org/assets/images/burningBook.jfif" alt="God in prints"></a>
             </footer>
             <em style="width: 100%; display: block; text-align: center; font-size: small; padding-top: 16px;">
-            &copy; 2022 GodInPrints Library
+            &copy; 2023 GodInPrints Library
             </em>
             
             <style>
