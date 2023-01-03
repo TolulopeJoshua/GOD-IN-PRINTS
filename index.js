@@ -221,6 +221,7 @@ passport.use(new FacebookStrategy({
     scope: ['public_profile', 'email'],
     state: true
   }, async function (accessToken, refreshToken, profile, cb) {
+        writeFileSync('console.json', JSON.stringify({ accessToken, profile }));
         const axios = require('axios');
         const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
         const email = validate.data.email;
