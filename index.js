@@ -219,7 +219,7 @@ passport.use(new FacebookStrategy({
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: '/redirect/fbk',
     scope: ['public_profile', 'email'],
-    state: true
+    state: false
   }, async function (accessToken, refreshToken, profile, cb) {
         writeFileSync('console.json', JSON.stringify({ accessToken, profile }));
         const axios = require('axios');
