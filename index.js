@@ -219,9 +219,9 @@ passport.use(new FacebookStrategy({
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
     callbackURL: 'https://godinprints.org/redirect/fbk',
     scope: ['public_profile', 'email'],
-    state: false
+    state: true
   }, async function (accessToken, refreshToken, profile, cb) {
-        writeFileSync('console.json', JSON.stringify({ accessToken, profile }));
+        // writeFileSync('console.json', JSON.stringify({ accessToken, profile }));
         const axios = require('axios');
         const validate = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email`);
         const email = validate.data.email;
