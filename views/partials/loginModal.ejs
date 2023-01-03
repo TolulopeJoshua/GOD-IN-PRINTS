@@ -1,15 +1,13 @@
 <div style="z-index: 1000;" class="position-absolute top-0 left-0 <%= currentUser ? 'd-none' : 'd-flex' %> flex-column m-0  w-100 h-100 align-items-center">
-    <div id="loginCard" style="transform: translateY(-200vh); transition: ease all 2s; box-shadow: 0px 0px 30px #aaa;" class="card position-fixed m-0 mt-3">
-        <div class="loginSocials">
-            <h5 class="card-title text-center">Continue with</h5>
-            <p>
-                <a id="fbButton" class="btn btn-lg p-1 pb-2 ps-3 pe-3 me-3 btn-primary"><i class="bi bi-facebook pe-2 fs-4"></i><i>Facebook</i></a>
-                <span>|</span>
-                <a href="/login/ggl" class="btn btn-lg p-1 pb-2 ps-4 pe-4 ms-3 border-warning text-primary"><i class="fs-4">Google</i><i class="bi bi-google ps-2"></i></a>
-            </p>
+    <div id="loginCard" style="transform: translateY(-200vh); transition: ease all 2s; box-shadow: 0px 0px 30px #aaa; width: 300px;" class="card position-fixed px-2 m-0 mt-3">
+        <div class="">
+            <h5 class="card-title text-center m-2">Continue with</h5>
+            <a href="/login/fbk" class="d-block btn pb-2 ps-3 pe-3 btn-primary mb-2"><i class="bi bi-facebook pe-2"></i><i>Facebook</i></a>
+            <a href="/login/ggl" class="d-block btn pb-2 ps-4 pe-4 border-warning text-primary"><i class="bi bi-google pe-2"></i><i>Google</i></a><hr class="my-2">
         </div>
-        <div class="d-flex align-items-center pb-2 px-2">
-            <a href="/login" class="btn btn-success btn-block p-2 mb-2 w-100">Password Login</a>
+        <div class="d-flex justify-content-between pb-2 gap-2">
+            <a href="/login" class="btn btn-success btn-block p-2 w-100">Password</a>
+            <a href="/register" class="btn border-success btn-block p-2 w-100">Register</a>
         </div>
     </div>
     <script>

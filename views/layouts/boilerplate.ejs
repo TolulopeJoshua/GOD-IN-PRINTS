@@ -45,13 +45,13 @@
       </div>
     </main>
     
-    <%- include('../partials/supportModal') %>
+    <!-- <%- include('../partials/supportModal') %> -->
     <%- include('../partials/suggestModal') %>
     <%- include('../partials/footer') %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>    
     <script src="/javascripts/validateForms.js"></script>
-    <script src="/javascripts/get_story.js"></script>
+    <!-- <script src="/javascripts/get_story.js"></script> -->
     <script src="/javascripts/likeReview.js"></script>
     <script src="/javascripts/deleteReview.js"></script>
 
@@ -90,41 +90,41 @@
         document.getElementById('search').placeholder = 'search ' + (pageTitle == 'Media' ? 'movies' : pageTitle);
       }
 
-      const mymodal = document.getElementById('mymodal');
+      // const mymodal = document.getElementById('mymodal');
 
-      document.getElementById('closeButton').addEventListener('click', () => {
-        mymodal.classList.remove('open');
-      })
-      function openSupportModal() { mymodal.classList.add('open') };
-      document.getElementById('support').addEventListener('click', openSupportModal)
+      // document.getElementById('closeButton').addEventListener('click', () => {
+      //   mymodal.classList.remove('open');
+      // })
+      // function openSupportModal() { mymodal.classList.add('open') };
+      // document.getElementById('support').addEventListener('click', openSupportModal)
 
-      var paymentForm = document.getElementById('paymentForm');
-      paymentForm.addEventListener('submit', payWithPaystack, false);
-      function payWithPaystack(e) {
-        e.preventDefault();
-        var handler = PaystackPop.setup({
-          key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
-          email: document.getElementById('email').value,
-          amount: document.getElementById('amount').value * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
-          currency: document.getElementById('currency').value, // Use GHS for Ghana Cedis or USD for US Dollars
-          callback: function(response) {
-            // Make an AJAX call to your server with the reference to verify the transaction
-            const data = {
-              name: 'Sender: ' + document.getElementById('amount').value + ' - Ref: ' + response.reference,
-              email: document.getElementById('email').value,
-              message: document.getElementById('message').value || 'no message',
-            }
-            emailjs.init("LLErcEZSRlUGBQ138");
-            emailjs.send('service_sdb5kby', 'template_qyakobg', data);
-            e.target.reset();
-            mymodal.classList.remove('open');
-          },
-          onClose: function() {
-            console.log('closed')
-          },
-        });
-        handler.openIframe();
-      }
+      // var paymentForm = document.getElementById('paymentForm');
+      // paymentForm.addEventListener('submit', payWithPaystack, false);
+      // function payWithPaystack(e) {
+      //   e.preventDefault();
+      //   var handler = PaystackPop.setup({
+      //     key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
+      //     email: document.getElementById('email').value,
+      //     amount: document.getElementById('amount').value * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+      //     currency: document.getElementById('currency').value, // Use GHS for Ghana Cedis or USD for US Dollars
+      //     callback: function(response) {
+      //       // Make an AJAX call to your server with the reference to verify the transaction
+      //       const data = {
+      //         name: 'Sender: ' + document.getElementById('amount').value + ' - Ref: ' + response.reference,
+      //         email: document.getElementById('email').value,
+      //         message: document.getElementById('message').value || 'no message',
+      //       }
+      //       emailjs.init("LLErcEZSRlUGBQ138");
+      //       emailjs.send('service_sdb5kby', 'template_qyakobg', data);
+      //       e.target.reset();
+      //       mymodal.classList.remove('open');
+      //     },
+      //     onClose: function() {
+      //       console.log('closed')
+      //     },
+      //   });
+      //   handler.openIframe();
+      // }
 
 
     </script><script type="module">
