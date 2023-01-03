@@ -139,7 +139,7 @@
     const hymnsAnchors = document.querySelectorAll('.hymns a');
     const player = document.querySelector('#hymnPlayer');
     const hymns = <%- JSON.stringify(hymns) %>
-    console.log(hymns)
+    // console.log(hymns)
     hymnsAnchors.forEach(anchor => anchor.addEventListener('click', e => {
         e.preventDefault();
         hymnsAnchors.forEach(el => el.querySelector('li').classList.remove('playing'));

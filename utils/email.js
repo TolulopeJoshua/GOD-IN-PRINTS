@@ -12,7 +12,7 @@ const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) =
             <h2 style="text-align: center;">${subject}</h2>
             <p style="font-size: 14px; font-weight: 600; color: #666; line-height: 40px; text-align: justify;">
                 ${greeting || `Hello ${name[0].toUpperCase() + name.slice(1).toLowerCase()}`}, <br>
-                ${message.join('<br>')} <br>
+                ${message.join(' <br> ')} <br>
                 <br> ${farewell || 'Best Regards'}, <br>
             </p><hr>
             <footer style="text-align: center;">
