@@ -217,7 +217,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new FacebookStrategy({
     clientID: process.env['FACEBOOK_CLIENT_ID'],
     clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-    callbackURL: '/redirect/fbk?close',
+    callbackURL: 'https://godinprints.org/redirect/fbk',
     scope: ['public_profile', 'email'],
     state: false
   }, async function (accessToken, refreshToken, profile, cb) {
