@@ -88,7 +88,7 @@
 <script>
     const shareData = {
         title: `<%= article.name %>`,
-        text: `<%= article.text.slice(0,500) %>` + '...' + ' continue with article using the link provided',
+        text: `<%= article.text.replace(/<[^>]*>/g, " ").slice(0,500) %>` + '...' + ' continue with article using the link provided',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');
