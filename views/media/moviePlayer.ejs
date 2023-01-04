@@ -95,7 +95,8 @@
         <div class="bg2"></div>
     </div> 
     <div>
-        <h6 class="py-2 m-0"><%= movie.views %> views</h6>
+        
+        <div class="d-flex justify-content-between my-2"><h6 class="py-2 m-0"><%= movie.views %> views</h6><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share</em><i class="bi bi-share-fill"></i></button></div>
         <small style="cursor: default;" class="text-truncate justify d-block"><%- movie.snippet.description.split('\n')[0] %></small>
         <p id="more" style="cursor: pointer;" class="m-0 p-0 h6 more">more</p>
     </div>
@@ -208,4 +209,14 @@
             btn.innerHTML = '<i class="bi bi-trash-fill"></i>';
         })
     }))
+</script>
+
+<script>
+    const shareData = {
+        title: `<%= movie.snippet.title %>`,
+        text: 'Watch the movie: ' + `'<%= movie.snippet.title %>'` + ' at the url provided.',
+        url: window.location.href
+    }
+    const shareBtn = document.querySelector('#share');
+    shareBtn.addEventListener('click', async () => navigator.share(shareData))
 </script>

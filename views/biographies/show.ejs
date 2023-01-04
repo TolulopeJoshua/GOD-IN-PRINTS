@@ -21,7 +21,6 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<script> let route; let xhttp; const idLength = {};</script>
 <% if(!biography.isApproved) { %> 
     <div class="alert alert-warning alert-dismissible fade show text-center offset-md-3 offset-lg-2 col-md-9 col-lg-7" role="alert">
         This biography is yet to be approved! 
@@ -40,15 +39,16 @@
         <h5 class="card-title"></h5>
         <p class="card-text text-muted"> </p>
         <p> </p>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush mb-3">
             <li class="list-group-item"><h1 class="h3 text-capitalize"><%= biography.name %></h1></li>
             <li class="list-group-item text-muted"><%= biography.role %></li>
             <li class="list-group-item">(<%= biography.birthYear %> - <%= biography.deathYear %>)</li>
         </ul>
+        <div class="d-flex justify-content-center"><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share</em><i class="bi bi-share-fill"></i></button></div>
     </div>
 </div>
 <div class="card bg col-md-6 col-lg-5 vh-100 m-0 p-0">
-    <div style="height: max-content;" class="scroll p-3">
+    <div style="height: max-content; transform: translateX(0);" class="scroll px-1">
         <% const title = biography.gender === 'female' ? 'Her Story' : 'His Story' %> 
         <h1 class="card-title text-center title-1 display-3"><%= title %> </h1>
         <pre class="card-text lh-lg text ta justify"><%- biography.text %> </pre>
@@ -94,3 +94,12 @@
     const pageTitle = "Biographies";
 </script>
 
+<script>
+    const shareData = {
+        title: `<%= biography.name %>`,
+        text: `<%= biography.text.slice(0,500) %>` + '...' + ' continue with biography using the link provided',
+        url: window.location.href
+    }
+    const shareBtn = document.querySelector('#share');
+    shareBtn.addEventListener('click', async () => navigator.share(shareData))
+</script>

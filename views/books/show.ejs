@@ -34,6 +34,7 @@
             <% } %> 
         <div class="card-body">
             <h1 class="h5 card-title text-capitalize"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h1>
+            <div class="d-flex justify-content-center"><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share Link</em><i class="bi bi-share-fill"></i></button></div>
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>
         <ul class="list-group list-group-flush">
@@ -49,8 +50,8 @@
         </div>
         <% if (currentUser) { %>
             <small class="text-secondary d-block text-center pb-1">
-                Download limit: <%= currentUser.subscription.status === 'premium' ? '3 per week' : currentUser.subscription.status === 'medium' ? '2 per week' : currentUser.subscription.status === 'starter' ? '1 per week' : '1 per month' %> <i class="bi bi-dot"></i> <i>
-                <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>
+                Download limit: <%= currentUser.subscription.status === 'premium' ? '3 per week' : currentUser.subscription.status === 'medium' ? '2 per week' : currentUser.subscription.status === 'starter' ? '1 per week' : '1 per month' %> <i>
+                <%- currentUser.subscription.status != 'premium' ? `<a style="text-decoration: underline dotted;" href="/subscription"><i class="bi bi-dot"></i> increase limit</a>` : '' %> 
             </i></small>
         <% } %>
         <!-- <div class="card-footer text-muted">
@@ -105,15 +106,17 @@
 </div>
 
 <script>
-    let route; let xhttp; const idLength ={};
-</script>
-
-<script>
-    idLength['<%= book._id %>'] = 1000;
-</script>
-
-<script>
     const pageTitle = "Books";
+</script>
+
+<script>
+    const shareData = {
+        title: `<%= book.title %>`,
+        text: 'Use the link provided to download the book: ' + `'<%= book.title %>'` + ' for free.',
+        url: window.location.href
+    }
+    const shareBtn = document.querySelector('#share');
+    shareBtn.addEventListener('click', async () => navigator.share(shareData))
 </script>
     
 
