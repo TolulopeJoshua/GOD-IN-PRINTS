@@ -111,8 +111,8 @@
 
 <script>
     const shareData = {
-        title: `<%= book.title %>`,
-        text: 'Use the link provided to download the book: ' + `'<%= book.title %>'` + ' for free.',
+        title: `<%= book.title.toUpperCase() %>`,
+        text: 'Use the link provided to download the book: ' + `'<%= book.title.toUpperCase() %>'` + ' for free. \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');

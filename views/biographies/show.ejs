@@ -96,8 +96,8 @@
 
 <script>
     const shareData = {
-        title: `<%= biography.name %>`,
-        text: `<%= biography.text.replace(/<[^>]*>/g, " ").slice(0,500) %>` + '...' + ' continue with biography using the link provided',
+        title: `<%= biography.name.toUpperCase() %>`,
+        text: `<%= biography.text.replace(/<[^>]*>/g, " ").slice(0,500) %>` + '...' + '\n\n continue with biography using the link provided \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');
