@@ -45,7 +45,7 @@ const sendWelcomeMail = (user) => {
         subject: 'Welcome to GIP Libraries',
         message: ['Welcome to the God In Prints libraries. We are glad to have you.', 
         'Feel free to explore our bank of resources and provide your feedbacks using our suggestion and <a href="https://godinprints.org#contact">contact</a> forms.',],
-        farewell: 'Remain blessed'
+        farewell: 'Regards'
     }
     sendPersonalMail(options);
 }

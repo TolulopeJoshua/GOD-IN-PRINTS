@@ -14,10 +14,10 @@
 
 <div class="col-md-9 col-lg-6 offset-md-3">
     <div style="width: 400px; max-width: 90%;" class="d-flex flex-column align-items-center ms-auto me-auto small">
-        <form action="/profile" method="POST" autocomplete="off" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
+        <form id="changeEmail" action="/profile" method="POST" autocomplete="off" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
             <h6 class="mb-3">Email Address</h6>
             <input name="email" class="mb-3 p-2 rounded-3 " type="email" value="<%= currentUser.email %>" disabled readonly>
-            <div id="changeEmailForm" class="d-none">
+            <div id="changeEmailDiv" class="d-none">
                 <label class="form-label mt-2" for="newEmail">New Email</label>
                 <input name="newEmail" value="" class="mb-3 p-2 form-control " type="email" required> 
                 <h6>Enter Password</h6>
@@ -110,15 +110,22 @@
         toggleNewPassword.classList.toggle('bi-eye');
     });
 
+    const changeEmailForm = document.getElementById('changeEmail');
+    changeEmailForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        swal('', 'Any subscription on the current email will be suspended!','warning', {buttons: true, dangerMode: true}).then(res => {
+            if (res) changeEmailForm.submit();
+        })
+    })
     const changeEmailButton = document.getElementById('changeEmailButton');
-    const changeEmailForm = document.getElementById('changeEmailForm');
+    const changeEmailDiv = document.getElementById('changeEmailDiv');
     const cancelEmailButton = document.getElementById('cancelEmailButton');
     changeEmailButton.addEventListener('click', () => {
-        changeEmailForm.classList.remove('d-none');
+        changeEmailDiv.classList.remove('d-none');
         changeEmailButton.classList.add('d-none');
     })
     cancelEmailButton.addEventListener('click', () => {
-        changeEmailForm.classList.add('d-none');
+        changeEmailDiv.classList.add('d-none');
         changeEmailButton.classList.remove('d-none');
     })
 </script>
