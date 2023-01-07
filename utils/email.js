@@ -2,7 +2,7 @@ const { transporter } = require('../functions');
 
 const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) => {
     let mailOptions = {
-        from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
+        from: '"God In Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
         to: email, // list of receivers
         subject, // Subject line
         // text: 'hello', // plain text body
@@ -13,7 +13,7 @@ const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) =
             <p style="font-size: 14px; font-weight: 600; color: #666; line-height: 40px; text-align: justify;">
                 ${greeting || `Hello ${name[0].toUpperCase() + name.slice(1).toLowerCase()}`}, <br>
                 ${message.join(' <br> ')} <br>
-                <br> ${farewell || 'Best Regards'}, <br>
+                <br> ${farewell || 'Best Regards,'} <br>
             </p><hr>
             <footer style="text-align: center;">
             <a href="https://web.facebook.com/godinprints"><img style="width: 26px; padding-right: 16px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="GodInPrints facebook"></a>
@@ -45,7 +45,7 @@ const sendWelcomeMail = (user) => {
         subject: 'Welcome to GIP Libraries',
         message: ['Welcome to the God In Prints libraries. We are glad to have you.', 
         'Feel free to explore our bank of resources and provide your feedbacks using our suggestion and <a href="https://godinprints.org#contact">contact</a> forms.',],
-        farewell: 'Regards'
+        farewell: 'Regards,'
     }
     sendPersonalMail(options);
 }

@@ -114,7 +114,15 @@
     changeEmailForm.addEventListener('submit', (e) => {
         e.preventDefault();
         swal('', 'Any subscription on the current email will be suspended!','warning', {buttons: true, dangerMode: true}).then(res => {
-            if (res) changeEmailForm.submit();
+            if (res) {
+                if ('<%= currentUser.subscription.code %>' != '') {
+                    axios.delete('/subscription/<%= currentUser.subscription.code %>')
+                }
+                if ('<%= currentUser.subscription.curr %>' == 'usd') {
+                    axios.delete('/subscription_usd')
+                }
+                changeEmailForm.submit();
+            }
         })
     })
     const changeEmailButton = document.getElementById('changeEmailButton');

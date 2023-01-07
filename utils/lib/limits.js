@@ -16,5 +16,11 @@ module.exports = {
         starter: '1,450',
         medium: '2,850',
         premium: '4,250',
+    },
+    prices_usd: {
+        classic: 'free',
+        starter: '3.99',
+        medium: '7.99',
+        premium: '11.99',
     }
 }

@@ -31,7 +31,13 @@ router.get('/subscription', users.renderSubscription);
 
 router.post('/subscription', catchAsync(users.subscription));
 
+router.post('/subscription_usd', catchAsync(users.subscription_usd));
+
+router.post('/subscription/:id', catchAsync(users.setSubscription));
+
 router.delete('/subscription/:subCode', isLoggedIn, catchAsync(users.disableSubscription));
+
+router.delete('/subscription_usd', isLoggedIn, catchAsync(users.disableUsdSubscription));
 
 router.get('/bookTicket/:ref', isLoggedIn, catchAsync(users.bookTicket));
 

@@ -3,7 +3,10 @@ const Review = require('../models/review');
 const BookTicket = require('../models/bookTicket');
 const bcrypt = require ('bcrypt');
 const axios = require('axios');
+const Flutterwave = require('flutterwave-node-v3');
+const flw = new Flutterwave('FLWPUBK_TEST-fae42aec40442a30d63d9840457af5bc-X', 'FLWSECK_TEST-8831e6eec2857f7b58e27474d45d5c57-X') // new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY);
 const { sendWelcomeMail } = require('../utils/email');
+const { writeFileSync } = require('fs');
 
 
 module.exports.renderRegister = (req, res) => {
@@ -106,26 +109,6 @@ module.exports.updateProfile = async (req, res) => {
     if (authenticated.user) {
       user.email = req.body.newEmail;
       user.username = req.body.newEmail;
-      if (user.subscription.status != 'classic') {
-        let {data} = await axios.get(`https://api.paystack.co/subscription/${user.subscription.code}`, {
-          headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }  // 
-        })
-        if (data.status && data.data.customer.email == req.user.email) {
-          const token = data.data.email_token;
-          const response = axios({
-            method: 'post',
-            url: 'https://api.paystack.co/subscription/disable',
-            data: {
-              code: user.subscription.code,
-              token: token,
-            },
-            headers: { 
-              Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY,  // 
-              'Content-Type': 'application/json',
-            }
-          });
-        }
-      }
       await user.save();
     } else {
       throw authenticated.error;
@@ -159,6 +142,45 @@ module.exports.renderSubscription = (req, res) => {
   const { sortVideos } = require('../utils/lib/videos_functions');
   const { videos } = sortVideos(req);
   res.render('users/subscription', {title: 'Profile', limits, numVideos: videos.length})
+}
+
+module.exports.setSubscription = async (req, res) => {
+  const { id } = req.params;
+  const response = await flw.Transaction.verify({id});
+  if (response.status == 'success') {
+    req.user.subscription = req.body.subscription;
+    await req.user.save();
+    res.status(200).send();
+    const {data} = await flw.Subscription.get({email: req.user.email});
+    for (sub of data) {
+      if (sub.plan != response.data.plan && sub.status == 'active') {
+        await flw.Subscription.cancel({id: sub.id})
+      }
+    }
+  } else {
+    res.status(401).send();
+  }
+}
+
+module.exports.subscription_usd = async (req, res) => {
+
+  if (!req.headers["verif-hash"] || (req.headers["verif-hash"] !== process.env.FLW_SECRET_HASH)) res.status(401).end();
+  
+  if (req.body.event == 'subscription.cancelled' && req.body.data.plan.name.split('_')[0] == req.user.subscription.status) {
+    const user = User.findOne({email: req.body.data.customer.email})
+    if (user) {
+      user.subscription = {
+        status: 'classic',
+        expiry: null,
+        autorenew: true,
+        code: '',
+        curr: '',
+      }
+      await user.save();
+    }
+  }
+  writeFileSync('sub.json', JSON.stringify(req.body));
+  res.status(200).send();
 }
 
 // const crypto = require('crypto');
@@ -233,13 +255,22 @@ module.exports.subscription = async (req, res) => {
     res.send(200);
 }
 
+module.exports.disableUsdSubscription = async (req, res) => {
+  const {data} = await flw.Subscription.get({email: req.user.email});
+  for (sub of data) {
+    if (sub.status == 'active') {
+      await flw.Subscription.cancel({id: sub.id})
+    }
+  }
+}
+
 module.exports.disableSubscription = async (req, res) => {
   const { subCode } = req.params;
   
   let {data} = await axios.get(`https://api.paystack.co/subscription/${subCode}`, {
     headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY }  // 
   })
-  if (data.status && data.data.customer.email == req.user.email) {
+  if (data.status && data.data.status == 'active' && data.data.customer.email == req.user.email) {
     const token = data.data.email_token;
     const response = axios({
       method: 'post',

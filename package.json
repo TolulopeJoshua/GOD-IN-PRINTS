@@ -26,6 +26,7 @@
     "express": "^4.17.2",
     "express-mongo-sanitize": "^2.1.0",
     "express-session": "^1.17.2",
+    "flutterwave-node-v3": "^1.0.12",
     "fs": "^0.0.1-security",
     "geoip-lite": "^1.4.6",
     "helmet": "^5.0.2",

@@ -114,6 +114,7 @@ const scriptSrcUrls = [
     "https://adservice.google.com.ng",
     "https://adservice.google.com",
     "https://tpc.googlesyndication.com",
+    "https://checkout.flutterwave.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -138,6 +139,8 @@ const connectSrcUrls = [
     "https://firebase.googleapis.com",
     "https://firebaseinstallations.googleapis.com",
     "https://www.google-analytics.com",
+    "https://api.ravepay.co",
+    "https://flw-events-ge.herokuapp.com",
     // "https://api.mapbox.com/",
     // "https://a.tiles.mapbox.com/",
     // "https://b.tiles.mapbox.com/",
@@ -155,6 +158,7 @@ const frameSrcUrls = [
     "https://www.google.com",
     "https://www.youtube.com",
     "https://www.boomplay.com",
+    "https://checkout.flutterwave.com",
 ]
 
 app.use((req, res, next) => {
