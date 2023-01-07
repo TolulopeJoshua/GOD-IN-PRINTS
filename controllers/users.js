@@ -167,20 +167,18 @@ module.exports.subscription_usd = async (req, res) => {
   if (!req.headers["verif-hash"] || (req.headers["verif-hash"] !== process.env.FLW_SECRET_HASH)) res.status(401).end();
   res.status(200).send();
   writeFileSync('sub.json', JSON.stringify(req.body));
-  const result = User.find({email: req.body.customer.email})
-  if (result && result[0]) {
-    const user = result[0]
-    if (req.body.event == 'subscription.cancelled' && req.body.plan.name.split('_')[0] == user?.subscription.status) {
-      if (user) {
-        user.subscription = {
-          status: 'classic',
-          expiry: null,
-          autorenew: true,
-          code: '',
-          curr: '',
-        }
-        await user.save();
+  if (req.body.event == 'subscription.cancelled' ) {
+    const result = await User.find({email: req.body.data.customer.email})
+    const user = result && result[0];
+    if (req.body.data.plan.name.split('_')[0] == user?.subscription.status) {
+      user.subscription = {
+        status: 'classic',
+        expiry: null,
+        autorenew: true,
+        code: '',
+        curr: '',
       }
+      await user.save();
     }
   }
 }
