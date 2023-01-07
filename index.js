@@ -159,6 +159,7 @@ const frameSrcUrls = [
     "https://www.youtube.com",
     "https://www.boomplay.com",
     "https://checkout.flutterwave.com",
+    "https://checkout-v3-ui-prod.tls-flutterwave.com/",
 ]
 
 app.use((req, res, next) => {

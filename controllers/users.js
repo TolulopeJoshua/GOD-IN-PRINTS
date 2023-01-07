@@ -4,7 +4,7 @@ const BookTicket = require('../models/bookTicket');
 const bcrypt = require ('bcrypt');
 const axios = require('axios');
 const Flutterwave = require('flutterwave-node-v3');
-const flw = new Flutterwave('FLWPUBK_TEST-fae42aec40442a30d63d9840457af5bc-X', 'FLWSECK_TEST-8831e6eec2857f7b58e27474d45d5c57-X') // new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY);
+const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY); // 
 const { sendWelcomeMail } = require('../utils/email');
 const { writeFileSync } = require('fs');
 
@@ -195,9 +195,9 @@ module.exports.subscription = async (req, res) => {
     if (["subscription.create","invoice.update","subscription.disable"].includes(event.event)) {
       const subId = event.event == 'invoice.update' ? event.data.subscription.subscription_code : event.data.subscription_code;
       let confirmation = await axios.get(`https://api.paystack.co/subscription/${subId}`, {
-        headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e'  } // process.env.PAYSTACK_SECRET_KEY
+        headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY} // 
       })
-      if (!confirmation.status) return;
+      if (!confirmation.status) res.status(404).end();
     }
     if (event.event == "subscription.create") {
       // const user = await User.find({email: event.data.customer.email});
@@ -236,7 +236,7 @@ module.exports.subscription = async (req, res) => {
       }
     }
     if (event.event == "subscription.disable") {
-      if (event.data.subscription_code == user.subscription.code) {
+      if (event.data.subscription_code == user.subscription.code && user.subscription.curr != 'usd') {
         user.subscription = {
           status: 'classic',
           expiry: null,
@@ -252,7 +252,7 @@ module.exports.subscription = async (req, res) => {
         await user.save();
       }
     }
-    res.send(200);
+    res.status(200).send();
 }
 
 module.exports.disableUsdSubscription = async (req, res) => {
