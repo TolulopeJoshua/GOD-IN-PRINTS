@@ -165,8 +165,8 @@ module.exports.setSubscription = async (req, res) => {
 module.exports.subscription_usd = async (req, res) => {
   
   if (!req.headers["verif-hash"] || (req.headers["verif-hash"] !== process.env.FLW_SECRET_HASH)) res.status(401).end();
-  
-  writeFileSync('sub.json', JSON.stringify({body: req.body, customer: req.body.customer}));
+  res.status(200).send();
+  writeFileSync('sub.json', JSON.stringify(req.body));
   const result = User.find({email: req.body.customer.email})
   if (result && result[0]) {
     const user = result[0]
@@ -183,7 +183,6 @@ module.exports.subscription_usd = async (req, res) => {
       }
     }
   }
-  res.status(200).send();
 }
 
 // const crypto = require('crypto');
