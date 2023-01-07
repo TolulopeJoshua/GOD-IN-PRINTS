@@ -195,7 +195,7 @@ module.exports.subscription = async (req, res) => {
     if (["subscription.create","invoice.update","subscription.disable"].includes(event.event)) {
       const subId = event.event == 'invoice.update' ? event.data.subscription.subscription_code : event.data.subscription_code;
       let confirmation = await axios.get(`https://api.paystack.co/subscription/${subId}`, {
-        headers: { Authorization : "Bearer " + process.env.PAYSTACK_SECRET_KEY } // 
+        headers: { Authorization : "Bearer " + 'sk_test_8eb01ba4f3d2919d481834320f90b78f9e1dea8e'  } // process.env.PAYSTACK_SECRET_KEY
       })
       if (!confirmation.status) return;
     }
