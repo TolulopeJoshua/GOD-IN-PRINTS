@@ -112,7 +112,7 @@
 <script>
     const shareData = {
         title: `<%= book.title.toUpperCase() %>`,
-        text: 'Use the link provided to download the book: ' + `'<%= book.title.toUpperCase() %>'` + ' for free. \n',
+        text: 'Use the link provided to download the book: \n\n' + `'<%= book.title.toUpperCase() %>'` + '\n\n for free. \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');

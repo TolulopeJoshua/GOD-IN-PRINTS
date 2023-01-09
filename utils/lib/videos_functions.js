@@ -37,7 +37,7 @@ function sortVideos(req) {
     const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
     const userFeatures = userMovies.filter(movie => movie.embeddable && movie.availableInCountry && !movie.forKids).sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
  
-    const playlists = require('./video_ids.json');
+    const playlists = require('./video_ids.json'); 
     const userPlaylists = playlists.map(playlist => {
         const videos = userMovies.map(movie => playlist.ids.includes(movie.id) ? movie : null).filter(movie => movie != null && movie.embeddable && !movie.forKids);
         return { name: playlist.name, videos };
@@ -45,7 +45,7 @@ function sortVideos(req) {
     const forKids = userMovies.filter(movie => movie.forKids && movie.embeddable);
     userPlaylists.push({name: 'For Kids', videos: forKids}); 
     const nonEmbeddable = userMovies.filter(movie => !movie.embeddable);
-    nonEmbeddable.length && userPlaylists.push({name: 'Watch on Youtube', videos: nonEmbeddable});
+    nonEmbeddable.length && userStatus != 'classic' && userPlaylists.push({name: 'Watch on Youtube', videos: nonEmbeddable});
 
     return { videos: orderedByDate, userMovies, userFeatures, userPlaylists };
 }

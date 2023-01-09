@@ -73,7 +73,7 @@
     @keyframes slide {
         0%  {transform: translateX(0);}
         20%  {transform: translateX(-0);}
-        100% {transform: translateX(calc(-20% - 4px));}
+        100% {transform: translateX(calc(-20% - 15px));}
     }
 </style>
     
@@ -81,12 +81,12 @@
 <div class="col-md-9 col-lg-6 offset-md-3 position-relative">
     <div class="pt-3 mb-3 border-bottom border-2 overflow-hidden">
         <em class="small">Playing:</em>
-        <div class="d-flex movie-header">
-            <h1 style="min-width: 350px;" class="h5 pt-3"><%= movie.snippet.title %></h1>
-            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
-            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
-            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
-            <h1 style="min-width: 350px;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
+        <div style="min-width: 500%;" class="d-flex movie-header">
+            <h1 style="min-width: 20%;" class="h5 pt-3"><%= movie.snippet.title %></h1>
+            <h1 style="min-width: 20%;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
+            <h1 style="min-width: 20%;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
+            <h1 style="min-width: 20%;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
+            <h1 style="min-width: 20%;" class="h5 ms-3 pt-3"><%= movie.snippet.title %></h1>
         </div>
     </div>
     <div class="ratio ratio-16x9 position-relative">
@@ -214,7 +214,7 @@
 <script>
     const shareData = {
         title: `<%= movie.snippet.title %>`,
-        text: 'Watch the movie: ' + `'<%= movie.snippet.title %>'` + ' at the url provided. \n',
+        text: 'Watch the movie: \n\n' + `'<%= movie.snippet.title %>'` + '\n\n at the url provided. \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');
