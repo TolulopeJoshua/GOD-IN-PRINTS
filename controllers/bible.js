@@ -1,65 +1,41 @@
+const { default: axios } = require('axios');
+const { response } = require('express');
+const { writeFileSync, readFileSync } = require('fs');
+const { version } = require('joi');
 const Review = require('../models/review');
 const User = require('../models/user');
+const catchAsync = require('../utils/catchAsync');
 
 module.exports.index = async (req, res) => {
     const title = `GIP Library - Multiversioned Bible`;
     res.render('bible/index', {title});
 };
 
-module.exports.chapter = async (req, res) => {
+module.exports.chapter = (async (req, res) => {
+
+    // getChapters('9879dbb7cfe39e4d-04');
+
     const chapt = req.query.chapter || 'jhn.3';
     const version = req.query.version || 'de4e12af7f28f599-02';
     req.session.bibleVersion = version;
     const reviews = req.user ? await Review.find({author: req.user._id, parentId: chapt}) : [];
-    const longChapters = ["psa.119", "1ki.8", "deu.28", "deu.32", "num.7", "lev.13", "jer.51", "ezk.16", "gen.24"];
     const title = `Multiversioned Bible - ${chapt.toUpperCase()}`;
-    if (longChapters.includes(chapt)) {
-        const {chapter} = require(`../public/javascripts/bibleData/kjvLongTexts/${chapt}`)
-        const {meta, data} = chapter;
-        res.render('bible/chapter', {meta, data, reviews, title});
-    } else { 
-        const https = require('https')
-        const options = {
-        hostname: 'api.scripture.api.bible',
-            path: `/v1/bibles/${version}/chapters/${chapt}`,
-            method: 'GET',
-            headers: {'api-key': process.env.BIBLE_API_KEY},
-        }
-        const reqst = https.request(options, rest => {
-            rest.on('data', d => {
-                const {meta, data} = JSON.parse(d);
-                res.render('bible/chapter', {meta, data, reviews, title});
-            })
-        })
-        reqst.end() 
-    };
-};
+    const chapters = JSON.parse(readFileSync(`utils/bible/${version}.json`));
+    const data = chapters.find(chapter => chapter.id.toLowerCase() == chapt);
+    res.render('bible/chapter', {data, reviews, title});
+});
 
-module.exports.search = async (req, res) => {
+module.exports.search = (async (req, res) => {
     const searchText = req.query.search;
     const title = `Multiversioned Bible Search - ${searchText}`;
     const offset = req.query.offset || 0;
-    const https = require('https')
-    const options = {
-      hostname: 'api.scripture.api.bible',
-    //   port: 443, 
-        path: encodeURI(`/v1/bibles/de4e12af7f28f599-01/search?query=${searchText}&offset=${offset}&limit=20`),
-        method: 'GET',
+    const version = req.query.version || req.session.bibleVersion;
+    axios.get(`https://api.scripture.api.bible/v1/bibles/${version}/search?query=${searchText}&offset=${offset * 20}&limit=20`, {
         headers: {'api-key': process.env.BIBLE_API_KEY},
-    }    
-    const reqst = https.request(options, rest => {
-    //   console.log(`statusCode: ${rest.statusCode}`)
-        rest.on('data', d => {
-            // process.stdout.write(d)
-                const {data} = JSON.parse(d);
-                res.render('bible/search', {data, searchText, title});
-        })
-    })
-    reqst.on('error', error => {
-      console.error(error)
-    })
-    reqst.end()
-};
+    }).then(({data: {data}}) => {
+        res.render('bible/search', {data, searchText, title});
+    }).catch(); 
+});
 
 // module.exports.addReview = async (req, res) => {
 //     // console.log(req)
@@ -82,4 +58,23 @@ module.exports.deleteReview = async (req, res) => {
     await User.findByIdAndUpdate(userId, {$pull: {reviews: reviewId} } );
     await Review.findByIdAndDelete(reviewId);
     res.send(reviewId);
+}
+
+
+async function getChapters(id) {
+    const chapters = []
+    axios.get(`https://api.scripture.api.bible/v1/bibles/${id}/books?include-chapters=true`, {
+        headers: {'api-key': process.env.BIBLE_API_KEY},
+    }).then(async ({data: {data}}) => {
+        for (let d of data) {
+            for (let chapter of d.chapters) {
+                let {data} = await axios.get(`https://api.scripture.api.bible/v1/bibles/${chapter.bibleId}/chapters/${chapter.id}?include-verse-spans=true`, {
+                    headers: {'api-key': process.env.BIBLE_API_KEY},
+                })
+                chapters.push(data.data);
+                // break;
+            }
+        }
+        writeFileSync(`utils/bible/${id}.json`, JSON.stringify(chapters)); 
+    }) 
 }

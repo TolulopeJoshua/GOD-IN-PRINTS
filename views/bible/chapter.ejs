@@ -27,10 +27,22 @@
             
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-auto text-center">
     <div class="subheadings">
-        <h1 id="viewing" class="pt-3 text-decoration-underline"><%= data.reference %> </h1>
+        <h1 id="viewing" class="p-3 text-decoration-underline"><%= data.reference %></h1>
+        <span class="d-flex justify-content-between align-items-center p-3">
+            <a class="prev btn btn-outline-secondary fs-5 w-25"></a>
+            <button id="share" class="btn btn-outline"><i class="bi bi-share-fill"></i></button>
+            <a class="next btn btn-outline-secondary fs-5 w-25"></a>
+        </span>
     </div>
-    <div class="eb-container justify p-3" id="chapter-text">
+    <div class="fixed-bottom">
+        <audio src="" controls></audio>
+    </div>
+    <div class="eb-container justify p-3 position-relative" id="chapter-text">
         <%- data.content %>
+    </div>
+    <div class="d-flex justify-content-center gap-3 m-3">
+        <a class="prev btn btn-info fs-5 w-25"></a>
+        <a class="next btn btn-info fs-5 w-25"></a>
     </div>
 </div>
 
@@ -67,17 +79,18 @@
 <script>
     const activeBook = '<%= (data.bookId.toLowerCase()) %>';
     const activeChapter = '<%= (data.id.toLowerCase()) %>';
+
+    const shareData = {
+        title: `<%= data.reference %>`,
+        text: `<%= data.content.replace(/<[^>]*>/g, " ").slice(0,500) %>...` + '\n\n use the link provided to read whole chapter. \n',
+        url: window.location.href
+    }
+    const shareBtn = document.querySelector('#share');
+    shareBtn.addEventListener('click', async () => navigator.share(shareData))
+
 </script>
 
 <script src="/javascripts/bibleData/bible_chapters_data.js"></script>
-
-<script>
-    let route; let xhttp; const idLength ={};
-</script>
-
-<script>
-    idLength['<%= currentUser && currentUser._id %>'] = 1000;
-</script>
 
 <script>
     const pageTitle = "Bible";

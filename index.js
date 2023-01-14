@@ -178,7 +178,12 @@ app.use(
             workerSrc: ["'self'", "blob:"],
             frameSrc: ["'self'", "blob:", ...frameSrcUrls],
             objectSrc: [],
-            mediaSrc: ["'self'", "https://youtu.be", "https://www.youtube.com"],
+            mediaSrc: [
+                "'self'", 
+                "https://youtu.be", 
+                "https://www.youtube.com",
+                "https://godinprintsdocuments.s3.amazonaws.com",
+            ],
             imgSrc: [
                 "'self'",
                 "blob:",

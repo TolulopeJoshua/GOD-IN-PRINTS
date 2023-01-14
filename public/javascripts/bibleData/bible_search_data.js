@@ -4,16 +4,22 @@ const resultsList = document.querySelector(`#results-list`);
 const searchInput = document.querySelector(`#search`);
 const searchNavTop = document.querySelector(`#search-nav-top`);
 const searchNavBottom = document.querySelector(`#search-nav-bottom`);
+const version = document.getElementById("version");
 
-const unknowns = ['1ES', '2ES', 'TOB', 'JDT', 'ESG', 'WIS', 'SIR', 'BAR', 'S3Y', 'SUS', 'BEL', 'MAN', '1MA', '2MA'];
+version.value = localStorage.getItem("bibleVersion") || "de4e12af7f28f599-02";
+version.onchange = function() {
+  localStorage.setItem('bibleVersion', version.value);
+  document.getElementById('searchForm').submit();
+}
 
 search(searchText);
 
-function search(searchText, offset = data.offset) {
+function search(searchText, offset = data.offset / 20) {
     searchInput.value = searchText;
     let resultsHTML = ``;
 
     if (data.verses) {
+      console.log(data.verses)
       if (!data.verses[0]) {
         searchNavTop.innerHTML = ``;
         searchNavBottom.innerHTML = ``;
@@ -29,12 +35,10 @@ function search(searchText, offset = data.offset) {
 
         resultsHTML += `<ul>`;
         for (let verse of data.verses) {
-            if (!unknowns.includes(verse.bookId)){
-                resultsHTML += `<li>
-                    <h5>${verse.reference}</h5>
-                    <div class="small fs-6 not-eb-container">${verse.text}</div>
-                    <a href="/bible/chapter?chapter=${verse.chapterId.toLowerCase()}">view chapter</a></li>`;
-            }
+          resultsHTML += `<li>
+              <h5>${verse.reference}</h5>
+              <div class="small fs-6 not-eb-container">${verse.text}</div>
+              <a href="/bible/chapter?chapter=${verse.chapterId.toLowerCase()}">view chapter</a></li>`;
         }
         resultsHTML += `<ul>`;
       }
@@ -48,13 +52,11 @@ function search(searchText, offset = data.offset) {
       } else {
         resultsHTML += `<ul>`;
         for (let passage of data.passages) {
-          if (!unknowns.includes(passage.bookId)){
-            resultsHTML += `<li>
-                <h5>${passage.reference}</h5>
-                <div class="small fs-6 eb-container">${passage.content}</div>
-                <a href="/bible/chapter?chapter=${passage.chapterIds[0].toLowerCase()}">view chapter</a>
-                <br></li>`;
-          }
+          resultsHTML += `<li>
+              <h5>${passage.reference}</h5>
+              <div class="small fs-6 eb-container">${passage.content}</div>
+              <a href="/bible/chapter?chapter=${passage.chapterIds[0].toLowerCase()}">view chapter</a>
+              <br></li>`;
         }
         resultsHTML += `</ul>`;
       }
@@ -79,11 +81,11 @@ function buildNav(offset, total, searchText) {
   }
 
   if (offset > 0) {
-    searchNavHTML += `<a class="btn btn-outline-primary" href="/bible/search?search=${searchText}&offset=${offset - 1}">Previous Page</a>`;
+    searchNavHTML += `<a class="btn btn-outline-primary" href="/bible/search?search=${searchText}&offset=${offset - 1}&version=${version.value}">Previous Page</a>`;
   }
 
   if (total / 20 > offset + 1) {
-    searchNavHTML += `<a class="btn btn-outline-primary ms-auto" href="/bible/search?search=${searchText}&offset=${offset + 1}">Next Page</a>`;
+    searchNavHTML += `<a class="btn btn-outline-primary ms-auto" href="/bible/search?search=${searchText}&offset=${offset + 1}&version=${version.value}">Next Page</a>`;
   }
 
   if (offset > 0 || total / 20 > offset + 1) {
