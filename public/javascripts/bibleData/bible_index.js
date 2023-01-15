@@ -22,8 +22,9 @@ const planner = document.querySelector('#plan');
 const createPlanBtn = datePage.querySelector('button');
 const loaders = planner.querySelectorAll('.loader');
 
+let func;
 if (planArr) {
-    hydratePlan();
+    func = hydratePlan();
     inflateDaily();
 }
 
@@ -52,12 +53,12 @@ document.querySelector('#newDate').addEventListener('click', () => {
 })
 
 createPlanBtn.addEventListener('click', async () => {
-  hide(datePage); 
+  hide(datePage); func && document.querySelector('#todayPlan').removeEventListener('click', func);;
   loaders.forEach(loader => loader.classList.remove('d-none'))
   planArr = await createPlan(plan, startingDate);
   localStorage.setItem('biblePlan', JSON.stringify(planArr));
   setTimeout(() => {
-    hydratePlan();
+    func = hydratePlan();
     inflateDaily();
   }, 2000);
 });
@@ -68,7 +69,7 @@ function inflateDaily() {
   planArr.forEach(obj => obj.date = new Date(obj.date));
   const today = planArr.find(obj => (new Date()).toJSON().slice(0,10) == obj.date.toJSON().slice(0,10)) || null;
   if(today) {
-    document.querySelector('#menu').querySelector('a[href$="/bible"]').innerText += ` (${(new Date()).toJSON().slice(0,10)})`;
+    document.querySelector('#menu').querySelector('a[href$="/bible"]').innerText = `Planner (${(new Date()).toJSON().slice(0,10)})`;
     const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
     today.chapters.forEach(item => {
       const line = document.createElement('li');
@@ -141,6 +142,7 @@ function hydratePlan() {
     }
   }
   document.querySelector('#todayPlan').addEventListener('click', runToday);
+  return runToday;
 }
 
 function hide(element) {
