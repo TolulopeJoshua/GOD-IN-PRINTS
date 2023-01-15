@@ -38,6 +38,7 @@ plans.forEach(pln => {
 
 datePage.querySelector('#toplan').addEventListener('click', () => unhide(planPage));
 datePage.querySelector('input[type=date]').addEventListener('change', (e) => {
+  !e.target.value && (e.target.value = startingDate);
   startingDate = e.target.value;
   createPlanBtn.classList.remove('disabled');
 })
