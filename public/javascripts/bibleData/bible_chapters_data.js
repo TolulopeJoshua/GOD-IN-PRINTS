@@ -88,7 +88,37 @@ fetch('/javascripts/bibleData/chapters.json')
     return chapters.concat(book.chapters.filter(chapter => chapter.number != 'intro'));
   }, [])
   const currIndex = chapters.findIndex(chapter => chapter.id == bibleChapters.value.toUpperCase());
-  document.querySelectorAll('.prev').forEach(prev => chapters[currIndex - 1] ? (prev.href = `/bible/chapter?chapter=${chapters[currIndex - 1].id.toLowerCase()}&version=${version.value}`) && (prev.innerHTML = `${chapters[currIndex - 1].id}<i class="bi bi-skip-backward-fill ps-2 fs-4"></i>`) : prev.classList.add('invisible'))
-  document.querySelectorAll('.next').forEach(next => currIndex != -1 && chapters[currIndex + 1] ? (next.href = `/bible/chapter?chapter=${chapters[currIndex + 1].id.toLowerCase()}&version=${version.value}`) && (next.innerHTML = `<i class="bi bi-skip-forward-fill pe-2 fs-4"></i>${chapters[currIndex + 1].id}`) : next.classList.add('invisible'))
+  document.querySelectorAll('.prev').forEach(prev => chapters[currIndex - 1] ? (prev.href = `/bible/chapter?chapter=${chapters[currIndex - 1].id.toLowerCase()}&version=${version.value}`) && (prev.innerHTML = `${chapters[currIndex - 1].id}<i class="bi bi-skip-backward-fill ps-3 fs-4"></i>`) : prev.classList.add('invisible'))
+  document.querySelectorAll('.next').forEach(next => currIndex != -1 && chapters[currIndex + 1] ? (next.href = `/bible/chapter?chapter=${chapters[currIndex + 1].id.toLowerCase()}&version=${version.value}`) && (next.innerHTML = `<i class="bi bi-skip-forward-fill pe-3 fs-4"></i>${chapters[currIndex + 1].id}`) : next.classList.add('invisible'))
   
 })
+
+const planArr = JSON.parse(localStorage.getItem('biblePlan')) || [];
+inflateDaily();
+function inflateDaily() {
+  const daily = document.querySelector('#dailyPlans');
+  daily.innerHTML = '';
+  planArr.forEach(obj => obj.date = new Date(obj.date));
+  const today = planArr.find(obj => (new Date()).toJSON().slice(0,10) == obj.date.toJSON().slice(0,10)) || null;
+  if(today) {
+    const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
+    today.chapters.forEach(item => {
+      const line = document.createElement('li');
+      line.classList.add('d-flex','gap-2')
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.checked = item.read;
+      check.classList.add('form-constrol','p-0','m-0');
+      check.addEventListener('change', (e) => {
+        item.read = e.target.checked;
+        localStorage.setItem('biblePlan', JSON.stringify(planArr));
+      })
+      line.appendChild(check);
+      const anchor = document.createElement('a');
+      anchor.innerText = item.chapter.name;
+      anchor.href = `/bible/chapter?chapter=${item.chapter.id.toLowerCase()}&version=${version}`;
+      line.appendChild(anchor);
+      daily.appendChild(line);
+    })
+  }
+}

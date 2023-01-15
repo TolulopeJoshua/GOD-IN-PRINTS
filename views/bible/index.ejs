@@ -1,7 +1,8 @@
 <% layout('layouts/boilerplate')%>
 
 <div id="menu" class="col-md-3 menu d-none d-md-block scroll">
-    <a class="h5 active" href="/bible">Cover Page</a>
+    <a class="h5 active" href="/bible">Planner</a>
+    <ol id="dailyPlans"></ol>
     <a class="h5" href="/bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
         <div class="container m-0 p-0">
@@ -24,18 +25,64 @@
 <div class="col-md-9 col-lg-6 offset-md-3">
     <div class="row">
         <div class="col-10  offset-1">
-            <h1 class="p-3 text-center">The Bible</h1>
-            <div style="border-radius: 3rem;" class="bible text-center m-3">
-                <p class="text-white h3 p-3">The statutes of the LORD are right,</p> 
-                <p class="text-white h3 p-3">rejoicing the heart:</p> 
-                <p class="text-white h3 p-3">the commandment of the LORD is pure,</p>
-                <p class="text-white h3 p-3">enlightening the eyes.</p>
+            <h1 class="p-4 text-center">The Bible</h1>
+            <div style="border-radius: 3rem;" class="bible text-center m-3 p-3">
+                <p class="text-white h6 p-3">The statutes of the LORD are right,</p> 
+                <p class="text-white h6 p-3">rejoicing the heart:</p> 
+                <p class="text-white h6 p-3">the commandment of the LORD is pure,</p>
+                <p class="text-white h6 p-3">enlightening the eyes.</p>
                 <a id="bibleLink" class="btn btn-light shadow text-dark m-3" href=''>OPEN</a>
             </div>
             <div class="d-none" id="links">
                 <a href="/Bible/search?search=blessed">Search Bible</a>
             </div>
         </div>
+    </div>
+</div>
+
+<style>
+    #plans, #date {
+        transition: transform ease 0.5s;
+    }
+</style>
+
+<div class="d-lg-none" style="margin-bottom: 100px;"></div>
+
+<div class="col-md-3 d-lg-none"></div>
+<div class="offset-lg-9 col-md-9 col-lg-3 p-lg-0 m-lg-0">
+    <div class="w-100 h-100 d-flex flex-column align-items-center">
+        <div class="card position-sticky" style="top: 200px;">
+            <h5 class="border-bottom text-center p-3 m-0">Reading Planner</h5>
+            <div style="height: 320px; width: 240px; overflow-x: hidden; transform: translateX(0);" class="position-relative scroll">
+                <div id="plan" style="gap: 16px; height: max-content;" class="d-flex flex-column justify-content-center align-items-center w-100 p-2">
+                    <div class="spinner-border text-info my-5 p-5 loader" style="width: 100px; height: 100px;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h6 class="loader text-info">Creating Plan</h6>
+                </div>
+                <div id="date" style="gap: 20px;" class="position-absolute top-0 start-0 w-100 h-100 bg-light d-flex flex-column justify-content-center align-items-center p-3">
+                    <h6 class="text-center m-0">Select Starting Date</h6>
+                    <input class="form-control" type="date">
+                    <button class="btn btn-outline-primary disabled">Create Plan</button>
+                    <span id="toplan"><i class="bi bi-arrow-90deg-left fs-4 text-primary btn"></i></span>
+                </div>
+                <div id="plans" style="gap: 16px;" class="position-absolute top-0 start-0 w-100 h-100 bg-white d-flex flex-column justify-content-center align-items-center p-1 border-end">
+                    <h6 class="text-center m-0">Choose a Plan</h6>
+                    <button id="1a" class="plan btn btn-sm p-0">One chapter a day (Gen to Rev)</button>
+                    <button id="1b" class="plan btn btn-sm p-0">One chapter a day (New Testmt)</button>
+                    <button id="2a" class="plan btn btn-sm p-0">Two chapters a day (Gen to Rev)</button>
+                    <button id="2b" class="plan btn btn-sm p-0">Two chapters a day (Old & New)</button>
+                    <small class="border-top w-100 text-center text-muted" style="text-decoration: underline; text-decoration-style: dotted;"><em>Bible in a Year</em></small>
+                    <button id="3a" class="plan btn btn-sm p-0">Three chapters a day (Gen to Rev)</button>
+                    <button id="3b" class="plan btn btn-sm p-0">Three chapters a day (Old & New)</button>
+                </div>
+            </div>
+            <div id="planOptions" class="w-100 d-flex flex-wrap p-1 bg-white d-none">
+                <button id="newPlan" class="border border-primary btn btn-sm w-50">New Plan</button>
+                <button id="newDate" class="border border-primary btn btn-sm w-50 d-none">New Date</button>
+                <button id="todayPlan" class="border border-primary btn btn-sm w-50">Go to Today</button>
+            </div>
+        </div>  
     </div>
 </div>
 
@@ -46,6 +93,8 @@
     const bibleUrl = `/bible/chapter?chapter=${chapter}&version=${version}`;
     const aButton = document.getElementById('bibleLink');
     aButton.href = bibleUrl;
+
+
 </script>
 <script src="/javascripts/bibleData/bible_index.js"></script>
 

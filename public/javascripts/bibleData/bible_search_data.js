@@ -19,7 +19,6 @@ function search(searchText, offset = data.offset / 20) {
     let resultsHTML = ``;
 
     if (data.verses) {
-      console.log(data.verses)
       if (!data.verses[0]) {
         searchNavTop.innerHTML = ``;
         searchNavBottom.innerHTML = ``;
@@ -93,4 +92,34 @@ function buildNav(offset, total, searchText) {
   }
 
   return [topSearchNavHTML, searchNavHTML];
+}
+
+const planArr = JSON.parse(localStorage.getItem('biblePlan')) || [];
+inflateDaily();
+function inflateDaily() {
+  const daily = document.querySelector('#dailyPlans');
+  daily.innerHTML = '';
+  planArr.forEach(obj => obj.date = new Date(obj.date));
+  const today = planArr.find(obj => (new Date()).toJSON().slice(0,10) == obj.date.toJSON().slice(0,10)) || null;
+  if(today) {
+    const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
+    today.chapters.forEach(item => {
+      const line = document.createElement('li');
+      line.classList.add('d-flex','gap-2')
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.checked = item.read;
+      check.classList.add('form-constrol','p-0','m-0');
+      check.addEventListener('change', (e) => {
+        item.read = e.target.checked;
+        localStorage.setItem('biblePlan', JSON.stringify(planArr));
+      })
+      line.appendChild(check);
+      const anchor = document.createElement('a');
+      anchor.innerText = item.chapter.name;
+      anchor.href = `/bible/chapter?chapter=${item.chapter.id.toLowerCase()}&version=${version}`;
+      line.appendChild(anchor);
+      daily.appendChild(line);
+    })
+  }
 }

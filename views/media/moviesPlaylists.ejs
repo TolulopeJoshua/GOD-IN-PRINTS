@@ -95,7 +95,7 @@
                 <h5 class="m-0 ms-2"><%= playlist.name %> </h5>
                 <div class="position-relative rounded-2 overflow-hidden ms-auto">
                     <% if (playlist.videos.length) { %>
-                        <img src="<%= playlist.videos[0].snippet.thumbnails.default.url %> " alt="<%= playlist.name %> ">
+                        <img height="90px" width="120px" src="<%= playlist.videos[0].snippet.thumbnails.default.url %> " alt="<%= playlist.name %> ">
                     <% } else { %>
                         <div style="width: 120px; height: 90px;" class="bg-light text-dark rounded-2 text-center d-flex justify-content-center align-items-center h6"><span><%= playlist.name == 'Watch Later' ? 'Add Movies to Watch Later' : 'Upgrade Account' %></span></div>
                     <% } %>
@@ -114,7 +114,7 @@
                         <% const url = !currentUser && !video.embeddable ? '/login' : !video.embeddable ? `https://youtu.be/${video.id}` : `/media/movies/${video.id}/${video.snippet.title}` %> 
                         <a href="<%= url %>" target="<%= !video.embeddable && currentUser ? '_blank' : '' %>"><article class="rounded-3 bg-light border d-flex position-relative">
                             <div class="position-relative">            
-                                <img class="rounded-start" src="<%= video.snippet.thumbnails.default.url %> " alt="<%= video.snippet.title %> ">
+                                <img class="rounded-start" height="90px" src="<%= video.snippet.thumbnails.default.url %> " alt="<%= video.snippet.title %> ">
                                 <span class="play rounded-start position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center h1 bg-secondary text-light"><i class="bi bi-play-fill"></i></span>
                             </div>
                             <span class="px-2 d-flex flex-column justify-content-around">
