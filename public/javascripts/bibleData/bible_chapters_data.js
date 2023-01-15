@@ -32,7 +32,7 @@ fetch('/javascripts/bibleData/chapters.json')
   };
   
   bibleChapters.onchange = function(){
-    localStorage.setItem('bibleChapter', bibleChapters.value);
+    // localStorage.setItem('bibleChapter', bibleChapters.value);
     document.getElementById("chapterForm").submit();
   }
   
@@ -40,6 +40,7 @@ fetch('/javascripts/bibleData/chapters.json')
     localStorage.setItem('bibleVersion', version.value);
     document.getElementById("chapterForm").submit();
   }
+  localStorage.setItem('bibleChapter', (new URLSearchParams(window.location.search)).get('chapter'));
   
   bibleChapters.value = localStorage.getItem('bibleChapter') || 'jhn.3';
   version.value = localStorage.getItem("bibleVersion") || "de4e12af7f28f599-02";
