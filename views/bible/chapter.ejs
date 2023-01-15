@@ -1,18 +1,18 @@
 <% layout('layouts/boilerplate')%>
 
 <div id="menu" class="col-md-3 menu d-md-block scroll">
-    <a class="h5" href="/bible">Planner</a>
+    <a href="/bible">Planner</a>
     <ol id="dailyPlans"></ol>
-    <a class="h5 active" href="bible/chapter?chapter=jhn.3">Passage</a>
+    <a class="active" href="bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
         <div class="container m-0 p-0">
-            <select class="menu-list p-2 search-area " name="book" id="book"></select>
-            <select class="menu-list p-2 search-area " name="chapter" id="chapter"></select>
+            <select class="menu-list p-2 search-area w-100" name="book" id="book"></select>
+            <select class="menu-list p-2 search-area w-100" name="chapter" id="chapter"></select>
         </div>
     </form>
     <a href="">Version</a>
     <div class="container m-0 p-0">
-        <select form="chapterForm" class="menu-list p-2 search-area " name="version" id="version">
+        <select form="chapterForm" class="menu-list p-2 search-area w-100" name="version" id="version">
             <option value="de4e12af7f28f599-02">King James</option>
             <option value="06125adad2d5898a-01">American Standard</option>
             <option value="9879dbb7cfe39e4d-04">World English</option>

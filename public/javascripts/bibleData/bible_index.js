@@ -68,10 +68,11 @@ function inflateDaily() {
   planArr.forEach(obj => obj.date = new Date(obj.date));
   const today = planArr.find(obj => (new Date()).toJSON().slice(0,10) == obj.date.toJSON().slice(0,10)) || null;
   if(today) {
+    document.querySelector('#menu').querySelector('a[href$="/bible"]').innerText += ` (${(new Date()).toJSON().slice(0,10)})`;
     const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
     today.chapters.forEach(item => {
       const line = document.createElement('li');
-      line.classList.add('d-flex','gap-2')
+      line.classList.add('d-md-flex','gap-2')
       const check = document.createElement('input');
       check.type = 'checkbox';
       check.checked = item.read;
