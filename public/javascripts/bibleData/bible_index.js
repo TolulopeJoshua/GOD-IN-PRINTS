@@ -21,10 +21,11 @@ const datePage = document.querySelector('#date');
 const planner = document.querySelector('#plan');
 const createPlanBtn = datePage.querySelector('button');
 const loaders = planner.querySelectorAll('.loader');
+const backToPlan = document.querySelector('#backToPlan');
 
-let func;
+let delEvent;
 if (planArr) {
-    func = hydratePlan();
+    delEvent = hydratePlan();
     inflateDaily();
 }
 
@@ -46,20 +47,30 @@ document.querySelector('#newPlan').addEventListener('click', () => {
   unhide(planPage); unhide(datePage); 
   document.querySelectorAll('.planDays').forEach(day => day.classList.add('d-none')); 
   document.querySelector('#planOptions').classList.add('d-none')
+  backToPlan.classList.remove('d-none')
 })
 document.querySelector('#newDate').addEventListener('click', () => {
   unhide(datePage); 
   document.querySelectorAll('.planDays').forEach(day => day.classList.add('d-none')); 
   document.querySelector('#planOptions').classList.add('d-none')
+  backToPlan.classList.remove('d-none')
+})
+backToPlan.addEventListener('click', (e) => {
+  document.querySelectorAll('.planDays').forEach(day => day.classList.remove('d-none')); 
+  document.querySelector('#planOptions').classList.remove('d-none');
+  hide(planPage); hide(datePage);
+  backToPlan.classList.add('d-none');
 })
 
 createPlanBtn.addEventListener('click', async () => {
-  hide(datePage); func && document.querySelector('#todayPlan').removeEventListener('click', func);;
+  hide(datePage); delEvent && delEvent();
   loaders.forEach(loader => loader.classList.remove('d-none'))
+  document.querySelectorAll('.planDays').forEach(day => day.remove()); 
+  backToPlan.classList.add('d-none')
   planArr = await createPlan(plan, startingDate);
   localStorage.setItem('biblePlan', JSON.stringify(planArr));
   setTimeout(() => {
-    func = hydratePlan();
+    delEvent = hydratePlan();
     inflateDaily();
   }, 2000);
 });
@@ -74,7 +85,7 @@ function inflateDaily() {
     const version = localStorage.getItem('bibleVersion') || 'de4e12af7f28f599-02';
     today.chapters.forEach(item => {
       const line = document.createElement('li');
-      line.classList.add('d-md-flex','gap-2')
+      line.classList.add('d-flex','gap-2','pe-md-5','w-100','justify-content-center')
       const check = document.createElement('input');
       check.type = 'checkbox';
       check.checked = item.read;
@@ -143,7 +154,7 @@ function hydratePlan() {
     }
   }
   document.querySelector('#todayPlan').addEventListener('click', runToday);
-  return runToday;
+  return () => document.querySelector('#todayPlan').removeEventListener('click', runToday);
 }
 
 function hide(element) {
