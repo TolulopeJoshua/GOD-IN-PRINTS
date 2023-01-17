@@ -13,7 +13,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.books[Object.keys(limits.books)[0]] %> book download(s) per month.</li>
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> Songs playlists.</li>
-                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= Math.floor(limits.videos[Object.keys(limits.books)[0]] * numVideos / 100) - 4 %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= Math.floor(limits.videos[Object.keys(limits.books)[0]] * numVideos / 100) - 4 %> Movies. <em>(Additions frequent)</em></li>
                 </ul>
                 <small class="pb-2"><i class="text-capitalize"><%= limits.prices[Object.keys(limits.books)[0]] %></i></small><small>indefinite</small>
             </div>
@@ -34,7 +34,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= limits.books[Object.keys(limits.books)[1]] / 4 %> book download(s) per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li>
-                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[1]] + Math.floor(limits.videos[Object.keys(limits.books)[1]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[1]] + Math.floor(limits.videos[Object.keys(limits.books)[1]] * numVideos / 100) %> Movies. <em>(Additions frequent)</em></li>
                 </ul>
                 <small class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[1]] %> / $<%= limits.prices_usd[Object.keys(limits.books)[1]] %></i></small><small>monthly</small>
             </div>
@@ -58,7 +58,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= limits.books[Object.keys(limits.books)[2]] / 4 %> book download(s) per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li>
-                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[2]] + Math.floor(limits.videos[Object.keys(limits.books)[2]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[2]] + Math.floor(limits.videos[Object.keys(limits.books)[2]] * numVideos / 100) %> Movies. <em>(Additions frequent)</em></li>
                 </ul>
                 <small class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[2]] %> / $<%= limits.prices_usd[Object.keys(limits.books)[2]] %></i></small><small>monthly</small>
             </div>
@@ -82,7 +82,7 @@
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Access entire documents list.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= limits.books[Object.keys(limits.books)[3]] / 4 %> book download(s) per week.</li>
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li>
-                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= 55 + Math.ceil(limits.videos[Object.keys(limits.books)[3]] * numVideos / 100) %> Movies. <em>(Additions Weekly)</em></li>
+                    <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= 55 + Math.ceil(limits.videos[Object.keys(limits.books)[3]] * numVideos / 100) %> Movies. <em>(Additions frequent)</em></li>
                 </ul>
                 <small id="ticket" class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[3]] %> / $<%= limits.prices_usd[Object.keys(limits.books)[3]] %></i></small><small>monthly</small>
             </div>
