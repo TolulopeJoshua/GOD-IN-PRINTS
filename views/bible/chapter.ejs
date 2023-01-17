@@ -5,13 +5,13 @@
     <ol id="dailyPlans"></ol>
     <a class="active" href="bible/chapter?chapter=jhn.3">Passage</a>
     <form action="/bible/chapter" id="chapterForm" method="get">
-        <div class="container m-0 p-0">
+        <div class=" m-0 p-0">
             <select class="menu-list p-2 search-area w-100" name="book" id="book"></select>
             <select class="menu-list p-2 search-area w-100" name="chapter" id="chapter"></select>
         </div>
     </form>
     <a href="">Version</a>
-    <div class="container m-0 p-0">
+    <div class=" m-0 p-0">
         <select form="chapterForm" class="menu-list p-2 search-area w-100" name="version" id="version">
             <option value="de4e12af7f28f599-02">King James</option>
             <option value="06125adad2d5898a-01">American Standard</option>
@@ -25,8 +25,34 @@
     <button class=" btn btn-outline btn-info" id="fastUpButton"><i class="bi bi-chevron-double-up"></i></button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .highlighted {
+        background-color: #ccc;
+    }
+    .eb-container {
+        cursor: default;
+    }
+</style>
             
-<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto text-center">
+<div id="highlightBar" style="z-index: 10000;" class="d-none position-fixed border border-3 col-md-9 col-lg-6 offset-md-3 d-flex justify-content-between bg-light p-0">
+    <div>
+        <button id="shareVerses" class="btn btn-outline"><i class="bi bi-share-fill"></i></button>
+    </div>
+    <div id="highlightColors" class="w-75 d-flex justify-content-center align-items-center gap-1 m-1">
+        <button style="background: rgba(255, 69, 0, 0.5);" class="btn btn-outline border border-2 w-10 h-100"></button>
+        <button style="background: rgba(255, 255, 0, 0.5);" class="btn btn-outline border border-2 w-10 h-100"></button>
+        <button style="background: transparent;" class="btn btn-outline border border-2 w-10 h-100"></button>
+        <button style="background: rgba(0, 128, 0, 0.5);" class="btn btn-outline border border-2 w-10 h-100"></button>
+        <button style="background: rgba(0, 0, 255, 0.5);" class="btn btn-outline border border-2 w-10 h-100"></button>
+        <input id="color" type="color" style="visibility: collapse; width: 0;">
+        <label for="color" style="background: linear-gradient(to right, red, orange,yellow,green,blue,indigo,violet);" class="btn btn-outline border border-2 w-10 h-100"></label>
+    </div>
+    <div class="me-0">
+        <button id="closeHighlight" class="btn btn-info"><i class="bi bi-x text-light"></i></button>
+    </div>
+</div>
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto text-center position-relative">
     <div class="subheadings">
         <h1 id="viewing" class="p-3 text-decoration-underline"><%= data.reference %></h1>
         <span class="d-flex justify-content-between align-items-center p-3">
@@ -83,11 +109,11 @@
 
     const shareData = {
         title: `<%= data.reference %>`,
-        text: `<%= data.content.replace(/<[^>]*>/g, " ").slice(0,500) %>...` + '\n\n use the link provided to read whole chapter. \n',
+        text: `<%= data.content.replace(/<[^>]*>/g, " ").slice(0,1000) %>...` + '\n\n use the link provided to read passage. \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');
-    shareBtn.addEventListener('click', async () => navigator.share(shareData))
+    shareBtn.addEventListener('click', () => navigator.share(shareData))
 
 </script>
 

@@ -124,3 +124,97 @@ function inflateDaily() {
     })
   }
 }
+
+let savedHighlights = JSON.parse(localStorage.getItem('bibleHighlights')) || [];
+let currVerseId;
+const highlightBar = document.getElementById('highlightBar');
+const highlightColors = document.getElementById('highlightColors');
+const verses = document.querySelectorAll('.verse-span');
+
+savedHighlights.forEach(verse => {
+  const hVerses = document.querySelectorAll(`.verse-span[data-verse-id="${verse.verseId}"]`);
+  hVerses.forEach(vs => vs.style.background = verse.color);
+})
+
+verses.forEach(verse => verse.addEventListener('click', () => {
+  currVerseId = verse.dataset.verseId;
+  const rels = document.querySelectorAll(`.verse-span[data-verse-id="${currVerseId}"]`)
+  rels.forEach(rel => {
+    rel.classList.toggle('highlighted')
+    if (rel.classList.contains('highlighted')) {
+      rel.style.background = '';
+    } else {
+      const saved = savedHighlights.find(h => h.verseId == currVerseId);
+      rel.style.background = saved ? saved.color : '';
+    }
+  })
+  const highlight = document.querySelector('.highlighted');
+  highlight ? highlightBar.classList.remove('d-none') : closeHighlights();
+}))
+highlightBar.querySelector('#closeHighlight').addEventListener('click', closeHighlights);
+highlightColors.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('.highlighted').forEach(verse => {
+    verse.style.background = button.style.background
+    const saved = savedHighlights.find(saved => saved.verseId == verse.dataset.verseId);
+    saved ? (saved.color = button.style.background) : savedHighlights.push({verseId: verse.dataset.verseId, color: button.style.background})
+  });
+  localStorage.setItem('bibleHighlights', JSON.stringify(savedHighlights));
+  closeHighlights();
+}))
+highlightColors.querySelector('input').addEventListener('change', (e) => {
+  const c = e.target.value.replace('#', '0x');
+  document.querySelectorAll('.highlighted').forEach(verse => {
+    verse.style.background = 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+', 0.5)'
+    const saved = savedHighlights.find(saved => saved.verseId == verse.dataset.verseId);
+    saved ? (saved.color = verse.style.background) : savedHighlights.push({verseId: verse.dataset.verseId, color: verse.style.background})
+  });
+  localStorage.setItem('bibleHighlights', JSON.stringify(savedHighlights));
+  e.target.value = '#000000';
+  closeHighlights();
+})
+
+highlightBar.querySelector('#shareVerses').addEventListener('click', () => {
+  const shareData = {
+    title: '',
+    text: '',
+    url: window.location.href
+  }
+  let text = '', title, verses = [];
+  document.querySelectorAll('.highlighted').forEach(verse => {
+    text += verse.innerText;
+    title = verse.dataset.verseId.split('.').slice(0,2).join(' : ');
+    verses = [...verses, parseInt(verse.dataset.verseId.split('.')[2])];
+  })
+  shareData.title = title + ' vs ' + vs2psg([...new Set(verses)]);
+  shareData.text = text;
+  navigator.share(shareData);
+  // closeHighlights();
+
+  function vs2psg(arr) {
+    let psg = [];
+    let curr = 0;
+    let currP = 0;
+    for (let num of arr) {
+      if (curr) {
+        if (num != curr + 1) {
+          currP == curr ? psg.push(`${curr}`) : psg.push(`${currP}-${curr}`);
+          currP = num;
+        }
+      }
+      curr = num; !currP && (currP = num);
+    }
+    if (curr) {
+      currP == curr ? psg.push(`${curr}`) : psg.push(`${currP}-${curr}`);
+    }
+    return psg.join(',');
+  }
+})
+
+function closeHighlights() {
+  document.querySelectorAll('.highlighted').forEach(verse => {
+    verse.classList.remove('highlighted');
+    const saved = savedHighlights.find(h => h.verseId == verse.dataset.verseId);
+    verse.style.background = saved ? saved.color : '';
+  });
+  highlightBar.classList.add('d-none')
+};
