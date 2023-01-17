@@ -46,9 +46,9 @@
     .bg2 {
         position: absolute;
         top: calc(100% - 150px);
-        left: 0;
+        left: calc(100% - 100px);
         height: 100px;
-        width: 100%;
+        width: 100px;
     }
     .movie-header {
         width: max-content;
@@ -90,7 +90,7 @@
         </div>
     </div>
     <div class="ratio ratio-16x9 position-relative">
-        <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/<%= movie.id %>?autoplay=1&mute=1" title="<%= movie.snippet.title %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe class="shadow-lg rounded"  src="https://www.youtube.com/embed/<%= movie.id %>" title="<%= movie.snippet.title %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div class="bg1"></div>
         <div class="bg2"></div>
     </div> 

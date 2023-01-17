@@ -64,15 +64,22 @@
         })
       }
     </script>
-    <div class="toast default position-fixed bottom-0 start-50 translate-middle-x m-3" style="z-index: 11" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+    <div class="toast default position-fixed bottom-0 start-50 translate-middle-x m-3 d-none" style="z-index: 11" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
         <div class="toast-body bg-dark text-light text-center rounded-2">
             Toast
         </div>
         <script>
-            const toast = new bootstrap.Toast(document.querySelector('.toast.default'))
+            let toastTimeout;
+            const defaultToast = document.querySelector('.toast.default');
+            const toast = new bootstrap.Toast(defaultToast)
             function toaster(msg) {
-              document.querySelector('.toast.default').querySelector('.toast-body').innerText = msg;
+              defaultToast.classList.remove('d-none');
+              defaultToast.querySelector('.toast-body').innerText = msg;
               toast.show();
+              toastTimeout && clearTimeout(toastTimeout);
+              toastTimeout = setTimeout(() => {
+                defaultToast.classList.add('d-none');
+              }, 2000);
             }
         </script>
   
