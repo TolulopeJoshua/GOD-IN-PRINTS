@@ -41,12 +41,12 @@
                 <% } %> 
             </div>
             <div class="row">
-                <p class="p-3 lh-lg justify">
+                <p class="px-3 lh-lg justify">
                     <span id=<%= biographies[0]._id %>><span class="text-muted"><%= biographies[0].text.replace(/<[^>]*>/g, " ").substring(0, 750) %>...</span></span>
                     <a class="" href="/biographies/1/<%= biographies[0].name%> ">continue</a>
                 </p>
 
-                <div class="row text-center bottom-100 mx-2">
+                <div class="row text-center bottom-100 m-0 p-0 mx-2">
                     <% for (let i = 1; i < biographies.length; i++) { %> 
                     <div class="d-flex justify-content-center offset-md-1 col-md-9 offset-lg-0 col-lg-4">
                         <div class="card shadow top-100 translate-middle-y rounded-pill" style="max-width: 320px;">
