@@ -30,7 +30,7 @@
         <% if (book.image.key != 'none') { %>        
             <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
         <% } else { %>
-            <img class="card-img-top rounded img-thumbnail" alt="<%= book.title %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
+            <img class="card-img-top rounded img-thumbnail" alt="<%= book.title.replaceAll('_', ' ') %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
         <div class="card-body">
             <h1 class="h5 card-title text-capitalize"><%= book.title %> <%= book.author === ' '? '': ' - ' + book.author %> </h1>

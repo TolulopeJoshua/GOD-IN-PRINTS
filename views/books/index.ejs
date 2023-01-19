@@ -20,20 +20,60 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
+<style>
+
+    .anime strong {
+        width: max-content;
+        min-width: 50%;
+    }
+
+    .anime {
+        display: none;
+        width: max-content;
+        min-width: 200%;
+    }
+
+    td:hover .anime {
+        display: flex;
+        width: max-content;
+        min-width: 200%;
+        animation: across 5s linear 1s infinite;
+    }
+
+    td:hover a.text-truncate {
+        display: none !important;
+    }
+
+    @keyframes across {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
 <h1 class="p-3 text-center col-md-9 offset-md-3 col-lg-6">Feature Books</h1>
 <div class="col-md-9 offset-md-3 col-lg-6 overflow-auto">
     <table class="">
         <% for (i = 0; i < 10; i++) { %> 
             <tr>
                 <% for (j = 0; j < 2; j++) { %> 
-                    <td class="text-center p-2">
+                    <td class="text-center p-2 overflow-hidden">
                         <% const index = i + j * 3 %> 
                         <% if (books[index]) { %> 
                         <a href="/books/1/<%= books[index].title %>">
                             <img height="150px" class='mx-3 my-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image.key.replaceAll(" ", "+") %> alt="<%= books[index].title %> "> 
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
-                        <a class="text-decoration-none text-capitalize d-block text-truncate" href="/books/1/<%= books[index].title %>"><strong><%= books[index].title.toLowerCase() %> <%= books[index].author.toLowerCase() %> </strong></a>
+                        <a class="text-capitalize text-truncate d-block" href="/books/1/<%= books[index].title %>">
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                        </a>
+                        <a class="text-capitalize anime" href="/books/1/<%= books[index].title %>">
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                        </a>
                         <% } %> 
                     </td>
                 <% } %> 

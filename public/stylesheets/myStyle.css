@@ -76,7 +76,7 @@ a {
 
 .title-1 {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    text-shadow: 0px 0px 3px black;
+    /* text-shadow: 0px 0px 3px black; */
     text-decoration: underline;
     padding: 1em;
 }
