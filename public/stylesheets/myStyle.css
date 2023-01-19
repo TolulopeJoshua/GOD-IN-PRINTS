@@ -63,11 +63,11 @@ a {
 }
 
 .bg {
-    background-image: url("/assets/images/burningSheet.jpeg");
+    /* background-image: url("/assets/images/burningSheet.jpeg");
     background-size: 50% 75%;
     background-repeat: no-repeat;
     background-position: center bottom;
-    background-attachment: fixed;
+    background-attachment: fixed; */
 }
 
 .custom-bg {
@@ -75,8 +75,8 @@ a {
 }
 
 .title-1 {
-    font-family: 'Neonderthaw', cursive;
-    text-shadow: 0px 0px 5px black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-shadow: 0px 0px 3px black;
     text-decoration: underline;
     padding: 1em;
 }

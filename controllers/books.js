@@ -18,14 +18,15 @@ const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship
 
 
 module.exports.index = async (req, res) => {
-    // let books;
-    // let sessData = req.session;   
-    // if (sessData.featureBooks) {
-    //     books = sessData.featureBooks;
-    // } else {
-        const books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
-        // sessData.featureBooks = books;
-    // }
+    let books;
+    let sessData = req.session;   
+    if (sessData.featureBooks && !req.query.refresh) {
+        books = sessData.featureBooks;
+    } else {
+        books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
+        sessData.featureBooks = books;
+        return res.redirect('/books');
+    }
     const title = 'Feature Books on Christian Faith - Free pdf download';
     res.render('books/index', {books, title})
 };

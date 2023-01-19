@@ -20,29 +20,24 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<h1 class="text-center p-3 col-md-9 col-lg-6 offset-md-3">Feature Articles</h1>
-<div class="col-md-9 col-lg-6 offset-md-3 overflow-auto">
-    <table class="">
-        <% for (i = 0; i < 6; i++) { %> 
-            <tr>
-                <% for (j = 0; j < 2; j++) { %> 
-                    <td class="">
-                        <% const index = i + j * 6 %>  
-                        <h5 class="text-center py-3"><span class="shadow-sm bg-white p-2"><%= categories[index] %></span></h5>
-                        <ul class="p-2">
-                        <% let count = 0 %> 
-                        <% for (let article of articles) { %> 
-                            <% if (article.role === categories[index] && count < 3) { %> 
-                                <li class="text-truncate p-1"><small><a class="text-decoration-none text-capitalize" href="/articles/1/<%= article.name %>"><%= article.name %> </a></small> </li>
-                                <% count++ %> 
-                            <% } %> 
-                        <% } %> 
-                        </ul>
-                    </td>
-                <% } %> 
-            </tr>
-        <% } %> 
-    </table>
+
+<h1 class="text-center p-4 col-md-9 col-lg-6 offset-md-3">Feature Articles</h1>
+<div style="row-gap: 3rem; column-gap: 0.5rem;" class="col-md-9 col-lg-6 offset-md-3 overflow-auto d-flex flex-wrap justify-content-around">
+    <% for( article of articles ) { %>
+    <a href="/articles/1/<%= article.name %>" class="position-relative">
+        <article style="width: 320px; padding: 4rem 4.5rem;">
+            <h6 style="height: 80px; line-height: 1.5rem;" class="d-flex w-100 justify-content-center align-items-center text-capitalize text-center text-dark"><%= article.name %> </h6>
+            <p style="font-family: 'Times New Roman', Times, serif;" class="text-muted justify"><%= article.text.replace(/<[^>]*>/g, " ").substring(0, 250) %>... %> </p>
+        </article>
+        <span class="position-absolute top-0 start-0 w-100 h-100">
+            <img src="/assets/images/scroll-bg.png" width="100%" height="100%" alt="scroll background">
+        </span>
+        <article style="padding: 4rem 4.5rem;" class="position-absolute top-0 start-0 w-100 h-100">
+            <h6 style="height: 80px; line-height: 1.5rem;" class="d-flex w-100 justify-content-center align-items-center text-capitalize text-center text-dark"><%= article.name %> </h6>
+            <p style="font-family: 'Times New Roman', Times, serif;" class="text-muted justify"><%= article.text.replace(/<[^>]*>/g, " ").substring(0, 250) %>... %> </p>
+        </article>
+    </a>
+    <% } %>
 </div>
 
 <div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">

@@ -18,8 +18,9 @@ const categories = [
 module.exports.index = async (req, res) => {
     let articles = await Doc.find({docType: 'article', isApproved: true}) // Doc.aggregate([{ $match: {docType: 'article', isApproved: true} }, { $sample: { size: 300 } }]);
     articles = articles.sort(() => 0.5 - Math.random());
+    articles = categories.map(cat => articles.find(art => art.role == cat));
     const title = 'GIP Library - Feature Articles on Christian Faith';
-    res.render('articles/index', {categories, articles, title})
+    res.render('articles/index', { articles, title})
 };
 
 module.exports.list = async (req, res) => {
