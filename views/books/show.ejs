@@ -50,8 +50,8 @@
         </div>
         <% if (currentUser) { %>
             <small class="text-secondary d-block text-center pb-1">
-                Download limit: <%= currentUser.subscription.status === 'premium' ? '3 per week' : currentUser.subscription.status === 'medium' ? '2 per week' : currentUser.subscription.status === 'starter' ? '1 per week' : '1 per month' %> <i>
-                <%- currentUser.subscription.status != 'premium' ? `<a style="text-decoration: underline dotted;" href="/subscription"><i class="bi bi-dot"></i> increase limit</a>` : '' %> 
+                Download limit: <%= limit[currentUser.subscription.status] %> per month <i>
+                <%- currentUser.subscription.status != 'premium' ? `<i class="bi bi-dot"></i> <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>` : '' %> 
             </i></small>
         <% } %>
         <!-- <div class="card-footer text-muted">
@@ -65,7 +65,7 @@
             <h6 class="text-center">Download with Ticket!</h6>
             <input type="text" name="ticketId" placeholder="Ticket Id" class="form-control my-3" required>
             <button id="ticketBtn" class="btn btn-primary w-100">Download</button>
-            <p class="small text-end"><a href="/subscription#ticket">Get a ticket</a></p>
+            <p class="small text-end pt-3"><a href="/subscription#ticket">Get a ticket</a></p>
         </form>
     </div>
     <% } %> 

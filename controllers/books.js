@@ -181,8 +181,9 @@ module.exports.showBook = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books');
     }
+    const { books: limit } = require('../utils/lib/limits');
     const title = `${book.title} - Free pdf download`;
-    res.render('books/show', {book, title});
+    res.render('books/show', {book, title, limit});
 };
 
 module.exports.show = async (req, res) => {
@@ -193,8 +194,9 @@ module.exports.show = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books');
     }
+    const { books: limit } = require('../utils/lib/limits');
     const title = `${book.title} - Free pdf download`;
-    res.render('books/show', {book, title});
+    res.render('books/show', {book, title, limit});
 };
 
 module.exports.image = async (req, res) => {    
