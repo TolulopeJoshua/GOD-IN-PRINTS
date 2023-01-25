@@ -1,9 +1,28 @@
 <% layout('layouts/boilerplate') %> 
 
+<div id="menu" class="col-md-3 menu d-md-block scroll">
+    <ol>
+        <li><a href="/profile">Profile Info</a></li>
+        <li><a class="active" href="/subscription">Subscription</a></li>
+    </ol>
+</div>
+
+<div class="d-md-none mb-2" id="menuToggler">
+    <button class="d-none btn btn-outline btn-info" id="fastDownButton"><i class="bi bi-chevron-double-down"></i></button>
+    <button class=" btn btn-outline btn-info" id="fastUpButton"><i class="bi bi-chevron-double-up"></i></button>
+</div>
+<script src="/javascripts/toggleMenu.js"></script>
+
+<style>
+    .form-check-input:checked {
+        background: green;
+    }
+</style>
+
 <% const status = currentUser ? currentUser.subscription.status : 'classic' %> 
 
-<div class="mt-5 mb-5">
-    <div class="d-flex justify-content-center flex-wrap gap-3">
+<div class="col-md-9 col-lg-6 offset-md-3 my-5">
+    <div style="gap: 48px;" class="d-flex justify-content-center flex-wrap">
         <div class="card subscription disabled p-3">
             <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
                 <h3 class="p-3 text-primary text-capitalize"><%= Object.keys(limits.books)[0] %> </h3>
