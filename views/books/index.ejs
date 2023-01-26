@@ -68,11 +68,11 @@
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
                         <a class="text-capitalize text-truncate d-block" href="/books/1/<%= books[index].title %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('.pdf', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
                         </a>
                         <a class="text-capitalize anime" href="/books/1/<%= books[index].title %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('_', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('.pdf', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase().replaceAll('.pdf', ' ') %> <%= books[index].author.toLowerCase() %> </strong>
                         </a>
                         <% } %> 
                     </td>

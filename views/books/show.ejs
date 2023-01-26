@@ -28,12 +28,12 @@
     <% } %> 
     <div class="card text-center mb-3 card-size position-relative">
         <% if (book.image.key != 'none') { %>        
-            <img class='card-img-top rounded img-thumbnail' src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
+            <img class='card-img-top rounded img-thumbnail' style="min-height: 320px;" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
         <% } else { %>
             <img class="card-img-top rounded img-thumbnail" alt="<%= book.title %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
         <div class="card-body">
-            <h1 class="h5 card-title text-capitalize"><%= book.title.replaceAll('_', ' ') %> <%= book.author === ' '? '': ' - ' + book.author %> </h1>
+            <h1 class="h5 card-title text-capitalize"><%= book.title.replaceAll('.pdf', '') %> <%= book.author === ' '? '': ' by ' + book.author %> </h1>
             <div class="d-flex justify-content-center"><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share Link</em><i class="bi bi-share-fill"></i></button></div>
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>

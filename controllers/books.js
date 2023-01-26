@@ -25,7 +25,7 @@ module.exports.index = async (req, res) => {
     } else {
         books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
         sessData.featureBooks = books;
-        return res.redirect('/books');
+        if (req.query.refresh) return res.redirect('/books');
     }
     const title = 'Feature Books on Christian Faith - Free pdf download';
     res.render('books/index', {books, title})
@@ -179,7 +179,7 @@ module.exports.showBook = async (req, res) => {
     });
     if(!book) {
         req.flash('error', 'Cannot find that book!');
-        return res.redirect('/books');
+        return res.redirect('/books?refresh=1');
     }
     const { books: limit } = require('../utils/lib/limits');
     const title = `${book.title} - Free pdf download`;
@@ -192,7 +192,7 @@ module.exports.show = async (req, res) => {
     });
     if(!book) {
         req.flash('error', 'Cannot find that book!');
-        return res.redirect('/books');
+        return res.redirect('/books?refresh=1');
     }
     const { books: limit } = require('../utils/lib/limits');
     const title = `${book.title} - Free pdf download`;
@@ -234,7 +234,7 @@ module.exports.download = async (req, res) => {
         Bucket    : 'godinprintsdocuments',
         Key       : key,
     };
-    res.attachment(book.title); // Use ( + '.' + book.filetype) to add file extension
+    res.attachment(book.title.replaceAll('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
 
@@ -256,7 +256,7 @@ module.exports.ticketDownload = async (req, res) => {
         Bucket    : 'godinprintsdocuments',
         Key       : key,
     };
-    res.attachment(book.title); // Use ( + '.' + book.filetype) to add file extension
+    res.attachment(book.title.replaceAll('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
     await BookTicket.findByIdAndDelete(ticket._id);
