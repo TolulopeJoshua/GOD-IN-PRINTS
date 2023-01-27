@@ -59,7 +59,10 @@
         </div> -->
         <%- include('../partials/loginModal') %> 
     </div>
+    
     <% if (currentUser) { %> 
+    <p id="downloads" class="text-center"><button type="button" data-bs-toggle="modal" data-bs-target="#downloadsModal" class="text-muted text-decoration-underline btn btn-sm">Downloads History</button ></p>
+
     <div class="flex justify-content-center my-5">
         <form action="/books/<%= book._id %>/download/ticket" method="post" class="border border-2 border-secondary my-5 p-3 pb-0" style="width: 300px; max-width: 90%;">
             <h6 class="text-center">Download with Ticket!</h6>
@@ -117,7 +120,67 @@
     }
     const shareBtn = document.querySelector('#share');
     shareBtn.addEventListener('click', async () => navigator.share(shareData))
+
+    document.getElementById('downloads')?.addEventListener('click', () => {
+        axios.get('/books/downloads').then(response => {
+            // console.log(response.data)
+            const listDom = document.getElementById('downloadsModal').querySelector('.modal-body');
+            if (!response.data.last30.length && !response.data.other.length) {
+                listDom.innerHTML = 'There are no books in your downloads folder!';
+            } else {
+                listDom.innerHTML = '';
+            }
+            if (response.data.last30.length) {
+                const title1 = document.createElement('h6');
+                title1.classList.add('text-center','text-secondary','p-3');
+                title1.innerHTML = 'Last 30 days';
+                listDom.appendChild(title1);
+                response.data.last30.forEach((download, index) => {
+                    const title = document.createElement('h6');
+                    title.classList.add('text-capitalize','text-dark','border-top','border-secondary','pt-3');
+                    title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
+                    const info = document.createElement('p');
+                    info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
+                    info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
+                    listDom.appendChild(title); listDom.appendChild(info);
+                })
+            }
+            if (response.data.other.length) {
+                const title1 = document.createElement('h6');
+                title1.classList.add('text-center','text-secondary','p-3');
+                title1.innerHTML = 'Over 30 days';
+                listDom.appendChild(title1);
+                response.data.other.forEach((download, index) => {
+                    const title = document.createElement('h6');
+                    title.classList.add('text-capitalize','text-dark','border-top','border-secondary','pt-3');
+                    title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
+                    const info = document.createElement('p');
+                    info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
+                    info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
+                    listDom.appendChild(title); listDom.appendChild(info);
+                })
+            }
+        })
+    })
 </script>
     
-
+<div class="modal fade" id="downloadsModal" tabindex="-1" aria-labelledby="downloadsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Downloads</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-secondary">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-secondary mt-3">Retrieving downloads</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
  

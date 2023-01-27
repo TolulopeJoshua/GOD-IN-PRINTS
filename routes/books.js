@@ -27,6 +27,8 @@ router.post('/new', isLoggedIn, upload0.single('document'), validateBook, catchA
  
 router.get('/search', setRedirect, catchAsync(books.search));
 
+router.get('/downloads', isLoggedIn, catchAsync(books.downloadsList));
+
 router.get('/:id', setRedirect, catchAsync(books.showBook));
 
 router.get('/1/:title', setRedirect, catchAsync(books.show));

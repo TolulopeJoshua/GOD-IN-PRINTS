@@ -11,6 +11,7 @@ const path = require('path');
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
 const ExpressError = require('../utils/ExpressError');
 const bookTicket = require('../models/bookTicket');
+const { bool } = require('joi');
 
 const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
                     'Devotion', 'Commitment/Consecration', 'Grace/Conversion', 
@@ -46,7 +47,7 @@ module.exports.random = async (req, res) => {
 module.exports.categories = (req, res) => {
     const title = 'GIP Library - Books Categories';
     res.render('books/categories', {categories, title})
-};
+}; 
 
 module.exports.perCategory = async (req, res) => {
     const {category} = req.query;
@@ -245,7 +246,6 @@ module.exports.download = async (req, res) => {
 
 module.exports.ticketDownload = async (req, res) => {
     const ticket = await BookTicket.findOne({ticket: req.body.ticketId});
-    // const tickets = await BookTicket.find({});
     if (!ticket) {
         req.flash('error', 'Ticket not found.');
         return res.redirect(`/books/${req.params.id}`);
@@ -259,8 +259,33 @@ module.exports.ticketDownload = async (req, res) => {
     res.attachment(book.title.replaceAll('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
+
+    const user = await User.findById(req.user._id);
+    user.tktdownloads.push({bookId: book._id, downloadTime: new Date()})
+    await user.save();
     await BookTicket.findByIdAndDelete(ticket._id);
 };
+
+module.exports.downloadsList = async (req, res) => {
+    const user = await User.findById(req.user._id).populate('downloads.bookId').populate('tktdownloads.bookId');
+    const downloads = user.downloads.concat(user.tktdownloads).sort((a,b) => b.downloadTime - a.downloadTime).map(download => {
+        return {
+            title: download.bookId.title,
+            author: download.bookId.author,
+            downloadTime: download.downloadTime,
+            ticket: user.tktdownloads.includes(download)
+        }
+    });
+    const last30 = [], other = [];
+    for (let download of downloads) {
+        if ((new Date() - download.downloadTime) < (30 * 24 * 60 * 60 * 1000)) {
+            last30.push(download);
+        } else {
+            other.push(download);
+        }
+    }
+    return res.status(200).send({last30, other});
+}
 
 module.exports.read = async (req, res) => {
     const book = await Book.findById(req.params.id).populate({
