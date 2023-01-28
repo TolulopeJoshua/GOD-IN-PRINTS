@@ -163,10 +163,10 @@ module.exports.adminUpload = async (req, res) => {
 module.exports.createPreviews = async (req, res) => {
     const pdfConverter = require('pdf-poppler');
     const books = await Book.find({});
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < 2000; index++) {
+        console.log(index);
+        if ([823,148].includes(index)) continue;
         const book = books[index] || null;
-        // console.log(index, book.title, book.image.previews.length)
-        // continue;
         if (book && !book.image.previews.length) {
             const data = await getImage(book.document.key);
             fs.writeFileSync('output.pdf', data.Body);
@@ -179,7 +179,7 @@ module.exports.createPreviews = async (req, res) => {
                     out_dir : 'uploads',
                     out_prefix : `preview-${book.title.replaceAll(':', '-')}`, // path.basename(pdfPath, path.extname(pdfPath)),
                     page : i
-                }
+                } 
                 await pdfConverter.convert(pdfPath, option)
             }
             let files = fs.readdirSync('uploads')

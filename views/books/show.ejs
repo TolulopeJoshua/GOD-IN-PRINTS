@@ -33,13 +33,14 @@
             <img class="card-img-top rounded img-thumbnail" alt="<%= book.title %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
         <div class="card-body">
-            <h1 class="h5 card-title text-capitalize"><%= book.title.replaceAll('.pdf', '') %> <%= book.author === ' '? '': ' by ' + book.author %> </h1>
-            <div class="d-flex justify-content-center"><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share Link</em><i class="bi bi-share-fill"></i></button></div>
+            <h1 class="h5 card-title text-capitalize"><%= book.title.toLowerCase() %></h1>
+            <!-- <div class="d-flex justify-content-center"></div> -->
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>
         <ul class="list-group list-group-flush">
-            <!-- <li class="list-group-item text-muted text-capitalize"><em>About: book.keywords.toLowerCase()</em></li> -->
-            <li class="list-group-item"><em class="pe-2">Size: </em><small><%= book.document.size >= 1000000 ? Math.round(book.document.size / 10000) / 100 + 'MB' : Math.round(book.document.size / 1000) + 'KB' %> </small></li>
+            <li class="list-group-item text-muted text-capitalize"><em>Author: <%= book.author %> </em></li>
+            <li class="list-group-item text-muted"><em class="pe-2">Size: </em><small><%= book.document.size >= 1000000 ? Math.round(book.document.size / 10000) / 100 + 'MB' : Math.round(book.document.size / 1000) + 'KB' %> </small></li>
+            <li class="list-group-item text-muted text-capitalize"><button id="share" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Share Link</em><i class="bi bi-share-fill"></i></button></li>
         </ul>
         <div class="card-body d-flex justify-content-around">
             <!-- <form class="d-inline" action="/books/<%= book._id %>/download" method="get"> -->
@@ -189,10 +190,10 @@
   </div>
     
 <div class="modal fade" id="previewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="previewModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Preview</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Preview | Pg. 1-<%= book.image.previews.length %></h5>
           <small class="ms-3">(**preview pages are compressed**)</small>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>

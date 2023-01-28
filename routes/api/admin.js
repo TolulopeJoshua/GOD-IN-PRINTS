@@ -57,6 +57,11 @@ router.delete('/book/:id', validateAdmin, catchAsync(async (req, res) => {
     if (book.image.key != 'none') {
         await deleteImage(book.image.key)
     }
+    if (book.image.previews && book.image.previews.length) {
+        for (let image of book.image.previews) {
+            await deleteImage(image)
+        }
+    }
     await deleteImage(book.document.key);
     const deleted = await Book.findByIdAndDelete(book._id)
     res.status(200).send(deleted);
