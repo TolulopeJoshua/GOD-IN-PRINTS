@@ -461,3 +461,43 @@ a {
   .editable .active {
     background-color: #e0e9ff;
   }
+
+  /* Tooltip container */
+.mytooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Tooltip text */
+  .mytooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: gray;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    width: max-content;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000000;
+  }
+  .mytooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: gray transparent transparent transparent;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .mytooltip:hover .tooltiptext {
+    visibility: visible;
+  }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const books = require('../controllers/books');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isBookAuthor, validateBook, isReviewAuthor, validateReview, checkDownloadLimit, setRedirect} = require('../middleware');
+const { isLoggedIn, isBookAuthor, validateBook, isReviewAuthor, validateReview, checkDownloadLimit, setRedirect, isAdmin} = require('../middleware');
 
 const {upload, upload0} = require("../functions")
 
@@ -21,13 +21,15 @@ router.get('/new', isLoggedIn, catchAsync(books.renderNewForm));
 
 router.post('/new', isLoggedIn, upload0.single('document'), validateBook, catchAsync(books.createBook));
 
-// router.get('/adminUpload', isLoggedIn, books.renderAdminUpload);
+// router.get('/adminUpload', isAdmin, books.renderAdminUpload);
 
 // router.post('/adminUpload', upload.array('documents'), catchAsync(books.adminUpload))
  
 router.get('/search', setRedirect, catchAsync(books.search));
 
 router.get('/downloads', isLoggedIn, catchAsync(books.downloadsList));
+
+router.get('/createPreviews', isAdmin, catchAsync(books.createPreviews));
 
 router.get('/:id', setRedirect, catchAsync(books.showBook));
 

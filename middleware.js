@@ -54,6 +54,14 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
+module.exports.isAdmin = (req, res, next) => {
+    if (!req.isAuthenticated() || !req.user.admin) {
+        req.flash('error', 'Unauthorized!');
+        return res.redirect('/books');
+    }
+    next();
+}
+
 module.exports.setRedirect = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;

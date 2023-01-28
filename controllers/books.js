@@ -5,7 +5,6 @@ const User = require('../models/user');
 const BookTicket = require('../models/bookTicket');
 
 const fs = require('fs');
-// const pdfConverter = require('pdf-poppler');
 const path = require('path');
 
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
@@ -131,16 +130,16 @@ module.exports.renderAdminUpload = (req, res) => {
 };
 
 module.exports.adminUpload = async (req, res) => {
+    const pdfConverter = require('pdf-poppler');
     for (const doc of req.files) {
         const book = new Book();
         const {key, size} = doc;
         book.document = {key, size};
         book.title = doc.originalname;
-        book.author = ' ';
         book.filetype = doc.mimetype.split('/')[1];
         book.datetime = Date.now();
-        book.isApproved = true;
-        book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -3) + 'jpg';
+        book.isApproved = false;
+        book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -4) + '.jpg';
         const data = await getImage(book.document.key);
         fs.writeFileSync('output.pdf', data.Body);
         const pdfPath = 'output.pdf';
@@ -160,6 +159,40 @@ module.exports.adminUpload = async (req, res) => {
     }
     res.send('SUCCESS');
 };
+
+module.exports.createPreviews = async (req, res) => {
+    const pdfConverter = require('pdf-poppler');
+    const books = await Book.find({});
+    for (let index = 0; index < 100; index++) {
+        const book = books[index] || null;
+        // console.log(index, book.title, book.image.previews.length)
+        // continue;
+        if (book && !book.image.previews.length) {
+            const data = await getImage(book.document.key);
+            fs.writeFileSync('output.pdf', data.Body);
+            const pdfPath = 'output.pdf';
+            const info = await pdfConverter.info(pdfPath);
+            const length = parseInt(info.pages) >= 10 ? 10 : parseInt(info.pages);
+            for (let i = 1; i <= length; i++) {
+                let option = {
+                    format : 'jpeg',
+                    out_dir : 'uploads',
+                    out_prefix : `preview-${book.title.replaceAll(':', '-')}`, // path.basename(pdfPath, path.extname(pdfPath)),
+                    page : i
+                }
+                await pdfConverter.convert(pdfPath, option)
+            }
+            let files = fs.readdirSync('uploads')
+            for (const file of files) {
+                book.image.previews.push(`book-img/${file}`)
+                await uploadCompressedImage(`uploads/${file}`, `book-img/${file}`);
+            }
+            await book.save();
+        }
+    }
+    req.flash('success', 'Previews Created!');
+    res.redirect('/books');
+}
 
 module.exports.search = async (req, res) => {
     const item = req.query.search;

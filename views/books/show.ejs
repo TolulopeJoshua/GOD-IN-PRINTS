@@ -20,7 +20,7 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-6 col-lg-4 offset-md-4 overflow-auto">
+<div class="col-md-6 col-lg-4 offset-md-4">
     <% if(!book.isApproved) { %> 
         <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
             This book is yet to be approved! 
@@ -44,7 +44,10 @@
         <div class="card-body d-flex justify-content-around">
             <!-- <form class="d-inline" action="/books/<%= book._id %>/download" method="get"> -->
                 <a class="btn btn-lg btn-success" href="/books/<%= book._id %>/download">Download</a>
-                <a class="btn btn-lg btn-outline-success disabled" href="/books/<%= book._id %>/read">&nbsp;&nbsp;Read&nbsp;&nbsp;</a>
+                <span class="mytooltip">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-lg btn-outline-success <%= !book.image.previews?.length && 'disabled'%>">Preview</button>
+                    <span class="<%= book.image.previews?.length ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Preview not available for this book.</span>
+                </span>
                 <!-- <button class="btn btn-lg btn-success">Download</button>
             </form> -->
         </div>
@@ -137,7 +140,8 @@
                 listDom.appendChild(title1);
                 response.data.last30.forEach((download, index) => {
                     const title = document.createElement('h6');
-                    title.classList.add('text-capitalize','text-dark','border-top','border-secondary','pt-3');
+                    title.classList.add('text-capitalize','text-dark','pt-3');
+                    title.style.borderTop = '1px dotted #ddd'
                     title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
                     const info = document.createElement('p');
                     info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
@@ -176,6 +180,28 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
             <p class="text-secondary mt-3">Retrieving downloads</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+<div class="modal fade" id="previewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="previewModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Preview</h5>
+          <small class="ms-3">(**preview pages are compressed**)</small>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-secondary">
+            <div class="p-3 d-flex flex-column gap-3 align-items-center">
+                <% for( let image of book.image.previews ) { %>
+                    <img style="max-width: 100%;" class="border" src="<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + image.replaceAll(" ", "+") %>" alt="<%= image %>">
+                <% } %>
+            </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
