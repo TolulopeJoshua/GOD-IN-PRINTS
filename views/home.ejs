@@ -155,7 +155,7 @@
 										</div>
 										<div class="field half">
 											<label for="email">Email</label>
-											<input type="text" name="email" id="email" value="<%= !currentUser ? '' : currentUser.email %> " />
+											<input type="email" name="email" id="email" value="<%= !currentUser ? '' : currentUser.email %> " required/>
 										</div>
 										<div class="field">
 											<label for="message">Message</label>
@@ -194,6 +194,14 @@
 							</section>
 						</div>
 					</section>
+					<script>
+						const params = new Proxy(new URLSearchParams(window.location.search), {
+							get: (searchParams, prop) => searchParams.get(prop),
+						});
+						if (params.rq) {
+							document.getElementById('message').innerHTML = 'Hello GIP Team \n\nI need you to build me a website for my business with the following details, \n\nBusiness name: \nBusiness Category: \n... \nI will appreciate your urgent response. \n\nRegards';
+						}
+					</script>
 
 				<!-- Footer -->
 					<footer id="footer">

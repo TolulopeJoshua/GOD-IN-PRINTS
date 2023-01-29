@@ -68,11 +68,11 @@
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
                         <a class="text-capitalize text-truncate d-block" href="/books/1/<%= books[index].title %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' by ' + books[index].author %> %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
                         </a>
                         <a class="text-capitalize anime" href="/books/1/<%= books[index].title %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' by ' + books[index].author %> %> </strong>
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' by ' + books[index].author %> %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
+                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
                         </a>
                         <% } %> 
                     </td>
@@ -88,7 +88,7 @@
     <%- include('../partials/ad/art') %>  
 </div>
 
-<div class="" style="margin-bottom: 100px;"></div>
+<div class="" style="margin-bottom: 50px;"></div>
 
 <div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
     <div class="footer-item">
