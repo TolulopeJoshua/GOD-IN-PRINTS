@@ -46,7 +46,7 @@
             <!-- <form class="d-inline" action="/books/<%= book._id %>/download" method="get"> -->
                 <a class="btn btn-lg btn-success" href="/books/<%= book._id %>/download">Download</a>
                 <span class="mytooltip">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-lg btn-outline-success <%= !book.image.previews?.length && 'disabled'%>">Preview</button>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-lg btn-outline border-success text-success <%= !book.image.previews?.length && 'disabled'%>">Preview</button>
                     <span class="<%= book.image.previews?.length ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Preview not available for this book.</span>
                 </span>
                 <!-- <button class="btn btn-lg btn-success">Download</button>
