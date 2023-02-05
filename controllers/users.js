@@ -134,8 +134,7 @@ module.exports.updateProfile = async (req, res) => {
   res.render('users/profile', {title: 'Profile'})
 }
 
-module.exports.renderSubscription = (req, res) => {
-  // sendWelcomeMail(req.user)
+module.exports.renderSubscription = async (req, res) => {
 
   if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
@@ -388,7 +387,7 @@ module.exports.setUserSource = async (req, res) => {
     await user.save();
     console.log(user)
   }
-  res.status(200).send({message: 'Updated successfully!'});
+  res.status(200).render('success',{title: 'Success'});
 }
 
 module.exports.addReview = async (req, res) => {

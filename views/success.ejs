@@ -1,0 +1,10 @@
+<% layout('layouts/boilerplate') %> 
+<script>
+    let mydiv = document.createElement('div');
+    mydiv.innerHTML = 'Success!';
+    swal('', '', 'success', {content: mydiv}).then(() => history.back())
+</script>
+
+<script>
+    const pageTitle = '💯';
+</script>
