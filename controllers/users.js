@@ -135,7 +135,7 @@ module.exports.updateProfile = async (req, res) => {
 }
 
 module.exports.renderSubscription = (req, res) => {
-  sendWelcomeMail(req.user)
+  // sendWelcomeMail(req.user)
 
   if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
