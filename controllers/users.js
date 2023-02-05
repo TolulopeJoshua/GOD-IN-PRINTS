@@ -386,6 +386,7 @@ module.exports.setUserSource = async (req, res) => {
   if(user) {
     user.referrer = sanitize(source);
     await user.save();
+    console.log(user)
   }
   res.status(200).send({message: 'Updated successfully!'});
 }
