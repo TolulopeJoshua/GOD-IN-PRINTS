@@ -1,5 +1,10 @@
+
+<span id="feedbackBtn" style="position: fixed; bottom: 100px; right: 0; padding: 3px 10px; color: white; opacity: 0.7; cursor: pointer; transform: rotateZ(-90deg) translateY(25px); background: blue; border-bottom: 5px solid skyblue;">
+    Feedback
+</span>
+
 <form id="messageForm" name="messageForm" class="position-fixed bottom-0 end-0 bg-light d-flex flex-column gap-3 align-items-center">
-    <div class="d-flex flex-column gap-3 p-3 m-3 align-items-center border rounded-2" style="width: 300px; max-width: 90%;">
+    <div class="d-flex flex-column gap-3 p-3 m-3 align-items-center border rounded-2" style="width: 300px; max-width: 80%;">
         <div class="w-100 half">
             <!-- <label for="name">Name</label> -->
             <input class="form-control" type="text" name="name" id="name" placeholder="Name" value='<%= !currentUser ? "" : (currentUser.firstName + " " + currentUser.lastName) %>'  />
@@ -13,35 +18,49 @@
             <textarea class="form-control" name="message" id="message" rows="6" placeholder="Message" required></textarea>
         </div>
         <div class="w-100 d-flex justify-content-between">
-            <input type="submit" value="Send Message" class="btn btn-outline-primary" />
-            <input type="reset" value="Clear" class="btn text-warning" />
+            <button type="submit" class="btn btn-outline-primary">Send Message</button>
+            <input type="reset" value="Close" class="btn text-warning" />
         </div>
     </div>
 </form>
-
-<span style="position: fixed; bottom: 100px; right: 0;">
-    Feedback
-</span>
 
 <script type="text/javascript"
 src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
 </script>
 
 <script type="text/javascript">
-(function(){
+    (function(){
 
-emailjs.init("LLErcEZSRlUGBQ138");
+        emailjs.init("LLErcEZSRlUGBQ138");
 
-const messageForm = document.getElementById('messageForm');
-messageForm.onsubmit = function(e) {
-e.preventDefault();
-try {
-    emailjs.sendForm('service_sdb5kby', 'template_qyakobg', messageForm);
-    alert('Message sent successfully!');
-    e.target.reset();
-} catch (error) {
-    alert('An error occured');
-}
-}
-})();
+        const messageForm = document.getElementById('messageForm');
+        messageForm.onsubmit = function(e) {
+            e.preventDefault();
+            document.querySelector('#messageForm button').classList.add('disabled');
+            setTimeout(() => {
+                try {
+                    emailjs.sendForm('service_sdb5kby', 'template_qyakobg', messageForm);
+                    alert('Message sent successfully!');
+                    e.target.reset();
+                    closeFeedback();
+                    document.querySelector('#messageForm button').classList.remove('disabled');
+                } catch (error) {
+                    alert('An error occured');
+                }
+            }, 1000);
+        }
+    })();
+
+    document.querySelector('#messageForm input[type=reset]').addEventListener('click', closeFeedback);
+    document.querySelector('#feedbackBtn').addEventListener('click', openFeedback);
+
+    document.getElementById('messageForm').style.transition = '0.5s transform ease'
+    function closeFeedback() {
+        document.getElementById('messageForm').style.transform = 'translateX(100%)'
+    }
+    closeFeedback()
+    function openFeedback() {
+        document.getElementById('messageForm').style.transform = 'translateX(0%)'
+    }
+
 </script>
