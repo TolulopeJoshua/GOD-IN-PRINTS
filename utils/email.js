@@ -46,7 +46,7 @@ const sendWelcomeMail = (user) => {
         message: ['Welcome to the God In Prints libraries. We are glad to have you.', 
         'Feel free to explore our little bank of resources and kindly provide your feedbacks using our suggestion and <a href="https://godinprints.org#contact">contact</a> forms.',
         `<div style="font-size: 14px; font-weight: 600; color: #666; line-height: 30px;">
-            <form action="https://godinprints.org/userSource" method="POST" id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
+            <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
                 <h5 style="color: black; text-align: center;">We will love to know how you heard about GIP</h5>
                 <ul>
                     <li><input type="radio" name="source" value="friend" id="referral" checked><label for="referral">Friend/Referral</label></li>
@@ -57,14 +57,14 @@ const sendWelcomeMail = (user) => {
                 </ul>
                 <p class="info success" style="text-align: center; font-size: small; display: none; color: blue;">Feedback sent successfully.</p>
                 <p class="info error" style="text-align: center; font-size: small; display: none; color: orangered;">An error occured!</p>
-                <button style="width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
+                <button type="button" style="width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
             </form>
             <script>
                 document.querySelector('#userSourceForm input[type=text]').addEventListener('change', e => {
                     document.querySelector('#userSourceForm #other').checked = true;
                     document.querySelector('#userSourceForm #other').value = e.target.value;
                 })
-                document.getElementById('userSourceForm').addEventListener('submit', e => {
+                document.getElementById('userSourceForm button').addEventListener('click', e => {
                     e.preventDefault();
                     fetch('https://godinprints.org/userSource', {
                         headers: {
