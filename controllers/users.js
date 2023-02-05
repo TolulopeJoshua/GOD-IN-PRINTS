@@ -381,7 +381,7 @@ module.exports.setPassword = async (req, res) => {
 };
 
 module.exports.setUserSource = async (req, res) => {
-  const {email, source} = req.body;
+  const {email, source} = req.params;
   const user = await User.findOne({email});
   if(user) {
     user.referrer = sanitize(source);

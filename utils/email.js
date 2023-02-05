@@ -49,15 +49,15 @@ const sendWelcomeMail = (user) => {
             <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
                 <h5 style="color: black; text-align: center;">We will love to know how you heard about GIP</h5>
                 <ul>
-                    <li><input type="radio" name="source" value="friend" id="referral" checked><label for="referral">Friend/Referral</label></li>
-                    <li><input type="radio" name="source" value="google" id="google"><label for="google">Google</label></li>
-                    <li><input type="radio" name="source" value="twitter" id="twitter"><label for="twitter">Twitter</label></li>
-                    <li><input type="radio" name="source" value="socials" id="socials"><label for="socials">Socials (Whatsapp, Facebook, Instagram)</label></li>
-                    <li><input type="radio" name="source" value="other" id="other"><label for="other">Others</label><input type="text" placeholder="Specify"></li>
+                    <li><input type="radio" name="source" value="friend" id="referral" checked><label for="referral"><a href="https://godinprints.org/userSource/Friend/Referral/${user.email}>Friend/Referral</a></label></li>
+                    <li><input type="radio" name="source" value="google" id="google"><label for="google"><a href="https://godinprints.org/userSource/Google/${user.email}>Google</a></label></li>
+                    <li><input type="radio" name="source" value="twitter" id="twitter"><label for="twitter"><a href="https://godinprints.org/userSource/Twitter/${user.email}>Twitter</a></label></li>
+                    <li><input type="radio" name="source" value="socials" id="socials"><label for="socials"><a href="https://godinprints.org/userSource/Socials/${user.email}>Socials (Whatsapp, Facebook, Instagram)</a></label></li>
+                    <li><input type="radio" name="source" value="other" id="other"><label for="other"><a href="https://godinprints.org/userSource/Others/${user.email}>Others</a></label></li>
                 </ul>
                 <p class="info success" style="text-align: center; font-size: small; display: none; color: blue;">Feedback sent successfully.</p>
                 <p class="info error" style="text-align: center; font-size: small; display: none; color: orangered;">An error occured!</p>
-                <button type="button" style="width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
+                <button type="button" style=" display: none; width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
             </form>
             <script>
                 document.querySelector('#userSourceForm input[type=text]').addEventListener('change', e => {
