@@ -8,7 +8,7 @@ const { playlists, artists } = require('../utils/lib/songs');
 // const limits = require('../utils/lib/limits');
 let hymns = require('../utils/lib/hymns.json');
 const td = require("tinyduration")
-const { sortVideos } = require('../utils/lib/videos_functions');
+const { sortVideos, getVideoIdsFromVideoPlaylists, getAllVideosFromVideoIds } = require('../utils/lib/videos_functions');
 
 
 const Review = require('../models/review');
@@ -16,38 +16,20 @@ const Book = require('../models/book');
 const { default: axios } = require('axios');
 const { writeFileSync } = require('fs');
 
-// movies = movies.filter(movie => JSON.stringify(movie.thumbnails) != '{}');
-
-// const reduced = playlistsVideo.reduce((joined, playlist) => {
-//     playlist.videos.forEach(video => video.snippet.playlist = playlist.name);
-//     playlist.videos.forEach(video => {
-//         const movie = movies.find(movie => movie.id == video.snippet.resourceId.videoId)
-//         movie && (movie.playlist = playlist.name);
-//     });
-//     return joined.concat(playlist.videos.map(video => video.snippet)).filter(movie => JSON.stringify(movie.thumbnails) != '{}').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-// }, [])
-
 router.get('/movies', catchAsync(async (req, res) => {
+    // await getVideoIdsFromVideoPlaylists(res);
+    // await getAllVideosFromVideoIds(res);
 
     const { userFeatures }= sortVideos(req);
-
-    // const userStatus = req.user?.subscription.status || 'classic';
-    // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
-    // const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
-    // const features = userMovies.sort(() => 0.5 - Math.random()).slice(0, n).concat([null, null, null]).slice(0,10).sort(() => 0.5 - Math.random());
     res.render('media/movies', {title: 'Feature Movies | God In Prints', features: userFeatures, })
 })); 
 
 router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
 
-    const { userPlaylists: playlists, userMovies }= sortVideos(req);
-
-    // const userStatus = req.user?.subscription.status || 'classic';
-    // const userMovies = movies.filter((movie, index) => index % 100 < limits.videos[userStatus]);
-    // const playlists = playlistsVideo.map(list => ({name: list.name, videos: [...userMovies.filter(movie => movie.playlist == list.name)]}))
+    const { userPlaylists: playlists, videos }= sortVideos(req);
     let watchLater = {name: 'Watch Later', videos: []};
     if (req.user) {
-        watchLater.videos = req.user.watchLater.map(id => userMovies.find(movie => movie.id == id) || null).filter(movie => movie != null);
+        watchLater.videos = req.user.watchLater.map(id => videos.find(video => video.id == id)).filter(mov => mov);
     }
     playlists.unshift(watchLater);
     res.render('media/moviesPlaylists', {title: 'Movies Playlists | God In Prints', playlists, })
@@ -55,9 +37,9 @@ router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
 
 router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
 
-    const { userMovies }= sortVideos(req);
+    const { videos, userMovies }= sortVideos(req);
     
-    const movie = userMovies.find(movie => movie.id == req.params.id)
+    const movie = videos.find(movie => movie.id == req.params.id)
     if (!movie ) {
         req.flash('error', 'Movie not found!');
         res.redirect('/media/movies/playlists')
@@ -125,8 +107,8 @@ router.post('/movies/watchlater/:id', catchAsync(async (req, res) => {
     if (!user) return res.status(404).send()
     !user.watchLater.includes(req.params.id) && user.watchLater.unshift(req.params.id);
     await user.save();
-    const { userMovies }= sortVideos(req);
-    const watchLater = user.watchLater.filter(later => userMovies.find(movie => movie.id == later));
+    const { videos }= sortVideos(req);
+    const watchLater = user.watchLater.filter(later => videos.find(movie => movie.id == later));
     res.status(200).send(watchLater.length.toString()); 
 }))
 
@@ -135,8 +117,8 @@ router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
     if (!user) return res.status(404).send()
     user.watchLater = user.watchLater.filter(id => id != req.params.id);
     await user.save();
-    const { userMovies }= sortVideos(req);
-    const watchLater = user.watchLater.filter(later => userMovies.find(movie => movie.id == later));
+    const { videos }= sortVideos(req);
+    const watchLater = user.watchLater.filter(later => videos.find(movie => movie.id == later));
     res.status(200).send(watchLater.length.toString()); 
 }))
 
