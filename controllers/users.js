@@ -7,6 +7,7 @@ const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY); // 
 const { sendWelcomeMail } = require('../utils/email');
 const { writeFileSync } = require('fs');
+const sanitize = require('sanitize-html');
 
 
 module.exports.renderRegister = (req, res) => {
@@ -134,6 +135,8 @@ module.exports.updateProfile = async (req, res) => {
 }
 
 module.exports.renderSubscription = (req, res) => {
+  sendWelcomeMail(req.user)
+
   if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
       return res.redirect('/login');
@@ -376,6 +379,16 @@ module.exports.setPassword = async (req, res) => {
       }
     });
 };
+
+module.exports.setUserSource = async (req, res) => {
+  const {email, source} = req.body;
+  const user = await User.findOne({email});
+  if(user) {
+    user.referrer = sanitize(source);
+    await user.save();
+  }
+  res.status(200).send({message: 'Updated successfully!'});
+}
 
 module.exports.addReview = async (req, res) => {
     // console.log(req)

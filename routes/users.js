@@ -49,6 +49,8 @@ router.get('/changePassword/:userId/:resetCode', users.renderSetPassword);
 
 router.post('/changePassword/:userId/:resetCode', validatePassword, catchAsync(users.setPassword));
 
+router.post('/userSource', catchAsync(users.setUserSource));
+
 router.post('/addReview/:chapter/:version', isLoggedIn, validateReview, catchAsync(users.addReview));
 
 router.delete('/:userId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(users.deleteReview));

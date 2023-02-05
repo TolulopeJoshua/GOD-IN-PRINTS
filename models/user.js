@@ -14,6 +14,7 @@ const UserSchema = new Schema({
     loginType: { type: String, enum: ['password', 'facebook', 'google'], required: true, },
     facebookId: { type: String },
     googleId: { type: String },
+    referrer: { type: String },
     resetCode: { type: String, default: null }, 
     subscription: { status: {type: String, default: 'classic'}, expiry: Date, autorenew: Boolean, code: {type: String, default: ''}, curr: {type: String, default: ''} },
     admin: { type: Number, default: 0 },
