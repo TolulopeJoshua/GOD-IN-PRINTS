@@ -3,13 +3,13 @@
     Feedback
 </span>
 
-<form id="messageForm" name="messageForm" class="position-fixed bottom-0 end-0 bg-light d-flex flex-column gap-3 align-items-center">
-    <div class="d-flex flex-column gap-3 p-3 m-3 align-items-center border rounded-2" style="width: 300px; max-width: 80%;">
-        <div class="w-100 half">
+<form style="width: min-content;" id="messageForm" name="messageForm" class="position-fixed bottom-0 end-0 bg-light">
+    <div class="d-flex flex-column gap-3 p-3 m-3 align-items-center border rounded-2" style="width: 300px; max-width: 80vw;">
+        <div class="w-100">
             <!-- <label for="name">Name</label> -->
             <input class="form-control" type="text" name="name" id="name" placeholder="Name" value='<%= !currentUser ? "" : (currentUser.firstName + " " + currentUser.lastName) %>'  />
         </div>
-        <div class="w-100 half">
+        <div class="w-100">
             <!-- <label for="email">Email</label> -->
             <input class="form-control" type="email" name="email" id="email" placeholder="Email" value="<%= !currentUser ? '' : currentUser.email %>"/>
         </div>
