@@ -98,6 +98,8 @@ module.exports.logout = async (req, res) => {
 };
 
 module.exports.renderProfile = (req, res) => {
+  // sendWelcomeMail(req.user); 
+
   res.render('users/profile', {title: 'Profile'})
 }
 
@@ -390,7 +392,7 @@ module.exports.setUserSource = async (req, res) => {
   res.status(200).render('success',{title: 'Success'});
 }
 
-module.exports.addReview = async (req, res) => {
+module.exports.addReview = async (req, res) => { 
     // console.log(req)
     const user = await User.findById(req.user._id);
     const review = new Review(req.body.review);

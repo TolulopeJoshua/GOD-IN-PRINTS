@@ -19,7 +19,7 @@ function sortVideos(req) {
         video.embeddable = video.status.embeddable;
         video.forKids = video.status.madeForKids;
         video.availableInCountry = true;
-        const country = lookup(req.headers['x-forwarded-for'] || req.connection.remoteAddress)?.country;
+        const country = req && lookup(req.headers['x-forwarded-for'] || req.connection.remoteAddress)?.country;
         if (country && video.contentDetails.regionRestriction) {
             video.country = country;
             if (video.contentDetails.regionRestriction.allowed && !video.contentDetails.regionRestriction.allowed.includes(country)) video.availableInCountry = false;
@@ -31,8 +31,18 @@ function sortVideos(req) {
     })
     filteredVideos = [...new Set(filteredVideos.map(video => JSON.stringify(video)))].map(video => JSON.parse(video));
     const orderedByDate = filteredVideos.sort((a,b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
+
+    let prev = [], classesMovies = {};
+    for (let limit in limits.videos) {
+        let classMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[limit]);
+        if (prev.length) {
+            classMovies = classMovies.filter(movie => !prev.includes(JSON.stringify(movie)));
+        }
+        classesMovies[limit] = [...new Set(classMovies.map(video => JSON.stringify(video)))].map(video => JSON.parse(video));
+        prev = [...prev, ...new Set(classMovies.map(video => JSON.stringify(video)))];
+    }
     
-    const userStatus = req.user?.subscription.status || 'classic';
+    const userStatus = req?.user?.subscription.status || 'classic';
     let userMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[userStatus]);
     // userMovies = userMovies.filter(movie => !['Bm0gGEZXAbo', 'sc8qQKxdTnA', '7Wv8Mz9VXSo', 'QrQVzDTa5Bc', 'QHULfBhM4dU', 'mpwgeE7koPE', 'Xdx-qAgySwQ', 'GykgCvYsNJw', 'E_8cFo_MXpU'].includes(movie.id))
     const n = userStatus == 'classic' ? 7 : userStatus == 'premium' ? 10 : 9;
@@ -48,7 +58,7 @@ function sortVideos(req) {
     const nonEmbeddable = userMovies.filter(movie => !movie.embeddable);
     nonEmbeddable.length && userStatus != 'classic' && userPlaylists.push({name: 'Watch on Youtube', videos: nonEmbeddable});
 
-    return { videos: orderedByDate, userMovies, userFeatures, userPlaylists };
+    return { videos: orderedByDate, userMovies, userFeatures, userPlaylists, classesMovies };
 }
 
 async function getVideoIdsFromVideoPlaylists(res) {

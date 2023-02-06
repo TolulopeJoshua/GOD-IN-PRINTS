@@ -1,8 +1,6 @@
 <% layout('layouts/boilerplate') %> 
 <script>
-    let mydiv = document.createElement('div');
-    mydiv.innerHTML = 'Success!';
-    swal('', '', 'success', {content: mydiv}).then(() => history.back())
+    swal('', 'Success!', 'success').then(() => history.back())
 </script>
 
 <script>

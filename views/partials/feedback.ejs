@@ -1,8 +1,8 @@
 
+<div id="feedbackBackdrop" class="position-fixed start-0 top-0 w-100 h-100"></div>
 <span id="feedbackBtn" style="position: fixed; bottom: 100px; right: 0; padding: 3px 10px; color: white; opacity: 0.7; cursor: pointer; transform: rotateZ(-90deg) translateY(25px); background: blue; border-bottom: 5px solid skyblue;">
     Feedback
 </span>
-
 <form style="width: min-content;" id="messageForm" name="messageForm" class="position-fixed bottom-0 end-0 bg-light">
     <div class="d-flex flex-column gap-3 p-3 m-3 align-items-center border rounded-2" style="width: 300px; max-width: 80vw;">
         <div class="w-100">
@@ -51,18 +51,19 @@ src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
         }
     })();
 
-    document.querySelector('#messageForm input[type=reset]').addEventListener('click', closeFeedback);
     document.querySelector('#feedbackBtn').addEventListener('click', openFeedback)
+    document.getElementById('feedbackBackdrop').addEventListener('click', closeFeedback)
+    document.querySelector('#messageForm input[type=reset]').addEventListener('click', closeFeedback);
     
     document.getElementById('messageForm').style.transition = '0.5s transform ease'
     function closeFeedback(e) {
         document.getElementById('messageForm').style.transform = 'translateX(100%)'
-        document.querySelector('main').removeEventListener('click', closeFeedback)
+        document.getElementById('feedbackBackdrop').style.transform = 'translateX(100%)'
     }
     closeFeedback()
     function openFeedback() {
         document.getElementById('messageForm').style.transform = 'translateX(0%)'
-        document.querySelector('main').addEventListener('click', closeFeedback)
+        document.getElementById('feedbackBackdrop').style.transform = 'translateX(0%)'
     }
 
 </script>

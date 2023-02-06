@@ -38,13 +38,27 @@ const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) =
       });
 }
 
-const sendWelcomeMail = (user) => {
+const sendWelcomeMail = async (user) => {
+
+    const { sortVideos } = require('./lib/videos_functions')
+    const Book = require('../models/book');
+    const Doc = require('../models/doc');
+
+    const books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 4 } }]);
+    const biographies = await Doc.aggregate([{ $match: { docType: "biography", isApproved: true } }, { $sample: { size: 1 } }]);
+    const articles = await Doc.aggregate([{ $match: { docType: "article", isApproved: true } }, { $sample: { size: 2 } }]);
+    
+    const { classesMovies } = sortVideos();
+    const movies = [classesMovies.classic[Math.floor(Math.random() * classesMovies.classic.length)]];
+    movies.push(classesMovies.starter[Math.floor(Math.random() * classesMovies.starter.length)]);
+    movies.push(classesMovies.medium[Math.floor(Math.random() * classesMovies.medium.length)]);
+
     const options = {
         email: user.email,
         name: user.firstName,
         subject: 'Welcome to GIP Libraries',
-        message: ['Welcome to the God In Prints libraries. We are glad to have you.', 
-        'Feel free to explore our little bank of resources and kindly provide your feedbacks using our suggestion and <a href="https://godinprints.org#contact">contact</a> forms.',
+        message: ['Welcome to God In Prints libraries. We are glad to have you.', 
+        'Feel free to frequently explore our little bank of resources and submit your requests and feedbacks using our requests, suggestions and <a href="https://godinprints.org#contact">contact</a> forms.',
         `<div style="font-size: 14px; font-weight: 600; color: #666; line-height: 30px;">
             <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
                 <h5 style="color: black; text-align: center;">We will love to know how you heard about GIP</h5>
@@ -59,6 +73,59 @@ const sendWelcomeMail = (user) => {
                 <p class="info error" style="text-align: center; font-size: small; display: none; color: orangered;">An error occured!</p>
                 <button type="button" style=" display: none; width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
             </form>
+        </div>`,
+        `<h4 style="text-align: center;">Some Items You Might Love:</h4>
+        <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
+            <h3 style="text-decoration: underline; text-align: center;">Life-building literatures</h3>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${books[0].title.toUpperCase()}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[0].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[0]._id}">Go to Download</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${books[1].title.toUpperCase()}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[1].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[1]._id}">Go to Download</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${books[2].title.toUpperCase()}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[2].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[2]._id}">Go to Download</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${books[3].title.toUpperCase()}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[3].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[3]._id}">Go to Download</a></p>
+            </div>
+        </div>
+        <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
+            <h3 style="text-decoration: underline; text-align: center;">All-Time Movies</h3>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${movies[0].snippet.title}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>Classic Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[0].id}/${movies[0].title}">Play${movies[0].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+            <h4>${movies[1].snippet.title}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Starter Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[1].id}/${movies[1].title}">Play${movies[1].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+            <h4>${movies[2].snippet.title}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}/${movies[2].title}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            </div>
+        </div>
+        <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
+            <h3 style="text-decoration: underline; text-align: center;">Inspired Letters</h3>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${articles[0].name.toUpperCase()}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>${articles[0].source}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[0]._id}">Read Article</a></p>
+            </div>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+            <h4>${articles[1].name.toUpperCase()}</h4>
+            <p style="display: flex; justify-content: space-between; font-size: small;"><span>${articles[1].source}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[1]._id}">Read Article</a></p>
+            </div>
+        </div>
+        <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
+            <h3 style="text-decoration: underline; text-align: center;">Meet Someone Special</h3>
+            <div style="border-top: 1px solid #ddd; padding: 5px;">
+                <h4>${biographies[0].name}</h4>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>${biographies[0].role}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/biographies/${biographies[0]._id}">Read Bio</a></p>
+            </div>
         </div>`
     ],
         farewell: 'Regards,'

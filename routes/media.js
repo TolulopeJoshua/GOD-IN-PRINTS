@@ -37,12 +37,18 @@ router.get('/movies/playlists', setRedirect, catchAsync(async (req, res) => {
 
 router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
 
-    const { videos, userMovies }= sortVideos(req);
-    
-    const movie = videos.find(movie => movie.id == req.params.id)
+    const { userMovies, classesMovies }= sortVideos(req);
+
+    const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
-        req.flash('error', 'Movie not found!');
-        res.redirect('/media/movies/playlists')
+        let msg = 'Movie not found!'
+        for (let clas in classesMovies) {
+            if (classesMovies[clas].find(mov => mov.id == req.params.id)) {
+                msg = `<a href="/subscription">${clas.toUpperCase()} subscription</a> level required.`
+            }
+        }
+        req.flash('error', msg);
+        return res.redirect('/media/movies/playlists')
     }
     let reviews = await Review.find({ parentId: movie.id }).populate('author');
     reviews.reverse();
@@ -52,12 +58,18 @@ router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
 
 router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
 
-    const { userMovies }= sortVideos(req);
+    const { userMovies, classesMovies }= sortVideos(req);
 
     const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
-        req.flash('error', 'Movie not found!');
-        res.redirect('/media/movies/playlists')
+        let msg = 'Movie not found!'
+        for (let clas in classesMovies) {
+            if (classesMovies[clas].find(mov => mov.id == req.params.id)) {
+                msg = `<a href="/subscription">${clas.toUpperCase()} subscription</a> level required.`
+            }
+        }
+        req.flash('error', msg);
+        return res.redirect('/media/movies/playlists')
     }
     let reviews = await Review.find({ parentId: movie.id }).populate('author');
     reviews.reverse();
