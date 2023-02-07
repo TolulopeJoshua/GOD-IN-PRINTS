@@ -1,9 +1,10 @@
 const { transporter } = require('../functions');
 
-const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) => {
+const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject, message, greeting, farewell}) => {
     let mailOptions = {
         from: '"God In Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
         to: email, // list of receivers
+        bcc,
         subject, // Subject line
         // text: 'hello', // plain text body
         html: `<header style="text-align: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
@@ -40,18 +41,7 @@ const sendPersonalMail = ({email, name, subject, message, greeting, farewell}) =
 
 const sendWelcomeMail = async (user) => {
 
-    const { sortVideos } = require('./lib/videos_functions')
-    const Book = require('../models/book');
-    const Doc = require('../models/doc');
-
-    const books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 4 } }]);
-    const biographies = await Doc.aggregate([{ $match: { docType: "biography", isApproved: true } }, { $sample: { size: 1 } }]);
-    const articles = await Doc.aggregate([{ $match: { docType: "article", isApproved: true } }, { $sample: { size: 2 } }]);
-    
-    const { classesMovies } = sortVideos();
-    const movies = [classesMovies.classic[Math.floor(Math.random() * classesMovies.classic.length)]];
-    movies.push(classesMovies.starter[Math.floor(Math.random() * classesMovies.starter.length)]);
-    movies.push(classesMovies.medium[Math.floor(Math.random() * classesMovies.medium.length)]);
+    const picks = await generateSortedResources();
 
     const options = {
         email: user.email,
@@ -74,7 +64,48 @@ const sendWelcomeMail = async (user) => {
                 <button type="button" style=" display: none; width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
             </form>
         </div>`,
-        `<h4 style="text-align: center;">Some Items You Might Love:</h4>
+        `<h4 style="text-align: center;">Some Items You Might Love:</h4>${picks}`
+    ],
+        farewell: 'Regards,'
+    }
+    sendPersonalMail(options);
+}
+
+const sendWeeklyMails = async (emails) => {
+
+    const picks = await generateSortedResources();
+
+    const options = {
+        email: 'gipteam@hotmail.com',
+        bcc: emails,
+        subject: 'Weekly Picks!',
+        message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
+        'Ensure you take a look at some of these, as you are sure to be richly blessed.', picks],
+        farewell: 'Best Regards,'
+    }
+    sendPersonalMail(options);
+}
+
+module.exports = {sendPersonalMail, sendWelcomeMail, sendWeeklyMails}
+
+
+
+async function generateSortedResources () {
+
+    const { sortVideos } = require('./lib/videos_functions');
+    const Book = require('../models/book');
+    const Doc = require('../models/doc');
+
+    const books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 4 } }]);
+    const biographies = await Doc.aggregate([{ $match: { docType: "biography", isApproved: true } }, { $sample: { size: 1 } }]);
+    const articles = await Doc.aggregate([{ $match: { docType: "article", isApproved: true } }, { $sample: { size: 2 } }]);
+    
+    const { classesMovies } = sortVideos();
+    const movies = [classesMovies.classic[Math.floor(Math.random() * classesMovies.classic.length)]];
+    movies.push(classesMovies.starter[Math.floor(Math.random() * classesMovies.starter.length)]);
+    movies.push(classesMovies.medium[Math.floor(Math.random() * classesMovies.medium.length)]);
+
+    return `
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
             <h3 style="text-decoration: underline; text-align: center;">Life-building literatures</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
@@ -113,11 +144,11 @@ const sendWelcomeMail = async (user) => {
             <h3 style="text-decoration: underline; text-align: center;">Inspired Letters</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${articles[0].name.toUpperCase()}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>${articles[0].source}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[0]._id}">Read Article</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${articles[0].source.split('.')[0]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[0]._id}">Read Article</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
             <h4>${articles[1].name.toUpperCase()}</h4>
-            <p style="display: flex; justify-content: space-between; font-size: small;"><span>${articles[1].source}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[1]._id}">Read Article</a></p>
+            <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${articles[1].source.split('.')[0]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[1]._id}">Read Article</a></p>
             </div>
         </div>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
@@ -127,10 +158,4 @@ const sendWelcomeMail = async (user) => {
                 <p style="display: flex; justify-content: space-between; font-size: small;"><span>${biographies[0].role}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/biographies/${biographies[0]._id}">Read Bio</a></p>
             </div>
         </div>`
-    ],
-        farewell: 'Regards,'
-    }
-    sendPersonalMail(options);
 }
-
-module.exports = {sendPersonalMail, sendWelcomeMail}

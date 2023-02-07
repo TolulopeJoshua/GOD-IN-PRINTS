@@ -5,7 +5,7 @@ const bcrypt = require ('bcrypt');
 const axios = require('axios');
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY); // 
-const { sendWelcomeMail } = require('../utils/email');
+const { sendWelcomeMail, sendWeeklyMails } = require('../utils/email');
 const { writeFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
@@ -97,8 +97,15 @@ module.exports.logout = async (req, res) => {
     res.redirect('/');
 };
 
+module.exports.weeklyMails = async (req, res) => {
+  const users = await User.find({});
+  const mails = users.map(user => user.email);
+  sendWeeklyMails(mails)
+  req.flash('success', 'Mails sent successfully!');
+  res.redirect('/profile');
+}
+
 module.exports.renderProfile = (req, res) => {
-  // sendWelcomeMail(req.user); 
 
   res.render('users/profile', {title: 'Profile'})
 }

@@ -3,7 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users');
-const { isLoggedIn, validateReview, isReviewAuthor, validateEmail, validatePassword, validateUser, validateProfile } = require('../middleware');
+const { isLoggedIn, validateReview, isReviewAuthor, validateEmail, validatePassword, validateUser, validateProfile, isAdmin } = require('../middleware');
 
 router.route('/register')
     .get(users.renderRegister)
@@ -22,6 +22,8 @@ router.get('/login/ggl', passport.authenticate('google'));
 router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true, failureRedirect: '/login'}), catchAsync(users.socialLogin));
 
 router.get('/logout', catchAsync(users.logout));
+
+router.get('/weeklyMails', isAdmin, catchAsync(users.weeklyMails));
 
 router.get('/profile', isLoggedIn, users.renderProfile);
 
