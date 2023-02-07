@@ -23,7 +23,7 @@ router.get('/redirect/ggl', passport.authenticate('google', {failureFlash: true,
 
 router.get('/logout', catchAsync(users.logout));
 
-router.get('/weeklyMails', isAdmin, catchAsync(users.weeklyMails));
+router.post('/weeklyMails', isAdmin, catchAsync(users.weeklyMails));
 
 router.get('/profile', isLoggedIn, users.renderProfile);
 
