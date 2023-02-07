@@ -126,7 +126,9 @@
     shareBtn.addEventListener('click', async () => navigator.share(shareData))
 
     document.getElementById('bookDownload').addEventListener('click', () => {
-        swal('Downloading...');
+        const mydiv = document.createElement('strong');
+        mydiv.innerHTML = '<i class="bi bi-download pe-3"></i><span>Downloading...</span>'
+        swal('','','info',{content: mydiv});
         setTimeout(() => {
             swal.close();
         }, 5000);
