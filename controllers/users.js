@@ -106,6 +106,7 @@ module.exports.weeklyMails = async (req, res) => {
 }
 
 module.exports.renderProfile = (req, res) => {
+  // sendWelcomeMail(req.user);
 
   res.render('users/profile', {title: 'Profile'})
 }

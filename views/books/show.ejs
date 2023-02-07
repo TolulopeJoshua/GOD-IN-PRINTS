@@ -44,7 +44,7 @@
         </ul>
         <div class="card-body d-flex justify-content-around">
             <!-- <form class="d-inline" action="/books/<%= book._id %>/download" method="get"> -->
-                <a class="btn btn-lg btn-success" href="/books/<%= book._id %>/download">Download</a>
+                <a id="bookDownload" class="btn btn-lg btn-success" href="/books/<%= book._id %>/download">Download</a>
                 <span class="mytooltip">
                     <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-lg btn-outline border-success text-success <%= !book.image.previews?.length && 'disabled'%>">Preview</button>
                     <span class="<%= book.image.previews?.length ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Preview not available for this book.</span>
@@ -54,7 +54,7 @@
         </div>
         <% if (currentUser) { %>
             <small class="text-secondary d-block text-center pb-1">
-                Download limit: <%= limit[currentUser.subscription.status] %> per month <i>
+                Downloads limit: <%= limit[currentUser.subscription.status] %> per month <i>
                 <%- currentUser.subscription.status != 'premium' ? `<i class="bi bi-dot"></i> <a style="text-decoration: underline dotted;" href="/subscription">increase limit</a>` : '' %> 
             </i></small>
         <% } %>
@@ -124,6 +124,13 @@
     }
     const shareBtn = document.querySelector('#share');
     shareBtn.addEventListener('click', async () => navigator.share(shareData))
+
+    document.getElementById('bookDownload').addEventListener('click', () => {
+        swal('Downloading...');
+        setTimeout(() => {
+            swal.close();
+        }, 5000);
+    })
 
     document.getElementById('downloads')?.addEventListener('click', () => {
         axios.get('/books/downloads').then(response => {

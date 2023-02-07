@@ -7,7 +7,8 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
         bcc,
         subject, // Subject line
         // text: 'hello', // plain text body
-        html: `<header style="text-align: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
+        html: `<section style="font-family: Arial, Helvetica, sans-serif; padding: 4px;">
+            <header style="text-align: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
             <img style="opacity: 0.5; border-radius: 50% 50% 0 0;" width="72px" height="72px" src="https://godinprints.org/assets/images/burningBook.jfif" alt="gip library icon">
             </header>
             <h2 style="text-align: center;">${subject}</h2>
@@ -22,14 +23,7 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
             </footer>
             <em style="width: 100%; display: block; text-align: center; font-size: small; padding-top: 16px;">
             &copy; 2023 GodInPrints Library
-            </em>
-            
-            <style>
-                html, body {
-                    font-family: Arial, Helvetica, sans-serif;
-                    padding: 4px;
-                }
-            </style>`
+            </em></section>`
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -141,7 +135,7 @@ async function generateSortedResources () {
             </div>
         </div>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
-            <h3 style="text-decoration: underline; text-align: center;">Inspired Letters</h3>
+            <h3 style="text-decoration: underline; text-align: center;">Inspiring Letters</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${articles[0].name.toUpperCase()}</h4>
                 <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${articles[0].source.split('.')[0]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[0]._id}">Read Article</a></p>
