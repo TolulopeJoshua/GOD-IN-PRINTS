@@ -5,13 +5,15 @@ const {isLoggedIn, isReviewAuthor} = require('../middleware');
 
 const Review = require('../models/review');
 
-router.get('/:reviewId/like', isLoggedIn, catchAsync(async (req, res) => {
-    const review = await Review.findById(req.params.reviewId);
-    const i = review.likes.indexOf(req.user._id);
-    i > -1 ? review.likes.splice(i, 1) : review.likes.push(req.user._id);
-    await review.save();
-    // console.log(review.likes.length)
-    res.send(review.likes.length.toString());
+router.get('/:reviewId/like', catchAsync(async (req, res) => {
+    if (req.user) {
+        const review = await Review.findById(req.params.reviewId);
+        const i = review.likes.indexOf(req.user._id);
+        i > -1 ? review.likes.splice(i, 1) : review.likes.push(req.user._id);
+        await review.save();
+        // console.log(review.likes.length)
+        res.send(review.likes.length.toString());
+    }
 })); 
 
 router.get('/:reviewId/edit', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {

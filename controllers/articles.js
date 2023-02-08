@@ -177,7 +177,7 @@ module.exports.addReview = async (req, res) => {
     article.reviews.unshift(review);
     await review.save();
     await article.save();
-    res.redirect(`/articles/${article._id}`)
+    res.redirect(`/articles/${article._id}#comments`)
 };
 
 module.exports.deleteReview = async (req, res) => {
