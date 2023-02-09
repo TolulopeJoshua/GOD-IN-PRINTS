@@ -115,9 +115,10 @@ module.exports.renderProfile = (req, res) => {
 
 module.exports.nomail = async (req, res) => {
   const user = req.user;
+  console.log(user)
   user.preferences.nomail = {set: true, time: new Date()};
   await user.save();
-  res.render('success');
+  res.render('success', {title: 'success page'});
 }
 
 module.exports.updateProfile = async (req, res) => {
