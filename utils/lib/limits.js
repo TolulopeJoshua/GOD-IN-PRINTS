@@ -1,7 +1,7 @@
 module.exports = {
     books: {
         classic: 2,
-        starter: 4,
+        starter: 5,
         medium: 8,
         premium: 12,
     },
@@ -22,5 +22,5 @@ module.exports = {
         starter: '3.99',
         medium: '7.99',
         premium: '11.99',
-    }
-} 
+    } 
+}  
