@@ -75,13 +75,13 @@ const sendWeeklyMails = async (emails) => {
         subject: 'Weekly Picks!',
         message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
-        farewell: 'Best Regards,'
+        farewell: 'Best Regards,<br><br><p style="text-align: center; margin: 0; padding: 0; font-size: small;"><a href="https://godinprints.org/user/nomail">Unsubscribe</a></p>'
     }
     sendPersonalMail(options); 
 }
 
 module.exports = {sendPersonalMail, sendWelcomeMail, sendWeeklyMails}
-
+ 
 
 
 async function generateSortedResources () {

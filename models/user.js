@@ -26,6 +26,7 @@ const UserSchema = new Schema({
     tktdownloads: [ { bookId: { type: Schema.Types.ObjectId, ref: 'Book' }, downloadTime: Date, } ], 
     watchLater: [ { type: String } ],
     isApproved: { type: Boolean, default: true },
+    preferences: { nomail: {set: {type: Boolean, default: false}, time: Date}, },
 });
 
 UserSchema.plugin(passportLocalMongoose);

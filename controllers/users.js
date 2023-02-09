@@ -99,8 +99,10 @@ module.exports.logout = async (req, res) => {
 
 module.exports.weeklyMails = async (req, res) => {
   const users = await User.find({});
-  const mails = users.map(user => user.email);
-  sendWeeklyMails(mails)
+  const mails = users
+          .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.nomail?.set || (new Date() - new Date(user.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
+          .map(user => user.email);
+  sendWeeklyMails(['babtol235@gmail.com'])
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }
@@ -109,6 +111,13 @@ module.exports.renderProfile = (req, res) => {
   // sendWelcomeMail(req.user);
 
   res.render('users/profile', {title: 'Profile'})
+}
+
+module.exports.nomail = async (req, res) => {
+  const user = req.user;
+  user.preferences.nomail = {set: true, time: new Date()};
+  await user.save();
+  res.render('success');
 }
 
 module.exports.updateProfile = async (req, res) => {
