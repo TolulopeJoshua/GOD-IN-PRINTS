@@ -98,11 +98,11 @@ module.exports.logout = async (req, res) => {
 };
 
 module.exports.weeklyMails = async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({email:'babatundetolulopejoshua@yahoo.com'});
   const mails = users
-          .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.nomail?.set || (new Date() - new Date(user.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
+          .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
           .map(user => user.email);
-  sendWeeklyMails(['babtol235@gmail.com'])
+  sendWeeklyMails(mails);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }
