@@ -55,11 +55,11 @@ src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
     document.querySelector('#feedbackBtn').addEventListener('click', openFeedback)
     document.getElementById('feedbackBackdrop').addEventListener('click', closeFeedback)
     document.querySelector('#messageForm input[type=reset]').addEventListener('click', closeFeedback);
+    document.getElementById('messageForm').style.transition = '0.5s transform ease'
     
     function closeFeedback(e) {
         document.getElementById('messageForm').style.transform = 'translateX(100%)'
         document.getElementById('feedbackBackdrop').style.transform = 'translateX(100%)'
-        document.getElementById('messageForm').style.transition = '0.5s transform ease'
     }
     function openFeedback() {
         document.getElementById('messageForm').style.transform = 'translateX(0%)'
