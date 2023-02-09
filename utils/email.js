@@ -42,24 +42,24 @@ const sendWelcomeMail = async (user) => {
         name: user.firstName,
         subject: 'Welcome to GIP Libraries',
         message: ['Welcome to God In Prints libraries. We are glad to have you.', 
-        'Feel free to frequently explore our little bank of resources and submit your requests and feedbacks using our requests, suggestions and <a href="https://godinprints.org#contact">contact</a> forms.',
-        `<div style="font-size: 14px; font-weight: 600; color: #666; line-height: 30px;">
-            <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
-                <h5 style="color: black; text-align: center;">We would like to know how you heard about GIP</h5>
-                <ul>
-                    <li><label for="referral"><a href="https://godinprints.org/userSource/Friend/${user.email}">Friend/Referral</a></label></li>
-                    <li><label for="google"><a href="https://godinprints.org/userSource/Google/${user.email}">Google</a></label></li>
-                    <li><label for="twitter"><a href="https://godinprints.org/userSource/Twitter/${user.email}">Twitter</a></label></li>
-                    <li><label for="socials"><a href="https://godinprints.org/userSource/Socials/${user.email}">Socials (Whatsapp, Facebook, Instagram)</a></label></li>
-                    <li><label for="other"><a href="https://godinprints.org/userSource/Others/${user.email}">Others</a></label></li>
-                </ul>
-                <p class="info success" style="text-align: center; font-size: small; display: none; color: blue;">Feedback sent successfully.</p>
-                <p class="info error" style="text-align: center; font-size: small; display: none; color: orangered;">An error occured!</p>
-                <button type="button" style=" display: none; width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
-            </form>
-        </div>`,
-        `<h4 style="text-align: center;">Some Items You Might Love:</h4>${picks}`
-    ],
+            'Feel free to frequently explore our little bank of resources and submit your requests and feedbacks using our requests, suggestions and <a href="https://godinprints.org#contact">contact</a> forms.',
+            `<div style="font-size: 14px; font-weight: 600; color: #666; line-height: 30px;">
+                <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
+                    <h5 style="color: black; text-align: center;">We would like to know how you heard about GIP</h5>
+                    <ul>
+                        <li><label for="referral"><a href="https://godinprints.org/userSource/Friend/${user.email}">Friend/Referral</a></label></li>
+                        <li><label for="google"><a href="https://godinprints.org/userSource/Google/${user.email}">Google</a></label></li>
+                        <li><label for="twitter"><a href="https://godinprints.org/userSource/Twitter/${user.email}">Twitter</a></label></li>
+                        <li><label for="socials"><a href="https://godinprints.org/userSource/Socials/${user.email}">Socials (Whatsapp, Facebook, Instagram)</a></label></li>
+                        <li><label for="other"><a href="https://godinprints.org/userSource/Others/${user.email}">Others</a></label></li>
+                    </ul>
+                    <p class="info success" style="text-align: center; font-size: small; display: none; color: blue;">Feedback sent successfully.</p>
+                    <p class="info error" style="text-align: center; font-size: small; display: none; color: orangered;">An error occured!</p>
+                    <button type="button" style=" display: none; width: 100%; text-align: center; background: #666; color: white; border-color: #666; outline: none; border-radius: 3px; padding: 5px;">Submit</button>
+                </form>
+            </div>`,
+            `<h4 style="text-align: center;">Some Items You Might Love:</h4>${picks}`
+        ],
         farewell: 'Regards,'
     }
     sendPersonalMail(options);
@@ -118,7 +118,7 @@ async function generateSortedResources () {
                 <h4>${books[3].title.toUpperCase()}</h4>
                 <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[3].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[3]._id}">Go to Download</a></p>
             </div>
-        </div>
+        </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
             <h3 style="text-decoration: underline; text-align: center;">All-Time Movies</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
@@ -133,7 +133,7 @@ async function generateSortedResources () {
             <h4>${movies[2].snippet.title}</h4>
                 <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}/${movies[2].title}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
             </div>
-        </div>
+        </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
             <h3 style="text-decoration: underline; text-align: center;">Inspiring Letters</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
@@ -144,7 +144,7 @@ async function generateSortedResources () {
             <h4>${articles[1].name.toUpperCase()}</h4>
             <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${articles[1].source.split('.')[0]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/articles/${articles[1]._id}">Read Article</a></p>
             </div>
-        </div>
+        </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
             <h3 style="text-decoration: underline; text-align: center;">Meet Someone Special</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
