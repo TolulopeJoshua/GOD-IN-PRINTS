@@ -75,7 +75,7 @@ const sendWeeklyMails = async (emails) => {
         subject: 'Weekly Picks!',
         message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
-        farewell: 'Best Regards,<br><br><p style="text-align: center; margin: 0; padding: 0; font-size: small;"><a href="https://godinprints.org/user/nomail">Unsubscribe</a></p>'
+        farewell: '<p style="text-align: center; margin: 0; padding: 0; font-size: small;"><a href="https://godinprints.org/user/nomail">Unsubscribe</a></p>'
     }
     sendPersonalMail(options); 
 }
@@ -123,15 +123,15 @@ async function generateSortedResources () {
             <h3 style="text-decoration: underline; text-align: center;">All-Time Movies</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${movies[0].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>Classic Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[0].id}/${movies[0].title}">Play${movies[0].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>Classic Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[0].id}">Play${movies[0].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
             <h4>${movies[1].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Starter Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[1].id}/${movies[1].title}">Play${movies[1].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Starter Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[1].id}">Play${movies[1].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
             <h4>${movies[2].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}/${movies[2].title}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
             </div>
         </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">

@@ -59,7 +59,7 @@ router.get('/movies/:id', setRedirect, catchAsync(async (req, res) => {
 router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
 
     const { userMovies, classesMovies }= sortVideos(req);
-
+ 
     const movie = userMovies.find(movie => movie.id == req.params.id)
     if (!movie ) {
         let msg = 'Movie not found!'
@@ -69,12 +69,12 @@ router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
             }
         }
         req.flash('error', msg);
-        return res.redirect('/media/movies/playlists')
+        return res.redirect('/media/movies/playlists') 
     }
     let reviews = await Review.find({ parentId: movie.id }).populate('author');
     reviews.reverse();
     const otherMovies = userMovies.filter(mov => mov.embeddable && mov.id != movie.id).sort(() => 0.5 - Math.random()).slice(0, 5);
-    res.render('media/moviePlayer', {title: `${req.params.title} | God In Prints`, movie, reviews, otherMovies})
+    res.render('media/moviePlayer', {title: `${movie.snippet.title} | God In Prints`, movie, reviews, otherMovies})
 })); 
 
 router.post('/movies/:movieId/review', catchAsync(async (req,res) => {
