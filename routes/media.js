@@ -65,7 +65,7 @@ router.get('/movies/:id/:title', setRedirect, catchAsync(async (req, res) => {
         let msg = 'Movie not found!'
         for (let clas in classesMovies) {
             if (classesMovies[clas].find(mov => mov.id == req.params.id)) {
-                msg = `<a href="/subscription">${clas.toUpperCase()} subscription</a> level required.`
+                msg = `<a href="/subscription">${clas[0].toUpperCase()}${clas.slice(1)} subscription</a> level required.`
             }
         }
         req.flash('error', msg);
