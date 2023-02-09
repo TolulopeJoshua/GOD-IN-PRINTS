@@ -45,7 +45,7 @@ const sendWelcomeMail = async (user) => {
         'Feel free to frequently explore our little bank of resources and submit your requests and feedbacks using our requests, suggestions and <a href="https://godinprints.org#contact">contact</a> forms.',
         `<div style="font-size: 14px; font-weight: 600; color: #666; line-height: 30px;">
             <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
-                <h5 style="color: black; text-align: center;">We will love to know how you heard about GIP</h5>
+                <h5 style="color: black; text-align: center;">We would love to know how you heard about GIP</h5>
                 <ul>
                     <li><input type="radio" name="source" value="friend" id="referral" checked><label for="referral"><a href="https://godinprints.org/userSource/Friend/${user.email}">Friend/Referral</a></label></li>
                     <li><input type="radio" name="source" value="google" id="google"><label for="google"><a href="https://godinprints.org/userSource/Google/${user.email}">Google</a></label></li>
