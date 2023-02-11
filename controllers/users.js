@@ -118,7 +118,7 @@ module.exports.nomail = async (req, res) => {
   console.log(user)
   user.preferences.nomail = {set: true, time: new Date()};
   await user.save();
-  res.render('success', {title: 'success page'});
+  res.render('success', {title: 'Success', msg: 'Unsubscribed'});
 }
 
 module.exports.updateProfile = async (req, res) => {
@@ -407,7 +407,7 @@ module.exports.setUserSource = async (req, res) => {
     await user.save();
     console.log(user)
   }
-  res.status(200).render('success',{title: 'Success'});
+  res.status(200).render('success',{title: 'Success', msg: 'Sent'});
 }
 
 module.exports.addReview = async (req, res) => { 

@@ -1,6 +1,7 @@
 <% layout('layouts/boilerplate') %> 
+ 
 <script>
-    swal('', 'Success!', 'success').then(() => history.back())
+    swal('', 'Success!', '<%= msg %>').then(() => history.back())
 </script>
 
 <script>

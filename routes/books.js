@@ -21,9 +21,9 @@ router.get('/new', isLoggedIn, catchAsync(books.renderNewForm));
 
 router.post('/new', isLoggedIn, upload0.single('document'), validateBook, catchAsync(books.createBook));
 
-// router.get('/adminUpload', isAdmin, books.renderAdminUpload);
+router.get('/adminUpload', isAdmin, books.renderAdminUpload);
 
-// router.post('/adminUpload', upload.array('documents'), catchAsync(books.adminUpload))
+router.post('/adminUpload', isAdmin, upload0.array('documents'), catchAsync(books.adminUpload))
  
 router.get('/search', setRedirect, catchAsync(books.search));
 

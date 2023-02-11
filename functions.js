@@ -82,6 +82,7 @@ function checkFileType(file, cb){
         return cb(new Error('Allowed extensions - PDF | MOBI | EPUB | DOCX'));
     }
   }
+  module.exports.checkFileType = checkFileType;
 
 module.exports.upload = multer({
     storage: multerS3({

@@ -114,7 +114,7 @@ module.exports.createBook = async (req, res) => {
         let mailOptions = {
             from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', 
             to: [request.author.email, 'gipteam@hotmail.com'],
-            subject: 'Re - Book Request',
+            subject: 'Book Request',
             html: `<p>Hello ${request.author.firstName.toUpperCase()},<p/><br>
               <p>Your request for the book: <b>${request.text}</b> has been responded to. Kindly check out the resource at https://godinprints.org/books/${book._id}.<p/><br>
               <p>Regards,<p/><br><b>GIP Library</b>`
@@ -131,33 +131,40 @@ module.exports.renderAdminUpload = (req, res) => {
 
 module.exports.adminUpload = async (req, res) => {
     const pdfConverter = require('pdf-poppler');
+    const {checkFileType} = require('../functions')
     for (const doc of req.files) {
+        console.log(doc.originalname);
+
+        checkFileType(doc, (res) => res);
         const book = new Book();
-        const {key, size} = doc;
+        const {size} = doc;
+        const key = 'book/' + Date.now().toString() + '_' + doc.originalname;
+        const originalname = doc.originalname.toLowerCase().replaceAll('.pdf', '');
         book.document = {key, size};
-        book.title = doc.originalname;
+        book.title = originalname.split(' - ')[0];
+        book.author = originalname.split(' - ')[1] || ' ';
         book.filetype = doc.mimetype.split('/')[1];
         book.datetime = Date.now();
         book.isApproved = false;
-        book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title.slice(0, -4) + '.jpg';
-        const data = await getImage(book.document.key);
-        fs.writeFileSync('output.pdf', data.Body);
-        const pdfPath = 'output.pdf';
+        book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title + '.jpg';
+    
+        const pdfPath = `uploads/${doc.originalname}`;
+        const myBuffer = fs.readFileSync(pdfPath);
+        await book.save();
+        await putImage(key, myBuffer);
         let option = {
             format : 'jpeg',
-            out_dir : 'uploads',
+            out_dir : 'uploads2',
             out_prefix : path.basename(pdfPath, path.extname(pdfPath)),
             page : 1
         }
         await pdfConverter.convert(pdfPath, option)
-        let files = fs.readdirSync('uploads')
-        await uploadCompressedImage(`uploads/${files[0]}`, book.image.key);
-        await book.save();
-        for (const file of files) {
-            fs.unlinkSync(path.join('uploads', file));
-        }
+        fs.unlinkSync(pdfPath);
+        let files = fs.readdirSync('uploads2')
+        await uploadCompressedImage(`uploads2/${files[0]}`, book.image.key);
     }
-    res.send('SUCCESS');
+    req.flash('success', 'Successfully Uploaded!')
+    res.redirect('/books/adminUpload');
 };
 
 module.exports.createPreviews = async (req, res) => {

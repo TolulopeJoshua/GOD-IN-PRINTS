@@ -75,7 +75,7 @@ const sendWeeklyMails = async (emails) => {
         subject: 'Weekly Picks!',
         message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
-        farewell: '<p style="text-align: center; margin: 0; padding: 0; font-size: small;"><a href="https://godinprints.org/user/nomail">Unsubscribe</a></p>'
+        farewell: '<p style="text-align: center; margin: 0; padding: 0; font-size: small;">Click <a href="https://godinprints.org/user/nomail">here</a> to Unsubscribe</p>'
     }
     sendPersonalMail(options); 
 }
