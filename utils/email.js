@@ -54,8 +54,7 @@ const sendBookReviewsRequest = async (user, book) => {
             `<form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
             <ul>
                 ${templateReviews.map(rev => `<li style="padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/${rev}">${rev}</a></li>`).join('')}
-                <hr style="opacity: 0.3; margin: 10px 0">
-                <li style"margin: 10px 0; padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/0"><i>Respond in your own words</i></a></li>
+                <li style"margin: 10px 0; padding: 10px 0; border-top: 1px solid #ccc"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/0"><i>Respond in your own words</i></a></li>
             </ul>
             </form>`
         ],
