@@ -171,7 +171,8 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     if (reviewId == '0') return next();
     const review = await Review.findById(reviewId);
     if(!review.author.equals(req.user._id) && req.user.status !== 'author') {
-        req.flash('error', 'You do not have permission');
+        req.logout();
+        req.flash('error', 'You were logged out because your login credentials are different from the review author\'s. Kindly log in again');
         return res.redirect(`/${review.category}/${review.parentId}`);
     }
     next();
