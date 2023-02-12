@@ -51,6 +51,8 @@ router.post('/:id/download/ticket', isLoggedIn, catchAsync(books.ticketDownload)
 
 router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(books.addReview));
 
+router.get('/mailReview/:userId/:bookId/:review', catchAsync(books.mailReview));
+
 router.delete('/:bookId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(books.deleteReview));
  
 router.post('/suggest', isLoggedIn, validateReview, catchAsync(books.suggest));

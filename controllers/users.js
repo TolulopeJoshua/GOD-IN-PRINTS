@@ -5,7 +5,7 @@ const bcrypt = require ('bcrypt');
 const axios = require('axios');
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY); // 
-const { sendWelcomeMail, sendWeeklyMails } = require('../utils/email');
+const { sendWelcomeMail, sendWeeklyMails, sendPersonalMail, sendBookReviewsRequest } = require('../utils/email');
 const { writeFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
@@ -107,6 +107,26 @@ module.exports.weeklyMails = async (req, res) => {
   res.redirect('/profile');
 }
 
+module.exports.getBookReviews = async (req, res) => {
+  const users = await User.find({email: 'babatundetolulopejoshua@yahoo.com'})
+          .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
+          .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
+  for (let user of users) {
+    const downloads = user.downloads.concat(user.tktdownloads);
+    for (let download of downloads) {
+      const daysDiff = new Date() - new Date(download.downloadTime);
+      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 70 * 24 * 60 * 60 * 1000)) {
+        if (!download.bookId.reviews.find(rev => rev.author._id.toString() == user._id.toString())) {
+          sendBookReviewsRequest(user, download.bookId);
+          break;
+        }
+      }
+    }
+  }
+  req.flash('success', 'Mails sent successfully!');
+  res.redirect('/profile');
+}
+
 module.exports.renderProfile = (req, res) => {
   // sendWelcomeMail(req.user);
 
@@ -115,10 +135,22 @@ module.exports.renderProfile = (req, res) => {
 
 module.exports.nomail = async (req, res) => {
   const user = req.user;
-  console.log(user)
   user.preferences.nomail = {set: true, time: new Date()};
   await user.save();
+  sendPersonalMail({
+    email: user.email, name: user.firstName, subject: 'Unsubscribed successfully', farewell: 'Regards,',
+    message: [`You have successfully unsubscribed from our weekly mails and will no longer be recieving them.`, '',
+      'Click <a href="https://godinprints.org/user/getmail">here</a> to re-subscribe to the weekly mails.'
+    ]
+  })
   res.render('success', {title: 'Success', msg: 'Unsubscribed'});
+}
+
+module.exports.getmail = async (req, res) => {
+  const user = req.user;
+  user.preferences.nomail = {set: false};
+  await user.save();
+  res.render('success', {title: 'Success', msg: 'Subscribed to Mails'});
 }
 
 module.exports.updateProfile = async (req, res) => {

@@ -25,7 +25,11 @@ router.get('/logout', catchAsync(users.logout));
 
 router.post('/weeklyMails', isAdmin, catchAsync(users.weeklyMails));
 
+router.get('/bookReviews', isAdmin, catchAsync(users.getBookReviews));
+
 router.get('/user/nomail', isLoggedIn, catchAsync(users.nomail));
+
+router.get('/user/getmail', isLoggedIn, catchAsync(users.getmail));
 
 router.get('/profile', isLoggedIn, users.renderProfile);
 

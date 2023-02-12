@@ -2,9 +2,10 @@
 <div class="row">
     <h3 class="text-center m-3">Edit Text</h3>
     <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 px-5">
-        <form action="/reviews/<%= review._id %>/edit?_method=PATCH" method="POST" novalidate class="validated-form">
+        <form id="reviewForm" action="/reviews/<%= review._id %>/edit?_method=PATCH" method="POST" novalidate class="validated-form">
             <label class="form-label" for="image">Text:</label>
             <textarea class="form-control" id="text" name="review[text]" cols="50" rows="5" required><%= review.text %></textarea>
+            <input type="hidden" name="parentId" id="parentId">
             <button class="btn btn-success">Save</button>
         </form>
     </div>
@@ -12,4 +13,11 @@
 
 <script>
     const pageTitle = '<%= review.category %>';
+</script>
+
+<script>
+    const params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop), });
+    if (params.parentId) {
+        document.getElementById('parentId').value = params.parentId;
+    }
 </script>

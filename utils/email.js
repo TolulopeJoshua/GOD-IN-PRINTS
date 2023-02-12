@@ -33,6 +33,37 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
       });
 }
 
+const sendBookReviewsRequest = async (user, book) => {
+
+    const templateReviews = [
+        'Book has incomplete/poor content.',
+        'Not very interesting/inspiring.',
+        'No comment! Reading in progess...',
+        "I can't say if I got anything new.",
+        "It wasn't a waste of time.",
+        "Some of the contents are great.",
+        "Inspiring, I was much impacted.",
+        "Exceptional piece. Highly recommended!",
+    ];
+    const options = {
+        email: user.email,
+        name: user.firstName,
+        subject: 'Review your book!',
+        message: [`You downloaded the book: <i>${book.title.toUpperCase()}</i> a few days ago.`, 
+            'We would love to know how the book has blessed you.', 'You can select from our list of template responses or send your custom response.',
+            `<form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
+            <ul>
+                ${templateReviews.map(rev => `<li style="padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/${rev}">${rev}</a></li>`).join('')}
+                <hr style="opacity: 0.3; margin: 10px 0">
+                <li style"margin: 10px 0; padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/0"><i>Respond in your own words</i></a></li>
+            </ul>
+            </form>`
+        ],
+        farewell: 'Waiting to hear from you.'
+    }
+    sendPersonalMail(options); 
+}
+
 const sendWelcomeMail = async (user) => {
 
     const picks = await generateSortedResources();
@@ -80,7 +111,7 @@ const sendWeeklyMails = async (emails) => {
     sendPersonalMail(options); 
 }
 
-module.exports = {sendPersonalMail, sendWelcomeMail, sendWeeklyMails}
+module.exports = {sendPersonalMail, sendWelcomeMail, sendWeeklyMails, sendBookReviewsRequest}
  
 
 

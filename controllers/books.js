@@ -11,6 +11,7 @@ const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = requir
 const ExpressError = require('../utils/ExpressError');
 const bookTicket = require('../models/bookTicket');
 const { bool } = require('joi');
+const sanitize = require('sanitize-html');
 
 const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
                     'Devotion', 'Commitment/Consecration', 'Grace/Conversion', 
@@ -382,6 +383,23 @@ module.exports.addReview = async (req, res) => {
     await review.save();
     await book.save();
     res.redirect(`/books/${book._id}`)
+};
+
+module.exports.mailReview = async (req, res) => {
+    // console.log(req)
+    const book = await Book.findById(req.params.bookId);
+    if (req.params.review != '0') {
+        const review = new Review({text: sanitize(req.params.review)});
+        review.parentId = book._id.toString();
+        review.author = new Object(req.params.userId);
+        review.category = 'Books';
+        review.dateTime = Date.now();
+        book.reviews.unshift(review);
+        await review.save();
+        await book.save();
+        return res.redirect(`/reviews/${review._id}/edit`)
+    }
+    return res.redirect(`/reviews/0/edit?parentId=${book._id}`)
 };
 
 module.exports.deleteReview = async (req, res) => {
