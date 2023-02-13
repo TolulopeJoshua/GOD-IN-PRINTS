@@ -11,7 +11,7 @@ const sanitize = require('sanitize-html');
 
 
 module.exports.renderRegister = (req, res) => {
-    res.render('users/register', {title: 'GIP Library - Register'})
+    res.render('users/register', {title: 'GIP Library | Register'})
 }
 
 module.exports.register = async (req, res) => {

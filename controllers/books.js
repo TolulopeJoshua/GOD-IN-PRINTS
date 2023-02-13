@@ -316,7 +316,7 @@ module.exports.ticketDownload = async (req, res) => {
 
 module.exports.downloadsList = async (req, res) => {
     const user = await User.findById(req.user._id).populate('downloads.bookId').populate('tktdownloads.bookId');
-    const downloads = user.downloads.concat(user.tktdownloads).sort((a,b) => b.downloadTime - a.downloadTime).map(download => {
+    const downloads = user.downloads.concat(user.tktdownloads).filter(d => d.bookId).sort((a,b) => b.downloadTime - a.downloadTime).map(download => {
         return {
             title: download.bookId.title,
             author: download.bookId.author,
