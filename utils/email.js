@@ -36,14 +36,9 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
 const sendBookReviewsRequest = async (user, book) => {
 
     const templateReviews = [
-        'Book has incomplete/poor content.',
-        'Not very interesting/inspiring.',
-        'No comment! Reading in progess...',
-        "I can't say if I got anything new.",
-        "It wasn't a waste of time.",
-        "Some of the contents are great.",
-        "Inspiring, I was much impacted.",
-        "Exceptional piece. Highly recommended!",
+        'Book has incomplete/poor content.', 'Not very interesting/inspiring.', 'No comment! Reading in progess...',
+        "I can't say if I got anything new.", "It wasn't a waste of time.", "Some of the contents are great.",
+        "Inspiring, I was much impacted.", "Exceptional piece. Highly recommended!",
     ];
     const options = {
         email: user.email,
@@ -58,7 +53,7 @@ const sendBookReviewsRequest = async (user, book) => {
             </ul>
             </form>`
         ],
-        farewell: 'Waiting to hear from you.'
+        farewell: ''
     }
     sendPersonalMail(options); 
 }

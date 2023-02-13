@@ -25,7 +25,7 @@ router.get('/logout', catchAsync(users.logout));
 
 router.post('/weeklyMails', isAdmin, catchAsync(users.weeklyMails));
 
-router.get('/bookReviews', isAdmin, catchAsync(users.getBookReviews));
+router.post('/bookReviews', isAdmin, catchAsync(users.getBookReviews));
 
 router.get('/user/nomail', isLoggedIn, catchAsync(users.nomail));
 

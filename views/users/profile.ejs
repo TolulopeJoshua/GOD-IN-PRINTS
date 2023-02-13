@@ -16,6 +16,7 @@
 <div class="col-md-9 col-lg-6 offset-md-3">
     <% if (currentUser.admin == 5) { %>
      <form action="/weeklyMails" method="post" id="weeklymailsform" class="text-center mt-3"><button class="btn btn-primary">Send Weekend Mails</button></form>
+     <form action="/bookReviews" method="post" id="reviewmailsform" class="text-center mt-3"><button class="btn btn-info">Send Review Mails</button></form>
     <% } %>
     <div style="width: 400px; max-width: 90%;" class="d-flex flex-column align-items-center ms-auto me-auto small">
         <form id="changeEmail" action="/profile" method="POST" autocomplete="off" novalidate class="validated-form card w-100 rounded-3 p-4 m-3 shadow">
@@ -142,10 +143,17 @@
     })
 
     const weekly = document.getElementById('weeklymailsform');
+    const revs = document.getElementById('reviewmailsform');
     weekly && weekly.addEventListener('submit', (e) => {
         e.preventDefault()
         if (confirm('Sure to send weekend marketing mails to all library users?')) {
             weekly.submit();
+        }
+    })
+    revs && revs.addEventListener('submit', (e) => {
+        e.preventDefault()
+        if (confirm('Sure to send book review mails to all library users?')) {
+            revs.submit();
         }
     })
 </script>

@@ -108,21 +108,24 @@ module.exports.weeklyMails = async (req, res) => {
 }
 
 module.exports.getBookReviews = async (req, res) => {
-  const users = await User.find({email: 'babatundetolulopejoshua@yahoo.com'})
+  const users = await User.find({})
           .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
           .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
+  let c = 0;
   for (let user of users) {
     const downloads = user.downloads.concat(user.tktdownloads);
     for (let download of downloads) {
       const daysDiff = new Date() - new Date(download.downloadTime);
       if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 70 * 24 * 60 * 60 * 1000)) {
-        if (!download.bookId.reviews.find(rev => rev.author._id.toString() == user._id.toString())) {
-          sendBookReviewsRequest(user, download.bookId);
+        if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == user._id.toString())) {
+          // sendBookReviewsRequest(user, download.bookId);
+          c += 1;
           break;
         }
       }
     }
   }
+  console.log(c);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }
@@ -139,8 +142,8 @@ module.exports.nomail = async (req, res) => {
   await user.save();
   sendPersonalMail({
     email: user.email, name: user.firstName, subject: 'Unsubscribed successfully', farewell: 'Regards,',
-    message: [`You have successfully unsubscribed from our weekly mails and will no longer be recieving them.`, '',
-      'Click <a href="https://godinprints.org/user/getmail">here</a> to re-subscribe to the weekly mails.'
+    message: [`You have successfully unsubscribed from our weekly mails and will no longer be recieving them.`,
+      'Click <a href="https://godinprints.org/user/getmail">here</a> to re-subscribe.'
     ]
   })
   res.render('success', {title: 'Success', msg: 'Unsubscribed'});

@@ -270,7 +270,10 @@ module.exports.imageUpload = async (req, res) => {
 
 module.exports.download = async (req, res) => {
     const book = await Book.findById(req.params.id);
-    // download the file via aws s3 here
+    if (!book) {
+        req.flash('error', 'Book not found.');
+        return res.redirect(`/books`);
+    }
     const {key} = book.document;
     const options = {
         Bucket    : 'godinprintsdocuments',
@@ -292,6 +295,10 @@ module.exports.ticketDownload = async (req, res) => {
         return res.redirect(`/books/${req.params.id}`);
     }
     const book = await Book.findById(req.params.id);
+    if (!book) {
+        req.flash('error', 'Book not found.');
+        return res.redirect(`/books`);
+    }
     const {key} = book.document;
     const options = {
         Bucket    : 'godinprintsdocuments',
