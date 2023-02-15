@@ -108,24 +108,29 @@ module.exports.weeklyMails = async (req, res) => {
 }
 
 module.exports.getBookReviews = async (req, res) => {
-  const users = await User.find({})
+  let users = await User.find({})
           .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
           .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
-  let c = 0;
-  for (let user of users) {
-    const downloads = user.downloads.concat(user.tktdownloads);
+  const blockedMails = ['tchampion2977@stu.pcssd.org', 'noelsalvador4@gmail.com', 'esosaosadirector@yahoo.com', 'jjeo5191@stu.gusd.net']
+  users = users.filter(user => !blockedMails.includes(user.email));
+  let i = 0, c = 0;
+  const mailInterval = setInterval(() => {
+    if (i >= users.length - 1) clearInterval(mailInterval);
+    const downloads = users[i].downloads.concat(users[i].tktdownloads);
     for (let download of downloads) {
       const daysDiff = new Date() - new Date(download.downloadTime);
-      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 70 * 24 * 60 * 60 * 1000)) {
-        if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == user._id.toString())) {
-          // sendBookReviewsRequest(user, download.bookId);
+      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 42 * 24 * 60 * 60 * 1000)) {
+        if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
+          console.log(users[i].email, download.bookId.title)
+          // sendBookReviewsRequest(users[i], download.bookId);
           c += 1;
           break;
         }
       }
     }
-  }
-  console.log(c);
+    i += 1;
+    console.log(i, c);
+  }, 2000);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }

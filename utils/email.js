@@ -46,14 +46,15 @@ const sendBookReviewsRequest = async (user, book) => {
         subject: 'Review your book!',
         message: [`You downloaded the book: <i>${book.title.toUpperCase()}</i> a few days ago.`, 
             'We would love to know how the book has blessed you.', 'You can select from our list of template responses or send your custom response.',
-            `<form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
+            `<p style="text-align: center;"><img width="160px" src="https://godinprintsdocuments.s3.amazonaws.com/${book.image.key.replaceAll(" ", "+")}"></p>
+            <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
             <ul>
                 ${templateReviews.map(rev => `<li style="padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/${rev}">${rev}</a></li>`).join('')}
                 <li style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #ccc;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/0"><i>Respond in your own words</i></a></li>
             </ul>
             </form>`
         ],
-        farewell: ''
+        farewell: ' '
     }
     sendPersonalMail(options); 
 }
