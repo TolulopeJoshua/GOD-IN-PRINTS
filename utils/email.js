@@ -86,7 +86,15 @@ const sendWelcomeMail = async (user) => {
             </div>`,
             `<h4 style="text-align: center;">Some Items You Might Love:</h4>${picks}`
         ],
-        farewell: 'Regards,'
+        farewell: `<div style="display: flex; align-items: center; border-top: 1px dotted lightgray; padding-top: 10; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
+                        <span style="padding-right: 10;">
+                            <strong><em>Puzzle lover?</em></strong><br/><br/>
+                            <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><small style="font-family: 'Comic Sans MS';">Check out the little fun game by GIP &nbsp;&nbsp;</small></a>
+                        </span>
+                        <span>
+                        <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><img height="100" src="https://play-lh.googleusercontent.com/WrutWYFQT2cbPnN__jOkZe1RzPcP5RAD1bZq6Q1Wwxnh7p5Ht88TF3jnQcAIOxXJxOg=w526-h296-rw" alt="Puzzle Image"></a>
+                        </span>
+                    </div><br/><br/>Regards,`
     }
     sendPersonalMail(options);
 }
@@ -101,7 +109,16 @@ const sendWeeklyMails = async (emails) => {
         subject: 'Weekly Picks!',
         message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
-        farewell: '<p style="text-align: center; margin: 0; padding: 0; font-size: small;">Click <a href="https://godinprints.org/user/nomail">here</a> to Unsubscribe</p>'
+        farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
+        <div style="display: flex; align-items: center; border-top: 1px dotted lightgray; padding-top: 10; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
+            <span style="padding-right: 10;">
+                <strong><em>Puzzle lover?</em></strong><br/><br/>
+                <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><small style="font-family: 'Comic Sans MS';">Check out the little fun game by GIP &nbsp;&nbsp;</small></a>
+            </span>
+            <span>
+                <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><img height="100" src="https://play-lh.googleusercontent.com/WrutWYFQT2cbPnN__jOkZe1RzPcP5RAD1bZq6Q1Wwxnh7p5Ht88TF3jnQcAIOxXJxOg=w526-h296-rw" alt="Puzzle Image"></a>
+            </span>
+        </div><br/><br/>Click <a href="https://godinprints.org/user/nomail">here</a> to unsubscribe</p>`
     }
     sendPersonalMail(options); 
 }
