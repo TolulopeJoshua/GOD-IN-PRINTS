@@ -43,7 +43,7 @@
             <div class="row">
                 <p class="px-3 lh-lg justify">
                     <span id=<%= biographies[0]._id %>><span class="text-muted"><%= biographies[0].text.replace(/<[^>]*>/g, " ").substring(0, 750) %>...</span></span>
-                    <a class="" href="/biographies/1/<%= biographies[0].name%> ">continue</a>
+                    <a class="" href="/biographies/2/<%= biographies[0].uid%> ">continue</a>
                 </p>
 
                 <div class="row text-center bottom-100 m-0 p-0 mx-2">
@@ -64,7 +64,7 @@
                                     <p class="text-muted"> (<%= biographies[i].birthYear %> - <%= biographies[i].deathYear %>)  </p>
                                     <small id=<%= biographies[i]._id %> class="card-text p-2"><span class="text-muted"><%= biographies[i].text.replace(/<[^>]*>/g, " ").substring(0, 110) %>...</span></small><br>
                                     
-                                    <a href="/biographies/1/<%= biographies[i].name %> " class="btn btn-sm btn-outline-secondary mt-5">Read</a>
+                                    <a href="/biographies/2/<%= biographies[i].uid %> " class="btn btn-sm btn-outline-secondary mt-5">Read</a>
                                 </div>
                             </div>
                         </div>

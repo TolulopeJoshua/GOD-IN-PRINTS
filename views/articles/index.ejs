@@ -24,7 +24,7 @@
 <h1 class="text-center p-4 col-md-9 col-lg-6 offset-md-3">Feature Articles</h1>
 <div style="row-gap: 3rem; column-gap: 0.5rem;" class="col-md-9 col-lg-6 offset-md-3 overflow-auto d-flex flex-wrap justify-content-around">
     <% for( article of articles ) { %>
-    <a href="/articles/1/<%= article.name %>" class="position-relative">
+    <a href="/articles/2/<%= article.uid %>" class="position-relative">
         <article style="width: 320px; padding: 4rem 4.5rem;">
             <h6 style="height: 80px; line-height: 1.5rem;" class="d-flex w-100 justify-content-center align-items-center text-capitalize text-center text-dark"><%= article.name %> </h6>
             <p style="font-family: 'Times New Roman', Times, serif;" class="text-muted justify"><%= article.text.replace(/<[^>]*>/g, " ").substring(0, 250) %>... %> </p>

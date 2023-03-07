@@ -63,14 +63,14 @@
                     <td class="text-center p-2 overflow-hidden">
                         <% const index = i + j * 3 %> 
                         <% if (books[index]) { %> 
-                        <a href="/books/1/<%= books[index].title %>">
+                        <a href="/books/2/<%= books[index].uid %>">
                             <img height="150px" class='mx-3 my-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image.key.replaceAll(" ", "+") %> alt="<%= books[index].title %> "> 
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
-                        <a class="text-capitalize text-truncate d-block" href="/books/1/<%= books[index].title %>">
+                        <a class="text-capitalize text-truncate d-block" href="/books/2/<%= books[index].uid %>">
                             <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
                         </a>
-                        <a class="text-capitalize anime" href="/books/1/<%= books[index].title %>">
+                        <a class="text-capitalize anime" href="/books/2/<%= books[index].uid %>">
                             <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
                             <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
                         </a>

@@ -27,6 +27,8 @@ router.get('/:id', catchAsync(articles.showArticle));
 
 router.get('/1/:name', catchAsync(articles.show));
 
+router.get('/2/:uid', catchAsync(articles.show2));
+
 router.get('/:id/story', catchAsync(articles.story));
 
 router.get('/:id/image', catchAsync(articles.image));

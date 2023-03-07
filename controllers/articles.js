@@ -2,6 +2,7 @@ const Doc = require('../models/doc')
 const Book = require('../models/book');
 const Review = require('../models/review');
 const sanitizeHtml = require('sanitize-html');
+const capitalize = require('../utils/capitalize');
 
 
 const {getImage, putImage, paginate, uploadCompressedImage, encode} = require("../functions");
@@ -64,7 +65,8 @@ module.exports.createArticle = async (req, res) => {
         allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
-    article.name = article.name.toLowerCase().replace('?', '');
+    article.name = article.name.toLowerCase().replaceAll('?', '');
+    article.uid = article.name.toLowerCase().replaceAll(' ', '-');
     article.docType = 'article' 
     article.dateTime = Date.now();
     article.contributor = req.user._id;
@@ -111,6 +113,18 @@ module.exports.showArticle = async (req, res) => {
 
 module.exports.show = async (req, res) => {
     const article = await Doc.findOne({ name: req.params.name }).populate({
+        path: 'reviews', populate: { path: 'author' }
+    });
+    if(!article) { 
+        req.flash('error', 'Not in directory!');
+        return res.redirect('/articles');
+    }
+    const title = `Article - ${article.name}`;
+    res.render('articles/show', {article, title});
+};
+
+module.exports.show2 = async (req, res) => {
+    const article = await Doc.findOne({ uid: req.params.uid }).populate({
         path: 'reviews', populate: { path: 'author' }
     });
     if(!article) { 

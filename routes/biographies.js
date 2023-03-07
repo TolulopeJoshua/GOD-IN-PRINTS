@@ -26,6 +26,8 @@ router.get('/:id', catchAsync(biographies.showBiography));
 
 router.get('/1/:name', catchAsync(biographies.show));
 
+router.get('/2/:uid', catchAsync(biographies.show2));
+
 router.get('/:id/story', catchAsync(biographies.story))
 
 router.get('/:id/image', catchAsync(biographies.image))

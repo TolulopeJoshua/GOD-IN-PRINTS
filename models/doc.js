@@ -8,6 +8,10 @@ const DocSchema = new Schema({
         type: String,
         required: true
     },
+    uid: {
+        type: String,
+        required: true,
+    },
     role: String,
     birthYear: Number,
     deathYear: Number,

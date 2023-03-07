@@ -45,6 +45,7 @@ module.exports.createBiography = async (req, res) => {
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     biography.name = biography.name.replace('?', '');
+    biography.uid = biography.name.toLowerCase().replaceAll(' ', '-');
     biography.docType = 'biography' 
     biography.dateTime = Date.now();
     biography.contributor = req.user._id;
@@ -93,6 +94,21 @@ module.exports.showBiography = async (req, res) => {
 
 module.exports.show = async (req, res) => {
     const biography = await Doc.findOne({ name: req.params.name}).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    });
+    if(!biography) {
+        req.flash('error', 'Not in directory!');
+        return res.redirect('/biographies');
+    }
+    const title = `Biography - ${biography.name}`;
+    res.render('biographies/show', {biography, title});
+};
+
+module.exports.show2 = async (req, res) => {
+    const biography = await Doc.findOne({ uid: req.params.uid}).populate({
         path: 'reviews',
         populate: {
             path: 'author'

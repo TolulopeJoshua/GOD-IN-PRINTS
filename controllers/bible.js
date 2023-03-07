@@ -19,9 +19,9 @@ module.exports.chapter = (async (req, res) => {
     const version = req.query.version || 'de4e12af7f28f599-02';
     req.session.bibleVersion = version;
     const reviews = req.user ? await Review.find({author: req.user._id, parentId: chapt}) : [];
-    const title = `Multiversioned Bible - ${chapt.toUpperCase()}`;
     const chapters = JSON.parse(readFileSync(`utils/bible/${version}.json`));
     const data = chapters.find(chapter => chapter.id.toLowerCase() == chapt);
+    const title = `Multiversioned Bible - ${data.reference}`;
     res.render('bible/chapter', {data, reviews, title});
 });
 

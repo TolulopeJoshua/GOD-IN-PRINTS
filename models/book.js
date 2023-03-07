@@ -8,6 +8,11 @@ const BookScema = new Schema({
     title: {
         type: String,
         required: true,
+        unique: true
+    },
+    uid: {
+        type: String,
+        required: true,
     },
     author: {
         type: String,

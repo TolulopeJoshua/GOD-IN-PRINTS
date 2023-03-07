@@ -10,7 +10,6 @@ const path = require('path');
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
 const ExpressError = require('../utils/ExpressError');
 const bookTicket = require('../models/bookTicket');
-const { bool } = require('joi');
 const sanitize = require('sanitize-html');
 
 const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
@@ -20,14 +19,14 @@ const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship
 
 module.exports.index = async (req, res) => {
     let books;
-    let sessData = req.session;   
-    if (sessData.featureBooks && !req.query.refresh) {
-        books = sessData.featureBooks;
-    } else {
+    // let sessData = req.session;   
+    // if (sessData.featureBooks && !req.query.refresh) {
+    //     books = sessData.featureBooks;
+    // } else {
         books = await Book.aggregate([{ $match: { filetype: "pdf", isApproved: true } }, { $sample: { size: 20 } }]);
-        sessData.featureBooks = books;
-        if (req.query.refresh) return res.redirect('/books');
-    }
+    //     sessData.featureBooks = books;
+    //     if (req.query.refresh) return res.redirect('/books');
+    // }
     const title = 'Feature Books on Christian Faith - Free pdf download';
     res.render('books/index', {books, title})
 };
@@ -96,6 +95,7 @@ module.exports.createBook = async (req, res) => {
     const key = 'book/' + Date.now().toString() + '_' + req.file.originalname;
     book.document = {key, size};
     book.title = book.title.toUpperCase();
+    book.uid = book.title.toLowerCase().replaceAll(' ', '-');
     book.author = book.author.toLowerCase();
     book.contributor = req.user._id;
     book.filetype = req.file.mimetype.split('/')[1];
@@ -143,6 +143,7 @@ module.exports.adminUpload = async (req, res) => {
         const originalname = doc.originalname.toLowerCase().replaceAll('.pdf', '');
         book.document = {key, size};
         book.title = originalname.split(' - ')[0];
+        book.uid = book.title.toLowerCase().replaceAll(' ', '-');
         book.author = originalname.split(' - ')[1] || ' ';
         book.filetype = doc.mimetype.split('/')[1];
         book.datetime = Date.now();
@@ -230,6 +231,19 @@ module.exports.showBook = async (req, res) => {
 
 module.exports.show = async (req, res) => {
     const book = await Book.findOne({ title: req.params.title }).populate({
+        path: 'reviews', populate: { path: 'author' }
+    });
+    if(!book) {
+        req.flash('error', 'Cannot find that book!');
+        return res.redirect('/books?refresh=1');
+    }
+    const { books: limit } = require('../utils/lib/limits');
+    const title = `${book.title} - Free pdf download`;
+    res.render('books/show', {book, title, limit});
+};
+
+module.exports.show2 = async (req, res) => {
+    const book = await Book.findOne({ uid: req.params.uid }).populate({
         path: 'reviews', populate: { path: 'author' }
     });
     if(!book) {
