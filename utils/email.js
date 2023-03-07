@@ -147,19 +147,19 @@ async function generateSortedResources () {
             <h3 style="text-decoration: underline; text-align: center;">Life-building literatures</h3>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${books[0].title.toUpperCase()}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[0].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[0]._id}">Go to Download</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[0].author.toUpperCase()}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[0]._id}">Go to Download</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${books[1].title.toUpperCase()}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[1].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[1]._id}">Go to Download</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[1].author.toUpperCase()}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[1]._id}">Go to Download</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${books[2].title.toUpperCase()}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[2].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[2]._id}">Go to Download</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[2].author.toUpperCase()}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[2]._id}">Go to Download</a></p>
             </div>
             <div style="border-top: 1px solid #ddd; padding: 5px;">
                 <h4>${books[3].title.toUpperCase()}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[3].author}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[3]._id}">Go to Download</a></p>
+                <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${books[3].author.toUpperCase()}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${books[3]._id}">Go to Download</a></p>
             </div>
         </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
