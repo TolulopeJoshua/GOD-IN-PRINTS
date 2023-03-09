@@ -37,7 +37,7 @@
                 <% if (biographies[0].image.key === 'none') { %> 
                     <img src="/assets/images/<%= biographies[0].gender %>.png" alt="<%= biographies[0].name %> " class="card-img-top rounded-circle img-thumbnail my-3"> <p></p>
                 <% } else { %> 
-                    <img class='card-img-top rounded img-thumbnail' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[0].image.key.replaceAll(" ", "+") %> alt="<%= biographies[0].name %> ">
+                    <img class='card-img-top rounded img-thumbnail' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[0].image.key.replace(/ /g, "+") %> alt="<%= biographies[0].name %> ">
                 <% } %> 
             </div>
             <div class="row">
@@ -55,7 +55,7 @@
                                     <% if (biographies[i].image.key === 'none') { %> 
                                         <img class="card-img-top rounded-circle img-thumbnail" src="/assets/images/<%= biographies[i].gender %>.png" alt="<%= biographies[i].name %> " > <p></p>
                                     <% } else { %> 
-                                        <img class='card-img-top rounded-circle img-thumbnail' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[i].image.key.replaceAll(" ", "+") %> alt="<%= biographies[i].name %> ">
+                                        <img class='card-img-top rounded-circle img-thumbnail' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[i].image.key.replace(/ /g, "+") %> alt="<%= biographies[i].name %> ">
                                     <% } %> 
                                 </div>
                                 <div class="card-body p-3">

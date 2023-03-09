@@ -41,6 +41,7 @@ function sortVideos(req) {
         classesMovies[limit] = [...new Set(classMovies.map(video => JSON.stringify(video)))].map(video => JSON.parse(video));
         prev = [...prev, ...new Set(classMovies.map(video => JSON.stringify(video)))];
     }
+    classesMovies.classic = classesMovies.classic.filter(movie => movie.embeddable);
     
     const userStatus = req?.user?.subscription.status || 'classic';
     let userMovies = orderedByDate.filter((_, index) => index % 100 < limits.videos[userStatus]);

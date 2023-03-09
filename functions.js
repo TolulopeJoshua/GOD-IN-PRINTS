@@ -122,7 +122,7 @@ module.exports.paginate = (req, docs) => {
     pageData.next && pageData.pages.push(Number(page) + 1);
     pageData.queryString = '?';
     for (const q in req.query) {
-        q !== 'page' && (pageData.queryString += q.replaceAll('%20', ' ') + '=' + req.query[q] + '&');
+        q !== 'page' && (pageData.queryString += q.replace(/%20/g, ' ') + '=' + req.query[q] + '&');
     }
     pageData.search = req.query.search;
     return [pageDocs, pageData];

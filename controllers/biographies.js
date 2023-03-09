@@ -45,7 +45,7 @@ module.exports.createBiography = async (req, res) => {
         allowedAttributes: { 'img': ['src'], '*': ['style'] },
     });
     biography.name = biography.name.replace('?', '');
-    biography.uid = biography.name.toLowerCase().replaceAll(' ', '-');
+    biography.uid = biography.name.toLowerCase().replace(/ /g, '-');
     biography.docType = 'biography' 
     biography.dateTime = Date.now();
     biography.contributor = req.user._id;
@@ -127,7 +127,7 @@ module.exports.story = async (req, res) => {
     // console.log(q)
     const biography = await Doc.findById(req.params.id);
     const data = await getImage(biography.story);
-    const story = data.Body.toString().replaceAll("<[^>]*>", " ");
+    const story = data.Body.toString().replace(/<[^>]*>/g, " ");
     if (Number(q)) {
         return res.send(story.substring(0, q) + '...');
     }

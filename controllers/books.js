@@ -9,7 +9,7 @@ const path = require('path');
 
 const {getImage, s3, paginate, uploadCompressedImage, encode, putImage} = require("../functions");
 const ExpressError = require('../utils/ExpressError');
-const bookTicket = require('../models/bookTicket');
+const capitalize = require('../utils/capitalize');
 const sanitize = require('sanitize-html');
 
 const categories = ['Evangelism', 'Prayer', 'Marriage/Family', 'Dating/Courtship', 
@@ -63,7 +63,7 @@ module.exports.perCategory = async (req, res) => {
     res.render('books/list', {category, books: pageDocs, pageData, title})
 
     function words(category) {
-        const word = category.toLowerCase().replaceAll(' ', '/');
+        const word = category.toLowerCase().replace(/ /g, '/');
         return word.split('/');
     }
 };
@@ -95,7 +95,7 @@ module.exports.createBook = async (req, res) => {
     const key = 'book/' + Date.now().toString() + '_' + req.file.originalname;
     book.document = {key, size};
     book.title = book.title.toUpperCase();
-    book.uid = book.title.toLowerCase().replaceAll(' ', '-');
+    book.uid = book.title.toLowerCase().replace(/ /g, '-');
     book.author = book.author.toLowerCase();
     book.contributor = req.user._id;
     book.filetype = req.file.mimetype.split('/')[1];
@@ -140,10 +140,10 @@ module.exports.adminUpload = async (req, res) => {
         const book = new Book();
         const {size} = doc;
         const key = 'book/' + Date.now().toString() + '_' + doc.originalname;
-        const originalname = doc.originalname.toLowerCase().replaceAll('.pdf', '');
+        const originalname = doc.originalname.toLowerCase().replace('.pdf', '');
         book.document = {key, size};
         book.title = originalname.split(' - ')[0];
-        book.uid = book.title.toLowerCase().replaceAll(' ', '-');
+        book.uid = book.title.toLowerCase().replace(/ /g, '-');
         book.author = originalname.split(' - ')[1] || ' ';
         book.filetype = doc.mimetype.split('/')[1];
         book.datetime = Date.now();
@@ -186,7 +186,7 @@ module.exports.createPreviews = async (req, res) => {
                 let option = {
                     format : 'jpeg',
                     out_dir : 'uploads',
-                    out_prefix : `preview-${book.title.replaceAll(':', '-')}`, // path.basename(pdfPath, path.extname(pdfPath)),
+                    out_prefix : `preview-${book.title.replace(/:/g, '-')}`, // path.basename(pdfPath, path.extname(pdfPath)),
                     page : i
                 } 
                 await pdfConverter.convert(pdfPath, option)
@@ -225,7 +225,7 @@ module.exports.showBook = async (req, res) => {
         return res.redirect('/books?refresh=1');
     }
     const { books: limit } = require('../utils/lib/limits');
-    const title = `${book.title} - Free pdf download`;
+    const title = `${capitalize(book.title)} - Free pdf download`;
     res.render('books/show', {book, title, limit});
 };
 
@@ -238,7 +238,7 @@ module.exports.show = async (req, res) => {
         return res.redirect('/books?refresh=1');
     }
     const { books: limit } = require('../utils/lib/limits');
-    const title = `${book.title} - Free pdf download`;
+    const title = `${capitalize(book.title)} - Free pdf download`;
     res.render('books/show', {book, title, limit});
 };
 
@@ -251,7 +251,7 @@ module.exports.show2 = async (req, res) => {
         return res.redirect('/books?refresh=1');
     }
     const { books: limit } = require('../utils/lib/limits');
-    const title = `${book.title} - Free pdf download`;
+    const title = `${capitalize(book.title)} - Free pdf download`;
     res.render('books/show', {book, title, limit});
 };
 
@@ -293,7 +293,7 @@ module.exports.download = async (req, res) => {
         Bucket    : 'godinprintsdocuments',
         Key       : key,
     };
-    res.attachment(book.title.replaceAll('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
+    res.attachment(book.title.replace('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
 
@@ -318,7 +318,7 @@ module.exports.ticketDownload = async (req, res) => {
         Bucket    : 'godinprintsdocuments',
         Key       : key,
     };
-    res.attachment(book.title.replaceAll('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
+    res.attachment(book.title.replace('.pdf', '') + '.pdf'); // Use ( + '.' + book.filetype) to add file extension
     const fileStream = s3.getObject(options).createReadStream();
     fileStream.pipe(res);
 
@@ -356,7 +356,7 @@ module.exports.read = async (req, res) => {
             path: 'author'
         }
     });
-    const title = `${book.title} - Preview`;
+    const title = `${capitalize(book.title)} - Preview`;
     res.render('books/read', {book, title});
 }
 

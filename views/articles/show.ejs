@@ -35,7 +35,7 @@
         <% } %> 
         <div class="card-body justify overflow-auto">        
             <% if (article.image.key !== 'none') { %> 
-                <img style="max-width: 20rem;" class='card-img-top d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replaceAll(" ", "+") %> alt="<%= article.name %> ">
+                <img style="max-width: 20rem;" class='card-img-top d-block ms-auto me-auto float-sm-end ps-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + article.image.key.replace(/ /g, "+") %> alt="<%= article.name %> ">
             <% } else if (article.image.link) { %> 
                 <img style="max-width: 20rem;" src="<%= article.image.link %>" alt="<%= article.name %>" class="card-img-top d-block ms-auto me-auto float-sm-end ps-3">
             <% } else { %>

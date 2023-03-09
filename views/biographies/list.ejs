@@ -57,7 +57,7 @@
                     <% if (biographies[i].image.key === 'none') { %> 
                         <img class="card-img-top rounded-circle img-thumbnail m-3" src="/assets/images/<%= biographies[i].gender %>.png" alt="<%= biographies[i].name %> " > <p></p>
                     <% } else { %> 
-                        <img class='card-img-top rounded-circle img-thumbnail m-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[i].image.key.replaceAll(" ", "+") %> alt="<%= biographies[i].name %> ">
+                        <img class='card-img-top rounded-circle img-thumbnail m-3' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + biographies[i].image.key.replace(/ /g, "+") %> alt="<%= biographies[i].name %> ">
                         <% } %> 
                 </div>
                 <div class="col-8 p-4">

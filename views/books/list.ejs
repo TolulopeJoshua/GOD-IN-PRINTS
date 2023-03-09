@@ -52,7 +52,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body text-center text-md-start">
-                        <a class="h5 card-title stretched-link text-capitalize " href="/books/2/<%= book.uid %>"><%= book.title.replaceAll('.pdf', ' ') %></a>
+                        <a class="h5 card-title stretched-link text-capitalize " href="/books/2/<%= book.uid %>"><%= book.title.replace('.pdf', ' ') %></a>
                         
                         <p class="card-text text-capitalize text-muted"><em><%= book.author.toLowerCase() %></em></p>
                     </div>

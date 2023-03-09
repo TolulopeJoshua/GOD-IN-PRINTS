@@ -7,7 +7,7 @@
         <% let id = "" %> 
         <% for (let key in growthHabits) { %>
             <li>
-                <a href="/growth#<%= id %> "><%= key.replaceAll('_', ' ') %> </a>
+                <a href="/growth#<%= id %> "><%= key.replace(/_/g, ' ') %> </a>
             </li>
             <% id = key %> 
         <% }; %> 
@@ -24,7 +24,7 @@
     <ul class="p-0 m-0">
     <% for (let key in growthHabits) { %>
         <li>
-            <h3 class="habit-title p-2"><%= key.replaceAll('_', ' ') %> </h3>
+            <h3 class="habit-title p-2"><%= key.replace(/_/g, ' ') %> </h3>
             <% for (let habit of growthHabits[key]) { %> 
                 <ul class="p-3">
                     <li id="<%= key %>" class="justify"><img src="https://freesvg.org/img/1551445551.png" height="13" class="me-2" alt="*"><small><b><%= habit %>.</b></small></li>

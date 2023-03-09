@@ -28,7 +28,7 @@
     <% } %> 
     <div class="card text-center mb-3 card-size position-relative">
         <% if (book.image.key != 'none') { %>        
-            <img class='card-img-top rounded img-thumbnail' style="min-height: 320px;" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replaceAll(" ", "+") %> alt="<%= book.title %> "> 
+            <img class='card-img-top rounded img-thumbnail' style="min-height: 320px;" src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replace(/ /g, "+") %> alt="<%= book.title %> "> 
         <% } else { %>
             <img class="card-img-top rounded img-thumbnail" alt="<%= book.title %> " src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png">
             <% } %> 
@@ -212,7 +212,7 @@
         <div class="modal-body text-secondary">
             <div class="p-3 d-flex flex-column gap-3 align-items-center">
                 <% for( let image of book.image.previews ) { %>
-                    <img style="max-width: 100%;" class="border" src="<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + image.replaceAll(" ", "+") %>" alt="<%= image %>">
+                    <img style="max-width: 100%;" class="border" src="<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + image.replace(/ /g, "+") %>" alt="<%= image %>">
                 <% } %>
             </div>
         </div>
