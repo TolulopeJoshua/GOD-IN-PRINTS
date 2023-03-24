@@ -9,6 +9,7 @@ const { sendWelcomeMail, sendWeeklyMails, sendPersonalMail, sendBookReviewsReque
 const { writeFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
+const blockedMails = require('../utils/blockedMails')
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register', {title: 'GIP Library | Register'})
@@ -101,8 +102,16 @@ module.exports.weeklyMails = async (req, res) => {
   const users = await User.find({});
   const mails = users
           .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
-          .map(user => user.email);
-  // sendWeeklyMails(mails.slice(100));
+          .map(user => user.email).filter(mail => !blockedMails.includes(mail));
+  let index = 0;
+  // sendWeeklyMails('babtol235@gmail.com');
+  const interval = setInterval(() => {
+    const batch = mails.slice(index, index + 99) 
+    console.log(batch.length)
+    sendWeeklyMails(batch);
+    index += 99;
+    if (index > mails.length) clearInterval(interval);
+  }, 5000);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }
@@ -111,7 +120,6 @@ module.exports.getBookReviews = async (req, res) => {
   let users = await User.find({})
           .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
           .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
-  const blockedMails = ['tchampion2977@stu.pcssd.org', 'noelsalvador4@gmail.com', 'esosaosadirector@yahoo.com', 'jjeo5191@stu.gusd.net']
   users = users.filter(user => !blockedMails.includes(user.email));
   let i = 0, c = 0;
   const mailInterval = setInterval(() => {

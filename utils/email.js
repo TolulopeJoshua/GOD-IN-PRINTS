@@ -111,12 +111,12 @@ const sendWeeklyMails = async (emails) => {
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
         farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
         <div style="display: flex; align-items: center; border-top: 1px dotted lightgray; padding-top: 10; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
-            <span style="padding-right: 10;">
-                <strong><em>Puzzle lover?</em></strong><br/><br/>
-                <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><small style="font-family: 'Comic Sans MS';">Check out the little fun game by GIP &nbsp;&nbsp;</small></a>
+            <span style="padding: 0px 10px;">
+                <strong></strong><br/><br/><strong><em>Quiz</em></strong><br/><br/>
+                <a href="https://play.google.com/store/apps/details?id=com.tolulopejoshua.biblequiz"><small style="font-family: 'Comic Sans MS';">Book of the Bible (Play Store) &nbsp;&nbsp;</small></a>
             </span>
             <span>
-                <a href="https://play.google.com/store/apps/details?id=com.tolujosh.puzzle"><img height="100" src="https://play-lh.googleusercontent.com/WrutWYFQT2cbPnN__jOkZe1RzPcP5RAD1bZq6Q1Wwxnh7p5Ht88TF3jnQcAIOxXJxOg=w526-h296-rw" alt="Puzzle Image"></a>
+                <a href="https://play.google.com/store/apps/details?id=com.tolulopejoshua.biblequiz"><img height="150" src="https://play-lh.googleusercontent.com/P-oqUcl54Gf7iv-xvvgioXTZSpidK54XhUdo35HgedNSNz99OSh2iQc23TjQJeWLYNc=w526-h296-rw" alt="Puzzle Image"></a>
             </span>
         </div><br/><br/>Click <a href="https://godinprints.org/user/nomail">here</a> to unsubscribe</p>`
     }
@@ -164,17 +164,32 @@ async function generateSortedResources () {
         </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
             <h3 style="text-decoration: underline; text-align: center;">All-Time Movies</h3>
-            <div style="border-top: 1px solid #ddd; padding: 5px;">
-                <h4>${movies[0].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span>Classic Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[0].id}">Play${movies[0].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            <div style="border-top: 1px solid #ddd; padding: 5px; display: flex">
+                <div style="padding: 20px 5px">
+                    <img width="120px" src="${movies[0].snippet.thumbnails.medium.url}" alt="${movies[0].snippet.title}">
+                </div>
+                <span>
+                    <h4>${movies[0].snippet.title}</h4>
+                    <p style="display: flex; justify-content: space-between; font-size: small;"><span>Classic Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[0].id}">Play${movies[0].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                </span>
             </div>
-            <div style="border-top: 1px solid #ddd; padding: 5px;">
-            <h4>${movies[1].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Starter Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[1].id}">Play${movies[1].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            <div style="border-top: 1px solid #ddd; padding: 5px; display: flex">
+                <div style="padding: 20px 5px">
+                    <img width="120px" src="${movies[1].snippet.thumbnails.medium.url}" alt="${movies[1].snippet.title}">
+                </div>
+                <span>
+                    <h4>${movies[1].snippet.title}</h4>
+                    <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Starter Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[1].id}">Play${movies[1].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                </span>
             </div>
-            <div style="border-top: 1px solid #ddd; padding: 5px;">
-            <h4>${movies[2].snippet.title}</h4>
-                <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+            <div style="border-top: 1px solid #ddd; padding: 5px; display: flex">
+                <div style="padding: 20px 5px">
+                    <img width="120px" src="${movies[2].snippet.thumbnails.medium.url}" alt="${movies[2].snippet.title}">
+                </div>
+                <span>
+                    <h4>${movies[2].snippet.title}</h4>
+                    <p style="display: flex; justify-content: space-between; font-size: small;"><span><a href="https://godinprints.org/subscription">Medium Subscription</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/media/movies/${movies[2].id}">Play${movies[2].forKids ? ' <i>(For Kids)</i>' : ''}</a></p>
+                </span>    
             </div>
         </div><br>
         <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
