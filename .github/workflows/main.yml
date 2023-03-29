@@ -1,0 +1,15 @@
+
+name: Weekly mails
+on:
+  schedule:
+    - cron: "45 6 * * 5"
+jobs:
+  world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh world
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://godinprints.org/weeklyMails'
+          method: 'POST'
+          customHeaders: '{"secret": {{secrets.SECRET}}}'

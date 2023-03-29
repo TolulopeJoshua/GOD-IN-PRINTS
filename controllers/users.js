@@ -104,11 +104,11 @@ module.exports.weeklyMails = async (req, res) => {
           .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
           .map(user => user.email).filter(mail => !blockedMails.includes(mail));
   let index = 0;
-  // sendWeeklyMails('babtol235@gmail.com');
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     console.log(batch.length)
-    sendWeeklyMails(batch);
+    sendWeeklyMails('babtol235@gmail.com');
+    // sendWeeklyMails(batch);
     index += 99;
     if (index > mails.length) clearInterval(interval);
   }, 5000);
