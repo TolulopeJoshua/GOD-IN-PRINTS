@@ -7,7 +7,7 @@
 </div>
 <script>
     let mydiv = document.createElement('div');
-    mydiv.innerHTML = '<%= err %>';
+    mydiv.innerHTML = 'An error occured' // '<%= err %>';
     swal('', '', 'error', {content: mydiv}).then(() => history.back())
 </script>
 
