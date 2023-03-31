@@ -107,12 +107,12 @@ module.exports.weeklyMails = async (req, res) => {
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     console.log(batch.length)
-    sendWeeklyMails('babtol235@gmail.com');
+    // sendWeeklyMails('babtol235@gmail.com');
     // sendWeeklyMails(batch);
     index += 99;
     if (index > mails.length) clearInterval(interval);
   }, 5000);
-  req.flash('success', 'Mails sent successfully!');
+  req.flash('success', `Mails sent successfully - ${mails.length}`);
   res.redirect('/profile');
 }
 
