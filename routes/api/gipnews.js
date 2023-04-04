@@ -120,7 +120,7 @@ router.get('/data', catchAsync(async (req, res) => {
             try {
                 // throw ' '
                 sectionData = JSON.parse(readFileSync(sectionPath)) || [];
-                data[section] = sectionData;
+                data[section] = sectionData.map(art => ({...art, section}));
             } catch (error) { 
                 console.log('db get');
                 const urls = sects.slice(0,7).map(sec => `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sec.split(',')[0]}.json?orderBy="pubDate"&limitToLast=100`)
