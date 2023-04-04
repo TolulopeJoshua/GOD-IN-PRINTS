@@ -98,6 +98,10 @@ router.post('/refresh', catchAsync(async (req, res) => {
                             sectionData.unshift({title, link, description, content, pubDate, image_url, id});
                             writeFileSync(sectionPath, JSON.stringify(sectionData.sort((a,b) => {
                                 return (new Date(b.pubDate) - (new Date(a.pubDate)))
+                            }).sort((a,b) => {
+                                const val = (a.image_url && !b.image_url) ? -1 :
+                                            (b.image_url && !a.image_url) ? 1 : 0
+                                return val;
                             }).slice(0,100))); 
                             console.log(`${ins += 1} - ${section}`)
                             count += 1;
@@ -181,6 +185,7 @@ router.get('/:section', catchAsync(async (req, res) => {
     let sectionPath = `/tmp/${section.split(',')[0]}.json`;
     try {
         sectionData = JSON.parse(readFileSync(sectionPath)) || [];
+        sectionData = sectionData.map(art => ({...art, section}));
     } catch (error) { 
         if (section == 'reel') {
             const urls = [17,24,25,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
@@ -240,6 +245,7 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
         const sectionPath = `/tmp/${section?.split(',')[0]}.json`;
         try {
             sectionData = JSON.parse(readFileSync(sectionPath)) || [];
+            sectionData = sectionData.map(art => ({...art, section}));
         } catch (error) {
             if (section == 'reel') {
                 const urls = [17,24,25,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
