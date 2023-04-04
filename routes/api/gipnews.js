@@ -9,6 +9,9 @@ const { v4: uuid } = require('uuid');
 const sects = ['world','sports','business','health','top','science,technology','entertainment','reel']
 
 router.post('/refresh', catchAsync(async (req, res) => {
+    if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
+        return res.status(400).send();
+    }
     let count = 0, ins = 0;
     let {section} = req.query;
     // for (let section of sections) {
