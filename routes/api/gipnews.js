@@ -169,7 +169,7 @@ router.get('/data', catchAsync(async (req, res) => {
             }
         }
         for (let sec in data) {
-            data[sec] = data[sec].slice(0,10);
+            data[sec] = data[sec].slice(0,10).map(art => ({...art, content:''}));
         }
         res.status(200).send(data)
 }))
@@ -218,12 +218,12 @@ router.get('/:section', catchAsync(async (req, res) => {
             if (section == 'reel') {
                 reel = data.slice(1,5).map(vid => ({...vid, section}))
             }
-            return {...data[0], section}
+            return {...data[0], section, content: ''}
         } catch (error) { 
             return {};
          }
     })
-    res.status(200).send({data: sortByImage(sectionData).map(data => ({...data, section})), features, reel})
+    res.status(200).send({data: sortByImage(sectionData).map(data => ({...data, section, content: ''})), features, reel})
 
     function sortByImage(data) {
         return data.sort((a,b) => {
@@ -288,7 +288,7 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
             }
         }
         sectionData = sectionData.concat(sectionData.splice(0,sectionData.indexOf(data)+1))
-            .filter(dat => dat.image_url).map(data => ({...data, section}))
+            .filter(dat => dat.image_url).map(data => ({...data, section, content: ''}))
         res.status(200).send({data: data ? {...data, section} : null, list: sectionData});
 }))
 
