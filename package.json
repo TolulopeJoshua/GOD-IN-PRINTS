@@ -49,6 +49,7 @@
     "pdf2pic": "^2.1.4",
     "sanitize-html": "^2.7.0",
     "tinyduration": "^3.2.3",
+    "uuid": "^9.0.0",
     "xhr2": "^0.2.1"
   },
   "devDependencies": {
