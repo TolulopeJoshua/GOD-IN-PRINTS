@@ -109,11 +109,11 @@ module.exports.weeklyMails = async (req, res) => {
     console.log(batch.length)
     // sendWeeklyMails('babtol235@gmail.com');
     sendWeeklyMails(batch);
-    sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
-      message:[`Number of mails sents: ${mails.length}`]})
     index += 99;
     if (index > mails.length) clearInterval(interval);
   }, 5000);
+  sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
+    message:[`Number of mails sents: ${mails.length}`]});
   res.status(200).send(mails.length.toString());
   // req.flash('success', `Mails sent successfully - ${mails.length}`);
   // res.redirect('/profile');
