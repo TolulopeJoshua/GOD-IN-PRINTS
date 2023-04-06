@@ -12,5 +12,4 @@ jobs:
         with:
           url: 'https://godinprints.org/weeklyMails'
           method: 'POST'
-          username: ${{secrets.USERNAME}}
-          password: ${{secrets.PASSWORD}}
+          customHeaders: '{"id": "_pxR945hMZJu303ldfIrWsOLns6Q"}'

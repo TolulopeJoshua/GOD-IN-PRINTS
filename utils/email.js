@@ -110,7 +110,7 @@ const sendWeeklyMails = async (emails) => {
         message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
         'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
         farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
-        <div style="display: flex; align-items: center; border-top: 1px dotted lightgray; padding-top: 10; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
+        <div style="display: flex; align-items: center; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
             <span style="padding: 0px 10px;">
                 <strong></strong><br/><br/><strong><em>Quiz</em></strong><br/><br/>
                 <a href="https://play.google.com/store/apps/details?id=com.tolulopejoshua.biblequiz"><small style="font-family: 'Comic Sans MS';">Book of the Bible (Play Store) &nbsp;&nbsp;</small></a>

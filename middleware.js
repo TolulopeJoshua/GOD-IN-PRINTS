@@ -55,7 +55,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 module.exports.isAdmin = (req, res, next) => {
-    if (req.password == process.env.AP) next();
+    if (req.headers.pass == process.env.AP) return next();
     if (!req.isAuthenticated() || !req.user.admin) {
         req.flash('error', 'Unauthorized!');
         return res.redirect('/books');

@@ -112,8 +112,9 @@ module.exports.weeklyMails = async (req, res) => {
     index += 99;
     if (index > mails.length) clearInterval(interval);
   }, 5000);
-  req.flash('success', `Mails sent successfully - ${mails.length}`);
-  res.redirect('/profile');
+  res.status(200).send(mails.length.toString());
+  // req.flash('success', `Mails sent successfully - ${mails.length}`);
+  // res.redirect('/profile');
 }
 
 module.exports.getBookReviews = async (req, res) => {
