@@ -89,7 +89,7 @@ module.exports.showBiography = async (req, res) => {
         return res.redirect('/biographies');
     }
     const title = `Biography - ${biography.name}`;
-    res.render('biographies/show', {biography, title});
+    res.render('biographies/show', {biography, title, canonicalUrl:`https://godinprints.org/biographies/2/${biography.uid}`});
 };
 
 module.exports.show = async (req, res) => {
@@ -104,7 +104,7 @@ module.exports.show = async (req, res) => {
         return res.redirect('/biographies');
     }
     const title = `Biography - ${biography.name}`;
-    res.render('biographies/show', {biography, title});
+    res.render('biographies/show', {biography, title, canonicalUrl:`https://godinprints.org/biographies/2/${biography.uid}`});
 };
 
 module.exports.show2 = async (req, res) => {
@@ -119,7 +119,7 @@ module.exports.show2 = async (req, res) => {
         return res.redirect('/biographies');
     }
     const title = `Biography - ${biography.name}`;
-    res.render('biographies/show', {biography, title});
+    res.render('biographies/show', {biography, title, canonicalUrl:`https://godinprints.org/biographies/2/${biography.uid}`});
 };
 
 module.exports.story = async (req, res) => {    

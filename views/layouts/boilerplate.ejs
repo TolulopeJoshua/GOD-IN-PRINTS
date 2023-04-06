@@ -7,6 +7,9 @@
   <title><%= title %> </title>
   <meta name="description" content="<%= title %>">
   
+  <% if (typeof canonicalUrl != "undefined") { %>
+    <link rel="canonical" href="<%= canonicalUrl %>" />
+  <% } %>
   <link rel="icon" href="/assets/images/burningBook.png" type="image/x-icon">
   
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">  

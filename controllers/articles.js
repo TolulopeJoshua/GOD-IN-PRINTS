@@ -108,7 +108,7 @@ module.exports.showArticle = async (req, res) => {
         return res.redirect('/articles');
     }
     const title = `Article - ${article.name}`;
-    res.render('articles/show', {article, title});
+    res.render('articles/show', {article, title, canonicalUrl:`https://godinprints.org/articles/2/${article.uid}`});
 };
 
 module.exports.show = async (req, res) => {
@@ -120,7 +120,7 @@ module.exports.show = async (req, res) => {
         return res.redirect('/articles');
     }
     const title = `Article - ${article.name}`;
-    res.render('articles/show', {article, title});
+    res.render('articles/show', {article, title, canonicalUrl:`https://godinprints.org/articles/2/${article.uid}`});
 };
 
 module.exports.show2 = async (req, res) => {
@@ -132,7 +132,7 @@ module.exports.show2 = async (req, res) => {
         return res.redirect('/articles');
     }
     const title = `Article - ${article.name}`;
-    res.render('articles/show', {article, title});
+    res.render('articles/show', {article, title, canonicalUrl:`https://godinprints.org/articles/2/${article.uid}`});
 };
 
 module.exports.story = async (req, res) => {    

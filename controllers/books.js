@@ -226,7 +226,7 @@ module.exports.showBook = async (req, res) => {
     }
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} - Free pdf download`;
-    res.render('books/show', {book, title, limit});
+    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 module.exports.show = async (req, res) => {
@@ -239,7 +239,7 @@ module.exports.show = async (req, res) => {
     }
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} - Free pdf download`;
-    res.render('books/show', {book, title, limit});
+    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 module.exports.show2 = async (req, res) => {
@@ -252,7 +252,7 @@ module.exports.show2 = async (req, res) => {
     }
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} - Free pdf download`;
-    res.render('books/show', {book, title, limit});
+    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 module.exports.image = async (req, res) => {    
