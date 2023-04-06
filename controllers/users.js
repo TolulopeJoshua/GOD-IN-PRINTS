@@ -107,8 +107,10 @@ module.exports.weeklyMails = async (req, res) => {
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     console.log(batch.length)
-    sendWeeklyMails('babtol235@gmail.com');
-    // sendWeeklyMails(batch);
+    // sendWeeklyMails('babtol235@gmail.com');
+    sendWeeklyMails(batch);
+    sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
+      message:[`Number of mails sents: ${mails.length}`]})
     index += 99;
     if (index > mails.length) clearInterval(interval);
   }, 5000);
