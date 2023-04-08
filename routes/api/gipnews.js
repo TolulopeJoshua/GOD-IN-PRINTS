@@ -248,33 +248,33 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
             sectionData = JSON.parse(readFileSync(sectionPath)) || [];
             sectionData = sectionData.map(art => ({...art, section}));
         } catch (error) {
-            if (section == 'reel') {
-                const urls = [17,24,25,27,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
-                const newsSection = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
-                let items = newsSection.reduce((it, data) => it.concat(data.items), [])
-                sectionData = items.filter(({contentDetails}) => !contentDetails.regionRestriction).map(video => {
-                    const {
-                    id, snippet: {title, description, publishedAt: pubDate, 
-                        thumbnails:{standard}}, player: {embedHtml: content}
-                    } = video;
-                    return ({title, description, content, pubDate, image_url: standard?.url, id});
-                })
-            } else {
-                const url = `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${section.split(',')[0]}.json?orderBy="pubDate"&limitToLast=100`;
-                const newsSection = (await axios.get(url)).data;
-                for (let key in newsSection) {
-                    sectionData.push(newsSection[key]);
-                }
-            }
-            sectionData = sectionData.sort((a,b) => (new Date(b.pubDate) - (new Date(a.pubDate))))
-            .sort((a,b) => {
-                const val = (a.image_url && !b.image_url) ? -1 :
-                            (b.image_url && !a.image_url) ? 1 : 0
-                return val;
-            }).slice(0,100).map(art => ({...art, section}));
-            try {
-                writeFileSync(sectionPath, JSON.stringify(sectionData)); 
-            } catch (error) { console.log('could not write to file') }
+            // if (section == 'reel') {
+            //     const urls = [17,24,25,27,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
+            //     const newsSection = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
+            //     let items = newsSection.reduce((it, data) => it.concat(data.items), [])
+            //     sectionData = items.filter(({contentDetails}) => !contentDetails.regionRestriction).map(video => {
+            //         const {
+            //         id, snippet: {title, description, publishedAt: pubDate, 
+            //             thumbnails:{standard}}, player: {embedHtml: content}
+            //         } = video;
+            //         return ({title, description, content, pubDate, image_url: standard?.url, id});
+            //     })
+            // } else {
+            //     const url = `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${section.split(',')[0]}.json?orderBy="pubDate"&limitToLast=100`;
+            //     const newsSection = (await axios.get(url)).data;
+            //     for (let key in newsSection) {
+            //         sectionData.push(newsSection[key]);
+            //     }
+            // }
+            // sectionData = sectionData.sort((a,b) => (new Date(b.pubDate) - (new Date(a.pubDate))))
+            // .sort((a,b) => {
+            //     const val = (a.image_url && !b.image_url) ? -1 :
+            //                 (b.image_url && !a.image_url) ? 1 : 0
+            //     return val;
+            // }).slice(0,100).map(art => ({...art, section}));
+            // try {
+            //     writeFileSync(sectionPath, JSON.stringify(sectionData)); 
+            // } catch (error) { console.log('could not write to file') }
         }
         let data = sectionData.find(art => art.id == id);
         if (!data) {
