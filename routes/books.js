@@ -59,4 +59,6 @@ router.delete('/:bookId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, cat
  
 router.post('/suggest', isLoggedIn, validateReview, catchAsync(books.suggest));
 
+router.post('/writexml', isAdmin, catchAsync(books.writexml));
+
 module.exports = router;

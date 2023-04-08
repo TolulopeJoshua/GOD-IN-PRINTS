@@ -37,6 +37,17 @@ module.exports.search = (async (req, res) => {
     }).catch(); 
 });
 
+module.exports.writexml = async (req, res) => {
+    const version = req.query.version || 'de4e12af7f28f599-02';
+    const chapters = JSON.parse(readFileSync(`utils/bible/${version}.json`));
+    let xmap = '';
+    for (let chapter of chapters) {
+        xmap += `<url>\n\ \ <loc>https://godinprints.org/bible/chapter?chapter=${chapter.id.toLowerCase()}</loc>\n\ \ <lastmod>2023-04-08T10:24:55+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+    }
+    writeFileSync('bible.xml', xmap);
+    res.status(200).send('done');
+}
+
 // module.exports.addReview = async (req, res) => {
 //     // console.log(req)
 //     const user = await User.findById(req.user._id);

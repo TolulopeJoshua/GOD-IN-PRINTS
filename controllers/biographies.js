@@ -200,3 +200,13 @@ module.exports.suggest = async (req, res) => {
     transporter.sendMail(mailOptions);
     res.status(200).send('Success')
 }
+
+module.exports.writexml = async (req, res) => {
+    const bios = await Doc.find({docType: 'biography'});
+    let xmap = '';
+    for (let bio of bios) {
+        xmap += `<url>\n\ \ <loc>https://godinprints.org/biographies/2/${encodeURI(bio.uid)}</loc>\n\ \ <lastmod>2023-04-08T10:24:55+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+    }
+    fs.writeFileSync('biographies.xml', xmap);
+    res.status(200).send('done');
+}

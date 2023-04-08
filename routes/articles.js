@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const articles = require('../controllers/articles');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isArticleAuthor, validateArticle, validateReview, isReviewAuthor, setRedirect} = require('../middleware');
+const { isLoggedIn, isArticleAuthor, validateArticle, validateReview, isReviewAuthor, setRedirect, isAdmin} = require('../middleware');
 
 const {upload0} = require("../functions")
 
@@ -44,5 +44,7 @@ router.post('/:id/addReview', isLoggedIn, validateReview, catchAsync(articles.ad
 router.delete('/:articleId/deleteReview/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(articles.deleteReview));
  
 router.post('/suggest', isLoggedIn, validateReview, catchAsync(articles.suggest));
+
+router.post('/writexml', isAdmin, catchAsync(articles.writexml));
 
 module.exports = router;

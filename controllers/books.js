@@ -448,3 +448,13 @@ module.exports.suggest = async (req, res) => {
     transporter.sendMail(mailOptions);
     res.status(200).send('Success')
 }
+
+module.exports.writexml = async (req, res) => {
+    const books = await Book.find({});
+    let xmap = '';
+    for (let book of books) {
+        xmap += `<url>\n\ \ <loc>https://godinprints.org/books/2/${encodeURI(book.uid)}</loc>\n\ \ <lastmod>2023-04-08T10:24:55+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+    }
+    fs.writeFileSync('books.xml', xmap);
+    res.status(200).send('done');
+}
