@@ -29,7 +29,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
         const sectionPath = `/tmp/${section.split(',')[0]}.json`;
         try {
             if (section == 'reel') {
-                const ids = [17,24,25,27,28]
+                const ids = [17,24,25,28]
                 const urls = ids.map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`);
                 const responses = await Promise.all(urls.map(url => axios.get(url))) 
                 let items = responses.reduce((res, sec) => res.concat(sec.data.items), []);
@@ -189,7 +189,7 @@ router.get('/:section', catchAsync(async (req, res) => {
         sectionData = sectionData.map(art => ({...art, section}));
     } catch (error) { 
         if (section == 'reel') {
-            const urls = [17,24,25,27,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
+            const urls = [17,24,25,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
             const newsSection = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
             let items = newsSection.reduce((it, data) => it.concat(data.items), [])
             sectionData = items.filter(({contentDetails}) => !contentDetails.regionRestriction).map(video => {
@@ -249,7 +249,7 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
             sectionData = sectionData.map(art => ({...art, section}));
         } catch (error) {
             // if (section == 'reel') {
-            //     const urls = [17,24,25,27,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
+            //     const urls = [17,24,25,28].map(id => `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=${id}&key=${process.env.YOUTUBE_API_KEY}`)
             //     const newsSection = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
             //     let items = newsSection.reduce((it, data) => it.concat(data.items), [])
             //     sectionData = items.filter(({contentDetails}) => !contentDetails.regionRestriction).map(video => {
