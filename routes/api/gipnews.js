@@ -12,6 +12,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
     if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
         return res.status(400).send();
     }
+    res.status(200).send('success ' + new Date());
     let count = 0, ins = 0;
     let {section} = req.query;
     // for (let section of sections) {
@@ -113,7 +114,6 @@ router.post('/refresh', catchAsync(async (req, res) => {
             }
         } catch (error) { console.log(error) }
     // }
-    res.status(200).send('success ' + new Date())
 }))
 
 router.get('/data', catchAsync(async (req, res) => {
