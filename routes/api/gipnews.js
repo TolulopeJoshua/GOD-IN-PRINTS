@@ -62,7 +62,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                         if (!article.image_url && article.content?.length < 1000) return false;
                         if (['cyprus-mail','pakistantoday','manicapost','scripts.24','Snl24','pajhwok','hmetro',
                             'colombopage','sportti','orissapost','herald','allbanaadir','sundaymail','sundaynews',
-                            'coinspeaker','arabnews','docbao'
+                            'coinspeaker','arabnews','docbao','technobaboy'
                             ].filter(src => article.link.includes(src)).length) return false;
                         return (!(sectionData.map(data => data.title).includes(article.title)));
                     }).sort((a,b) => (new Date(b.pubDate) - (new Date(a.pubDate)))).slice(0,1);

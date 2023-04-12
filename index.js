@@ -350,9 +350,13 @@ app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     console.log(err.message)
-    const errors = JSON.parse(readFileSync('console.json'));
-    errors.push(err.message + ' - Url: ' + req.url + '\n\n')
-    writeFileSync('console.json', JSON.stringify(errors));
+    try {
+        let error = readFileSync('console.txt');
+        error += err.message + ' - ' + req.url + '\n\n';
+        writeFileSync('console.txt', error);
+    } catch (error) {
+        writeFileSync('console.txt', err.message + ' - ' + req.url + '\n\n');
+    }
     res.status(statusCode).render('error', { err , title: 'Error Page'})
 })
 
