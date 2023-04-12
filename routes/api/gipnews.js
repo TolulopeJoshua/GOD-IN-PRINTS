@@ -13,6 +13,12 @@ router.post('/refresh', catchAsync(async (req, res) => {
         return res.status(400).send();
     }
     res.status(200).send('success ' + new Date());
+    let consol = '';
+    try {
+        consol = readFileSync('gipnews.txt') + '\n\n';
+    } catch (e) {
+        writeFileSync('gipnews.txt', consol);
+    }
     let count = 0, ins = 0;
     let {section} = req.query;
     // for (let section of sections) {
@@ -40,7 +46,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                         } = video;
                         return ({title, description, content, pubDate, image_url: standard?.url, id});
                     })
-                console.log(section, sectionData.length);
+                consol += (section + ' ' + sectionData.length);
                 writeFileSync(sectionPath, JSON.stringify(sectionData.sort((a,b) => {
                     return (new Date(b.pubDate) - (new Date(a.pubDate)))
                 }).slice(0,100)));
@@ -66,7 +72,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                             ].filter(src => article.link.includes(src)).length) return false;
                         return (!(sectionData.map(data => data.title).includes(article.title)));
                     }).sort((a,b) => (new Date(b.pubDate) - (new Date(a.pubDate)))).slice(0,1);
-                    console.log(section, results.length)
+                    consol += (section + ' ' + results.length) + ' ';
                     for (let result of results) {
                         let {title, link, description, content, pubDate, image_url, id} = result;
                         description = description || content.slice(0,100);
@@ -86,8 +92,8 @@ router.post('/refresh', catchAsync(async (req, res) => {
                                     'X-RapidAPI-Host': 'extract-news.p.rapidapi.com'
                                 }
                             };
-                            console.log(link.split('/')[2]);
-                            console.log(title);
+                            consol += (link.split('/')[2]) + ' - ';
+                            consol += (title);
                             response = await axios.request(options)
                             const {article} = response.data;
                             if (article) {
@@ -104,7 +110,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                                             (b.image_url && !a.image_url) ? 1 : 0
                                 return val;
                             }).slice(0,100))); 
-                            console.log(`${ins += 1} - ${section}`)
+                            consol += '\n' + (`${ins += 1} - ${section}`)
                             count += 1;
                         } else {
                             console.log('Escaped insertion: ' + section)
@@ -112,7 +118,8 @@ router.post('/refresh', catchAsync(async (req, res) => {
                     }
                 }
             }
-        } catch (error) { console.log(error) }
+        } catch (error) { consol += (error) }
+        writeFileSync('gipnews.txt', consol);
     // }
 }))
 
