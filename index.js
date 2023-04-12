@@ -352,10 +352,10 @@ app.use((err, req, res, next) => {
     console.log(err.message)
     try {
         let error = readFileSync('console.txt');
-        error += err.message + ' - ' + req.url + '\n\n';
+        error += err.message + ' - ' + req.url + ' - ' + (new Date()).toString() + '\n\n';
         writeFileSync('console.txt', error);
     } catch (error) {
-        writeFileSync('console.txt', err.message + ' - ' + req.url + '\n\n');
+        writeFileSync('console.txt', err.message + ' - ' + req.url + ' - ' + (new Date()).toString() + '\n\n');
     }
     res.status(statusCode).render('error', { err , title: 'Error Page'})
 })
