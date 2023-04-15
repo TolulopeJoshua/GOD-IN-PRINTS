@@ -68,7 +68,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                         if (!article.image_url && article.content?.length < 1000) return false;
                         if (['cyprus-mail','pakistantoday','manicapost','scripts.24','Snl24','pajhwok','hmetro',
                             'colombopage','sportti','orissapost','allbanaadir','sundaymail','sundaynews',
-                            'coinspeaker','arabnews','docbao','technobaboy'
+                            'coinspeaker','arabnews','docbao','technobaboy','herald.co.zw','jamaica-gleaner'
                             ].filter(src => article.link.includes(src)).length) return false;
                         return (!(sectionData.map(data => data.title).includes(article.title)));
                     }).sort((a,b) => (new Date(b.pubDate) - (new Date(a.pubDate)))).slice(0,1);
@@ -304,6 +304,67 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
         sectionData = sectionData.concat(sectionData.splice(0,sectionData.indexOf(data)+1))
             .filter(dat => dat.image_url).map(data => ({...data, section, content: ''}))
         res.status(200).send({data: data ? {...data, section} : null, list: sectionData});
+}))
+
+router.post('/mail', catchAsync(async (req, res) => {
+    
+    const urls = sects.slice(0,7).map(sec => `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sec.split(',')[0]}.json?orderBy="pubDate"&limitToLast=3`)
+    const newsSections = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
+    
+    let nodeMailer = require('nodemailer');
+    const transporter = nodeMailer.createTransport({
+    host: "smtp.gmail.com", // hostname
+    port: 465, // port for secure SMTP
+    secure: true, // TLS requires secureConnection to be false
+        auth: {
+            user: 'gipnews4@gmail.com',
+            pass: process.env.GIPNEWS_PASSWORD
+        },
+    });
+    let mailOptions = {
+        from: '"GIP News" <gipnews4@gmail.com>', // sender address
+        to: 'gipteam@hotmail.com', // list of receivers
+        // bcc: mails,
+        subject: `News Headlines | ${(new Date()).toUTCString().slice(0,11)}`, // Subject line
+        // text: 'hello', // plain text body
+        html: `<section style="font-family: Arial, Helvetica, sans-serif; padding: 4px;">
+            <header style="text-align: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
+            <img style="opacity: 0.5; border-radius: 50%;" width="72px" height="72px" src="https://gipnews.vercel.app/favicon.ico" alt="GIP News">
+            </header>
+            <h2 style="text-align: center;">Top headlines</h2>
+            <p style="padding: 6px;">
+            <em>What's happening around the world today, ${(new Date()).toUTCString().slice(0,16)}</em>
+            </p>
+            <p style="font-size: 14px; font-weight: 600; color: #666; line-height: 40px; text-align: justify;">
+                ${newsSections.map((newsSection, i) => {
+                    // const heading = sects[newsSections.indexOf(newsSection)] == 'world' ? '': `<h3 style="text-decoration: 'underline';">${sects[newsSections.indexOf(newsSection)].toUpperCase()}</h3>`;
+                    let list = [];
+                    for (let key in newsSection) {
+                        list.push(`
+                            <a href="https://gipnews.vercel.app/${sects[newsSections.indexOf(newsSection)]}/${key}">${newsSection[key].title}</a>
+                            <span style="font-size: 10px; font-weight: 400; color: #333;"></span><br>
+                            <span  style="font-weight: 400;">${newsSection[key].description}</span>
+                        `)
+                    }
+                    return list.join('<br>');
+                }).join(' <br> ')} 
+                <br><br><p style="text-align: center; margin: 0; padding: 0; font-size: small;">
+                <a href="https://gipnews.vercel.app/newsletter">Switch/cancel subscription</a></p><br>
+            </p><hr>
+            <footer style="text-align: center;">
+            <a href="https://gipnews.vercel.app"><img style="width: 26px; padding-right: 16px;" src="https://gipnews.vercel.app/favicon.ico" alt="GIP News"></a>
+            <a href="https://web.facebook.com/godinprints"><img style="width: 26px; padding-right: 16px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="GodInPrints facebook"></a>
+            <a href="https://godinprints.org"><img style="width: 32px;" src="https://godinprints.org/assets/images/burningBook.jfif" alt="God in prints"></a>
+            </footer>
+            <em style="width: 100%; display: block; text-align: center; font-size: small; padding-top: 16px;">
+            &copy; 2023 GIP Library
+            </em></section>`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) console.log(error) 
+        console.log(info)
+    });
+    res.status(200).send('success');
 }))
 
 module.exports = router;
