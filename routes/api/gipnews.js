@@ -111,6 +111,14 @@ router.post('/refresh', catchAsync(async (req, res) => {
                                 return val;
                             }).slice(0,100))); 
                             consol += '\n' + (`${ins += 1} - ${section}`)
+                            
+                            let xmap = '';
+                            try {
+                                xmap = readFileSync('gipXmap.xml');
+                            } catch (error) { }
+                            xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}/${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+                            writeFileSync('gipXmap.xml', xmap);
+
                             count += 1;
                         } else {
                             console.log('Escaped insertion: ' + section)
@@ -307,7 +315,9 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
 }))
 
 router.post('/mail', catchAsync(async (req, res) => {
-    
+    if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
+        return res.status(400).send();
+    }
     const urls = sects.slice(0,7).map(sec => `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sec.split(',')[0]}.json?orderBy="pubDate"&limitToLast=3`)
     const newsSections = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
     
@@ -366,5 +376,25 @@ router.post('/mail', catchAsync(async (req, res) => {
     });
     res.status(200).send('success');
 }))
+
+router.post('/xml', async (req, res) => {
+    try {
+        if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
+            return res.status(400).send();
+        }
+        let xmap = '';
+        for (let sect of sects) {
+            if (sect == 'reel') continue;
+            const ids = await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}.json?shallow=true`)
+            for (let id in ids) {
+                const title = await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}/${id}/title.json`)
+                xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${sect}/${id}/${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>2023-04-18T10:14:22+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+            }
+        }
+        writeFileSync('gipXmap.xml', xmap);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 module.exports = router;
