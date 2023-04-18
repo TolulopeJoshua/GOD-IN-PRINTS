@@ -116,7 +116,7 @@ router.post('/refresh', catchAsync(async (req, res) => {
                             try {
                                 xmap = readFileSync('gipXmap.xml');
                             } catch (error) { }
-                            xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}/${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+                            xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}?title=${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
                             writeFileSync('gipXmap.xml', xmap);
 
                             count += 1;
@@ -385,16 +385,20 @@ router.post('/xml', async (req, res) => {
         let xmap = '';
         for (let sect of sects) {
             if (sect == 'reel') continue;
-            const ids = await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}.json?shallow=true`)
+            console.log(sect)
+            const ids = (await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}.json?shallow=true`)).data;
             for (let id in ids) {
-                const title = await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}/${id}/title.json`)
-                xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${sect}/${id}/${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>2023-04-18T10:14:22+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+                const title = (await axios.get(`https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${sect.split(',')[0]}/${id}/title.json?shallow=true`)).data;
+                // console.log(title)
+                xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${sect}/${id}?title=${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>2023-04-18T10:14:22+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
             }
         }
         writeFileSync('gipXmap.xml', xmap);
     } catch (error) {
         console.log(error);
+        return res.status(400).send('error!')
     }
+    res.status(200).send('DONE!')
 })
 
 module.exports = router;
