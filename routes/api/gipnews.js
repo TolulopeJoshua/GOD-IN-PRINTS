@@ -133,6 +133,106 @@ router.post('/refresh', catchAsync(async (req, res) => {
     // }
 }))
 
+router.post('/refresh2', catchAsync(async (req, res) => {
+    if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
+        return res.status(400).send();
+    }
+    res.status(200).send('success ' + new Date());
+    let consol = '';
+    try {
+        consol = readFileSync('gipnews.txt') + '\n\n';
+    } catch (e) {
+        writeFileSync('gipnews.txt', consol);
+    }
+    let count = 0, ins = 0;
+    let {section} = req.query;
+    // for (let section of sections) {
+        const options = {
+            method: 'GET',
+            url: 'https://bing-news-search1.p.rapidapi.com/news',
+            params: { count: '100', category: section,
+              mkt: 'en-US', safeSearch: 'Moderate', textFormat: 'Raw' },
+            headers: {
+              'X-BingApis-SDK': 'true',
+              'X-RapidAPI-Key': process.env.NEXT_SECRET_C1,
+              'X-RapidAPI-Host': 'bing-news-search1.p.rapidapi.com'
+            }
+        };
+        let sectionData = [];
+        const sectionPath = `/tmp/${section.split(',')[0]}.json`;
+        try {
+            try {
+                sectionData = JSON.parse(readFileSync(sectionPath)) || [];
+            } catch (error) { 
+                const url = `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${section.split(',')[0]}.json?orderBy="pubDate"&limitToLast=100`
+                const newsSection = (await axios.get(url)).data;
+                for (let key in newsSection) {
+                    sectionData.push(newsSection[key]);
+                }
+            }
+            let response = await axios.request(options)
+            let { value: results } = response.data;
+            if (results && results.length) {
+                results = results.filter(article => {
+                    return (!(sectionData.map(data => data.title).includes(article.title)));
+                }).sort((a,b) => (new Date(b.datePublished) - (new Date(a.datePublished)))).slice(0,1);
+                consol += (section + ' ' + results.length) + ' ';
+                for (let result of results) {
+                    let {name: title, url: link, description, content, datePublished: pubDate, image_url, id} = result;
+                    id = uuid();
+                    if (count < 2) {
+                        const key = [
+                            process.env.NEXT_SECRET_C1, process.env.NEXT_SECRET_C2,
+                            process.env.NEXT_SECRET_C3, process.env.NEXT_SECRET_C4,
+                        ][sects.indexOf(section) % 4]
+                        const options = {
+                            method: 'GET',
+                            url: 'https://extract-news.p.rapidapi.com/v0/article',
+                            params: { url: link },
+                            headers: {
+                                'X-RapidAPI-Key': key,
+                                'X-RapidAPI-Host': 'extract-news.p.rapidapi.com'
+                            }
+                        };
+                        consol += (link.split('/')[2]) + ' - ';
+                        consol += (title);
+                        response = await axios.request(options)
+                        const {article} = response.data;
+                        if (article) {
+                            content = article.text || description; image_url = article.meta_image; 
+                            description = article.meta_description || description;
+                        }
+                        // console.log({title, link, description, content, pubDate, image_url, id})
+                        const dbPath = `https://gipnews-default-rtdb.firebaseio.com/${process.env.NEXT_SECRET_FIREBASE_APIKEY}/${section.split(',')[0]}/${id}.json`
+                        await axios.put(dbPath, JSON.stringify({title, link, description, content, pubDate, image_url, id}))
+                        sectionData.unshift({title, link, description, content, pubDate, image_url, id});
+                        writeFileSync(sectionPath, JSON.stringify(sectionData.sort((a,b) => {
+                            return (new Date(b.pubDate) - (new Date(a.pubDate)))
+                        }).sort((a,b) => {
+                            const val = (a.image_url && !b.image_url) ? -1 :
+                                        (b.image_url && !a.image_url) ? 1 : 0
+                            return val;
+                        }).slice(0,100))); 
+                        consol += '\n' + (`${ins += 1} - ${section}`)
+                        
+                        let xmap = '';
+                        try {
+                            xmap = readFileSync('gipXmap.xml');
+                        } catch (error) { }
+                        xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}?title=${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+                        writeFileSync('gipXmap.xml', xmap);
+
+                        count += 1;
+                    } else {
+                        console.log('Escaped insertion: ' + section)
+                    }
+                }
+            }
+        } catch (error) { consol += (error) }
+        writeFileSync('gipnews.txt', consol);
+    // }
+}))
+
 router.get('/data', catchAsync(async (req, res) => {
     const data = {};
         for (let section of sects) {

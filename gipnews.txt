@@ -1,2 +1,4 @@
 world 1 www.firstpost.com - FM Nirmala Sitharaman meets Saudi counterpart Mohammed Aljadaan; global debt crisis, G20 agenda discussed
 1 - world
+
+health 1 www.medscape.com - What New Cardiovascular Disease Risk Factors Have Emerged?
