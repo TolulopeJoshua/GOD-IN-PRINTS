@@ -219,7 +219,7 @@ router.post('/refresh2', catchAsync(async (req, res) => {
                         try {
                             xmap = readFileSync('gipXmap.xml');
                         } catch (error) { }
-                        xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}?title=${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-'))}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+                        xmap += `<url>\n\ \ <loc>https://gipnews.vercel.app/${section}/${id}?title=${encodeURI(title.replace(/[\ \/\?\:\;\,\.\|]/g, '-')).replace('&','%26')}</loc>\n\ \ <lastmod>${(new Date()).toISOString()}</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
                         writeFileSync('gipXmap.xml', xmap);
 
                         count += 1;
