@@ -154,6 +154,7 @@ const fontSrcUrls = [
 ];
 const frameSrcUrls = [
     "https://checkout.paystack.com",
+    "https://checkout-v3-ui-prod.f4b-flutterwave.com",
     "https://googleads.g.doubleclick.net",
     "https://tpc.googlesyndication.com",
     "https://www.google.com",
@@ -177,7 +178,7 @@ app.use(
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
             workerSrc: ["'self'", "blob:"],
-            frameSrc: ["'self'", "blob:", ...frameSrcUrls],
+            frameSrc: ["*","'self'", "blob:", ...frameSrcUrls],
             objectSrc: [],
             mediaSrc: [
                 "'self'", 
