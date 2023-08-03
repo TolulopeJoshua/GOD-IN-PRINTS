@@ -291,7 +291,7 @@ router.get('/data', catchAsync(async (req, res) => {
             }
         }
         for (let sec in data) {
-            data[sec] = data[sec].slice(0,req.query.mobile?25:10).map(art => ({...art, content:''}));
+            data[sec] = data[sec].slice(0,req.query.mobile?25:10).map(art => ({...art, content: req.query.mobile?art.content:''}));
         }
         res.status(200).send(data)
 }))
