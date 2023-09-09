@@ -133,7 +133,7 @@ module.exports.getBookReviews = async (req, res) => {
       if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 42 * 24 * 60 * 60 * 1000)) {
         if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
           console.log(users[i].email, download.bookId.title)
-          // sendBookReviewsRequest(users[i], download.bookId);
+          sendBookReviewsRequest(users[i], download.bookId);
           c += 1;
           break;
         }
@@ -141,7 +141,7 @@ module.exports.getBookReviews = async (req, res) => {
     }
     i += 1;
     console.log(i, c);
-  }, 2000);
+  }, 1000);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }
