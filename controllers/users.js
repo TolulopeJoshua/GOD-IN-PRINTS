@@ -103,17 +103,17 @@ module.exports.weeklyMails = async (req, res) => {
   const mails = users
           .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
           .map(user => user.email).filter(mail => !blockedMails.includes(mail));
-  let index = 0;
+  let index = 0, endIndex = 99 * 4;
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     console.log(batch.length)
     // sendWeeklyMails('babtol235@gmail.com');
     sendWeeklyMails(batch);
     index += 99;
-    if (index > mails.length) clearInterval(interval);
+    if (index >= endIndex) clearInterval(interval);
   }, 5000);
   sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
-    message:[`Number of mails sents: ${mails.length}`]});
+    message:[`Number of users: ${mails.length}`]});
   res.status(200).send(mails.length.toString());
   // req.flash('success', `Mails sent successfully - ${mails.length}`);
   // res.redirect('/profile');
@@ -130,7 +130,7 @@ module.exports.getBookReviews = async (req, res) => {
     const downloads = users[i].downloads.concat(users[i].tktdownloads);
     for (let download of downloads) {
       const daysDiff = new Date() - new Date(download.downloadTime);
-      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 42 * 24 * 60 * 60 * 1000)) {
+      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 35 * 24 * 60 * 60 * 1000)) {
         if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
           console.log(users[i].email, download.bookId.title)
           sendBookReviewsRequest(users[i], download.bookId);
