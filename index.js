@@ -364,5 +364,5 @@ app.use((err, req, res, next) => {
  
 const port = process.env.PORT || 8000; 
 app.listen(port, () => { 
-    console.log(`Serving:- https://localhost:${port}`) 
+    console.log(`Serving:- http://localhost:${port}`) 
 }) 
