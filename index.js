@@ -264,7 +264,7 @@ passport.use(new FacebookStrategy({
   passport.use(new GoogleStrategy({
     clientID: process.env['GOOGLE_CLIENT_ID'],
     clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-    callbackURL: '/redirect/ggl',
+    callbackURL: 'https://godinprints.org/redirect/ggl',
     // passReqToCallback: true,
     scope: [ 'profile', 'email' ]
   }, async function (issuer, profile, cb) {
@@ -364,5 +364,5 @@ app.use((err, req, res, next) => {
  
 const port = process.env.PORT || 8000; 
 app.listen(port, () => { 
-    console.log(`Serving:- http://localhost:${port}`) 
+    console.log(`Serving:- https://localhost:${port}`) 
 }) 
