@@ -1,2 +1,6 @@
 Page Not Found - /favicon.ico - Sat Sep 09 2023 15:46:49 GMT+0100 (West Africa Standard Time)
 
+path is not defined - /weeklyMails - Fri Jan 12 2024 10:04:41 GMT+0100 (West Africa Standard Time)
+
+The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received undefined - /weeklyMails - Fri Jan 12 2024 10:19:11 GMT+0100 (West Africa Standard Time)
+

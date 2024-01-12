@@ -6,10 +6,11 @@ const axios = require('axios');
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY); // 
 const { sendWelcomeMail, sendWeeklyMails, sendPersonalMail, sendBookReviewsRequest } = require('../utils/email');
-const { writeFileSync } = require('fs');
+const { writeFileSync, readFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
-const blockedMails = require('../utils/blockedMails')
+const blockedMails = require('../utils/blockedMails');
+const { endianness } = require('os');
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register', {title: 'GIP Library | Register'})
@@ -101,22 +102,26 @@ module.exports.logout = async (req, res) => {
 module.exports.weeklyMails = async (req, res) => {
   const users = await User.find({});
   const mails = users
-          .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
-          .map(user => user.email).filter(mail => !blockedMails.includes(mail));
-  let index = 99 * 4, endIndex = 99 * 8, sent = 0;
+    .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
+    .map(user => user.email).filter(mail => !blockedMails.includes(mail));
+  const currIndex = parseInt(readFileSync('utils/mailindex.txt')) % mails.length;
+  let index = currIndex, endIndex = currIndex + (99 * 4), sent = 0;
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     sent += batch.length;
-    console.log(batch.length)
+    console.log(batch.length);
     // sendWeeklyMails('babtol235@gmail.com');
-    sendWeeklyMails(batch);
+    sendWeeklyMails(batch); 
     index += 99;
-    if (index >= endIndex) clearInterval(interval);
+    if (index >= endIndex) {
+      clearInterval(interval);
+      sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
+        message:[`Mails sent: ${sent}/${users.length}`]});
+      // res.status(200).send(mails.length.toString());
+    }
   }, 5000);
-  sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
-    message:[`Number of users: ${sent.length}/${users.length}`]});
-  // res.status(200).send(mails.length.toString());
-  req.flash('success', `Mails sent - ${sent.length}/${users.length}`);
+  writeFileSync('utils/mailindex.txt', JSON.stringify(endIndex));
+  req.flash('success', `Mails sent`);
   res.redirect('/profile');
 }
 
@@ -131,7 +136,7 @@ module.exports.getBookReviews = async (req, res) => {
     const downloads = users[i].downloads.concat(users[i].tktdownloads);
     for (let download of downloads) {
       const daysDiff = new Date() - new Date(download.downloadTime);
-      if ((daysDiff > 14 * 24 * 60 * 60 * 1000) && (daysDiff < 28 * 24 * 60 * 60 * 1000)) {
+      if ((daysDiff > 35 * 24 * 60 * 60 * 1000) && (daysDiff < 42 * 24 * 60 * 60 * 1000)) {
         if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
           console.log(users[i].email, download.bookId.title)
           sendBookReviewsRequest(users[i], download.bookId);
