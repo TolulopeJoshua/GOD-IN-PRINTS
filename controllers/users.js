@@ -104,7 +104,8 @@ module.exports.weeklyMails = async (req, res) => {
   const mails = users
     .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
     .map(user => user.email).filter(mail => !blockedMails.includes(mail));
-  const currIndex = parseInt(readFileSync('utils/mailindex.txt')) % mails.length;
+  let currIndex = parseInt(readFileSync('utils/mailindex.txt'));
+  if (currIndex > mails.length) currIndex = 0;
   let index = currIndex, endIndex = currIndex + (99 * 4), sent = 0;
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
