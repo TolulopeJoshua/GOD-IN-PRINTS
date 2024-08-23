@@ -37,9 +37,9 @@ src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
         messageForm.onsubmit = function(e) {
             e.preventDefault();
             document.querySelector('#messageForm button').classList.add('disabled');
-            setTimeout(() => {
+            setTimeout(async () => {
                 try {
-                    emailjs.sendForm('service_sdb5kby', 'template_qyakobg', messageForm);
+                    await emailjs.sendForm('service_xwyenj4', 'template_qyakobg', messageForm);
                     alert('Message sent successfully!');
                     e.target.reset();
                     closeFeedback();

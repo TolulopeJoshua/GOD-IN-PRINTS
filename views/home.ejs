@@ -240,10 +240,10 @@
 				emailjs.init("LLErcEZSRlUGBQ138");
 
 				const messageForm = document.getElementById('messageForm');
-				messageForm.onsubmit = function(e) {
+				messageForm.onsubmit = async function(e) {
 					e.preventDefault();
 					try {
-						emailjs.sendForm('service_sdb5kby', 'template_qyakobg', messageForm);
+						await emailjs.sendForm('service_xwyenj4', 'template_qyakobg', messageForm);
 						alert('Message sent successfully!');
 						e.target.reset();
 					} catch (error) {
