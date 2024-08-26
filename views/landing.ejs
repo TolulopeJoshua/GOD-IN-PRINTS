@@ -172,18 +172,19 @@
 							</section>
 
 						<!-- Three -->
-							<section id="three">
-								<div class="inner">
-									<header class="major">
-										<h2>Join Us</h2>
-									</header>
-									<p>Register as a user to get access to our full list of materials.</p>
-									<ul class="actions">
-										<li><a href="/register" class="button next">Get Started</a></li>
-									</ul>
-								</div>
-							</section>
-
+							<% if (!currentUser) { %> 
+								<section id="three">
+									<div class="inner">
+										<header class="major">
+											<h2>Join Us</h2>
+										</header>
+										<p>Register as a user to get access to our full list of materials.</p>
+										<ul class="actions">
+											<li><a href="/register" class="button next">Get Started</a></li>
+										</ul>
+									</div>
+								</section>
+							<% } %> 
 					</div>
 
 				<!-- Contact -->
