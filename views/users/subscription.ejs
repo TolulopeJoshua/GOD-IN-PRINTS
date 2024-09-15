@@ -22,7 +22,7 @@
 <% const status = currentUser ? currentUser.subscription.status : 'classic' %> 
 
 <div class="col-md-9 col-lg-6 offset-md-3 mb-5">
-    <h6 class="d-flex justify-content-center align-items-end my-5"><i class="bi bi-lock-fill me-2"></i><span>Secured</span></h6>
+    <!-- <h6 class="d-flex justify-content-center align-items-end my-5"><i class="bi bi-lock-fill me-2"></i><span>Secured</span></h6> -->
     <div style="gap: 48px;" class="d-flex justify-content-center flex-wrap">
         <div class="card subscription disabled p-3">
             <div class="border pt-3 pb-3 mb-3 rounded-pill d-flex flex-column align-items-center text-secondary">
@@ -59,7 +59,11 @@
                     <!-- <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li> -->
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[1]] + Math.floor(limits.videos[Object.keys(limits.books)[1]] * numVideos / 100) %> Movies <i>(Updated monthly)</i></li>
                 </ul>
-                <small class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[1]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[1]] %></i></small><small>annually</small>
+                <small class="pb-2">
+                    <i style="text-decoration: line-through double">N</i>
+                    <i><%= limits.prices[Object.keys(limits.books)[1]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[1]] %></i>
+                </small>
+                <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
                 <span><input class="form-check-input" type="radio" id="usd_starter" name="starter_curr" value="usd" checked>
@@ -83,7 +87,11 @@
                     <!-- <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li> -->
                     <li class="mb-2"><i class="bi bi-dash text-primary"></i> <%= limits.videos[Object.keys(limits.books)[2]] + Math.floor(limits.videos[Object.keys(limits.books)[2]] * numVideos / 100) %> Movies <i>(Updated monthly)</i></li>
                 </ul>
-                <small class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[2]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[2]] %></i></small><small>annually</small>
+                <small class="pb-2">
+                    <i style="text-decoration: line-through double">N</i>
+                    <i><%= limits.prices[Object.keys(limits.books)[2]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[2]] %></i>
+                </small>
+                <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
                 <span><input class="form-check-input" type="radio" id="usd_medium" name="medium_curr" value="usd" checked>
@@ -107,7 +115,11 @@
                     <!-- <li class="mb-2"><i class="bi bi-check2 text-primary"></i> Songs albums and playlists.</li> -->
                     <li class="mb-2"><i class="bi bi-check2 text-primary"></i> <%= 55 + Math.ceil(limits.videos[Object.keys(limits.books)[3]] * numVideos / 100) %> Movies <i>(Updated monthly)</i></li>
                 </ul>
-                <small id="ticket" class="pb-2"><i style="text-decoration: line-through double">N</i><i><%= limits.prices[Object.keys(limits.books)[3]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[3]] %></i></small><small>annually</small>
+                <small id="ticketTop" class="pb-2">
+                    <i style="text-decoration: line-through double">N</i>
+                    <i><%= limits.prices[Object.keys(limits.books)[3]] %> | $<%= limits.prices_usd[Object.keys(limits.books)[3]] %></i>
+                </small>
+                <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
                 <span><input class="form-check-input" type="radio" id="usd_premium" name="premium_curr" value="usd" checked>
@@ -126,7 +138,10 @@
         <div class="border border-2 border-secondary my-5 p-3" style="width: 300px; max-width: 90%;">
             <h6 class="text-center">Buy book ticket.</h6>
             <em class="small">Tickets are used for a single book download.</em><br>
-            <em class="small d-block text-end">Price: <span style="text-decoration: line-through double">N</span>500</em>
+            <em class="small d-block text-end">
+                Price: <span style="text-decoration: line-through double">N</span>
+                <%= limits.prices.ticket %>
+            </em>
             <button id="ticketBtn" class="btn btn-primary w-100">Get Ticket</button>
         </div>
     </div>
@@ -145,9 +160,9 @@
     const medium = 'PLN_11goi761rd5njlg' //  '';
     const premium = 'PLN_dhyh9vxrdgpc1yw' // '';
     // const platinum = 'PLN_vv0s6d9ctjfyqh1';
-    const starter_usd = {code: 102699, price: 3.99, obj: {status: 'starter', curr: 'usd'}};
-    const medium_usd = {code: 102700, price: 6.99, obj: {status: 'medium', curr: 'usd'}};
-    const premium_usd = {code: 102701, price: 9.99, obj: {status: 'premium', curr: 'usd'}};
+    const starter_usd = {code: 127205, price: '<%= limits.prices_usd[Object.keys(limits.books)[1]] %>', obj: {status: 'starter', curr: 'usd'}};
+    const medium_usd = {code: 127206, price: '<%= limits.prices_usd[Object.keys(limits.books)[2]] %>', obj: {status: 'medium', curr: 'usd'}};
+    const premium_usd = {code: 127207, price: '<%= limits.prices_usd[Object.keys(limits.books)[3]] %>', obj: {status: 'premium', curr: 'usd'}};
 
     document.getElementById('starterButton').addEventListener('click', () => document.querySelector('input[name="starter_curr"]:checked').value == 'ngn' ? subscribe(starter) : subscribe_flw(starter_usd));
     document.getElementById('mediumButton').addEventListener('click', () => document.querySelector('input[name="medium_curr"]:checked').value == 'ngn' ? subscribe(medium) : subscribe_flw(medium_usd));
@@ -175,8 +190,10 @@
                     buttons: false,
                     closeOnClickOutside: false,
                 });
-                axios.post(`/subscription/${payment.transaction_id}`, {subscription: type.obj}).then(() => location.reload()).catch(() => swal('Could not validate transaction. Please contact admin on gipteam@hotmail.com!'))
-                if ('<%= currentUser.subscription.code %>' != '') axios.delete('/subscription/<%= currentUser.subscription.code %>');
+                axios.post(`/subscription/${payment.transaction_id}`, {subscription: type.obj}).then(() => {
+                    if ('<%= currentUser.subscription.code %>' != '') axios.delete('/subscription/<%= currentUser.subscription.code %>');
+                    location.reload()}
+                ).catch(() => swal('Could not validate transaction. Please contact admin on gipteam@hotmail.com!'))
                 modal.close();
             },
             onClose: () => {
@@ -217,7 +234,7 @@
         var handler = PaystackPop.setup({
           key: 'pk_live_26a7c0ce088e192d0b52e6adf9e83cecea301547', // Replace with your public key
           email: "<%= currentUser.email %>",
-          amount: 500 * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+          amount: Number('<%= limits.prices.ticket %>') * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
           currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
           callback: function(res) {
             // Make an AJAX call to your server with the reference to verify the transaction

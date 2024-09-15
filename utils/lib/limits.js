@@ -1,26 +1,30 @@
 module.exports = {
     books: {
         classic: 2,
-        starter: 5,
-        medium: 8,
-        premium: 12,
+        starter: 4,
+        medium: 6,
+        premium: 8,
     },
     videos: {
-        classic: 50,
+        classic: 33,
         starter: 66,
         medium: 83, 
         premium: 100,
     },
     prices: {
         classic: 'free',
-        starter: '1,450',
-        medium: '2,850',
-        premium: '4,250',
+        starter: '750',
+        medium: '1,450',
+        premium: '2,150',
+        ticket: '250',
+        duration: 'quarterly',
     },
     prices_usd: {
         classic: 'free',
-        starter: '3.99',
-        medium: '6.99',
-        premium: '9.99',
+        starter: '0.99',
+        medium: '1.99',
+        premium: '2.99',
+        ticket: '0.33',
+        duration: 'quarterly',
     } 
 }  

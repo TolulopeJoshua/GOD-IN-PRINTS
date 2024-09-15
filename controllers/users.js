@@ -10,7 +10,6 @@ const { writeFileSync, readFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
 const blockedMails = require('../utils/blockedMails');
-const { endianness } = require('os');
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register', {title: 'GIP Library | Register'})
@@ -102,7 +101,7 @@ module.exports.logout = async (req, res) => {
 module.exports.weeklyMails = async (req, res) => {
   const users = await User.find({});
   const mails = users
-    .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 90 * 24 * 60 * 60 * 1000)))
+    .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 360 * 24 * 60 * 60 * 1000)))
     .map(user => user.email).filter(mail => !blockedMails.includes(mail));
   let currIndex = parseInt(readFileSync('utils/mailindex.txt'));
   if (currIndex > mails.length) currIndex = 0;

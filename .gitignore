@@ -2,6 +2,9 @@ node_modules
 admin
 admin2
 .env
+
+backups
+
 # output.jpg
 # outputText.txt
 # output.pdf
