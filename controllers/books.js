@@ -305,7 +305,7 @@ module.exports.download = async (req, res) => {
 module.exports.ticketDownload = async (req, res) => {
     const ticket = await BookTicket.findOne({ticket: req.body.ticketId});
     if (!ticket) {
-        req.flash('error', 'Ticket not found.');
+        req.flash('error', 'Ticket does not exist or has been used.');
         return res.redirect(`/books/${req.params.id}`);
     }
     const book = await Book.findById(req.params.id);

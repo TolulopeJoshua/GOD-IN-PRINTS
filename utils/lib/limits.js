@@ -21,9 +21,9 @@ module.exports = {
     },
     prices_usd: {
         classic: 'free',
-        starter: '0.99',
-        medium: '1.99',
-        premium: '2.99',
+        starter: '1.00',
+        medium: '2.00',
+        premium: '3.00',
         ticket: '0.33',
         duration: 'quarterly',
     } 
