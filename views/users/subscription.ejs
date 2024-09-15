@@ -66,9 +66,9 @@
                 <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
-                <span><input class="form-check-input" type="radio" id="usd_starter" name="starter_curr" value="usd" checked>
+                <span><input class="form-check-input" type="radio" id="usd_starter" name="starter_curr" value="usd">
                 <label class="form-check-label" for="usd_starter">USD</label></span>
-                <span><input class="form-check-input" type="radio" id="ngn_starter" name="starter_curr" value="ngn">
+                <span><input class="form-check-input" type="radio" id="ngn_starter" name="starter_curr" value="ngn" checked>
                 <label class="form-check-label" for="ngn_starter">NGN</label></span>
             </div>
             <a href="#!" id="starterButton" class="btn btn-success w-100 <%= Object.keys(limits.books).slice(1).includes(status) ? 'disabled' : '' %>">
@@ -94,9 +94,9 @@
                 <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
-                <span><input class="form-check-input" type="radio" id="usd_medium" name="medium_curr" value="usd" checked>
+                <span><input class="form-check-input" type="radio" id="usd_medium" name="medium_curr" value="usd">
                 <label class="form-check-label" for="usd_medium">USD</label></span>
-                <span><input class="form-check-input" type="radio" id="ngn_medium" name="medium_curr" value="ngn">
+                <span><input class="form-check-input" type="radio" id="ngn_medium" name="medium_curr" value="ngn" checked>
                 <label class="form-check-label" for="ngn_medium">NGN</label></span>
             </div>
             <a href="#!" id="mediumButton" class="btn btn-success w-100 <%= Object.keys(limits.books).slice(2).includes(status) ? 'disabled' : '' %>">
@@ -122,9 +122,9 @@
                 <small><%= limits.prices.duration %></small>
             </div>
             <div class="form-check d-flex justify-content-around mb-2">
-                <span><input class="form-check-input" type="radio" id="usd_premium" name="premium_curr" value="usd" checked>
+                <span><input class="form-check-input" type="radio" id="usd_premium" name="premium_curr" value="usd">
                 <label class="form-check-label" for="usd_premium">USD</label></span>
-                <span><input class="form-check-input" type="radio" id="ngn_premium" name="premium_curr" value="ngn">
+                <span><input class="form-check-input" type="radio" id="ngn_premium" name="premium_curr" value="ngn" checked>
                 <label class="form-check-label" for="ngn_premium">NGN</label></span>
             </div>
             <a href="#!" id="premiumButton" class="btn btn-success w-100 <%= Object.keys(limits.books).slice(3).includes(status) ? 'disabled' : '' %>">
