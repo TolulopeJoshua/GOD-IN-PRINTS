@@ -24,7 +24,7 @@ module.exports = {
         starter: '1.00',
         medium: '2.00',
         premium: '3.00',
-        ticket: '0.33',
+        ticket: '0.30',
         duration: 'quarterly',
     } 
 }  

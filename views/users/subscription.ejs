@@ -140,7 +140,8 @@
             <em class="small">Tickets are used for a single book download.</em><br>
             <em class="small d-block text-end">
                 Price: <span style="text-decoration: line-through double">N</span>
-                <%= limits.prices.ticket %>
+                <%= limits.prices.ticket %> 
+                <!-- | $<%= limits.prices_usd.ticket %> -->
             </em>
             <button id="ticketBtn" class="btn btn-primary w-100">Get Ticket</button>
         </div>
@@ -239,12 +240,18 @@
           callback: function(res) {
             // Make an AJAX call to your server with the reference to verify the transaction
             axios.get(`/bookTicket/${res.reference}`).then(function(response) {
-                swal('Ticket Id:', response.data, {closeOnClickOutside: false});
+                // swal('Ticket Id:', response.data, {closeOnClickOutside: false});
+                swal('Ticket Id:', response.data, {
+                    closeOnClickOutside: false,
+                    button: 'Copy',
+                }).then(() => {
+                    navigator.clipboard.writeText(response.data);
+                });
             }).catch(function(error) {
                 swal('', 'Could not generate ticket. Please contact gipteam@hotmail.com.', 'error')
             })
-          },
-          onClose: function() {
+        },
+        onClose: function() {
             console.log('closed')
           },
         });
