@@ -69,6 +69,14 @@ function sortVideos(req) {
     return { videos: orderedByDate, userMovies, userFeatures, userPlaylists, classesMovies };
 }
 
+function getRandomMovies(n=1, req=null) {
+    const userStatus = req?.user?.subscription.status || 'classic';
+    const classesMovies = require('./classes_videos.json'); 
+    return classesMovies[userStatus]
+        .filter((mov) => mov.snippet.defaultAudioLanguage == 'en')
+        .sort(() => 0.5 - Math.random()).slice(0, n);
+}
+
 async function getVideoIdsFromVideoPlaylists(res) {
     let videoIds = []; 
     let videoPlaylists = require('./video_playlists.json');
@@ -116,10 +124,14 @@ async function getAllVideosFromVideoIds(res) {
             console.log(i, error);
         }
     }
-    console.log(allVideos.length);
-    res && res.json(allVideos);
+    console.log('total: ', allVideos.length);
     writeFileSync('utils/lib/all_videos.json', JSON.stringify(allVideos));
+    const { videos, classesMovies } = sortVideos();
+    console.log('filtered: ', videos.length);
+    res && res.json(videos);
+    writeFileSync('utils/lib/all_videos.json', JSON.stringify(videos));
+    writeFileSync('utils/lib/classes_videos.json', JSON.stringify(classesMovies));
     return;
 }
 
-module.exports = {sortVideos, getAllVideosFromVideoIds, getVideoIdsFromVideoPlaylists}
+module.exports = {getRandomMovies, sortVideos, getAllVideosFromVideoIds, getVideoIdsFromVideoPlaylists}

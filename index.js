@@ -299,9 +299,8 @@ app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
 
-    const { sortVideos } = require('./utils/lib/videos_functions')
-    const { userFeatures } = sortVideos(req);
-    res.locals.featureMovie = userFeatures.find((f) => f);
+    const { getRandomMovies } = require('./utils/lib/videos_functions');
+    res.locals.featureMovie = getRandomMovies(1, req)[0];
 
     next();
 })
