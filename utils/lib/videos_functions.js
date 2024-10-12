@@ -73,7 +73,7 @@ function getRandomMovies(n=1, req=null) {
     const userStatus = req?.user?.subscription.status || 'classic';
     const classesMovies = require('./classes_videos.json'); 
     return classesMovies[userStatus]
-        .filter((mov) => mov.snippet.defaultAudioLanguage == 'en')
+        .filter(movie => movie.embeddable && movie.availableInCountry && !movie.forKids)
         .sort(() => 0.5 - Math.random()).slice(0, n);
 }
 
