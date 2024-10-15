@@ -66,12 +66,10 @@ module.exports.createBiography = async (req, res) => {
 };
 
 module.exports.search = async (req, res) => {
+    const advSearch = require("../utils/search");
     const item = req.query.search;
-    const biographies = await Doc.find({docType: 'biography'}).sort({name: 1});
-    const result = [];
-    biographies.forEach((biography) => {
-        biography.name.toLowerCase().includes(item.toLowerCase()) && result.push(biography);
-    })
+    const biographies = await Doc.find({docType: 'biography'});
+    const result = advSearch(biographies, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Biographies -${item}`;
     res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, title});

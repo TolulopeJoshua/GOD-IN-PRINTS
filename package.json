@@ -33,6 +33,7 @@
     "flutterwave-node-v3": "^1.0.12",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.2.0",
+    "fuse.js": "^7.0.0",
     "geoip-lite": "^1.4.6",
     "helmet": "^5.0.2",
     "jimp": "^0.16.1",

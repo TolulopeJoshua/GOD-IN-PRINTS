@@ -132,22 +132,28 @@ module.exports.getBookReviews = async (req, res) => {
   users = users.filter(user => !blockedMails.includes(user.email));
   let i = 0, c = 0;
   const mailInterval = setInterval(() => {
-    if (i >= users.length - 1) clearInterval(mailInterval);
     const downloads = users[i].downloads.concat(users[i].tktdownloads);
     for (let download of downloads) {
-      const daysDiff = new Date() - new Date(download.downloadTime);
-      if ((daysDiff > 35 * 24 * 60 * 60 * 1000) && (daysDiff < 42 * 24 * 60 * 60 * 1000)) {
+      const daysDiff = (new Date() - new Date(download.downloadTime)) / (24 * 60 * 60 * 1000);
+      console.log(daysDiff);
+      if ((daysDiff > 35) && (daysDiff < 42)) {
         if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
-          console.log(users[i].email, download.bookId.title)
+          // console.log(users[i].email, download.bookId.title)
+          // console.log(download.downloadTime)
           sendBookReviewsRequest(users[i], download.bookId);
           c += 1;
           break;
         }
       }
     }
+    if (i >= users.length - 1) {
+      sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Review Mails Sent', 
+        message:[`Mails sent: ${c}`]});
+      clearInterval(mailInterval);
+    }
     i += 1;
-    console.log(i, c);
-  }, 1000);
+    // console.log(i, c);
+  }, 500);
   req.flash('success', 'Mails sent successfully!');
   res.redirect('/profile');
 }

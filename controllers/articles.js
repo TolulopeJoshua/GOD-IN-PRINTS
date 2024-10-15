@@ -88,12 +88,10 @@ module.exports.createArticle = async (req, res) => {
 };
 
 module.exports.search = async (req, res) => {
+    const advSearch = require("../utils/search");
     const item = req.query.search;
-    const articles = await Doc.find({docType: 'article'}).sort({name: 1});
-    const result = [];
-    articles.forEach((article) => {
-        article.name.toLowerCase().includes(item.toLowerCase()) && result.push(article);
-    })
+    const articles = await Doc.find({docType: 'article'});
+    const result = advSearch(articles, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Articles - ${item}`;
     res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, title});

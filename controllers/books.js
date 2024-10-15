@@ -204,13 +204,11 @@ module.exports.createPreviews = async (req, res) => {
 }
 
 module.exports.search = async (req, res) => {
+    const advSearch = require("../utils/search");
     const item = req.query.search;
     // console.log(item)
-    const books = await Book.find({}).sort({title: 1});
-    const result = [];
-    books.forEach((book) => {
-        book.title.toLowerCase().includes(item.toLowerCase()) && result.push(book);
-    })
+    const books = await Book.find({});
+    const result = advSearch(books, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Books - ${item}`;
     res.render('books/list', {category: `Search🔍: ${item}`, books: pageDocs, pageData, title});
