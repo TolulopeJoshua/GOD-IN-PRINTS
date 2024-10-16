@@ -94,7 +94,7 @@ module.exports.search = async (req, res) => {
     const result = advSearch(articles, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Articles - ${item}`;
-    res.render('articles/list', {category: `Search🔍: ${item}`, articles: pageDocs, pageData, title});
+    res.render('articles/list', {category: `🔍: ${item}`, articles: pageDocs, pageData, title});
 };
 
 module.exports.showArticle = async (req, res) => {

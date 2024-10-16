@@ -49,7 +49,6 @@ module.exports.putImage = putImage;
 
 module.exports.uploadCompressedImage = async (imgPath, key) => {
     var Jimp = require('jimp');
-    const path = require('path');
     const image = await Jimp.read(imgPath);
     image.resize(640, Jimp.AUTO);
     image.quality(20);

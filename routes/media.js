@@ -135,12 +135,11 @@ router.delete('/movies/watchlater/:id', catchAsync(async (req, res) => {
 }))
 
 router.get('/search', catchAsync(async (req, res) => {
+    const advSearch = require("../utils/search")
     let result = [];
     const search = req.query.search;
     const { userMovies, videos } = sortVideos(req);
-    if (search.trim()) {
-        videos.forEach(video => video.snippet.title.toLowerCase().includes(search.toLowerCase()) && result.push(video));
-    }
+    result = advSearch(videos, search, ["snippet.title"]);
     result = [...new Set(result)];
     result = result.map(movie => userMovies.includes(movie) ? movie : null).slice(0,10);
     res.render('media/movies', {title: 'Search results | God In Prints', features: result, search});

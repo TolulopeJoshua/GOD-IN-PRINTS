@@ -72,7 +72,7 @@ module.exports.search = async (req, res) => {
     const result = advSearch(biographies, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Biographies -${item}`;
-    res.render('biographies/list', {category: `Search🔍: ${item}`, biographies: pageDocs, pageData, title});
+    res.render('biographies/list', {category: `🔍: ${item}`, biographies: pageDocs, pageData, title});
 };
 
 module.exports.showBiography = async (req, res) => {
