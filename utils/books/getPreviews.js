@@ -20,30 +20,30 @@ db.once("open", async () => {
   console.log("Database connected");
   await run();
   mongoose.disconnect();
-  db.off();
-  process.exit(0);
+  process.exit();
 });
 
 async function run() {
   const pdfConverter = require("pdf-poppler");
   const books = await Book.find({});
-  for (let index = 1030; !books.length; index++) {
+  let pdfPath, option;
+  for (let index = 0; index < books.length; index++) {
     if ([823, 148, 1106].includes(index)) continue;
     const book = books[index] || null;
-    if (book && book.image.previews.length) {
+    if (book && !book.image.previews.length) {
       console.log(index, book.title);
+      let files = fs.readdirSync("uploads");
+      for (const file of files) {
+        fs.unlinkSync(`uploads/${file}`);
+      }
       try {
-        let files = fs.readdirSync("uploads");
-        for (const file of files) {
-          fs.unlinkSync(`uploads/${file}`);
-        }
         const data = await getImage(book.document.key);
         fs.writeFileSync("output.pdf", data.Body);
-        const pdfPath = "output.pdf";
+        pdfPath = "output.pdf";
         const info = await pdfConverter.info(pdfPath);
         const length = parseInt(info.pages) >= 10 ? 10 : parseInt(info.pages);
         for (let i = 1; i <= length; i++) {
-          let option = {
+          option = {
             format: "jpeg",
             out_dir: "uploads",
             out_prefix: `preview-${book.title.replace(/:/g, "-")}`, // path.basename(pdfPath, path.extname(pdfPath)),
@@ -62,4 +62,5 @@ async function run() {
       }
     }
   }
+  console.log("success");
 }

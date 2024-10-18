@@ -28,8 +28,9 @@ const featuresRoutes = require('./routes/features');
 const bibleRoutes = require('./routes/bible');
 const mediaRoutes = require('./routes/media');
 const reviewRoutes = require('./routes/reviews');
-const adminRoutes = require('./routes/api/admin')
+const adminApiRoutes = require('./routes/api/admin')
 const gipnewsRoutes = require('./routes/api/gipnews')
+const adminRoutes = require('./routes/admin')
 
 const MongoStore = require("connect-mongo");
 const { readFileSync, writeFileSync } = require('fs');
@@ -314,8 +315,9 @@ app.use('/features', featuresRoutes)
 app.use('/bible', bibleRoutes)
 app.use('/media', mediaRoutes)
 app.use('/reviews', reviewRoutes)
-app.use('/admin', adminRoutes)
+app.use('/admin', adminApiRoutes)
 app.use('/api/gipnews', gipnewsRoutes)
+app.use('/admin', adminRoutes);
  
 
 app.get('/', async (req, res) => {

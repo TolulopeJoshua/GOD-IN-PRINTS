@@ -29,8 +29,6 @@ router.get('/search', setRedirect, catchAsync(books.search));
 
 router.get('/downloads', isLoggedIn, catchAsync(books.downloadsList));
 
-router.get('/createPreviews', isAdmin, catchAsync(books.createPreviews));
-
 router.get('/:id', setRedirect, catchAsync(books.showBook));
 
 router.get('/1/:title', setRedirect, catchAsync(books.show));

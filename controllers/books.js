@@ -102,8 +102,8 @@ module.exports.createBook = async (req, res) => {
     book.datetime = Date.now();
     
     const myBuffer = fs.readFileSync(`uploads/${req.file.originalname}`);
-    await book.save();
     await putImage(key, myBuffer);
+    await book.save();
     fs.unlinkSync(`uploads/${req.file.originalname}`);
     req.flash('success', `${book.title.toUpperCase()} saved, kindly upload front-page image.`);
     res.redirect(`/books/${book._id}/imageUpload`)
@@ -152,8 +152,8 @@ module.exports.adminUpload = async (req, res) => {
     
         const pdfPath = `uploads/${doc.originalname}`;
         const myBuffer = fs.readFileSync(pdfPath);
-        await book.save();
         await putImage(key, myBuffer);
+        await book.save();
         let option = {
             format : 'jpeg',
             out_dir : 'uploads2',
@@ -161,52 +161,13 @@ module.exports.adminUpload = async (req, res) => {
             page : 1
         }
         await pdfConverter.convert(pdfPath, option)
-        fs.unlinkSync(pdfPath);
         let files = fs.readdirSync('uploads2')
         await uploadCompressedImage(`uploads2/${files[0]}`, book.image.key);
+        fs.unlinkSync(pdfPath);
     }
     req.flash('success', 'Successfully Uploaded!')
     res.redirect('/books/adminUpload');
 };
-
-module.exports.createPreviews = async (req, res) => {
-    // const pdfConverter = require('pdf-poppler');
-    // const books = await Book.find({});
-    // for (let index = 0; books.length; index++) {
-    //     console.log(index);
-    //     if ([823,148].includes(index)) continue;
-    //     const book = books[index] || null;
-    //     if (book && !book.image.previews.length) {
-    //         console.log("getting...");
-    //         try {
-    //             const data = await getImage(book.document.key);
-    //             fs.writeFileSync('output.pdf', data.Body);
-    //             const pdfPath = 'output.pdf';
-    //             const info = await pdfConverter.info(pdfPath);
-    //             const length = parseInt(info.pages) >= 10 ? 10 : parseInt(info.pages);
-    //             for (let i = 1; i <= length; i++) {
-    //                 let option = {
-    //                     format : 'jpeg',
-    //                     out_dir : 'uploads',
-    //                     out_prefix : `preview-${book.title.replace(/:/g, '-')}`, // path.basename(pdfPath, path.extname(pdfPath)),
-    //                     page : i
-    //                 } 
-    //                 await pdfConverter.convert(pdfPath, option)
-    //             }
-    //             let files = fs.readdirSync('uploads')
-    //             for (const file of files) {
-    //                 await uploadCompressedImage(`uploads/${file}`, `book-img/${file}`);
-    //                 book.image.previews.push(`book-img/${file}`)
-    //             }
-    //             await book.save();
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    // }
-    // req.flash('success', 'Previews Created!');
-    // res.redirect('/books');
-}
 
 module.exports.search = async (req, res) => {
     const advSearch = require("../utils/search");
@@ -258,6 +219,7 @@ module.exports.show2 = async (req, res) => {
     res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
+// no longer in use
 module.exports.image = async (req, res) => {    
     const book = await Book.findById(req.params.id);
     const data = await getImage(book.image.key);
@@ -352,6 +314,7 @@ module.exports.downloadsList = async (req, res) => {
     return res.status(200).send({last30, other});
 }
 
+// not in use
 module.exports.read = async (req, res) => {
     const book = await Book.findById(req.params.id).populate({
         path: 'reviews',
@@ -363,6 +326,7 @@ module.exports.read = async (req, res) => {
     res.render('books/read', {book, title});
 }
 
+// not in use
 module.exports.pagesArray = async (req, res) => {
 
     const book = await Book.findById(req.params.id);

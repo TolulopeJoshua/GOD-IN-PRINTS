@@ -22,7 +22,7 @@ db.once("open", async () => {
     fse.removeSync('backups')
     await getBackup();
     mongoose.disconnect();
-    db.off();
+    process.exit();
 });
 
 async function getBackup() {

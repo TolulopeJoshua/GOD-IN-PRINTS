@@ -34,6 +34,9 @@
           <a class="nav-link" id="articles" href="/articles">Scripts</a>
           <a class="nav-link" id="media" href="/media/movies">Media <em class="bg-warning text-light rounded-circle p-1 small">New</em></a>
           <a class="nav-link" id="resources" href="/resources" rel="nofollow">Resources</a>
+          <% if (currentUser?.admin == 5) { %> 
+            <a class="nav-link" id="admin" href="/admin">Admin</a>
+          <% } %> 
         </div>
         <div class="navbar-nav ms-auto position-relative">
           <% if (!currentUser) { %> 
