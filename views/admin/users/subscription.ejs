@@ -1,0 +1,90 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="py-3 row">
+  <div class="col">
+    <form
+      id="mail"
+      action="/admin/users/subscription"
+      method="GET"
+      class="card col-lg-6"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input
+          class="form-control"
+          type="email"
+          id="email"
+          name="email"
+          value="<%= email %>"
+          required
+        />
+        <button class="btn-lg btn-success w-25">Search</button>
+      </div>
+    </form>
+    <form
+      id="sub"
+      action="/admin/users/subscription"
+      method="GET"
+      class="card col-lg-6"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="subType">Subscription</label>
+        <select
+          class="form-select"
+          id="subType"
+          name="subType"
+          value="<%= subscription %>"
+          required
+        >
+          <option></option>
+          <% for( let sub of subTypes ) { %>
+          <option value="<%= sub %>"><%= sub %></option>
+          <% } %>
+        </select>
+        <button class="btn-lg btn-success w-25">Search</button>
+      </div>
+    </form>
+    <% for( let user of users ) { %>
+      <form
+        id="sub"
+        action="/admin/users/subscription"
+        method="POST"
+        class="card col-lg-6"
+        enctype="multipart/form-data"
+      >
+        <div class="mb-3">
+          <p><%= user.firstName %> <%= user.lastName %></p>
+          <p><%= user.email %></p>
+          <small>Subscription details:</small>
+          <div>
+            <label class="form-label" for="name">Name</label>
+            <input
+              class="form-control"
+              type="text"
+              id="name"
+              name="subscription[name]"
+              value="<%= user.subscription.name %>"
+              required
+            />
+          </div>
+          <button class="btn-lg btn-success w-25">Search</button>
+        </div>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  const pageTitle = "Admin";
+</script>
+
+<script>
+  document
+    .getElementById("mail")
+    .addEventListener("submit", () => loadWaiting());
+  document
+    .getElementById("sub")
+    .addEventListener("submit", () => loadWaiting());
+</script>
