@@ -66,6 +66,10 @@ module.exports.passwordSchema = Joi.object({
     password: Joi.string().required().escapeHTML()
 })
 
+module.exports.textSchema = Joi.object({
+    text: Joi.string().required().escapeHTML()
+})
+
 module.exports.userShema = Joi.object({
     firstName: Joi.string().min(2).max(20).required().escapeHTML(),
     lastName: Joi.string().min(2).max(20).required().escapeHTML(),
