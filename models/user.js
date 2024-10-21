@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     googleId: { type: String },
     referrer: { type: String },
     resetCode: { type: String, default: null }, 
-    subscription: { status: {type: String, default: 'classic'}, expiry: Date, autorenew: Boolean, code: {type: String, default: ''}, curr: {type: String, default: ''} },
+    subscription: { status: {type: String, default: 'classic'}, expiry: Date, autorenew: {type: Boolean, default: false}, code: {type: String, default: ''}, curr: {type: String, default: ''} },
     admin: { type: Number, default: 0 },
     adminToken: { hash: {type: String, default: ''}, expiry: {type: Date, default: null}},
     dateTime: { type: Date, default: new Date() },

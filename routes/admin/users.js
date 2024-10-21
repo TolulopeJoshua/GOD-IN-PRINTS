@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../../utils/catchAsync');
-const { isAdmin } = require('../../middleware');
+const { isAdmin, validateSubscription } = require('../../middleware');
 const { emailSchema, textSchema } = require('../../schemas');
 const limits = require('../../utils/lib/limits');
 
@@ -22,6 +22,20 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
         title: 'Admin | God In Prints',
         users, subTypes: Object.keys(limits.books), email, subscription,
     })
+}));
+
+router.post('/subscription', validateSubscription, isAdmin, catchAsync(async (req, res) => {
+    const { email, subscription } = req.body;
+    const [user] = await User.find({ email });
+    if (user) {
+        subscription.autorenew = subscription.autorenew === 'on';
+        user.subscription = subscription;
+        await user.save();
+        req.flash("success", "User subscription updated!");
+    } else {
+        req.flash("error", "User not found!");
+    }
+    res.redirect(`/admin/users/subscription?email=${email}`)
 }));
 
 module.exports = router;

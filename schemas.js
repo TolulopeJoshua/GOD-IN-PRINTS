@@ -1,5 +1,6 @@
 const BaseJoi = require('joi');
 const sanitizeHtml = require('sanitize-html');
+const { subscription } = require('./controllers/users');
 
 const extension = (joi) => ({
     type: 'string',
@@ -91,4 +92,15 @@ module.exports.profileSchema = Joi.object({
     address: Joi.string().min(0).max(200).escapeHTML(),
     password: Joi.string().min(8).max(100).escapeHTML(),
     newPassword: Joi.string().min(8).max(100).escapeHTML(),
+})
+
+module.exports.subscriptionSchema = Joi.object({
+    email: Joi.string().email().required().escapeHTML(),
+    subscription: Joi.object({
+        status: Joi.string().required().escapeHTML(),
+        expiry: Joi.string().required().escapeHTML(),
+        autorenew: Joi.string().min(0).escapeHTML(),
+        code: Joi.string().min(0).escapeHTML(),
+        curr: Joi.string().min(0).escapeHTML(),
+    }).required()
 })

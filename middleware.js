@@ -2,7 +2,7 @@ const Book = require('./models/book');
 const Doc = require('./models/doc');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
-const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema} = require('./schemas.js');
+const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema, subscriptionSchema} = require('./schemas.js');
 const Review = require('./models/review');
 const { unlinkSync } = require('fs');
 const bcrypt = require('bcrypt')
@@ -129,6 +129,16 @@ module.exports.validateEmail = (req, res, next) => {
 module.exports.validatePassword = (req, res, next) => {
 
     const {error} = passwordSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.validateSubscription = (req, res, next) => {
+    const {error} = subscriptionSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
