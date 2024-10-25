@@ -9,16 +9,16 @@ const fse = require('fs-extra');
 
 const { getImage } = require("./functions");
 
-const dbUrl = process.env.DB_URL; 
+const dbUrl = process.env.DB_URL;
 mongoose.connect(dbUrl, {
-    useNewUrlParser: true, 
+    useNewUrlParser: true,
     useUnifiedTopology: true,
 });
- 
+
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:")); 
+db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", async () => {
-    console.log("Database connected"); 
+    console.log("Database connected");
     fse.removeSync('backups')
     await getBackup();
     mongoose.disconnect();
