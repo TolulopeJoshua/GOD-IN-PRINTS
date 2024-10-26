@@ -7,6 +7,8 @@ const Review = require('./models/review');
 const { unlinkSync } = require('fs');
 const bcrypt = require('bcrypt')
 
+const { getUserLocation } = require('./utils/users/location.js');
+
 module.exports.validateUser = (req, res, next) => {
     // console.log(req.body)
     const {error} = userShema.validate(req.body);
@@ -50,6 +52,9 @@ module.exports.isLoggedIn = (req, res, next) => {
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be signed in first!');
         return res.redirect('/login');
+    }
+    if (req.user && !req.user.location) {
+        getUserLocation(req, req.user);
     }
     next();
 }

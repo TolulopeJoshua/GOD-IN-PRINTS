@@ -10,6 +10,7 @@ const { writeFileSync, readFileSync } = require('fs');
 const sanitize = require('sanitize-html');
 
 const blockedMails = require('../utils/blockedMails');
+const { getUserLocation } = require('../utils/users/location');
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register', {title: 'GIP Library | Register'})
@@ -58,6 +59,7 @@ module.exports.register = async (req, res) => {
             delete req.session.returnTo;
             res.redirect(redirectUrl);
         })
+        await getUserLocation(req, registeredUser);
 }
 
 module.exports.renderLogin = (req, res) => {
@@ -79,6 +81,7 @@ module.exports.login = async (req, res) => {
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
+    await getUserLocation(req, user);
 }; 
 
 module.exports.socialLogin = async (req, res) => {
@@ -90,6 +93,7 @@ module.exports.socialLogin = async (req, res) => {
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
+    await getUserLocation(req, user);
 };
 
 module.exports.logout = async (req, res) => {

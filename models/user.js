@@ -27,6 +27,7 @@ const UserSchema = new Schema({
     watchLater: [ { type: String } ],
     isApproved: { type: Boolean, default: true },
     preferences: { nomail: {set: {type: Boolean, default: false}, time: Date}, },
+    location: { city: String, localRegion: String, countryCode: String, country: String, region: String, continent: String },
 });
 
 UserSchema.plugin(passportLocalMongoose);
