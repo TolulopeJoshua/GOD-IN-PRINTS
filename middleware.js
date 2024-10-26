@@ -47,16 +47,16 @@ module.exports.validateAdmin = async (req, res, next) => {
     }
 }
 
-module.exports.isLoggedIn = (req, res, next) => {
+module.exports.isLoggedIn = async (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be signed in first!');
         return res.redirect('/login');
     }
-    if (req.user && !req.user.location) {
-        getUserLocation(req, req.user);
-    }
     next();
+    if (req.user && !req.user.location) {
+        await getUserLocation(req, req.user);
+    }
 }
 
 module.exports.isAdmin = (req, res, next) => {
