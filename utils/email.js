@@ -107,8 +107,8 @@ const sendWeeklyMails = async (emails) => {
         email: 'gipteam@hotmail.com',
         bcc: emails,
         subject: 'Weekly Picks!',
-        message: ['We have thought to bring some sorted library resources to refresh you after a <i>work-full</i> week.', 
-        'Ensure you take a look at these items, as you are sure to be richly blessed.', '', picks],
+        message: ['We have thought to bring you some sorted library resources for this week.', 
+        'Ensure you take a look at these items, and we sure hope that you are richly blessed.', '', picks],
         farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
         <div style="display: flex; align-items: center; border-bottom: 1px dotted lightgray; padding-bottom: 10;">
             <span style="padding: 0px 10px;">

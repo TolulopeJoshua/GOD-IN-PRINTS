@@ -103,28 +103,28 @@ module.exports.logout = async (req, res) => {
 };
 
 module.exports.weeklyMails = async (req, res) => {
+  const { getIndex, putIndex } = require('../utils/users/mailIndex');
+
   const users = await User.find({});
   const mails = users
     .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 360 * 24 * 60 * 60 * 1000)))
     .map(user => user.email).filter(mail => !blockedMails.includes(mail));
-  let currIndex = parseInt(readFileSync('utils/mailindex.txt'));
-  if (currIndex > mails.length) currIndex = 0;
+  let currIndex = await getIndex();
+  console.log(currIndex);
+  if (currIndex >= mails.length) currIndex = 0;
   let index = currIndex, endIndex = currIndex + (99 * 4), sent = 0;
   const interval = setInterval(() => {
     const batch = mails.slice(index, index + 99) 
     sent += batch.length;
-    console.log(batch.length);
-    // sendWeeklyMails('babtol235@gmail.com');
     sendWeeklyMails(batch); 
     index += 99;
     if (index >= endIndex) {
       clearInterval(interval);
       sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
         message:[`Mails sent: ${sent}/${users.length}`]});
-      // res.status(200).send(mails.length.toString());
     }
   }, 5000);
-  writeFileSync('utils/mailindex.txt', JSON.stringify(endIndex));
+  await putIndex(endIndex);
   req.flash('success', `Mails sent`);
   res.redirect('/profile');
 }
@@ -163,8 +163,6 @@ module.exports.getBookReviews = async (req, res) => {
 }
 
 module.exports.renderProfile = (req, res) => {
-  // sendWelcomeMail(req.user);
-
   res.render('users/profile', {title: 'Profile'})
 }
 
