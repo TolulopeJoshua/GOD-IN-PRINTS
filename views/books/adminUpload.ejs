@@ -24,8 +24,8 @@
     <form action="/books/adminUpload" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 
         <div class="mb-3">
-            <label class="form-label" for="document">Pdf File</label>
-            <input class="form-control" type="file" multiple="multiple" id="documents" name="documents" required>
+            <label class="form-label" for="document">Pdf File(s) -> Max ~ 100 files</label>
+            <input class="form-control" type="file" multiple="multiple" id="documents" name="documents" max="100" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -34,8 +34,22 @@
             <button class="btn-lg btn-success">Upload</button>
         </div>
     </form>
+    <p class="text-danger">
+        <small>note: <em>use ' - ' to separate book title and author name, use ' -- ' otherwise!</em></small>
+    </p>
 </div>
 
 <script>
     const pageTitle = "Books";
+</script>
+
+<script>
+    const filesInput = document.getElementById("documents");
+    filesInput.onchange = (e) => {
+        console.log(e);
+        if (e.target.files.length > 100) {
+            alert("Only 100 files accepted.");
+            filesInput.value = null;
+        }
+    }
 </script>

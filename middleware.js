@@ -54,7 +54,7 @@ module.exports.isLoggedIn = async (req, res, next) => {
         return res.redirect('/login');
     }
     next();
-    if (req.user && !req.user.location?.country) {
+    if (req.user && !req.user.location?.loc) {
         await getUserLocation(req, req.user);
     }
 }

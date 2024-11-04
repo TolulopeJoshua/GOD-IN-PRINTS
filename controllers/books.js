@@ -135,25 +135,21 @@ module.exports.adminUpload = async (req, res) => {
     const {checkFileType} = require('../functions')
     for (const doc of req.files) {
         console.log(doc.originalname);
-
         checkFileType(doc, (res) => res);
         const book = new Book();
         const {size} = doc;
         const key = 'book/' + Date.now().toString() + '_' + doc.originalname;
-        const originalname = doc.originalname.toLowerCase().replace('.pdf', '');
+        const originalname = doc.originalname.toLowerCase().replace('.pdf', '').split(' - ');
         book.document = {key, size};
-        book.title = originalname.split(' - ')[0];
-        book.uid = book.title.toLowerCase().replace(/ /g, '-');
-        book.author = originalname.split(' - ')[1] || ' ';
+        book.title = originalname[0].replace(/ -- /g, ' - ');
+        book.author = originalname[1] || ' ';
+        book.uid = (book.title + ' ' + book.author).toLowerCase().replace(/ /g, '-');
         book.filetype = doc.mimetype.split('/')[1];
         book.datetime = Date.now();
-        book.isApproved = false;
+        book.isApproved = true; // false
         book.image.key = 'book-img/' + Date.now().toString() + '_' + book.title + '.jpg';
     
         const pdfPath = `uploads/${doc.originalname}`;
-        const myBuffer = fs.readFileSync(pdfPath);
-        await putImage(key, myBuffer);
-        await book.save();
         let option = {
             format : 'jpeg',
             out_dir : 'uploads2',
@@ -162,7 +158,15 @@ module.exports.adminUpload = async (req, res) => {
         }
         await pdfConverter.convert(pdfPath, option)
         let files = fs.readdirSync('uploads2')
-        await uploadCompressedImage(`uploads2/${files[0]}`, book.image.key);
+        const file = files.find(f => f.toLowerCase().includes(book.title.replace(/ - /g, ' -- ')))
+        // console.log(file);
+        await uploadCompressedImage(`uploads2/${file}`, book.image.key);
+
+        const myBuffer = fs.readFileSync(pdfPath);
+        // console.log(key, myBuffer);
+        await putImage(key, myBuffer);
+        // console.log(book);
+        await book.save();
         fs.unlinkSync(pdfPath);
     }
     req.flash('success', 'Successfully Uploaded!')
