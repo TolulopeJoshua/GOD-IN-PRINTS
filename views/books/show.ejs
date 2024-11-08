@@ -20,7 +20,7 @@
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-6 col-lg-4 offset-md-4">
+<div class="col-md-6 col-lg-4 offset-md-4 overflow-x-hidden">
     <% if(!book.isApproved) { %> 
         <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
             This book is yet to be approved! 
@@ -76,6 +76,29 @@
         </form>
     </div>
     <% } %> 
+
+    <div class="row overflow-hidden">
+        <div class="overflow-auto">
+            <h5>Others you might like</h5><hr class="my-3" style="height: 2px;">
+            <div class="flex align-items-stretch overflow-x-auto col-md-6 col-lg-4">
+                <% for( const book of similarBooks ) { %>
+                <a href="/books/2/<%= book.uid %>" class="d-flex flex-column justify-content-between h-auto pe-5">
+                    <% if (book.image.key != 'none') { %> <img class='' style="width: 128px;"
+                    src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' +
+                    book.image.key.replace(/\ /g, "+") %> alt="<%= book.title %> "> <% } else {
+                    %>
+                    <img
+                        class=""
+                        alt="<%= book.title %>"
+                        src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png"
+                    />
+                    <% } %>
+                    <h6 class="small text-capitalize text-wrap mt-2 mb-4"><%= book.title.toLowerCase() %></h6>
+                </a>
+                <% } %>
+            </div>    
+        </div>
+    </div>
 </div>
 
 <div class="review offset-md-3 col-md-9 col-lg-3 offset-lg-9 scroll p-5 p-lg-0">

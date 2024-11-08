@@ -192,9 +192,15 @@ module.exports.showBook = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books?refresh=1');
     }
+    const advSearch = require("../utils/search");
+    const item = `${book.title} ${book.author}`;
+    // console.log(item)
+    const books = await Book.find({});
+    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
-    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
+    res.render('books/show', {book, title, limit, similarBooks, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 module.exports.show = async (req, res) => {
@@ -205,9 +211,15 @@ module.exports.show = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books?refresh=1');
     }
+    const advSearch = require("../utils/search");
+    const item = `${book.title} ${book.author}`;
+    // console.log(item)
+    const books = await Book.find({});
+    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
-    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
+    res.render('books/show', {book, title, limit, similarBooks, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 module.exports.show2 = async (req, res) => {
@@ -218,9 +230,15 @@ module.exports.show2 = async (req, res) => {
         req.flash('error', 'Cannot find that book!');
         return res.redirect('/books?refresh=1');
     }
+    const advSearch = require("../utils/search");
+    const item = `${book.title} ${book.author}`;
+    // console.log(item)
+    const books = await Book.find({});
+    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
-    res.render('books/show', {book, title, limit, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
+    res.render('books/show', {book, title, limit, similarBooks, canonicalUrl:`https://godinprints.org/books/2/${book.uid}`});
 };
 
 // no longer in use
