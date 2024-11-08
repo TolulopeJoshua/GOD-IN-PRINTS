@@ -83,12 +83,13 @@
             <div class="flex align-items-stretch overflow-x-auto col-md-6 col-lg-4">
                 <% for( const book of similarBooks ) { %>
                 <a href="/books/2/<%= book.uid %>" class="d-flex flex-column justify-content-between h-auto pe-5">
-                    <% if (book.image.key != 'none') { %> <img class='' style="width: 128px;"
+                    <% if (book.image.key != 'none') { %> <img class='' style="height: 180px;"
                     src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' +
                     book.image.key.replace(/\ /g, "+") %> alt="<%= book.title %> "> <% } else {
                     %>
                     <img
-                        class=""
+                        class="" 
+                        style="height: 180px;"
                         alt="<%= book.title %>"
                         src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png"
                     />
