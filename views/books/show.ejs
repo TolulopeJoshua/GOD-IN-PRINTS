@@ -80,7 +80,7 @@
     <div class="row overflow-hidden">
         <h5>Others you might like</h5><hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto">
-            <div class="flex">
+            <div class="flex align-items-start">
                 <% for( const book of similarBooks ) { %>
                 <a href="/books/2/<%= book.uid %>" class="d-flex flex-column justify-content-between h-auto pe-5">
                     <% if (book.image.key != 'none') { %> <img class='' style="height: 180px;"
