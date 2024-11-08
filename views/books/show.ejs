@@ -78,9 +78,9 @@
     <% } %> 
 
     <div class="row overflow-hidden">
-        <h5>Others you might like</h5><hr class="my-3" style="height: 2px;">
+        <h5>Others you might like</h5><hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto">
-            <div class="flex align-items-stretch overflow-x-auto col-md-6 col-lg-4">
+            <div class="flex">
                 <% for( const book of similarBooks ) { %>
                 <a href="/books/2/<%= book.uid %>" class="d-flex flex-column justify-content-between h-auto pe-5">
                     <% if (book.image.key != 'none') { %> <img class='' style="height: 180px;"
