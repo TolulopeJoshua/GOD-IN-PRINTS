@@ -158,6 +158,15 @@
         }, 5000);
     })
 
+    document.getElementById('ticketBtn').addEventListener('click', () => {
+        const mydiv = document.createElement('strong');
+        mydiv.innerHTML = '<i class="bi bi-download pe-3"></i><span>Retrieving ticket, Downloading...</span>'
+        swal('','','info',{content: mydiv});
+        setTimeout(() => {
+            swal.close();
+        }, 5000);
+    })
+
     document.getElementById('downloads')?.addEventListener('click', () => {
         const listDom = document.getElementById('downloadsModal').querySelector('.modal-body');
         axios.get('/books/downloads').then(response => {
