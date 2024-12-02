@@ -78,7 +78,11 @@
     <% } %> 
 
     <div class="row overflow-hidden">
-        <h5>Others you might like</h5><hr class="mt-2 mb-3" style="height: 2px;">
+        <h5 class="d-flex justify-content-between align-items-center">
+            <span>Others you might like</span>
+            <small><a href="/books">Features >></a></small>
+        </h5>
+        <hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto">
             <div class="flex align-items-start">
                 <% for( const book of similarBooks ) { %>
