@@ -67,11 +67,11 @@
     <% if (currentUser) { %> 
     <p id="downloads" class="text-center"><button type="button" data-bs-toggle="modal" data-bs-target="#downloadsModal" class="text-muted text-decoration-underline btn btn-sm">Downloads History</button ></p>
 
-    <div class="flex justify-content-center my-5">
+    <div id="ticketForm" class="flex justify-content-center my-5">
         <form action="/books/<%= book._id %>/download/ticket" method="post" class="border border-2 border-secondary my-5 p-3 pb-0" style="width: 300px; max-width: 90%;">
             <h6 class="text-center">Download with Ticket!</h6>
             <input type="text" name="ticketId" placeholder="Ticket Id" class="form-control my-3" required>
-            <button id="ticketBtn" class="btn btn-primary w-100">Download</button>
+            <button class="btn btn-primary w-100">Download</button>
             <p class="small text-end pt-3"><a href="/subscription#ticketTop">Get a ticket</a></p>
         </form>
     </div>
@@ -158,13 +158,13 @@
         }, 5000);
     })
 
-    document.getElementById('ticketBtn').addEventListener('click', () => {
+    document.getElementById('ticketForm').addEventListener('submit', () => {
         const mydiv = document.createElement('strong');
         mydiv.innerHTML = '<i class="bi bi-download pe-3"></i><span>Retrieving ticket, Downloading...</span>'
         swal('','','info',{content: mydiv});
         setTimeout(() => {
             swal.close();
-        }, 5000);
+        }, 8000);
     })
 
     document.getElementById('downloads')?.addEventListener('click', () => {
