@@ -176,8 +176,7 @@ module.exports.adminUpload = async (req, res) => {
 module.exports.search = async (req, res) => {
     const advSearch = require("../utils/search");
     const item = req.query.search;
-    // console.log(item)
-    const books = await Book.find({});
+    const books = await Book.find({isApproved: true});
     const result = advSearch(books, item);
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Books - ${item}`;
@@ -194,9 +193,13 @@ module.exports.showBook = async (req, res) => {
     }
     const advSearch = require("../utils/search");
     const item = `${book.title} ${book.author}`;
-    // console.log(item)
-    const books = await Book.find({});
-    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+    const books = await Book.find({isApproved: true});
+    const search = advSearch(books, item).filter((b) => b.uid != book.uid);
+    const similarBooks = [];
+    for (const book of search) {
+        if (similarBooks.length >= 10) break;
+        if (!similarBooks.some((bk) => bk.uid === book.uid)) similarBooks.push(book);
+    }
 
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
@@ -213,9 +216,13 @@ module.exports.show = async (req, res) => {
     }
     const advSearch = require("../utils/search");
     const item = `${book.title} ${book.author}`;
-    // console.log(item)
-    const books = await Book.find({});
-    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+    const books = await Book.find({isApproved: true});
+    const search = advSearch(books, item).filter((b) => b.uid != book.uid);
+    const similarBooks = [];
+    for (const book of search) {
+        if (similarBooks.length >= 10) break;
+        if (!similarBooks.some((bk) => bk.uid === book.uid)) similarBooks.push(book);
+    }
 
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
@@ -232,9 +239,13 @@ module.exports.show2 = async (req, res) => {
     }
     const advSearch = require("../utils/search");
     const item = `${book.title} ${book.author}`;
-    // console.log(item)
-    const books = await Book.find({});
-    const similarBooks = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0,10);
+    const books = await Book.find({isApproved: true});
+    const search = advSearch(books, item).filter((b) => b.uid != book.uid);
+    const similarBooks = [];
+    for (const book of search) {
+        if (similarBooks.length >= 10) break;
+        if (!similarBooks.some((bk) => bk.uid === book.uid)) similarBooks.push(book);
+    }
 
     const { books: limit } = require('../utils/lib/limits');
     const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
