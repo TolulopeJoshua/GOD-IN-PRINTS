@@ -105,26 +105,31 @@ module.exports.logout = async (req, res) => {
 module.exports.weeklyMails = async (req, res) => {
   const { getIndex, putIndex } = require('../utils/users/mailIndex');
 
-  const users = await User.find({});
-  const mails = users
+  let users = await User.find({});
+  let mails = users
     .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 360 * 24 * 60 * 60 * 1000)))
     .map(user => user.email).filter(mail => !blockedMails.includes(mail));
   let currIndex = await getIndex();
-  console.log(currIndex);
+  // console.log('startIndex: ', currIndex);
   if (currIndex >= mails.length) currIndex = 0;
-  let index = currIndex, endIndex = currIndex + (99 * 4), sent = 0;
-  const interval = setInterval(() => {
-    const batch = mails.slice(index, index + 99) 
+  let index = currIndex, count = 0, sent = 0;
+  const interval = setInterval(async () => {
+    let endIndex = index + 99;
+    const batch = mails.slice(index, endIndex) 
     sent += batch.length;
+    // console.log('sent: ', sent, ' first: ', batch[0]);
     sendWeeklyMails(batch); 
-    index += 99;
-    if (index >= endIndex) {
+    if (endIndex > mails.length) endIndex = 0;
+    index = endIndex; count += 1;
+    if (count >= 4) {
+      users = undefined; mails = undefined;
       clearInterval(interval);
+      // console.log('endIndex: ', endIndex);
+      await putIndex(endIndex);
       sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
         message:[`Mails sent: ${sent}/${users.length}`]});
     }
   }, 5000);
-  await putIndex(endIndex);
   req.flash('success', `Mails sent`);
   res.redirect('/profile');
 }
@@ -139,7 +144,7 @@ module.exports.getBookReviews = async (req, res) => {
     const downloads = users[i].downloads.concat(users[i].tktdownloads);
     for (let download of downloads) {
       const daysDiff = (new Date() - new Date(download.downloadTime)) / (24 * 60 * 60 * 1000);
-      console.log(daysDiff);
+
       if ((daysDiff > 35) && (daysDiff < 42)) {
         if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
           // console.log(users[i].email, download.bookId.title)
@@ -153,6 +158,7 @@ module.exports.getBookReviews = async (req, res) => {
     if (i >= users.length - 1) {
       sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Review Mails Sent', 
         message:[`Mails sent: ${c}`]});
+      users = undefined;
       clearInterval(mailInterval);
     }
     i += 1;

@@ -17,7 +17,7 @@ router.get('/all', validateAdmin, catchAsync(async (req, res) => {
     const biographiesData = Doc.find({docType: 'biography'})
     const booksData = Book.find({})
     const requestsData = Review.find({category: 'Suggest'}).populate('author')
-    const usersData = User.find({})
+    const usersData = [] // User.find({})
     const [articles, biographies, books, requests, users] = await Promise.all([articlesData, biographiesData, booksData, requestsData, usersData]);
     return res.status(200).json({articles, biographies, books, requests, users})
 }))
