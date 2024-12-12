@@ -122,12 +122,12 @@ module.exports.weeklyMails = async (req, res) => {
     if (endIndex > mails.length) endIndex = 0;
     index = endIndex; count += 1;
     if (count >= 4) {
-      users = undefined; mails = undefined;
-      clearInterval(interval);
       // console.log('endIndex: ', endIndex);
       await putIndex(endIndex);
       sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
         message:[`Mails sent: ${sent}/${users.length}`]});
+      users = undefined; mails = undefined;
+      clearInterval(interval);
     }
   }, 5000);
   req.flash('success', `Mails sent`);
