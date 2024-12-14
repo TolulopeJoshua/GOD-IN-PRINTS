@@ -104,32 +104,37 @@ module.exports.logout = async (req, res) => {
 
 module.exports.weeklyMails = async (req, res) => {
   const { getIndex, putIndex } = require('../utils/users/mailIndex');
-
-  let users = await User.find({});
-  let mails = users
-    .filter(user => (new Date() - new Date(user.dateTime) > 7 * 24 * 60 * 60 * 1000) && (!user.preferences.nomail?.set || (new Date() - new Date(user.preferences.nomail?.time) > 360 * 24 * 60 * 60 * 1000)))
-    .map(user => user.email).filter(mail => !blockedMails.includes(mail));
   let currIndex = await getIndex();
-  // console.log('startIndex: ', currIndex);
-  if (currIndex >= mails.length) currIndex = 0;
-  let index = currIndex, count = 0, sent = 0;
-  const interval = setInterval(async () => {
-    let endIndex = index + 99;
-    const batch = mails.slice(index, endIndex) 
-    sent += batch.length;
-    // console.log('sent: ', sent, ' first: ', batch[0]);
-    sendWeeklyMails(batch); 
-    if (endIndex > mails.length) endIndex = 0;
-    index = endIndex; count += 1;
-    if (count >= 4) {
-      // console.log('endIndex: ', endIndex);
-      await putIndex(endIndex);
-      sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
-        message:[`Mails sent: ${sent}/${users.length}`]});
-      users = undefined; mails = undefined;
-      clearInterval(interval);
-    }
-  }, 5000);
+  console.log('startIndex', currIndex);
+  const batchSize = 99; let count = 0;
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  for (let i = 0; i < 4; i++) {
+    const users = await User.aggregate([
+      { 
+        $match: { 
+          'preferences.nomail.set': false,
+          dateTime: {  $lt : sevenDaysAgo },
+        } 
+      },
+      { $skip: currIndex },
+      { $limit: batchSize },
+      { $project: { email: 1 } },
+    ]);
+    const mails = users.map(u => u.email);
+    console.log(`batch: ${i}: `, mails);
+    sendWeeklyMails(mails); 
+
+    if (users.length < batchSize) currIndex = 0;
+    currIndex += batchSize; count += batchSize;
+  }
+  await putIndex(currIndex);
+
+  const [totalUsers] = await User.aggregate([{ $count : 'count' }]);
+  console.log('totalUsers: ', totalUsers.count, 'endIndex', currIndex);
+  sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
+    message:[`Mails sent: ${count}/${totalUsers.count}`]});
+
   req.flash('success', `Mails sent`);
   res.redirect('/profile');
 }
