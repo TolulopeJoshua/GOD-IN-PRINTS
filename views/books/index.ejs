@@ -54,9 +54,11 @@
     }
 </style>
 
-<h1 class="p-3 text-center col-md-9 offset-md-3 col-lg-6 offset-xl-2">Feature Books</h1>
+<div class="col-md-9 offset-md-3 col-lg-6">
+    <h1 class="py-3 text-center">Feature Books</h1>
+</div>
 <div class="col-md-9 offset-md-3 col-lg-6 overflow-auto">
-    <table class="">
+    <table class="w-100">
         <% for (i = 0; i < 10; i++) { %> 
             <tr>
                 <% for (j = 0; j < 2; j++) { %> 
@@ -97,7 +99,7 @@
     </div>
 </div>
 
-<div class="col-lg-6 col-md-9 offset-md-3 offset-xl-2 py-5 d-flex justify-content-center">
+<div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
     <div class="footer-item p-4">
         <p class="text-muted small pt-2 text-center"><strong id="gender"></strong></p>
         <%- include('../partials/ad/bio2') %>
