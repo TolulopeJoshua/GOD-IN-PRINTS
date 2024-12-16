@@ -67,7 +67,7 @@
     <% if (currentUser) { %> 
     <p id="downloads" class="text-center"><button type="button" data-bs-toggle="modal" data-bs-target="#downloadsModal" class="text-muted text-decoration-underline btn btn-sm">Downloads History</button ></p>
 
-    <div id="ticketForm" class="flex justify-content-center my-5">
+    <div id="ticketForm" class="flex justify-content-center mt-5">
         <form action="/books/<%= book._id %>/download/ticket" method="post" class="border border-2 border-secondary my-5 p-3 pb-0" style="width: 300px; max-width: 90%;">
             <h6 class="text-center">Download with Ticket!</h6>
             <input type="text" name="ticketId" placeholder="Ticket Id" class="form-control my-3" required>
@@ -77,7 +77,7 @@
     </div>
     <% } %> 
 
-    <div class="row overflow-hidden">
+    <div class="row overflow-hidden mt-5">
         <h5 class="d-flex justify-content-between align-items-center">
             <span>Others you might like</span>
             <small><a href="/books">Features >></a></small>

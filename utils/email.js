@@ -25,12 +25,15 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
             &copy; 2023 GodInPrints Library
             </em></section>`
     };
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error)
-        }
-        console.log(info)
-    });
+    return new Promise((resolve) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error)
+            }
+            console.log(info)
+            resolve();
+        });
+    })
 }
 
 const sendBookReviewsRequest = async (user, book) => {
@@ -56,7 +59,7 @@ const sendBookReviewsRequest = async (user, book) => {
         ],
         farewell: ' '
     }
-    sendPersonalMail(options); 
+    return sendPersonalMail(options); 
 }
 
 const sendWelcomeMail = async (user) => {
@@ -96,7 +99,7 @@ const sendWelcomeMail = async (user) => {
                         </span>
                     </div><br/><br/>Regards,`
     }
-    sendPersonalMail(options);
+    return sendPersonalMail(options); 
 }
 
 const sendWeeklyMails = async (emails) => {
@@ -120,7 +123,7 @@ const sendWeeklyMails = async (emails) => {
             </span>
         </div><br/><br/>Click <a href="https://godinprints.org/user/nomail">here</a> to unsubscribe</p>`
     }
-    sendPersonalMail(options); 
+    return sendPersonalMail(options); 
 }
 
 module.exports = {sendPersonalMail, sendWelcomeMail, sendWeeklyMails, sendBookReviewsRequest}

@@ -106,10 +106,10 @@ module.exports.weeklyMails = async (req, res) => {
   const { getIndex, putIndex } = require('../utils/users/mailIndex');
   let currIndex = await getIndex();
   console.log('startIndex', currIndex);
-  const batchSize = 99; let count = 0;
+  const batchSize = 99, batchCount = 4; let count = 0;
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < batchCount; i++) {
     const users = await User.aggregate([
       { 
         $match: { 
@@ -123,7 +123,7 @@ module.exports.weeklyMails = async (req, res) => {
     ]);
     const mails = users.map(u => u.email);
     console.log(`batch: ${i}: `, mails);
-    sendWeeklyMails(mails); 
+    await sendWeeklyMails(mails); 
 
     if (users.length < batchSize) currIndex = 0;
     currIndex += batchSize; count += batchSize;
@@ -132,7 +132,7 @@ module.exports.weeklyMails = async (req, res) => {
 
   const [totalUsers] = await User.aggregate([{ $count : 'count' }]);
   console.log('totalUsers: ', totalUsers.count, 'endIndex', currIndex);
-  sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
+  await sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
     message:[`Mails sent: ${count}/${totalUsers.count}`]});
 
   req.flash('success', `Mails sent`);
@@ -140,37 +140,47 @@ module.exports.weeklyMails = async (req, res) => {
 }
 
 module.exports.getBookReviews = async (req, res) => {
-  let users = await User.find({})
-          .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
-          .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
-  users = users.filter(user => !blockedMails.includes(user.email));
-  let i = 0, c = 0;
-  const mailInterval = setInterval(() => {
-    const downloads = users[i].downloads.concat(users[i].tktdownloads);
-    for (let download of downloads) {
-      const daysDiff = (new Date() - new Date(download.downloadTime)) / (24 * 60 * 60 * 1000);
+  req.flash('success', 'Mails in Progress!');
+  res.redirect('/profile');
 
-      if ((daysDiff > 35) && (daysDiff < 42)) {
-        if (download.bookId && !download.bookId.reviews.find(rev => rev.author._id.toString() == users[i]._id.toString())) {
-          // console.log(users[i].email, download.bookId.title)
-          // console.log(download.downloadTime)
-          sendBookReviewsRequest(users[i], download.bookId);
-          c += 1;
-          break;
+  const fiveWeeks = new Date(Date.now() - 5 * 7 * 24 * 60 * 60 * 1000);
+  const sixWeeks = new Date(Date.now() - 6 * 7 * 24 * 60 * 60 * 1000);
+
+  let users = await User.find({
+    $or: [
+      {
+        $and: [
+          { 'downloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+          { 'downloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+        ],
+      },
+      {
+        $and: [
+          { 'tktdownloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+          { 'tktdownloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+        ],
+      },
+    ]
+  })
+  .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
+  .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
+
+  let c = 0;
+  for (const user of users.slice(0, 400)) {
+    console.log(user.email, user.downloads.length);
+    const downloads = user.downloads.concat(user.tktdownloads)
+    for (const d of downloads) {
+      if (d.downloadTime > sixWeeks && d.downloadTime < fiveWeeks) {
+        console.log(d.downloadTime);
+        if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
+          await sendBookReviewsRequest(user, d.bookId);
+          c += 1; break;
         }
       }
     }
-    if (i >= users.length - 1) {
-      sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Review Mails Sent', 
-        message:[`Mails sent: ${c}`]});
-      users = undefined;
-      clearInterval(mailInterval);
-    }
-    i += 1;
-    // console.log(i, c);
-  }, 500);
-  req.flash('success', 'Mails sent successfully!');
-  res.redirect('/profile');
+  }
+  await sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Review Mails Sent', 
+    message:[`Mails sent: ${c}`]});
 }
 
 module.exports.renderProfile = (req, res) => {
