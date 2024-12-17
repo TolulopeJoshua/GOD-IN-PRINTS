@@ -64,7 +64,8 @@ module.exports.register = async (req, res) => {
 
 module.exports.renderLogin = (req, res) => {
   if (!req.user) return  res.render('users/login', {title: 'GIP Library - Login'})
-  res.status(200).json({response: 'logged in successfully', user: req.user.firstName + ' ' + req.user.lastName})
+  res.redirect('/');
+  // res.status(200).json({response: 'logged in successfully', user: req.user.firstName + ' ' + req.user.lastName})
 };
 
 module.exports.login = async (req, res) => {
@@ -125,15 +126,15 @@ module.exports.weeklyMails = async (req, res) => {
     console.log(`batch: ${i}: `, mails);
     await sendWeeklyMails(mails); 
 
-    if (users.length < batchSize) currIndex = 0;
     currIndex += batchSize; count += batchSize;
+    if (users.length < batchSize) currIndex = 0;
   }
   await putIndex(currIndex);
 
   const [totalUsers] = await User.aggregate([{ $count : 'count' }]);
   console.log('totalUsers: ', totalUsers.count, 'endIndex', currIndex);
   await sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Weekly Mails Sent', 
-    message:[`Mails sent: ${count}/${totalUsers.count}`]});
+    message:[`Mails sent: ${count}/${totalUsers.count}`, `EndIndex: ${currIndex}`]});
 
   req.flash('success', `Mails sent`);
   res.redirect('/profile');
@@ -150,14 +151,14 @@ module.exports.getBookReviews = async (req, res) => {
     $or: [
       {
         $and: [
-          { 'downloads.downloadTime': { $gt: sixWeeks }},
-          { 'downloads.downloadTime': { $lt: fiveWeeks }},
+          { 'downloads.downloadTime': { $gt: sixWeeks } },
+          { 'downloads.downloadTime': { $lt: fiveWeeks } },
         ],
       },
       {
         $and: [
-          { 'tktdownloads.downloadTime': { $gt: sixWeeks }},
-          { 'tktdownloads.downloadTime': { $lt: fiveWeeks }},
+          { 'tktdownloads.downloadTime': { $gt: sixWeeks } },
+          { 'tktdownloads.downloadTime': { $lt: fiveWeeks } },
         ],
       },
     ]
@@ -430,28 +431,17 @@ module.exports.changePassword = async (req, res) => {
       await user.save();
     });
     
-    let mailOptions = {
-        from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>', // sender address
-        to: user.email, // list of receivers
-        subject: 'GIP Library Password Reset', // Subject line
-        // text: 'hello', // plain text body
-        html: `<p>Hello ${user.firstName.toUpperCase()}<p/><br>
-          <p>Click <a href="https://www.godinprints.org/changePassword/${user._id}/${token}">reset</a> to set a new password for your account
-          or paste the link: https://www.godinprints.org/changePassword/${user._id}/${token} to your brower.</p><br>
-          <p>If you did not initiate the request, kindly reply with "Password change request not initiated by me" to this mail.<p/><br>
-          <p>Regards,<p/><br><b>GIP Team<b/>` // html body
-    };
-    const {transporter} = require('../functions');
-    transporter.sendMail(mailOptions, async (error, info) => {
-        if (error) {
-          console.log(error)
-          await req.flash('error', 'An error occured.');
-          return res.redirect('/changePassword')
-        }
-        console.log(info)
-        await req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
-        res.redirect('/changePassword')
-      });
+    await sendPersonalMail({
+      email: user.email, name: user.firstName, subject: 'GIP Library Password Reset', farewell: 'Regards,',
+      message: [
+        `Click <a href="https://www.godinprints.org/changePassword/${user._id}/${token}">reset</a> to set a new password for your account.`,
+        `Alternatively, paste the link: https://www.godinprints.org/changePassword/${user._id}/${token} to your brower.`,
+        'Kindly ignore if you did not initiate request.'
+      ]
+    })
+    await req.flash('success', 'Check your mail (inbox / spam folder) for the password reset link.');
+    req.logOut();
+    res.redirect(`/login`);
 }
 
 module.exports.renderSetPassword = (req, res) => {
@@ -472,7 +462,8 @@ module.exports.setPassword = async (req, res) => {
             user.loginType = 'password';
             await user.save();
             await req.flash('success', 'Password changed successfully.');
-            res.redirect(`/changePassword/${userId}/${resetCode}`);
+            req.logOut();
+            res.redirect(`/login`);
             return
           }
           await req.flash('error', 'An error occured.');
