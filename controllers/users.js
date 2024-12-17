@@ -150,14 +150,14 @@ module.exports.getBookReviews = async (req, res) => {
     $or: [
       {
         $and: [
-          { 'downloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
-          { 'downloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+          { 'downloads.downloadTime': { $gt: sixWeeks }},
+          { 'downloads.downloadTime': { $lt: fiveWeeks }},
         ],
       },
       {
         $and: [
-          { 'tktdownloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
-          { 'tktdownloads.downloadTime': { $gt: sixWeeks, $lt: fiveWeeks }},
+          { 'tktdownloads.downloadTime': { $gt: sixWeeks }},
+          { 'tktdownloads.downloadTime': { $lt: fiveWeeks }},
         ],
       },
     ]
