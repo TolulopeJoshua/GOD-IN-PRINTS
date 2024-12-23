@@ -9,7 +9,7 @@ const { v4: uuid } = require('uuid');
 const sects = ['world','sports','business','health','top','science,technology','entertainment','reel']
 
 router.post('/refresh', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
         return res.status(400).send();
     }
@@ -130,12 +130,12 @@ router.post('/refresh', catchAsync(async (req, res) => {
                 }
             }
         } catch (error) { consol += (error) }
-        writeFileSync('gipnews.txt', consol);
+        // writeFileSync('gipnews.txt', consol);
     // }
 }))
 
 router.post('/refresh2', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
         return res.status(400).send();
     }
@@ -231,12 +231,12 @@ router.post('/refresh2', catchAsync(async (req, res) => {
                 }
             }
         } catch (error) { consol += (error) }
-        writeFileSync('gipnews.txt', consol);
+        // writeFileSync('gipnews.txt', consol);
     // }
 }))
 
 router.get('/data', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     const data = {};
         for (let section of sects) {
             let sectionData = [];
@@ -300,7 +300,7 @@ router.get('/data', catchAsync(async (req, res) => {
 }))
 
 router.get('/:section', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     let sectionData = [];
     let reel = [];
     const { section } = req.params
@@ -362,7 +362,7 @@ router.get('/:section', catchAsync(async (req, res) => {
 }))
 
 router.get('/:section/:id', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
         let sectionData = [];
         const { section, id } = req.params
         const sectionPath = `/tmp/${section?.split(',')[0]}.json`;
@@ -422,7 +422,7 @@ router.get('/:section/:id', catchAsync(async (req, res) => {
 }))
 
 router.post('/mail', catchAsync(async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
         return res.status(400).send();
     }
@@ -486,7 +486,7 @@ router.post('/mail', catchAsync(async (req, res) => {
 }))
 
 router.post('/xml', async (req, res) => {
-    return res.status(200).send('success ' + new Date());
+    // return res.status(200).send('success ' + new Date());
     try {
         if (req.headers.id !== process.env.NEXT_SECRET_FIREBASE_APIKEY) {
             return res.status(400).send();
