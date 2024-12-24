@@ -251,7 +251,7 @@ router.get('/data', catchAsync(async (req, res) => {
                 urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=17&key=${process.env.YOUTUBE_API_KEY}`);
                 urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=24&key=${process.env.YOUTUBE_API_KEY}`);
                 urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=25&key=${process.env.YOUTUBE_API_KEY}`);
-                urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=27&key=${process.env.YOUTUBE_API_KEY}`);
+                // urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=27&key=${process.env.YOUTUBE_API_KEY}`);
                 urls.push(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=player&part=contentDetails&part=status&chart=mostPopular&maxResults=50&videoCategoryId=28&key=${process.env.YOUTUBE_API_KEY}`);
                 // const newsSection = (await axios.get(url)).data;
                 const newsSections = (await Promise.all(urls.map(url => axios.get(url)))).map(res => res.data);
