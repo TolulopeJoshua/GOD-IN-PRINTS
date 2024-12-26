@@ -60,7 +60,7 @@ const extract = async (urls, key) => {
 
 const getWorld = async () => {
   const url = "https://news67.p.rapidapi.com/v2/trending";
-  const key = process.env.NEXT_SECRET_C1;
+  const key = process.env.NEXT_SECRET_C4;
 
   const old = await getSection("world");
 
@@ -114,7 +114,7 @@ const getBusiness = async () => {
 
 const getHealth = async () => {
   const url = "https://newsapi90.p.rapidapi.com/topic/health";
-  const key = process.env.NEXT_SECRET_C4;
+  const key = process.env.NEXT_SECRET_C1;
 
   const old = await getSection("health");
 
@@ -131,7 +131,7 @@ const getHealth = async () => {
 
 const getTop = async () => {
   const url = "https://news67.p.rapidapi.com/v2/feed";
-  const key = process.env.NEXT_SECRET_C1;
+  const key = process.env.NEXT_SECRET_C4;
 
   const old = await getSection("top");
 
