@@ -37,6 +37,7 @@ router.get(
   catchAsync(async (req, res) => {
     const data = {};
     const urls = sects.map((sec) => dbUrl(sec));
+    console.log(urls);
     const newsSections = (
       await Promise.all(urls.map((url) => axios.get(url)))
     ).map((res) => res.data);
@@ -237,8 +238,7 @@ router.post("/xml", async (req, res) => {
 function dbUrl(section, limit = 100, id) {
   return `https://gipnews-default-rtdb.firebaseio.com/${
     process.env.NEXT_SECRET_FIREBASE_APIKEY
-  }/${section.split(",")[0]}${id ? "/" + id : ""}.json?
-  orderBy="pubDate"&limitToLast=${limit}`;
+  }/${section.split(",")[0]}${id ? "/" + id : ""}.json?orderBy="pubDate"&limitToLast=${limit}`;
 }
 
 module.exports = router;
