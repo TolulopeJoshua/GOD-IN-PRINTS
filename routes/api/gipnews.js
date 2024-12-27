@@ -36,7 +36,7 @@ router.get(
   catchAsync(async (req, res) => {
     const data = {};
     const urls = sects.map((sec) => dbUrl(sec));
-    console.log(urls);
+    // console.log(urls);
     const newsSections = (
       await Promise.all(urls.map((url) => axios.get(url)))
     ).map((res) => res.data);
@@ -57,6 +57,7 @@ router.get(
   catchAsync(async (req, res) => {
     let reel = [];
     const { section } = req.params;
+    const sectionIndex = sects.indexOf(section);
 
     const url = dbUrl(section);
     const newsSection = (await axios.get(url)).data;
@@ -67,20 +68,20 @@ router.get(
       .slice(0, 100)
       .map((art) => ({ ...art, section, content: "" }));
 
-    const featuresData = sects
-      .filter((sect) => sect != section)
-      .map((section) => axios.get(dbUrl(section, 10)));
-
-    const features = (await Promise.all(featuresData)).map(
-      ({ data }, index) => {
-        const section = sects[index];
-        data = Object.values(data).sort(noimage);
-        if (section == "reel") {
-          reel = data.slice(1, 5).map((vid) => ({ ...vid, section }));
+    const featuresData = sects.map((section) => axios.get(dbUrl(section, 10)));
+    
+    const features = (await Promise.all(featuresData))
+      .map(
+        ({ data }, index) => {
+          const section = sects[index];
+          data = Object.values(data).sort(dateDesc).sort(noimage);
+          if (section == "reel") {
+            reel = data.slice(1, 5).map((vid) => ({ ...vid, section }));
+          }
+          return { ...data[0], section, content: "" };
         }
-        return { ...data[0], section, content: "" };
-      }
-    );
+      )
+      .filter((_, index) => index != sectionIndex);
 
     res.status(200).send({
       data: sectionData,
