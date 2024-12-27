@@ -35,7 +35,7 @@ router.get(
   "/data",
   catchAsync(async (req, res) => {
     const data = {};
-    const urls = sects.map((sec) => dbUrl(sec));
+    const urls = sects.map((sec) => dbUrl(sec, 20));
     // console.log(urls);
     const newsSections = (
       await Promise.all(urls.map((url) => axios.get(url)))
