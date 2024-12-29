@@ -117,8 +117,9 @@ module.exports.createBook = async (req, res) => {
             to: [request.author.email, 'gipteam@hotmail.com'],
             subject: 'Book Request',
             html: `<p>Hello ${request.author.firstName.toUpperCase()},<p/><br>
-              <p>Your request for the book: <b>${request.text}</b> has been responded to. Kindly check out the resource at https://godinprints.org/books/${book._id}.<p/><br>
-              <p>Regards,<p/><br><b>GIP Library</b>`
+              <p>Your request for the book - <b>${request.text}</b> has been responded to. 
+              Kindly check out the resource at <br>https://godinprints.org/books/${book._id}.<p/><br>
+              Copy the resource link and paste in your browser.<br><p>Regards,<p/><br><b>GIP Library</b>`
         };
         const {transporter} = require('../functions');
         transporter.sendMail(mailOptions);
