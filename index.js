@@ -33,6 +33,7 @@ const reviewRoutes = require('./routes/reviews');
 const adminApiRoutes = require('./routes/api/admin')
 const gipnewsRoutes = require('./routes/api/gipnews')
 const adminRoutes = require('./routes/admin')
+const otherRoutes = require('./routes/otherRoutes');
 
 const { readFileSync, writeFileSync } = require('fs');
 const { connect: dbConnect } = require('./utils/main/db');
@@ -60,7 +61,10 @@ app.use(mongoSanitize({
 
 app.use(session(sessionConfig));
 app.use(flash());
-app.use(helmet());
+app.use(helmet({
+  crossOriginEmbedderPolicy: { policy: "credentialless" },
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
@@ -105,36 +109,7 @@ app.use('/reviews', reviewRoutes)
 app.use('/admin', adminApiRoutes)
 app.use('/api/gipnews', gipnewsRoutes)
 app.use('/admin', adminRoutes);
- 
-
-app.get('/', async (req, res) => {
-    res.render('home');
-});
-
-app.get('/growth', async (req, res) => {
-    const growthHabits = require("./personal_growth")
-
-    const Book = require('./models/book');
-    const adBook = await Book.aggregate([{ $match: { filetype: 'pdf' } }, { $sample: { size: 1 } }]);
-    const title = 'GIP Library - Personal Growth Strategies'
-    res.render('growth', {growthHabits, adBook, title});
-});
-
-app.get('/resources', async (req, res) => {
-    res.render('resources', {title: 'GIP Library - Other Resources'});
-});
-
-app.get('/about', async (req, res) => {
-    res.render('about');
-});
-
-app.get('/terms', async (req, res) => {
-    res.render('terms');
-});
-
-app.get('/privacy', async (req, res) => {
-    res.render('privacy');
-});
+app.use('/', otherRoutes);
 
 app.all('*', (req, res, next) => { 
     next(new ExpressError(`Page Not Found + ${req.originalUrl}`, 404))
@@ -142,17 +117,19 @@ app.all('*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
-    if (!err.message) err.message = 'Oh No, Something Went Wrong!'
-    console.log(err.message)
-    try {
-        let error = readFileSync('console.txt');
-        error += err.message + ' - ' + req.url + ' - ' + (new Date()).toString() + '\n\n';
-        writeFileSync('console.txt', error);
-    } catch (error) {
-        writeFileSync('console.txt', err.message + ' - ' + req.url + ' - ' + (new Date()).toString() + '\n\n');
-    }
-    res.status(statusCode).render('error', { err , title: 'Error Page'})
-})
+    // Log errors securely
+    console.error(err);
+    
+    // Don't send error details to client in production
+    const message = process.env.NODE_ENV === 'production' 
+        ? 'Something went wrong' 
+        : err.message;
+    
+    res.status(statusCode).render('error', { 
+        err: { message }, 
+        title: 'Error Page'
+    });
+});
 
  
 const port = process.env.PORT || 8000; 
