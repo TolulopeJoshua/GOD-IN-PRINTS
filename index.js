@@ -16,6 +16,7 @@ const LocalStrategy = require('passport-local');
 const FacebookStrategy = require('passport-facebook');
 const GoogleStrategy = require('passport-google-oidc');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 
 const User = require('./models/user');
@@ -34,14 +35,14 @@ const gipnewsRoutes = require('./routes/api/gipnews')
 const adminRoutes = require('./routes/admin')
 
 const { readFileSync, writeFileSync } = require('fs');
-const { connect } = require('./utils/main/db');
+const { connect: dbConnect } = require('./utils/main/db');
 const { sessionConfig } = require('./utils/main/session');
 const { helmetDirectives } = require('./utils/main/helmet');
 const { facebookConfig, facebookCallback, googleConfig, googleCallback } = require('./utils/main/auth');
 const { updateLocals } = require('./utils/main/locals');
 
 // connect to database
-connect();
+dbConnect();
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
@@ -60,6 +61,10 @@ app.use(mongoSanitize({
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet());
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+}));
 
 
 
