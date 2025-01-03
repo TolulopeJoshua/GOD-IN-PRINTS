@@ -19,8 +19,7 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
         if (error) return res.status(400).send("Bad email!")
         users = await User.find({ email });
     } else if (subscription) {
-        console.log(subscription);
-        const { error } = textSchema.validate({ subscription });
+        const { error } = textSchema.validate({ text: subscription });
         if (error) return res.status(400).send("Bad input!")
         users = await User.find({ 'subscription.type': subscription });
     }
