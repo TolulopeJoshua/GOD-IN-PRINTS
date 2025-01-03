@@ -9,6 +9,7 @@ const Review = require('../../models/review');
 const Book = require('../../models/book');
 const Doc = require('../../models/doc');
 const User = require('../../models/user');
+const { sendPersonalMail } = require('../../utils/email');
 
 router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
     const { email, subscription } = req.query;
@@ -17,6 +18,10 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
         const { error } = emailSchema.validate({ email });
         if (error) return res.status(400).send("Bad email!")
         users = await User.find({ email });
+    } else if (subscription) {
+        const { error } = textSchema.validate({ subscription });
+        if (error) return res.status(400).send("Bad input!")
+        users = await User.find({ 'subscription.type': subscription });
     }
     res.render('admin/users/subscription', {
         title: 'Admin | God In Prints',
@@ -31,6 +36,13 @@ router.post('/subscription', validateSubscription, isAdmin, catchAsync(async (re
         subscription.autorenew = subscription.autorenew === 'on';
         user.subscription = subscription;
         await user.save();
+        sendPersonalMail({ 
+            email: user.email, 
+            subject: 'Subscription Updated', 
+            message: ['Your subscription has been updated!'], 
+            greeting: 'Hello!', 
+            farewell: 'Thank you for using our service!' 
+        })
         req.flash("success", "User subscription updated!");
     } else {
         req.flash("error", "User not found!");
