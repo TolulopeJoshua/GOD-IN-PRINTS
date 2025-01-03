@@ -21,7 +21,15 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
     } else if (subscription) {
         const { error } = textSchema.validate({ text: subscription });
         if (error) return res.status(400).send("Bad input!")
-        users = await User.find({ 'subscription.type': { $eq: subscription } });
+        users = await User.aggregate([
+            { 
+                $match: { 
+                    'subscription.status.type': subscription,
+                } 
+            },
+            { $skip: 0 },
+            { $limit: 100 },
+        ]);
     }
     res.render('admin/users/subscription', {
         title: 'Admin | God In Prints',
