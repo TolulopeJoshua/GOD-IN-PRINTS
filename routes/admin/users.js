@@ -57,7 +57,7 @@ router.post('/subscription', validateSubscription, isAdmin, catchAsync(async (re
     } else {
         req.flash("error", "User not found!");
     }
-    res.redirect(req.url);
+    res.redirect(req.originalUrl);
 }));
 
 module.exports = router;
