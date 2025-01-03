@@ -21,7 +21,7 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
     } else if (subscription) {
         const { error } = textSchema.validate({ text: subscription });
         if (error) return res.status(400).send("Bad input!")
-        users = await User.find({ 'subscription.type': subscription });
+        users = await User.find({ 'subscription.type': { $eq: subscription } });
     }
     res.render('admin/users/subscription', {
         title: 'Admin | God In Prints',

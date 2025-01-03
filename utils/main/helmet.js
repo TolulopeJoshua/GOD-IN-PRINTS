@@ -42,6 +42,7 @@ const connectSrcUrls = [
     "https://firebase.googleapis.com",
     "https://firebaseinstallations.googleapis.com",
     "https://www.google-analytics.com",
+    "https://google-analytics.com",
     "https://api.ravepay.co",
     "https://flw-events-ge.herokuapp.com",
     // "https://api.mapbox.com/",
