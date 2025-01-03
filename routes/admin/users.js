@@ -24,7 +24,7 @@ router.get('/subscription', isAdmin, catchAsync(async (req, res) => {
         users = await User.aggregate([
             { 
                 $match: { 
-                    'subscription.status.type': subscription,
+                    'subscription.status': subscription,
                 } 
             },
             { $skip: 0 },
