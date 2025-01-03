@@ -14,7 +14,7 @@
         enctype="multipart/form-data">
         <div class="p-1">
           <label class="form-label" for="subscription">Subscription</label>
-          <select class="form-select" id="subscription" name="subscription" value="<%= subscription %>" required>
+          <select class="form-select" id="subscription" name="subscription"" required>
             <option></option>
             <% for( let sub of subTypes ) { %>
               <% if (sub == subscription) { %>
