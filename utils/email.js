@@ -8,7 +8,7 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
         subject, // Subject line
         // text: 'hello', // plain text body
         html: `<section style="font-family: Arial, Helvetica, sans-serif; padding: 4px;">
-            <header style="text-align: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
+            <header style="display: flex; justify-content: center; background-color: rgba(64, 64, 64, 0.1); border-radius: 4px; padding: 4px; ">
             <img style="opacity: 0.5; border-radius: 50% 50% 0 0;" width="72px" height="72px" src="https://godinprints.org/assets/images/burningBook.jfif" alt="gip library icon">
             </header>
             <h2 style="text-align: center;">${subject}</h2>
@@ -17,7 +17,7 @@ const sendPersonalMail = ({email, bcc, name = 'Esteemed library member', subject
                 ${message.join(' <br> ')} <br>
                 <br> ${farewell || 'Best Regards,'} <br>
             </p><hr>
-            <footer style="text-align: center;">
+            <footer style="display: flex; justify-content: center;">
             <a href="https://web.facebook.com/godinprints"><img style="width: 26px; padding-right: 16px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="GodInPrints facebook"></a>
             <a href="https://godinprints.org"><img style="width: 32px;" src="https://godinprints.org/assets/images/burningBook.jfif" alt="God in prints"></a>
             </footer>
