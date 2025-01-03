@@ -36,13 +36,15 @@ router.post('/subscription', validateSubscription, isAdmin, catchAsync(async (re
         subscription.autorenew = subscription.autorenew === 'on';
         user.subscription = subscription;
         await user.save();
-        sendPersonalMail({ 
-            email: user.email, 
-            subject: 'Subscription Updated', 
-            message: ['Your subscription has been updated!'], 
-            greeting: 'Hello!', 
-            farewell: 'Thank you for using our service!' 
-        })
+        if (subscription.type !== 'classic') {
+            sendPersonalMail({ 
+                email: user.email, 
+                subject: 'Subscription Updated', 
+                message: ['Your subscription has been updated!'], 
+                greeting: 'Hello!', 
+                farewell: 'Thank you for using our service!' 
+            })
+        }
         req.flash("success", "User subscription updated!");
     } else {
         req.flash("error", "User not found!");
