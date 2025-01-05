@@ -169,7 +169,7 @@
         setTimeout(() => {
             swal.close();
         }, 8000);
-    })
+    }, { once: true })
 
     document.getElementById('downloads')?.addEventListener('click', () => {
         const listDom = document.getElementById('downloadsModal').querySelector('.modal-body');

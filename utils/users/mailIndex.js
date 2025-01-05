@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-const url = 'https://godinprints-default-rtdb.firebaseio.com/weekliesIndex.json';
+const url = `${process.env.FB_DB_URL}/weekliesIndex.json`;
 
 module.exports.getIndex = async () => {
     const index = await axios.get(url);

@@ -40,14 +40,15 @@ src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
             setTimeout(async () => {
                 try {
                     await emailjs.sendForm('service_xwyenj4', 'template_qyakobg', messageForm);
-                    alert('Message sent successfully!');
+                    swal('', 'Feedback sent! Thank you', 'success')
                     e.target.reset();
                     closeFeedback();
                     document.querySelector('#messageForm button').classList.remove('disabled');
                 } catch (error) {
-                    alert('An error occured');
+                    swal('Error', 'An unknown error occured.');
                 }
             }, 1000);
+            messageForm.onsubmit = null;
         }
     })();
     
