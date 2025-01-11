@@ -137,3 +137,13 @@ module.exports.transporter = nodeMailer.createTransport({
       pass: process.env.GMAIL_PASSWORD
   },
 });
+
+module.exports.getTransport = (n) => nodeMailer.createTransport({
+  host: "smtp.gmail.com", // hostname
+  port: 465, // port for secure SMTP
+  secure: true, // TLS requires secureConnection to be false
+  auth: {
+      user: `godinprintslibraries${n}@gmail.com`,
+      pass: process.env[`GMAIL_PASSWORD_${n}`]
+  },
+});
