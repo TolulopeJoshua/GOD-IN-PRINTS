@@ -30,7 +30,7 @@ function sortVideos(req) {
             }
             if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.allowed && video.contentDetails.regionRestriction.allowed.length < 15) return false;
             if (video.contentDetails.regionRestriction && video.contentDetails.regionRestriction.blocked && video.contentDetails.regionRestriction.blocked.length > 30) return false;
-            return JSON.stringify(video.snippet.thumbnails) != '{}' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
+            return JSON.stringify(video.snippet.thumbnails) != '{}' && video.snippet.defaultLanguage === 'en' && (parseInt(video.duration.hours) > 0 || parseInt(video.duration.minutes) >= 30);
         } catch (error) {
             // console.log(error) 
             return false;
