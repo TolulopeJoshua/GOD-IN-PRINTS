@@ -8,7 +8,7 @@ const sendPersonalMail = ({
   message,
   greeting,
   farewell,
-}, trans = "") => {
+}, trans = 1) => {
   let mailOptions = {
     from: `"God In Prints Libraries" <godinprintslibraries${trans}@gmail.com>`, // sender address
     to: email, // list of receivers
@@ -33,7 +33,7 @@ const sendPersonalMail = ({
             <a href="https://godinprints.org"><img style="width: 32px;" src="https://godinprints.org/assets/images/burningBook.jfif" alt="God in prints"></a>
             </footer>
             <em style="width: 100%; display: block; text-align: center; font-size: small; padding-top: 16px;">
-            &copy; 2023 GodInPrints Library
+            &copy; 2025 GodInPrints Library
             </em></section>`,
   };
   const transport = trans ? getTransport(trans) : transporter;

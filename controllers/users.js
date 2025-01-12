@@ -123,7 +123,7 @@ module.exports.weeklyMails = async (req, res) => {
       { $project: { email: 1 } },
     ]);
     const mails = users.map(u => u.email);
-    console.log(`batch: ${i}: `, mails);
+    // console.log(`batch: ${i}: `, mails);
     await sendWeeklyMails(mails); 
 
     currIndex += batchSize; count += batchSize;
