@@ -18,6 +18,7 @@ const scriptSrcUrls = [
     "https://adservice.google.com",
     "https://tpc.googlesyndication.com",
     "https://checkout.flutterwave.com",
+    "https://mozilla.github.io",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",

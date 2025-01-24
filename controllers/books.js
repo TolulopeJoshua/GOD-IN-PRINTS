@@ -4,7 +4,7 @@ const Review = require("../models/review");
 const User = require("../models/user");
 const BookTicket = require("../models/bookTicket");
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 
 const {
@@ -167,6 +167,44 @@ module.exports.createBook = async (req, res) => {
     transporter.sendMail(mailOptions);
   }
 };
+
+module.exports.readOnline = async (req, res) => {
+  const id = req.params.id;
+  const book = await Book.findById(id);
+  if (!book) {
+    req.flash("error", "Book not found.");
+    return res.redirect("/books?refresh=1");
+  }
+  const data = await getImage(book.document.key);
+  const pdfPath = "public/pdfs";
+  fs.ensureDirSync(pdfPath);
+  fs.writeFileSync(path.join(pdfPath, `${book._id}.pdf`), data.Body);
+  res.render("books/read", { title: capitalize(book.title), bookId: book._id });
+}
+
+module.exports.currentRead = async (req, res) => {
+  const { page } = req.body;
+  const { id: bookId } = req.params;
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+  user.currentRead = { bookId, page };
+  await user.save();
+  res.status(200).send("done");
+}
+
+module.exports.deletePDF = async (req, res) => {
+  const id = req.params.id;
+  const pdfPath = "public/pdfs";
+  fs.removeSync(path.join(pdfPath, `${id}.pdf`));
+  res.status(200).send("done");
+}
+
+module.exports.clearPDFs = async (req, res) => {
+  fs.emptyDirSync("public/pdfs");
+  res.status(200).send("done");
+}
 
 module.exports.renderAdminUpload = (req, res) => {
   const title = "GIP Admin";
@@ -338,14 +376,6 @@ module.exports.show2 = async (req, res) => {
   });
 };
 
-// no longer in use
-module.exports.image = async (req, res) => {
-  const book = await Book.findById(req.params.id);
-  const data = await getImage(book.image.key);
-  const src = `data:image/png;base64,${encode(data.Body)}`;
-  res.send(src);
-};
-
 module.exports.renderImageUpload = (req, res) => {
   const id = req.params.id;
   const route = `/Books/${id}/imageUpload`;
@@ -440,50 +470,6 @@ module.exports.downloadsList = async (req, res) => {
     }
   }
   return res.status(200).send({ last30, other });
-};
-
-// not in use
-module.exports.read = async (req, res) => {
-  const book = await Book.findById(req.params.id).populate({
-    path: "reviews",
-    populate: {
-      path: "author",
-    },
-  });
-  const title = `${capitalize(book.title)} - Preview`;
-  res.render("books/read", { book, title });
-};
-
-// not in use
-module.exports.pagesArray = async (req, res) => {
-  const book = await Book.findById(req.params.id);
-  const data = await getImage(book.document.key);
-  fs.writeFileSync("output2.pdf", data.Body);
-
-  let files = fs.readdirSync("uploads2");
-  for (const file of files) {
-    fs.unlinkSync(path.join("uploads2", file));
-  }
-
-  const pdfPath = "output2.pdf";
-  let option = {
-    format: "jpeg",
-    out_dir: "uploads2",
-    out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
-    // page : 1
-  };
-  const jpg = await pdfConverter.convert(pdfPath, option);
-  files = fs.readdirSync("uploads2");
-
-  const srcs = [];
-  files.forEach((file) => {
-    var bitmap = fs.readFileSync(path.join("uploads2", file));
-    const base64 = new Buffer.from(bitmap).toString("base64");
-    const src = `data:image/png;base64,${base64}`;
-    srcs.push(src);
-  });
-
-  res.send(srcs);
 };
 
 module.exports.addReview = async (req, res) => {

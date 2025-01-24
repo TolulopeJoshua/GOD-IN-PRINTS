@@ -2,7 +2,7 @@ const Book = require('./models/book');
 const Doc = require('./models/doc');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
-const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema, subscriptionSchema} = require('./schemas.js');
+const {bookSchema, biographySchema, articleSchema, reviewSchema, emailSchema, passwordSchema, userShema, profileSchema, subscriptionSchema, readSchema} = require('./schemas.js');
 const Review = require('./models/review');
 const { unlinkSync } = require('fs');
 const bcrypt = require('bcrypt')
@@ -59,6 +59,14 @@ module.exports.isLoggedIn = async (req, res, next) => {
     }
 }
 
+module.exports.isSubscribed = async (req, res, next) => {
+    if (req.user.subscription.status == 'classic') {
+        // req.flash('error', 'You need to be subscribed to read online');
+        return res.redirect('/subscription');
+    }
+    next();
+}
+
 module.exports.isAdmin = (req, res, next) => {
     if (req.headers.pass == process.env.AP) return next();
     if (!req.isAuthenticated() || !req.user.admin) {
@@ -80,6 +88,17 @@ module.exports.validateBook = (req, res, next) => {
     const {error} = bookSchema.validate(req.body);
     if (error) {
         req.file && unlinkSync(`uploads/${req.file.originalname}`);
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.validateRead = (req, res, next) => {
+
+    const {error} = readSchema.validate(req.body);
+    if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
     } else {

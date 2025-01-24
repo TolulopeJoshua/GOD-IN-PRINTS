@@ -63,7 +63,7 @@
       function loadWaiting(msg = 'Please wait...') {
         swal(msg, {
           buttons: false,
-          closeOnClickOutside: false,
+          // closeOnClickOutside: false,
         })
       }
     </script>
@@ -75,14 +75,14 @@
             let toastTimeout;
             const defaultToast = document.querySelector('.toast.default');
             const toast = new bootstrap.Toast(defaultToast)
-            function toaster(msg) {
+            function toaster(msg, timeout = 2000) {
               defaultToast.classList.remove('d-none');
               defaultToast.querySelector('.toast-body').innerText = msg;
               toast.show();
               toastTimeout && clearTimeout(toastTimeout);
               toastTimeout = setTimeout(() => {
                 defaultToast.classList.add('d-none');
-              }, 2000);
+              }, timeout);
             }
         </script>
   

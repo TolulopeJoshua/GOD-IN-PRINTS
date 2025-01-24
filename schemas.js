@@ -31,6 +31,11 @@ module.exports.bookSchema = Joi.object({
     }).required()
 });
 
+module.exports.readSchema = Joi.object({
+    bookId: Joi.string().escapeHTML(),
+    page: Joi.number().required(),
+});
+
 module.exports.biographySchema = Joi.object({
     biography: Joi.object({
         name: Joi.string().required().escapeHTML(),

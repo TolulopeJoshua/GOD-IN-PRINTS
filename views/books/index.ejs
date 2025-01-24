@@ -9,6 +9,10 @@
     </ol>
     <a href="">Actions</a>
     <ol>
+        <% if (currentUser.currentRead) { %>
+            <% const { bookId, page } = currentUser.currentRead %>
+            <li><a href="/books/<%= bookId %>/read?page=<%= page %>">Continue Reading...</a></li>
+        <% } %>
         <li><a id="suggest" href="#!">Request Book</a></li>
         <li><a href="/books/new">Upload a Book</a></li>
     </ol>

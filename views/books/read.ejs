@@ -1,104 +1,287 @@
 <% layout('layouts/boilerplate')%>
 
-<div id="menu" class="col-md-3 menu d-md-block scroll">
-    <a class="h5" href="/books">Feature</a>
-    <a class="h5" href="/books/list">List</a>
-    <ol>
-        <li><a href="/books/list">Index</a></li>
-        <li><a href="/books/categories">Category</a></li>
-    </ol>
-    <a href="">Actions</a>
-    <ol>
-        <li><a id="suggest" href="#!">Request Book</a></li>
-        <li><a href="/books/new">Upload a Book</a></li>
-    </ol>
+<div id="menu" class="d-none col-md-3 menu d-md-block scroll">
+  <a class="h5" href="/books">Feature</a>
+  <a class="h5" href="/books/list">List</a>
+  <ol>
+    <li><a href="/books/list">Index</a></li>
+    <li><a href="/books/categories">Category</a></li>
+  </ol>
+  <a href="">Actions</a>
+  <ol>
+    <li><a id="suggest" href="#!">Request Book</a></li>
+    <li><a href="/books/new">Upload a Book</a></li>
+  </ol>
 </div>
 
 <div class="d-md-none mb-2" id="menuToggler">
-    <button class="d-none btn btn-outline btn-info" id="fastDownButton"><i class="bi bi-chevron-double-down"></i></button>
-    <button class=" btn btn-outline btn-info" id="fastUpButton"><i class="bi bi-chevron-double-up"></i></button>
+  <button class="btn btn-outline btn-info" id="fastDownButton">
+    <i class="bi bi-chevron-double-down"></i>
+  </button>
+  <button class="d-none btn btn-outline btn-info" id="fastUpButton">
+    <i class="bi bi-chevron-double-up"></i>
+  </button>
 </div>
 <script src="/javascripts/toggleMenu.js"></script>
 
-<div class="col-md-9 col-lg-6 offset-1 offset-md-3 position-fixed">
-    <span class="bg-white p-1 shadow-sm">
-        <small><strong>GOTO:</strong></small> &nbsp;
-        <input class="border rounded" id="goto" type="number" style="max-width: 50px;"> &nbsp;/&nbsp;
-        <span id="pageTotal"></span>
-    </span>
+<div 
+  class="col-md-9 col-lg-6 offset-1 offset-md-3 position-fixed d-flex justify-content-center align-items-start"
+  style="opacity: 0.9;"
+>
+  <span class="p-1 bg-white shadow-sm rounded">
+    <small><%= title %></small>
+  </span>
+  <span style="width: 10px; display: inline-block;"></span>
+  <span class="p-1 bg-white shadow-sm rounded">
+    <!-- <small><strong>Page:</strong></small> &nbsp; -->
+    <input
+      class="border rounded"
+      id="goto"
+      type="number"
+      min="1"
+      style="width: 70px"
+    />
+    &nbsp;/&nbsp;
+    <span id="pageTotal"></span>
+  </span>
+  <span style="width: 10px; display: inline-block;"></span>
+  <span class="p-1 bg-white shadow-sm rounded">
+    <!-- <small><strong>Zoom:</strong></small> &nbsp; -->
+    <select
+      class="border rounded"
+      id="zoom"
+      style="width: 70px"
+    >
+      <option value="50">50%</option>
+      <option value="75">75%</option>
+      <option value="90">90%</option>
+      <option value="100" selected>100%</option>
+      <option value="125">125%</option>
+      <option value="150">150%</option>
+      <option value="200">200%</option>
+    </select>
+  </span>
 </div>
-<div id="bookContainer" class="col-md-9 col-lg-6 offset-md-3 mt-3 justify-content-center text-center">
-    <div class="d-flex vh-100 justify-content-center align-items-center">
-        <div class="spinner-border text-secondary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <strong class="text-muted"> &nbsp;&nbsp; please wait</strong>
+<div
+  id="topLoader"
+  class="d-flex justify-content-center align-items-center d-none"
+>
+  <div class="spinner-border text-secondary" role="status"></div>
+</div>
+<div
+  id="bookContainer"
+  class="col-md-9 col-lg-6 offset-md-3 mt-4 d-flex flex-column align-items-center overflow-x-auto"
+  style="gap: 10px;"
+>
+  <div class="d-flex vh-100 justify-content-center align-items-center">
+    <div class="spinner-border text-secondary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
+    <strong class="text-muted"> &nbsp;&nbsp; please wait</strong>
+  </div>
+</div>
+<div
+  id="bottomLoader"
+  class="d-flex justify-content-center align-items-center d-none"
+>
+  <div class="spinner-border text-secondary" role="status"></div>
 </div>
 
-<script>
-    const div = document.getElementById('bookContainer');
-    axios.get(`/books/<%= book._id %>/getpages`)
-        .then(function (response) {
-            div.innerHTML = "";
-            const pageTotal = document.getElementById('pageTotal').innerHTML = response.data.length;
-            response.data.forEach((src, index) => {
-                var imgDiv = document.createElement("div");
-                imgDiv.classList.add('m-3');
-                imgDiv.id = index + 1;
-                var image = document.createElement("img");
-                image.src = src;
-                image.classList.add('img-fluid');
-                imgDiv.appendChild(image);
-                div.appendChild(imgDiv);
-            })
-        })
-        .catch(function (error) {
-            console.log(error);
-            div.classList.add('d-flex')
-            div.classList.add('vh-100')
-            div.classList.add('align-items-center')
-            div.innerHTML = error.message;
-        })
-        
-        const gotoInput = document.getElementById("goto");
-        gotoInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                const page = gotoInput.value;
-                const pageImg = document.getElementById(page);
-                if (pageImg) {
-                    pageImg.scrollIntoView();
-                }
-            }
-        });
-
-</script>
-
-<div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">
-    <p class="text-muted small text-center"><strong>The story of a <%= adBio[0].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
-    <%- include('../partials/ad/bio') %>  
+<!-- <div class="d-none d-lg-block col-3 offset-9 pt-3 position-fixed mh-100 scroll ps-5">
+    <p class="text-muted small text-center"><strong>The story of a <= adBio[0].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
+    <- include('../partials/ad/bio') %>  
 </div>
 
 <div class="" style="margin-bottom: 100px;"></div>
 
 <div class="d-lg-none col-md-9 offset-md-3 py-5 d-flex justify-content-center">    
     <div class="footer-item">
-        <p class="text-muted small pt-2 text-center"><strong>The story of a <%= adBio[1].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
-        <%- include('../partials/ad/bio2') %>    
+        <p class="text-muted small pt-2 text-center"><strong>The story of a <= adBio[1].gender === 'male' ? 'Man' : 'Woman' %> </strong></p>
+        <- include('../partials/ad/bio2') %>    
     </div>
-</div>
+</div> -->
 
-<script>
-    let route; const idLength ={};
+<script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+
+<script type="module">
+  const bookId = "<%= bookId %>";
+  const url = `/pdfs/${bookId}.pdf`;
+  const div = document.getElementById("bookContainer");
+  const gotoInput = document.getElementById("goto");
+  const pageTotal = document.getElementById("pageTotal");
+
+  const topLoader = document.getElementById("topLoader");
+  const bottomLoader = document.getElementById("bottomLoader");
+
+  let canvasObserver;
+  let pdf = null;
+  let pageNumber = 1;
+  let loadedPages = [];
+
+  const { pdfjsLib } = globalThis;
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "//mozilla.github.io/pdf.js/build/pdf.worker.mjs";
+
+  // Asynchronous download of PDF
+  const loadingTask = pdfjsLib.getDocument(url);
+  loadingTask.promise.then(
+    function (pdfObj) {
+      console.log("PDF loaded");
+
+      pdf = pdfObj;
+      pageTotal.innerHTML = pdf.numPages;
+      removePublicDoc(bookId);
+
+      // Fetch pages
+      const urlParams = new URLSearchParams(window.location.search);
+      const pn = urlParams.get('page');
+      goTo(Number(pn) || pageNumber);
+    },
+    function (reason) {
+      // PDF loading error
+      console.error(reason);
+      div.innerHTML =
+        '<strong class="text-muted">An error occured! Please reload page.</strong>';
+    }
+  );
+  async function renderPage(pageNumber, prev = false) {
+    console.log(pageNumber);
+    if (pageNumber < 1 || pageNumber > pdf.numPages) {
+      return;
+    }
+    await pdf.getPage(pageNumber).then(async function (page) {
+    //   console.log("Page loaded");
+
+      const scale = 1;
+      const viewport = page.getViewport({ scale: scale });
+
+      // Prepare canvas using PDF page dimensions
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      canvas.id = `canvas-${pageNumber}`;
+
+      // Render PDF page into canvas context
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+      const renderTask = page.render(renderContext);
+      await renderTask.promise.then(function () {
+        // console.log("Page rendered");
+        if (prev) {
+            div.prepend(canvas)
+            canvas.scrollTop -= canvas.offsetHeight + 10;
+        } else {
+            div.appendChild(canvas);
+        }
+        loadedPages.push(pageNumber);
+        canvasObserver.observe(canvas);
+      });
+    });
+  }
+  async function goTo(page) {
+    if (loadedPages.includes(page)) {
+        return scrollTo(page);
+    }
+    hideTopLoader();
+    hideBottomLoader();
+    div.innerHTML = "";
+    loadedPages = [];
+    canvasObserver?.disconnect();
+    const min = page -2, max = page + 2;
+    for (let i = min; i <= max; i++) {
+        await renderPage(i);
+    }
+    if (page > 1) {
+      scrollTo(page);
+      setTimeout(showTopLoader, 1000);      
+    }
+    if (max <= pdf.numPages) {
+      showBottomLoader();
+    }
+  }
+  async function renderNextPage(page) {
+    hideBottomLoader();
+    await renderPage(page + 1);
+    await renderPage(page + 2);
+    if ((page + 2) < pdf.numPages) {
+      showBottomLoader();
+    }
+  }
+  async function renderPrevPage(page) {
+    hideTopLoader();
+    await renderPage(page - 1, true);
+    await renderPage(page - 2, true);
+    // scrollTo(page);
+    if (page > 2) showTopLoader();
+  }
+  function scrollTo(page) {
+    document.getElementById(`canvas-${page}`)?.scrollIntoView();
+  }
+  function removePublicDoc(id) {
+    axios.delete(`/books/${id}/read`);
+  }
+
+  gotoInput?.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        const page = Number(gotoInput.value);
+        page && page <= pdf.numPages && goTo(page);
+        gotoInput.blur();
+    }
+  });
+
+  // Scroll Observer
+  function showTopLoader() {
+    topLoader?.classList.remove("d-none");
+  }
+  function hideTopLoader() {
+    topLoader?.classList.add("d-none");
+  }
+  function showBottomLoader() {
+    bottomLoader?.classList.remove("d-none");
+  }
+  function hideBottomLoader() {
+    bottomLoader?.classList.add("d-none");
+  }
+
+  const loaderObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const { isIntersecting, target } = entry;
+      if (target === topLoader && isIntersecting) {
+        renderPrevPage(pageNumber);
+      } else if (target === bottomLoader && isIntersecting) {
+        renderNextPage(pageNumber);
+      }
+    }
+  }, { rootMargin: '40px' });
+  loaderObserver.observe(topLoader);
+  loaderObserver.observe(bottomLoader);
+
+  canvasObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        pageNumber = Number(entry.target.id.split("-")[1]) || pageNumber;
+        gotoInput.value = pageNumber;
+      }
+    }
+  }, { threshold: 0.6 });
+
+  // Zoom
+  const zoomSelect = document.getElementById("zoom");
+  zoomSelect?.addEventListener("change", function (event) {
+    const zoom = event.target.value;
+    div.style.zoom = `${zoom}%`;
+  });
+
+  // Save Current Page
+  window.addEventListener("beforeunload", function (event) {
+    const data = { page: pageNumber };
+    axios.put(`/books/${bookId}/read`, data);
+  });
 </script>
 
 <script>
-    idLength['<%= book._id %>'] = 1000;
+  const pageTitle = "Books";
 </script>
-
-<script>
-    const pageTitle = "Books";
-</script>
-    
-
- 

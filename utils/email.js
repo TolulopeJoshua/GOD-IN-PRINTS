@@ -8,7 +8,7 @@ const sendPersonalMail = ({
   message,
   greeting,
   farewell,
-}, trans = 1) => {
+}, trans = "") => {
   let mailOptions = {
     from: `"God In Prints Libraries" <godinprintslibraries${trans}@gmail.com>`, // sender address
     to: email, // list of receivers

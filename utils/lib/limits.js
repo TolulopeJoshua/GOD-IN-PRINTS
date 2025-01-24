@@ -16,7 +16,7 @@ module.exports = {
         starter: '750',
         medium: '1,450',
         premium: '2,150',
-        ticket: '250',
+        ticket: '350',
         duration: 'quarterly',
     },
     prices_usd: {
