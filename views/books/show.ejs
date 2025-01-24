@@ -9,7 +9,7 @@
     </ol>
     <a href="">Actions</a>
     <ol>
-        <% if (currentUser.currentRead) { %>
+        <% if (currentUser?.currentRead?.bookId) { %>
             <% const { bookId, page } = currentUser.currentRead %>
             <li><a href="/books/<%= bookId %>/read?page=<%= page %>">Continue Reading...</a></li>
         <% } %>
@@ -51,7 +51,7 @@
                 <a id="bookDownload" class="btn btn-lg btn-success" href="/books/<%= book._id %>/download">Download</a>
                 <span class="mytooltip">
                     <a id="readOnline" href="/books/<%= book._id %>/read" class="btn btn-lg btn-outline border-success text-success">Read Online</a>
-                    <span class="<%= currentUser.subscription.status !== 'classic' ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Subscription Required</span>
+                    <span class="<%= currentUser?.subscription.status !== 'classic' ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Subscription Required</span>
                     <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-lg btn-outline border-success text-success <%= !book.image.previews?.length && 'disabled'%>">Preview</button>
                     <span class="<%= book.image.previews?.length ? 'd-none' : 'tooltiptext' %> small p-1 mb-2">Preview not available for this book.</span> -->
                 </span>

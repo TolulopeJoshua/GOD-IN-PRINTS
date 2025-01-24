@@ -9,7 +9,7 @@
     </ol>
     <a href="">Actions</a>
     <ol>
-        <% if (currentUser.currentRead) { %>
+        <% if (currentUser?.currentRead?.bookId) { %>
             <% const { bookId, page } = currentUser.currentRead %>
             <li><a href="/books/<%= bookId %>/read?page=<%= page %>">Continue Reading...</a></li>
         <% } %>
