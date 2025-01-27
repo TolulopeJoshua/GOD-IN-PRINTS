@@ -33,20 +33,19 @@
   </span> -->
   <!-- <span style="width: 10px; display: inline-block;"></span> -->
   <span class="p-1 bg-white shadow-sm rounded">
-    <!-- <small><strong>Page:</strong></small> &nbsp; -->
-    <input
-      class="border rounded"
-      id="goto"
-      type="number"
-      min="1"
-      style="width: 70px"
-    />
-    &nbsp;/&nbsp;
-    <span id="pageTotal"></span>
+     <form id="goto">
+       <input
+         class="border rounded"
+         type="number"
+         min="1"
+         style="width: 70px"
+       />
+       &nbsp;/&nbsp;
+       <span id="pageTotal"></span>
+     </form>
   </span>
-  <span style="width: 10px; display: inline-block;"></span>
+  <!-- <span style="width: 10px; display: inline-block;"></span>
   <span class="p-1 bg-white shadow-sm rounded">
-    <!-- <small><strong>Zoom:</strong></small> &nbsp; -->
     <select
       class="border rounded"
       id="zoom"
@@ -60,7 +59,7 @@
       <option value="150">150%</option>
       <option value="200">200%</option>
     </select>
-  </span>
+  </span> -->
 </div>
 <div
   id="topLoader"
@@ -107,7 +106,8 @@
   const bookId = "<%= bookId %>";
   const url = `/pdfs/${bookId}.pdf`;
   const div = document.getElementById("bookContainer");
-  const gotoInput = document.getElementById("goto");
+  const gotoForm = document.getElementById("goto");
+  const gotoInput = gotoForm.querySelector("input");
   const pageTotal = document.getElementById("pageTotal");
 
   const topLoader = document.getElementById("topLoader");
@@ -152,8 +152,10 @@
     await pdf.getPage(pageNumber).then(async function (page) {
     //   console.log("Page loaded");
 
-      const scale = 1;
-      const viewport = page.getViewport({ scale: scale });
+      let scale = 1;
+      let viewport = page.getViewport({ scale: scale });
+      scale = div.clientWidth / viewport.width;
+      viewport = page.getViewport({ scale: scale, });
 
       // Prepare canvas using PDF page dimensions
       const canvas = document.createElement("canvas");
@@ -224,12 +226,11 @@
     axios.delete(`/books/${id}/read`);
   }
 
-  gotoInput?.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        const page = Number(gotoInput.value);
-        page && page <= pdf.numPages && goTo(page);
-        gotoInput.blur();
-    }
+  gotoForm?.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const page = Number(gotoInput.value);
+    page && page <= pdf.numPages && goTo(page);
+    gotoInput.blur();
   });
 
   // Scroll Observer
