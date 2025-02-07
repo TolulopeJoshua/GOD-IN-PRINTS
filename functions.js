@@ -8,7 +8,7 @@ const aws = require('aws-sdk'),
 aws.config.update({
     secretAccessKey: process.env.AWSSecretKey,
     accessKeyId: process.env.AWSAccessKeyId,
-    region: 'eu-west-3'
+    region: 'us-east-1'
 });
 
 const s3 = new aws.S3(); 
@@ -19,7 +19,7 @@ module.exports.getImage = async (key) => {
             Bucket: `godinprintsdocuments`,
             Key: key, 
         }
-      
+    
     ).promise();
     return data;
 }
@@ -138,12 +138,8 @@ module.exports.transporter = nodeMailer.createTransport({
   },
 });
 
-module.exports.getTransport = (n) => nodeMailer.createTransport({
-  host: "smtp.gmail.com", // hostname
-  port: 465, // port for secure SMTP
-  secure: true, // TLS requires secureConnection to be false
-  auth: {
-      user: `godinprintslibraries${n}@gmail.com`,
-      pass: process.env[`GMAIL_PASSWORD_${n}`]
-  },
-});
+module.exports.transporter2 = nodeMailer.createTransport({
+    SES: new aws.SES({
+        apiVersion: '2010-12-01'
+      }),
+  });

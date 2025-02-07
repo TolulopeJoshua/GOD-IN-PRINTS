@@ -1,4 +1,4 @@
-const { transporter, getTransport } = require("../functions");
+const { transporter, transporter2 } = require("../functions");
 
 const sendPersonalMail = ({
   email,
@@ -8,9 +8,9 @@ const sendPersonalMail = ({
   message,
   greeting,
   farewell,
-}, trans = "") => {
+}, ses = false) => {
   let mailOptions = {
-    from: `"God In Prints Libraries" <godinprintslibraries${trans}@gmail.com>`, // sender address
+    from: `"God In Prints Libraries" <godinprintslibraries@gmail.com>`, // sender address
     to: email, // list of receivers
     bcc,
     subject, // Subject line
@@ -36,7 +36,7 @@ const sendPersonalMail = ({
             &copy; 2025 GodInPrints Library
             </em></section>`,
   };
-  const transport = trans ? getTransport(trans) : transporter;
+  const transport = ses ? transporter2 : transporter;
   return new Promise((resolve) => {
     transport.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -137,7 +137,7 @@ const sendWeeklyMails = async (emails) => {
     farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
         Click <a href="https://godinprints.org/user/nomail">here</a> to unsubscribe</p>`,
   };
-  return sendPersonalMail(options, "");
+  return sendPersonalMail(options, true);
 };
 
 module.exports = {

@@ -8,6 +8,7 @@ const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_K
 const { sendWelcomeMail, sendWeeklyMails, sendPersonalMail, sendBookReviewsRequest } = require('../utils/email');
 const { writeFileSync, readFileSync } = require('fs');
 const sanitize = require('sanitize-html');
+const moment = require('moment');
 
 const blockedMails = require('../utils/blockedMails');
 const { getUserLocation } = require('../utils/users/location');
@@ -107,8 +108,8 @@ module.exports.weeklyMails = async (req, res) => {
   const { getIndex, putIndex } = require('../utils/users/mailIndex');
   let currIndex = await getIndex();
   console.log('startIndex', currIndex);
-  const batchSize = 99, batchCount = 4; let count = 0;
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const batchSize = 49, batchCount = 10; let count = 0;
+  const sevenDaysAgo = moment().subtract(7, 'days').toDate();
 
   for (let i = 0; i < batchCount; i++) {
     const users = await User.aggregate([
@@ -144,21 +145,21 @@ module.exports.getBookReviews = async (req, res) => {
   req.flash('success', 'Mails in Progress!');
   res.redirect('/profile');
 
-  const fiveWeeks = new Date(Date.now() - 5 * 7 * 24 * 60 * 60 * 1000);
-  const sixWeeks = new Date(Date.now() - 6 * 7 * 24 * 60 * 60 * 1000);
+  const start = moment().subtract(40, 'days').startOf('day').toDate();
+  const end = moment().subtract(40, 'days').endOf('day').toDate();
 
   let users = await User.find({
     $or: [
       {
         $and: [
-          { 'downloads.downloadTime': { $gt: sixWeeks } },
-          { 'downloads.downloadTime': { $lt: fiveWeeks } },
+          { 'downloads.downloadTime': { $gt: start } },
+          { 'downloads.downloadTime': { $lt: end } },
         ],
       },
       {
         $and: [
-          { 'tktdownloads.downloadTime': { $gt: sixWeeks } },
-          { 'tktdownloads.downloadTime': { $lt: fiveWeeks } },
+          { 'tktdownloads.downloadTime': { $gt: start } },
+          { 'tktdownloads.downloadTime': { $lt: end } },
         ],
       },
     ]
@@ -167,11 +168,11 @@ module.exports.getBookReviews = async (req, res) => {
   .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
 
   let c = 0;
-  for (const user of users.slice(0, 400)) {
+  for (const user of users) {
     console.log(user.email, user.downloads.length);
     const downloads = user.downloads.concat(user.tktdownloads)
     for (const d of downloads) {
-      if (d.downloadTime > sixWeeks && d.downloadTime < fiveWeeks) {
+      if (d.downloadTime > start && d.downloadTime < end) {
         console.log(d.downloadTime);
         if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
           await sendBookReviewsRequest(user, d.bookId);
