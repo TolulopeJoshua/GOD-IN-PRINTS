@@ -138,7 +138,7 @@ module.exports.transporter = nodeMailer.createTransport({
   },
 });
 
-module.exports.transporter1 = nodeMailer.createTransport({
+module.exports.transporter2 = nodeMailer.createTransport({
   host: "email-smtp.us-east-1.amazonaws.com", // hostname
   port: 465, // port for secure SMTP
   secure: true, // TLS requires secureConnection to be false
@@ -148,7 +148,7 @@ module.exports.transporter1 = nodeMailer.createTransport({
   },
 });
 
-module.exports.transporter2 = nodeMailer.createTransport({
+module.exports.transporter1 = nodeMailer.createTransport({
     SES: new aws.SES({
         apiVersion: '2010-12-01'
       }),
