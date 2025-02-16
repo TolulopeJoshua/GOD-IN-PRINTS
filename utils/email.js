@@ -137,7 +137,7 @@ const sendWeeklyMails = async (emails) => {
     farewell: `<p style="text-align: center; margin: 0; padding: 0; font-size: small;">
         Click <a href="https://godinprints.org/user/nomail">here</a> to unsubscribe</p>`,
   };
-  return sendPersonalMail(options, true);
+  return sendPersonalMail(options);
 };
 
 module.exports = {
