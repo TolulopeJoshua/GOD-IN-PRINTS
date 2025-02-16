@@ -108,7 +108,7 @@ module.exports.weeklyMails = async (req, res) => {
   const { getIndex, putIndex } = require('../utils/users/mailIndex');
   let currIndex = await getIndex();
   console.log('startIndex', currIndex);
-  const batchSize = 49, batchCount = 10; let count = 0;
+  const batchSize = 99, batchCount = 3; let count = 0;
   const sevenDaysAgo = moment().subtract(7, 'days').toDate();
 
   for (let i = 0; i < batchCount; i++) {
