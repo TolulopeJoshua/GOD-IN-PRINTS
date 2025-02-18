@@ -36,7 +36,7 @@ router.post(
   catchAsync(books.createBook)
 );
 
-router.get("/:id/read", isLoggedIn, isSubscribed, catchAsync(books.readOnline));
+router.get("/:id/read", isLoggedIn, catchAsync(books.readOnline));
 
 router.put(
   "/:id/read",
