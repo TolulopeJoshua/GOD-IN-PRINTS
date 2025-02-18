@@ -19,6 +19,7 @@ const scriptSrcUrls = [
     "https://tpc.googlesyndication.com",
     "https://checkout.flutterwave.com",
     "https://mozilla.github.io",
+    "//pl25901707.effectiveratecpm.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
