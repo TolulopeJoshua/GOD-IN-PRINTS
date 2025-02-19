@@ -289,7 +289,7 @@
     window.history.replaceState(null, document.title, newUrl);
   }
 
-  function debounce(func, wait = 30000, immediate) {
+  function debounce(func, wait = 15000, immediate = true) {
     let timeout;
     return function () {
       const context = this,
