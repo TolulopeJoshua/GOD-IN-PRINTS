@@ -70,7 +70,7 @@
 <div
   id="bookContainer"
   class="col-md-9 col-lg-6 offset-md-3 mt-4 d-flex flex-column align-items-center overflow-x-auto"
-  style="gap: 10px;"
+  style="gap: 10px; min-height: 100vh;"
 >
   <div class="d-flex vh-100 justify-content-center align-items-center">
     <div class="spinner-border text-secondary" role="status">
@@ -140,8 +140,9 @@
     function (reason) {
       // PDF loading error
       console.error(reason);
-      div.innerHTML =
-        '<strong class="text-muted">An error occured! Please reload page.</strong>';
+      // div.innerHTML =
+      //   '<strong class="text-muted">An error occured! Please reload page.</strong>';
+      window.location.reload();
     }
   );
   async function renderPage(pageNumber, prev = false) {
@@ -192,7 +193,7 @@
     div.innerHTML = "";
     loadedPages = [];
     canvasObserver?.disconnect();
-    const min = page -2, max = page + 2;
+    const min = page -2, max = page + 4;
     for (let i = min; i <= max; i++) {
         await renderPage(i);
     }
@@ -208,7 +209,9 @@
     hideBottomLoader();
     await renderPage(page + 1);
     await renderPage(page + 2);
-    if ((page + 2) < pdf.numPages) {
+    await renderPage(page + 3);
+    await renderPage(page + 4);
+    if ((page + 4) < pdf.numPages) {
       showBottomLoader();
     }
   }
@@ -260,11 +263,13 @@
   loaderObserver.observe(topLoader);
   loaderObserver.observe(bottomLoader);
 
+  const debouncedSavePage = debounce(savePage);
   canvasObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         pageNumber = Number(entry.target.id.split("-")[1]) || pageNumber;
         gotoInput.value = pageNumber;
+        debouncedSavePage();
       }
     }
   }, { threshold: 0.6 });
@@ -277,10 +282,28 @@
   });
 
   // Save Current Page
-  window.addEventListener("beforeunload", function (event) {
+  function savePage() {
     const data = { page: pageNumber };
     axios.put(`/books/${bookId}/read`, data);
-  });
+    const newUrl = window.location.origin + window.location.pathname + `?page=${pageNumber}`;
+    window.history.replaceState(null, document.title, newUrl);
+  }
+
+  function debounce(func, wait = 30000, immediate) {
+    let timeout;
+    return function () {
+      const context = this,
+        args = arguments;
+      const later = function () {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
 </script>
 
 <script>
