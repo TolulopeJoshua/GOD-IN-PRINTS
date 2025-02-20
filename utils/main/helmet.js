@@ -18,6 +18,7 @@ const scriptSrcUrls = [
     "https://adservice.google.com",
     "https://tpc.googlesyndication.com",
     "https://fundingchoicesmessages.google.com",
+    "https://ep2.adtrafficquality.google",
     "https://checkout.flutterwave.com",
     "https://mozilla.github.io",
     "https://pl25901707.effectiveratecpm.com",
