@@ -47,6 +47,7 @@ const connectSrcUrls = [
     "https://z-m-graph.facebook.com",
     "https://pagead2.googlesyndication.com",
     "https://ep1.adtrafficquality.google",
+    "https://fundingchoicesmessages.google.com",
     "https://firebase.googleapis.com",
     "https://firebaseinstallations.googleapis.com",
     "https://www.google-analytics.com",
