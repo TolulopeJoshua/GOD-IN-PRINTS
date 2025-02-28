@@ -170,6 +170,31 @@
 </script>
 
 <script>
+    const similarContainer = document.getElementById('similar');
+    const listDom = similarContainer.querySelector('#list');
+    axios.get('/books/<%= book._id %>/similar').then(response => {
+        if (response.data?.length) {
+            listDom.innerHTML = '';
+            response.data.map((book) => {
+                const anchor = document.createElement('a');
+                anchor.href = '/books/2/book.uid';
+                anchor.classList.add('d-flex','flex-column','justify-content-between','h-auto','pe-5');
+
+                const img = document.createElement('img');
+                img.style.height = '180px';
+                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replace(/\ /g, "+");
+                img.alt = book.title;
+
+                const h6 = document.createElement('h6');
+                h6.classList.add('small','text-capitalize','text-wrap','mt-2','mb-4');
+                h6.innerHTML = book.title.toLowerCase();
+
+                anchor.appendChild(img); anchor.appendChild(h6);
+                listDom.appendChild(anchor);
+            })
+        }
+    }).catch(err => {})
+
     const shareData = {
         title: `<%= book.title.toUpperCase() %>`,
         text: 'Use the link provided to download the book: \n\n' + `'<%= book.title.toUpperCase() %>'` + '\n\n for free. \n',
@@ -198,29 +223,5 @@
 
     document.getElementById('readOnline')?.addEventListener('click', () => swal("Please wait...", { buttons: false }));
 
-    const similarContainer = document.getElementById('similar');
-    const listDom = similarContainer.querySelector('#list');
-    axios.get('/books/<%= book._id %>/similar').then(response => {
-        if (response.data?.length) {
-            listDom.innerHTML = '';
-            response.data.map((book) => {
-                const anchor = document.createElement('a');
-                anchor.href = '/books/2/book.uid';
-                anchor.classList.add('d-flex','flex-column','justify-content-between','h-auto','pe-5');
-
-                const img = document.createElement('img');
-                img.style.height = '180px';
-                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replace(/\ /g, "+");
-                img.alt = book.title;
-
-                const h6 = document.createElement('h6');
-                h6.classList.add('small','text-capitalize','text-wrap','mt-2','mb-4');
-                h6.innerHTML = book.title.toLowerCase();
-
-                anchor.appendChild(img); anchor.appendChild(h6);
-                listDom.appendChild(anchor);
-            })
-        }
-    }).catch(err => {})
 </script>
  
