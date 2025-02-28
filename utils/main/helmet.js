@@ -48,6 +48,7 @@ const connectSrcUrls = [
     "https://pagead2.googlesyndication.com",
     "https://ep1.adtrafficquality.google",
     "https://fundingchoicesmessages.google.com",
+    "https://csi.gstatic.com",
     "https://firebase.googleapis.com",
     "https://firebaseinstallations.googleapis.com",
     "https://www.google-analytics.com",
