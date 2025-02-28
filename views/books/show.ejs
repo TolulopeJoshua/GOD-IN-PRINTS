@@ -195,15 +195,17 @@
         }
     }).catch(err => {})
 
+    document.getElementById('readOnline')?.addEventListener('click', () => swal("Please wait...", { buttons: false }));
+
     const shareData = {
         title: `<%= book.title.toUpperCase() %>`,
         text: 'Use the link provided to download the book: \n\n' + `'<%= book.title.toUpperCase() %>'` + '\n\n for free. \n',
         url: window.location.href
     }
     const shareBtn = document.querySelector('#share');
-    shareBtn.addEventListener('click', async () => navigator.share(shareData))
+    shareBtn?.addEventListener('click', async () => navigator.share(shareData))
 
-    document.getElementById('bookDownload').addEventListener('click', () => {
+    document.getElementById('bookDownload')?.addEventListener('click', () => {
         const mydiv = document.createElement('strong');
         mydiv.innerHTML = '<i class="bi bi-download pe-3"></i><span>Downloading...</span>'
         swal('','','info',{content: mydiv});
@@ -212,7 +214,7 @@
         }, 5000);
     })
 
-    document.getElementById('ticketForm').addEventListener('submit', () => {
+    document.getElementById('ticketForm')?.addEventListener('submit', () => {
         const mydiv = document.createElement('strong');
         mydiv.innerHTML = '<i class="bi bi-download pe-3"></i><span>Retrieving ticket, Downloading...</span>'
         swal('','','info',{content: mydiv});
@@ -220,8 +222,6 @@
             swal.close();
         }, 8000);
     }, { once: true })
-
-    document.getElementById('readOnline')?.addEventListener('click', () => swal("Please wait...", { buttons: false }));
 
 </script>
  
