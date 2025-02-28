@@ -68,6 +68,8 @@ router.get("/1/:title", setRedirect, catchAsync(books.show));
 
 router.get("/2/:uid", setRedirect, catchAsync(books.show2));
 
+router.get("/:id/similar", catchAsync(books.similarBooks));
+
 router.get("/image", catchAsync(books.image));
 
 router.get("/:id/imageUpload", isLoggedIn, books.renderImageUpload);

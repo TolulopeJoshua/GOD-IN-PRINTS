@@ -83,30 +83,29 @@
     </div>
     <% } %> 
 
-    <div class="row overflow-hidden mt-5">
+    <div id="similar" class="row overflow-hidden mt-5">
         <h5 class="d-flex justify-content-between align-items-center">
             <span>Others you might like</span>
             <small><a href="/books">Features >></a></small>
         </h5>
         <hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto">
-            <div class="flex align-items-start">
-                <% for( const book of similarBooks ) { %>
-                <a href="/books/2/<%= book.uid %>" class="d-flex flex-column justify-content-between h-auto pe-5">
-                    <% if (book.image.key != 'none') { %> <img class='' style="height: 180px;"
-                    src= <%= 'https://godinprintsdocuments.s3.amazonaws.com/' +
-                    book.image.key.replace(/\ /g, "+") %> alt="<%= book.title %> "> <% } else {
-                    %>
-                    <img
-                        class="" 
-                        style="height: 180px;"
-                        alt="<%= book.title %>"
-                        src="/assets/images/<%= book.filetype.split('+')[0].toLowerCase() %> icon image.png"
-                    />
-                    <% } %>
-                    <h6 class="small text-capitalize text-wrap mt-2 mb-4"><%= book.title.toLowerCase() %></h6>
-                </a>
-                <% } %>
+            <div id="list" class="flex align-items-start">
+                <div style="width: 150px;">
+                    <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
+                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
+                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                </div>
+                <div style="width: 150px;">
+                    <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
+                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
+                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                </div>
+                <div style="width: 150px;">
+                    <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
+                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
+                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                </div>
             </div>    
         </div>
     </div>
@@ -145,6 +144,26 @@
     </div>
     <% } %>
 </div>
+    
+<div class="modal fade" id="downloadsModal" tabindex="-1" aria-labelledby="downloadsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Downloads</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-secondary">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-secondary mt-3">Retrieving downloads</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
     const pageTitle = "Books";
@@ -179,92 +198,29 @@
 
     document.getElementById('readOnline')?.addEventListener('click', () => swal("Please wait...", { buttons: false }));
 
-    document.getElementById('downloads')?.addEventListener('click', () => {
-        const listDom = document.getElementById('downloadsModal').querySelector('.modal-body');
-        axios.get('/books/downloads').then(response => {
-            if (!response.data.last30.length && !response.data.other.length) {
-                listDom.innerHTML = 'There are no books in your downloads folder!';
-            } else {
-                listDom.innerHTML = '';
-            }
-            if (response.data.last30.length) {
-                const title1 = document.createElement('h6');
-                title1.classList.add('text-center','text-secondary','p-3');
-                title1.innerHTML = 'Last 30 days';
-                listDom.appendChild(title1);
-                response.data.last30.forEach((download, index) => {
-                    if (download) {
-                        const title = document.createElement('h6');
-                        title.classList.add('text-capitalize','text-dark','pt-3');
-                        title.style.borderTop = '1px dotted #ddd'
-                        title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
-                        const info = document.createElement('p');
-                        info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
-                        info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
-                        listDom.appendChild(title); listDom.appendChild(info);
-                    }
-                })
-            }
-            if (response.data.other.length) {
-                const title1 = document.createElement('h6');
-                title1.classList.add('text-center','text-secondary','p-3');
-                title1.innerHTML = 'Over 30 days';
-                listDom.appendChild(title1);
-                response.data.other.forEach((download, index) => {
-                    if (download) {
-                        const title = document.createElement('h6');
-                        title.classList.add('text-capitalize','text-dark','border-top','border-secondary','pt-3');
-                        title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
-                        const info = document.createElement('p');
-                        info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
-                        info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
-                        listDom.appendChild(title); listDom.appendChild(info);
-                    }
-                })
-            }
-        }).catch(err => listDom.innerHTML = '<i class="bi bi-bug pe-3 text-danger"></i>An unknown error occured!')
-    })
+    const similarContainer = document.getElementById('similar');
+    const listDom = similarContainer.querySelector('#list');
+    axios.get('/books/<%= book._id %>/similar').then(response => {
+        if (response.data?.length) {
+            listDom.innerHTML = '';
+            response.data.map((book) => {
+                const anchor = document.createElement('a');
+                anchor.href = '/books/2/book.uid';
+                anchor.classList.add('d-flex','flex-column','justify-content-between','h-auto','pe-5');
+
+                const img = document.createElement('img');
+                img.style.height = '180px';
+                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replace(/\ /g, "+");
+                img.alt = book.title;
+
+                const h6 = document.createElement('h6');
+                h6.classList.add('small','text-capitalize','text-wrap','mt-2','mb-4');
+                h6.innerHTML = book.title.toLowerCase();
+
+                anchor.appendChild(img); anchor.appendChild(h6);
+                listDom.appendChild(anchor);
+            })
+        }
+    }).catch(err => {})
 </script>
-    
-<div class="modal fade" id="downloadsModal" tabindex="-1" aria-labelledby="downloadsModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Downloads</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-secondary">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="text-secondary mt-3">Retrieving downloads</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-    
-<div class="modal fade" id="previewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="previewModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Preview | Pg. 1-<%= book.image.previews.length %></h5>
-          <small class="ms-3">(**preview pages are compressed**)</small>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-secondary">
-            <div class="p-3 d-flex flex-column gap-3 align-items-center">
-                <% for( let image of book.image.previews ) { %>
-                    <img style="max-width: 100%;" class="border" src="<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + image.replace(/ /g, "+") %>" alt="<%= image %>">
-                <% } %>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
  

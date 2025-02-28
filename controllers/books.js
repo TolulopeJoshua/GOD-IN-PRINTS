@@ -286,16 +286,6 @@ module.exports.showBook = async (req, res) => {
     req.flash("error", "Cannot find that book!");
     return res.redirect("/books?refresh=1");
   }
-  const advSearch = require("../utils/search");
-  const item = `${book.title} ${book.author}`;
-  const books = await Book.find({ isApproved: true });
-  const search = advSearch(books, item).filter((b) => b.uid != book.uid);
-  const similarBooks = [];
-  for (const book of search) {
-    if (similarBooks.length >= 10) break;
-    if (!similarBooks.some((bk) => bk.uid === book.uid))
-      similarBooks.push(book);
-  }
 
   const { books: limit } = require("../utils/lib/limits");
   const title = `${capitalize(book.title)} by ${
@@ -305,7 +295,6 @@ module.exports.showBook = async (req, res) => {
     book,
     title,
     limit,
-    similarBooks,
     canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
   });
 };
@@ -319,16 +308,6 @@ module.exports.show = async (req, res) => {
     req.flash("error", "Cannot find that book!");
     return res.redirect("/books?refresh=1");
   }
-  const advSearch = require("../utils/search");
-  const item = `${book.title} ${book.author}`;
-  const books = await Book.find({ isApproved: true });
-  const search = advSearch(books, item).filter((b) => b.uid != book.uid);
-  const similarBooks = [];
-  for (const book of search) {
-    if (similarBooks.length >= 10) break;
-    if (!similarBooks.some((bk) => bk.uid === book.uid))
-      similarBooks.push(book);
-  }
 
   const { books: limit } = require("../utils/lib/limits");
   const title = `${capitalize(book.title)} by ${
@@ -338,7 +317,6 @@ module.exports.show = async (req, res) => {
     book,
     title,
     limit,
-    similarBooks,
     canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
   });
 };
@@ -352,16 +330,6 @@ module.exports.show2 = async (req, res) => {
     req.flash("error", "Cannot find that book!");
     return res.redirect("/books?refresh=1");
   }
-  const advSearch = require("../utils/search");
-  const item = `${book.title} ${book.author}`;
-  const books = await Book.find({ isApproved: true });
-  const search = advSearch(books, item).filter((b) => b.uid != book.uid);
-  const similarBooks = [];
-  for (const book of search) {
-    if (similarBooks.length >= 10) break;
-    if (!similarBooks.some((bk) => bk.uid === book.uid))
-      similarBooks.push(book);
-  }
 
   const { books: limit } = require("../utils/lib/limits");
   const title = `${capitalize(book.title)} by ${
@@ -371,10 +339,25 @@ module.exports.show2 = async (req, res) => {
     book,
     title,
     limit,
-    similarBooks,
     canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
   });
 };
+
+module.exports.similarBooks = async (req, res) => {
+  const advSearch = require("../utils/search");
+  const books = await Book.find({ isApproved: true });
+  const book = books.find((book) => book._id == req.params.id);
+  if (!book) return res.status(404).end();
+  const item = `${book.title} ${book.author}`;
+  const search = advSearch(books, item).filter((b) => b.uid != book.uid);
+  const similarBooks = [];
+  for (const book of search) {
+    if (similarBooks.length >= 10) break;
+    if (!similarBooks.some((bk) => bk.uid === book.uid))
+      similarBooks.push(book);
+  }
+  res.status(200).json(similarBooks);
+}
 
 module.exports.renderImageUpload = (req, res) => {
   const id = req.params.id;
