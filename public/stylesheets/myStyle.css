@@ -159,6 +159,16 @@ a {
     color: #ccc;
 }
 
+
+.scroll-xy::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.scroll-xy::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 4px;
+}
+
 .scroll {
     overflow-y: auto;
     overflow-x: hidden;

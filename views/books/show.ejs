@@ -89,7 +89,7 @@
             <small><a href="/books">Features >></a></small>
         </h5>
         <hr class="mt-2 mb-3" style="height: 2px;">
-        <div class="overflow-auto">
+        <div class="overflow-auto scroll-xy">
             <div id="list" class="flex align-items-start">
                 <div style="width: 150px; margin-right: 15px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
@@ -177,7 +177,7 @@
             listDom.innerHTML = '';
             response.data.map((book) => {
                 const anchor = document.createElement('a');
-                anchor.href = '/books/2/book.uid';
+                anchor.href = `/books/2/${book.uid}`;
                 anchor.classList.add('d-flex','flex-column','justify-content-between','h-auto','pe-5');
 
                 const img = document.createElement('img');
