@@ -186,7 +186,7 @@
                 img.alt = book.title;
 
                 const h6 = document.createElement('h6');
-                h6.classList.add('small','text-capitalize','text-wrap','mt-2','mb-4');
+                h6.classList.add('small','text-capitalize','text-wrap','multiline-ellipsis','mt-2','mb-4');
                 h6.innerHTML = book.title.toLowerCase();
 
                 anchor.appendChild(img); anchor.appendChild(h6);
