@@ -274,7 +274,7 @@ article:hover span.play {
 }
 
 .image-size {
-    max-width: 15em;
+    max-width: 20em;
     align-self: center;
 }
 
@@ -297,8 +297,8 @@ article:hover span.play {
 }
 
 .footer-item {
-    max-width: 320px;
-    margin-bottom: 50px;
+    max-width: 640px;
+    margin-bottom: 32px;
 }
 
 .advert {
