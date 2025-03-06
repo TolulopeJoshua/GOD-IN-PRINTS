@@ -59,6 +59,9 @@ const sendBookReviewsRequest = async (user, book) => {
     "Inspiring, I was much impacted.",
     "Exceptional piece. Highly recommended!",
   ];
+
+  const similarBooks = await generateSimilarBooks(book._id);
+
   const options = {
     email: user.email,
     name: user.firstName,
@@ -66,24 +69,25 @@ const sendBookReviewsRequest = async (user, book) => {
     message: [
       `You downloaded the book: <i>${book.title.toUpperCase()}</i> a few days ago.`,
       "We would love to know how the book has blessed you.",
-      "You can select from our list of template responses or send your custom response.",
+      "You can select from our list of template responses or select 'Respond in your own words'.",
       `<p style="text-align: center;"><img width="160px" src="https://godinprintsdocuments.s3.amazonaws.com/${book.image.key.replace(
         / /g,
         "+"
       )}"></p>
-            <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
-            <ul>
-                ${templateReviews
-                  .map(
-                    (rev) =>
-                      `<li style="padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/${rev}">${rev}</a></li>`
-                  )
-                  .join("")}
-                <li style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #ccc;"><a href="https://godinprints.org/books/mailReview/${
-                  user._id
-                }/${book._id}/0"><i>Respond in your own words</i></a></li>
-            </ul>
-            </form>`,
+      <form id="userSourceForm" style="border: 1px solid #666; border-radius: 3px; padding: 5px; margin: 20px 0;">
+      <ul>
+          ${templateReviews
+            .map(
+              (rev) =>
+                `<li style="padding: 10px 0;"><a href="https://godinprints.org/books/mailReview/${user._id}/${book._id}/${rev}">${rev}</a></li>`
+            )
+            .join("")}
+          <li style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #ccc;"><a href="https://godinprints.org/books/mailReview/${
+            user._id
+          }/${book._id}/0"><i>Respond in your own words</i></a></li>
+      </ul>
+      </form>`,
+      similarBooks,
     ],
     farewell: " ",
   };
@@ -288,4 +292,42 @@ async function generateSortedResources() {
   }">Read Bio</a></p>
             </div>
         </div>`;
+}
+
+async function generateSimilarBooks(bookId) {
+  const Book = require("../models/book");
+  const advSearch = require('./search');
+  
+  const books = await Book.find({ isApproved: true });
+  const book = books.find((book) => book._id.toString() == bookId.toString());
+
+  if (book) {
+    const item = `${book.title} ${book.author}`;
+    let search = advSearch(books, item).filter((b) => b.uid != book.uid);
+    search = search.slice(0, 11).filter((bk) => bk.uid != book.uid);
+
+    if (search.length) {
+      return `
+        <div style="border: 1px solid #ccc; border-radius: 3px; color: #666; padding: 5px; margin-bottom: 10px 0;">
+            <h3 style="text-decoration: underline; text-align: center;">Others you might like</h3>
+            ${
+              search.map((bk) => `
+                <div style="border-top: 1px solid #ddd; padding: 5px;">
+                  <div style="padding: 20px 5px">
+                    <img height="150px" src="https://godinprintsdocuments.s3.amazonaws.com/${
+                      bk.image.key.replace(/ /g, "+")
+                    }">
+                  </div>
+                  <h4>${bk.title.toUpperCase()}</h4>
+                  <p style="display: flex; justify-content: space-between; font-size: small;"><span>- ${bk.author.toUpperCase()}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://godinprints.org/books/${
+                    bk._id
+                  }">Go to Download</a></p>
+                </div>
+              `)
+            }
+          </div>
+      `;
+    }
+  }
+  return '';
 }

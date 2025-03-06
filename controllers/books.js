@@ -464,7 +464,12 @@ module.exports.addReview = async (req, res) => {
   review.category = "Books";
   review.dateTime = Date.now();
   book.reviews.unshift(review);
+  const duplicateReview = await Review.findOne({ parentId: review.parentId, author: review.author });
   await review.save();
+  if (duplicateReview) {
+    book.reviews = book.reviews.filter((review) => review._id.toString() != duplicateReview._id.toString());
+    duplicateReview.delete();
+  }
   await book.save();
   res.redirect(`/books/${book._id}`);
 };

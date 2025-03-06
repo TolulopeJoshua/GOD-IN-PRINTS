@@ -30,7 +30,7 @@ router.get('/:reviewId/edit', isLoggedIn, isReviewAuthor, catchAsync(async (req,
 router.patch('/:reviewId/edit', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     let review;
     if (req.params.reviewId == '0') {
-        if (!req.body.parentId) new ExpressError('parentId required!', 400);
+        if (!req.body.parentId) new ExpressError('Bad Request!', 400);
         review = new Review(req.body.review);
         const book = await Book.findById(req.body.parentId);
         review.author = req.user._id;
