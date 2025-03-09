@@ -480,7 +480,7 @@ module.exports.mailReview = async (req, res) => {
   if (req.params.review != "0") {
     const review = new Review({ text: sanitize(req.params.review) });
     review.parentId = book._id.toString();
-    review.author = new Object(req.params.userId);
+    review.author = req.user._id;
     review.category = "Books";
     review.dateTime = Date.now();
     book.reviews.unshift(review);

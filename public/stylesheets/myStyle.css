@@ -58,6 +58,11 @@ a {
     margin: auto;
 }
 
+.artAd, .bioAd, .bookAd {
+    width: 100%;
+    min-height: 15rem;
+}
+
 .text, .ta {
     white-space: pre-line;
 }

@@ -112,6 +112,13 @@ router.delete(
   catchAsync(books.deleteReview)
 );
 
+router.delete(
+  "/:v/:bookId/deleteReview/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
+  catchAsync(books.deleteReview)
+);
+
 router.post("/suggest", isLoggedIn, validateReview, catchAsync(books.suggest));
 
 router.post("/writexml", isAdmin, catchAsync(books.writexml));

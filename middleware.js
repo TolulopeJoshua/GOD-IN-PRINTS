@@ -205,7 +205,7 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     const {reviewId} = req.params;
     if (reviewId == '0') return next();
     const review = await Review.findById(reviewId);
-    if(!review.author.equals(req.user._id) && req.user.status !== 'author') {
+    if(!review.author.equals(req.user._id) && req.user.admin !== 5) {
         req.session.returnTo = req.originalUrl;
         req.logout();
         req.flash('error', 'You were logged out because your login credentials are different from the review author\'s. Kindly log in again');

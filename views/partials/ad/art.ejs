@@ -11,7 +11,7 @@
         for (artAd of artAds) {
             artAd.parentElement.href = `/articles/1/${response.data.name}`;
             artAd.querySelector('h5').innerText = response.data.name;
-            artAd.querySelector('p').innerText = response.data.text.replace(/<[^>]*>/g, " ").substring(0, 300) + '...';
+            artAd.querySelector('p').innerText = response.data.text.replace(/<[^>]*>/g, " ").substring(0, 450) + '...';
         }
     })
 </script>
