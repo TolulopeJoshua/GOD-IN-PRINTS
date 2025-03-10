@@ -125,7 +125,7 @@
   // Asynchronous download of PDF
   const loadingTask = pdfjsLib.getDocument(url);
   loadingTask.promise.then(
-    function (pdfObj) {
+    async function (pdfObj) {
       console.log("PDF loaded");
 
       pdf = pdfObj;
@@ -135,7 +135,8 @@
       // Fetch pages
       const urlParams = new URLSearchParams(window.location.search);
       const pn = urlParams.get('page');
-      goTo(Number(pn) || pageNumber);
+      await goTo(Number(pn) || pageNumber);
+      toaster('<%= title %>', 5000);
     },
     function (reason) {
       // PDF loading error
