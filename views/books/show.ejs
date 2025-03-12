@@ -135,7 +135,7 @@
             <div class="d-flex align-items-end small border-top m-1" style="opacity: 0.5;">
                 <a id="l<%= review._id %>" class="lreview mx-1" href="javascript:;"><i class="bi bi-hand-thumbs-up-fill text-primary"></i></a>
                 <small class="me-auto"> <%= (review.likes.length > 0 ? review.likes.length : '') %> </small>
-                <% if (review.author.equals(currentUser) || currentUser.admin == 5) { %> 
+                <% if (review.author.equals(currentUser) || currentUser?.admin == 5) { %> 
                 <a class="mx-3" href="/reviews/<%= review._id %>/edit"><i class="bi bi-pencil-fill text-primary"></i></a>
                 <a id="d<%= review._id %>" class="<%= book._id %> dreview" href="javascript:;"><i class="bi bi-trash-fill text-danger"></i></a>
                 <% } %> 
