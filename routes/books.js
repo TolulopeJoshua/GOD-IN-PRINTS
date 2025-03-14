@@ -103,7 +103,7 @@ router.post(
   catchAsync(books.addReview)
 );
 
-router.get("/mailReview/:userId/:bookId/:review", catchAsync(books.mailReview));
+router.get("/mailReview/:userId/:bookId/:review", isLoggedIn, catchAsync(books.mailReview));
 
 router.delete(
   "/:bookId/deleteReview/:reviewId",
