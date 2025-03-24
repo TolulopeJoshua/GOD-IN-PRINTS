@@ -7,6 +7,7 @@
     "start": "nodemon index.js",
     "getVideos": "node utils/lib/getVideos",
     "getBookPreviews": "node utils/books/getPreviews",
+    "getBookImages": "node utils/books/getImages",
     "backup": "node backup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -61,6 +62,7 @@
     "pdf2pic": "^2.1.4",
     "request-ip": "^3.3.0",
     "sanitize-html": "^2.7.0",
+    "sharp": "^0.33.5",
     "tinyduration": "^3.2.3",
     "uuid": "^9.0.0",
     "xhr2": "^0.2.1"
