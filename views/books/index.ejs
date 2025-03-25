@@ -70,7 +70,7 @@
                         <% const index = i + j * 3 %> 
                         <% if (books[index]) { %> 
                         <a href="/books/2/<%= books[index].uid %>">
-                            <img height="150px" class='mx-3 my-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image.key.replace(/ /g, "+") %> alt="<%= books[index].title %> "> 
+                            <img height="150px" class='mx-3 my-2' src=<%= 'https://godinprintsdocuments.s3.amazonaws.com/' + books[index].image["160"].replace(/ /g, "+") %> alt="<%= books[index].title %> "> 
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
                         <a class="text-capitalize text-truncate d-block" href="/books/2/<%= books[index].uid %>">

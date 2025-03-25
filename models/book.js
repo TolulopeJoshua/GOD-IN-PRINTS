@@ -32,6 +32,10 @@ const BookScema = new Schema({
             type: String,
             default: 'none'
         },
+        160: {
+            type: String,
+            default: 'none'
+        },
         // previews: [
         //     { type: String, }
         // ],

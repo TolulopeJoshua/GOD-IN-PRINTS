@@ -8,7 +8,7 @@
         for (bookAd of bookAds) {
             if (bookAd.parentElement.href) continue;
             bookAd.parentElement.href = `/books/1/${response.data.title}`;
-            bookAd.innerHTML = `<img class='mx-3 my-2 image-size opacity-75 fade-animate' width="80%" src= ${'https://godinprintsdocuments.s3.amazonaws.com/' + response.data.image.key.replace(/ /g, "+") } alt="${response.data.title}"> `;
+            bookAd.innerHTML = `<img class='mx-3 my-2 image-size opacity-75 fade-animate' width="80%" src= ${'https://godinprintsdocuments.s3.amazonaws.com/' + response.data.image["480"].replace(/ /g, "+") } alt="${response.data.title}"> `;
         }
     })
 </script>

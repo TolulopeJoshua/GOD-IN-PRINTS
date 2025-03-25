@@ -327,14 +327,14 @@ article:hover span.play {
 
 @keyframes fade {
     0%   {opacity: 1.0;}
-    20%  {opacity: 0.1;}
-    40%  {opacity: 1.0;}
-    50%  {filter: saturate(4);}
+    30%  {opacity: 0.5;}
+    60%  {opacity: 1.0;}
+    80%  {filter: saturate(4);}
     100% {filter: saturate(1);}
 }
 
 .fade-animate {
-    box-shadow: 8px 8px 10px grey;
+    box-shadow: 8px 8px 10px #ddd;
     animation-name: fade;
     animation-duration: 20s;
     animation-iteration-count: infinite;

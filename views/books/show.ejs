@@ -91,17 +91,17 @@
         <hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto scroll-xy">
             <div id="list" class="flex align-items-start">
-                <div style="width: 150px; margin-right: 15px;">
+                <div class="fade-animate" style="width: 150px; margin-right: 15px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
                     <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
                     <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
                 </div>
-                <div style="width: 150px; margin-right: 15px;">
+                <div class="fade-animate" style="width: 150px; margin-right: 15px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
                     <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
                     <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
                 </div>
-                <div style="width: 150px;">
+                <div class="fade-animate" style="width: 150px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
                     <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
                     <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
@@ -182,7 +182,7 @@
 
                 const img = document.createElement('img');
                 img.style.height = '180px';
-                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image.key.replace(/\ /g, "+");
+                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image["160"].replace(/\ /g, "+");
                 img.alt = book.title;
 
                 const h6 = document.createElement('h6');
