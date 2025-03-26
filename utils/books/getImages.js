@@ -25,14 +25,19 @@ db.once("open", async () => {
 
 async function run() {
   const books = await Book.find({});
+  console.log("number of books: ", books.length);
+  let c = 0;
   for (let book of books) {
-    if (book.image.key !== "none" && book.image["160"] === "none") {
+    c += 1;
+    if (c < 32) continue;
+    console.log(c);
+    if (book.image.key !== "none") { // && book.image["480"] === "none") {
       console.log(book.title);
       const image = await getImage(book.image.key);
-      const buffer = await transform(image.Body, 160, null);
-      const newKey = book.image.key.replace(".jpg", "-160.webp");
+      const buffer = await transform(image.Body, 480, null);
+      const newKey = book.image.key.replace(".jpg", "-480.webp");
       await putImage(newKey, buffer);
-      book.image["160"] = newKey;
+      book.image["480"] = newKey;
       await book.save();
     }
   }

@@ -42,7 +42,7 @@ const sendPersonalMail = ({
       if (error) {
         console.log(error);
       }
-      console.log(info);
+      console.log(info.accepted);
       resolve();
     });
   });

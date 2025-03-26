@@ -141,7 +141,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
-    console.log(err.message)
+    console.log(err.message + ' - ' + req.originalUrl);
     try {
         let error = readFileSync('console.txt');
         error += err.message + ' - ' + req.url + ' - ' + (new Date()).toString() + '\n\n';
