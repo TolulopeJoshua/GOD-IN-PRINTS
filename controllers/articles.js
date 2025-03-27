@@ -222,7 +222,10 @@ module.exports.writexml = async (req, res) => {
     const arts = await Doc.find({docType: 'article'});
     let xmap = '';
     for (let art of arts) {
-        xmap += `<url>\n\ \ <loc>https://godinprints.org/articles/2/${encodeURI(art.uid)}</loc>\n\ \ <lastmod>2023-04-08T10:24:55+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
+        xmap += `<url>\n\ \ <loc>https://godinprints.org/articles/2/${encodeURIComponent(
+            art.uid
+        ).replace(/\'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29")
+        }</loc>\n\ \ <lastmod>2023-04-08T10:24:55+00:00</lastmod>\n\ \ <priority>0.64</priority>\n</url>\n`
     }
     fs.writeFileSync('articles.xml', xmap);
     res.status(200).send('done');
