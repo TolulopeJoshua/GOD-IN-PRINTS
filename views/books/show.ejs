@@ -38,6 +38,10 @@
             <% } %> 
         <div class="card-body">
             <h1 class="h5 card-title"><%= book.title.toUpperCase() %></h1>
+            <% if (book.affiliates?.amazon) { %>
+                <a href="<%= book.affiliates?.amazon %>" target="_blank" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Buy on Amazon</em><i class="bi bi-cart-fill"></i></a>
+            <% } %>
+            <!-- <img src="/images/buy-on-amazon-button.png" alt="Buy on Amazon" class="img-fluid" style="width: 150px; height: auto;"> -->
             <!-- <div class="d-flex justify-content-center"></div> -->
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
         </div>

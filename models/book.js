@@ -44,6 +44,7 @@ const BookScema = new Schema({
         key: String,
         size: Number
     },
+    affiliates: { amazon: { type: String, } },
     datetime: {
         type: Date,
         default: new Date(2022, 3, 15)

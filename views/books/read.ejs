@@ -136,7 +136,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const pn = urlParams.get('page');
       await goTo(Number(pn) || pageNumber);
-      toaster('<%= title %>', 5000);
+      toaster('<%= title %>', 25000);
     },
     function (reason) {
       // PDF loading error
