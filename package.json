@@ -67,6 +67,9 @@
     "uuid": "^9.0.0",
     "xhr2": "^0.2.1"
   },
+  "resolutions": {
+    "sharp": "^0.29.0"
+  },
   "devDependencies": {
     "pdf-to-png-converter": "^0.2.5"
   }
