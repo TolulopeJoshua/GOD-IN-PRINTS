@@ -62,7 +62,7 @@
     "pdf2pic": "^2.1.4",
     "request-ip": "^3.3.0",
     "sanitize-html": "^2.7.0",
-    "sharp": "0.29.4",
+    "sharp": "^0.29.0",
     "tinyduration": "^3.2.3",
     "util": "^0.12.5",
     "uuid": "^9.0.0",
