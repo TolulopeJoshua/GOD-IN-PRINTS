@@ -106,6 +106,7 @@ module.exports.renderNewForm = async (req, res) => {
     const request = await Review.findById(req.query.requestId);
     booktitle = request.text + (request.info ? ` by ${request.info}` : '');
   }
+  if (request.likes.length) throw new ExpressError("Request has been attended to.", 400);
   res.render("books/upload", { booktitle, title });
 };
 
