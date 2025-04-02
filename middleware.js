@@ -89,7 +89,8 @@ module.exports.validateBook = (req, res, next) => {
     if (error) {
         req.file && unlinkSync(`uploads/${req.file.originalname}`);
         const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
+        console.log(msg, req.originalUrl);
+        res.status(400).send({ message: msg })
     } else {
         next();
     }

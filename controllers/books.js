@@ -6,6 +6,7 @@ const BookTicket = require("../models/bookTicket");
 
 const fs = require("fs-extra");
 const path = require("path");
+const pdfConverter = require("pdf-poppler");
 
 const {
   getImage,
@@ -18,6 +19,7 @@ const {
 const ExpressError = require("../utils/ExpressError");
 const capitalize = require("../utils/capitalize");
 const sanitize = require("sanitize-html");
+const { sendBookResponseMail } = require("../utils/email");
 
 const categories = [
   "Evangelism",
@@ -98,73 +100,64 @@ module.exports.perCategory = async (req, res) => {
 };
 
 module.exports.renderNewForm = async (req, res) => {
-  const title = "Post a Book";
+  const title = "Book(s) Upload";
   let booktitle = "";
   if (req.query.requestId) {
     const request = await Review.findById(req.query.requestId);
-    booktitle = request.text;
+    booktitle = request.text + (request.info ? ` by ${request.info}` : '');
   }
-  res.render("books/new", { booktitle, title });
+  res.render("books/upload", { booktitle, title });
 };
 
 module.exports.createBook = async (req, res) => {
-  if (!req.file) throw new ExpressError("No file attached!", 400);
-  const path = require("path");
-  const filetypes = /pdf|mobi|epub|docx/;
-  const extname = filetypes.test(
-    path.extname(req.file.originalname).toLowerCase()
-  );
-  const mimetype = filetypes.test(req.file.mimetype);
-  if (!mimetype || !extname) {
-    fs.unlinkSync(`uploads/${req.file.originalname}`);
-    throw new ExpressError(
-      "Allowed file extensions - PDF | MOBI | EPUB | DOCX",
-      400
-    );
+  const cb = (err) => {
+    if (err) {
+      fs.unlinkSync(`uploads/${req.file.originalname}`);
+      throw new ExpressError(err.message, 400);
+    }
   }
+  const { checkFileType } = require("../functions");
+  checkFileType(req.file, cb);
 
   const book = new Book(req.body.book);
   const { size } = req.file;
   const key = "book/" + Date.now().toString() + "_" + req.file.originalname;
   book.document = { key, size };
   book.title = book.title.toUpperCase();
-  book.uid = book.title.toLowerCase().replace(/ /g, "-");
   book.author = book.author.toLowerCase();
+  book.uid = (book.title + ' by ' + book.author).toLowerCase().replace(/ /g, "-");
   book.contributor = req.user._id;
   book.filetype = req.file.mimetype.split("/")[1];
-  book.datetime = Date.now();
+  book.isApproved = req.user.admin === 5;
+  book.affiliates.amazon = req.body.affiliate;
 
-  const myBuffer = fs.readFileSync(`uploads/${req.file.originalname}`);
+  const pdfPath = `uploads/${req.file.originalname}`;
+  const myBuffer = fs.readFileSync(pdfPath);
   await putImage(key, myBuffer);
   await book.save();
-  fs.unlinkSync(`uploads/${req.file.originalname}`);
-  req.flash(
-    "success",
-    `${book.title.toUpperCase()} saved, kindly upload front-page image.`
-  );
-  res.redirect(`/books/${book._id}/imageUpload`);
+  res.status(200).send({ success: true, bookId: book._id });
+
+  let option = {
+    out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
+    format: "jpeg", out_dir: "uploads2", page: Number(req.body.cover) || 1,
+  };
+  await pdfConverter.convert(pdfPath, option);
+  fs.unlinkSync(pdfPath);
+
+  const file = fs.readdirSync("uploads2").find((f) => f.includes(path.basename(pdfPath, path.extname(pdfPath))));
+  if (!file) return console.log("File not found - ", req.file.originalname);
+  book.image.key = "book-img/" + Date.now().toString() + "_" + book.title + ".webp";
+  book.image["480"] = book.image.key;
+  await uploadCompressedImage(`uploads2/${file}`, book.image.key);
+  await book.save();
+  book.image["160"] = book.image.key.replace(".webp", "-160.webp");
+  await uploadCompressedImage(`uploads2/${file}`, book.image.key, 160);
+  await book.save();
+  fs.unlinkSync(`uploads2/${file}`);
 
   if (req.query.requestId) {
-    const request = await Review.findById(req.query.requestId).populate(
-      "author"
-    );
-    request.likes[0] = req.user._id;
-    await request.save();
-    let mailOptions = {
-      from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>',
-      to: [request.author.email, "gipteam@hotmail.com"],
-      subject: "Book Request",
-      html: `<p>Hello ${request.author.firstName.toUpperCase()},<p/><br>
-              <p>Your request for the book - <b>${
-                request.text
-              }</b> has been responded to. 
-              Kindly check out the resource at <br>https://godinprints.org/books/${
-                book._id
-              }.<p/><br>
-              Copy the resource link and paste in your browser.<br><p>Regards,<p/><br><b>GIP Library</b>`,
-    };
-    const { transporter } = require("../functions");
-    transporter.sendMail(mailOptions);
+    const request = await Review.findById(req.query.requestId).populate("author");
+    sendBookResponseMail(request, book, req);
   }
 };
 
@@ -206,67 +199,14 @@ module.exports.clearPDFs = async (req, res) => {
   res.status(200).send("done");
 }
 
-module.exports.renderAdminUpload = (req, res) => {
-  const title = "GIP Admin";
-  res.render("books/adminUpload", { title });
-};
-
-module.exports.adminUpload = async (req, res) => {
-  const pdfConverter = require("pdf-poppler");
-  const { checkFileType } = require("../functions");
-  for (const doc of req.files) {
-    console.log(doc.originalname);
-    checkFileType(doc, (res) => res);
-    const book = new Book();
-    const { size } = doc;
-    const key = "book/" + Date.now().toString() + "_" + doc.originalname;
-    const originalname = doc.originalname
-      .toLowerCase()
-      .replace(".pdf", "")
-      .split(" - ");
-    book.document = { key, size };
-    book.title = originalname[0].replace(/ -- /g, " - ");
-    book.author = originalname[1] || " ";
-    book.uid = (book.title + " " + book.author)
-      .toLowerCase()
-      .replace(/ /g, "-");
-    book.filetype = doc.mimetype.split("/")[1];
-    book.datetime = Date.now();
-    book.isApproved = true; // false
-    book.image.key =
-      "book-img/" + Date.now().toString() + "_" + book.title + ".jpg";
-
-    const pdfPath = `uploads/${doc.originalname}`;
-    let option = {
-      format: "jpeg",
-      out_dir: "uploads2",
-      out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
-      page: 1,
-    };
-    await pdfConverter.convert(pdfPath, option);
-    let files = fs.readdirSync("uploads2");
-    const file = files.find((f) =>
-      f.toLowerCase().includes(book.title.replace(/ - /g, " -- "))
-    );
-    // console.log(file);
-    await uploadCompressedImage(`uploads2/${file}`, book.image.key);
-
-    const myBuffer = fs.readFileSync(pdfPath);
-    // console.log(key, myBuffer);
-    await putImage(key, myBuffer);
-    // console.log(book);
-    await book.save();
-    fs.unlinkSync(pdfPath);
-  }
-  req.flash("success", "Successfully Uploaded!");
-  res.redirect("/books/adminUpload");
-};
-
 module.exports.search = async (req, res) => {
   const advSearch = require("../utils/search");
   const item = req.query.search;
   const books = await Book.find({ isApproved: true });
-  const result = advSearch(books, item);
+  const result = item.trim() ? advSearch(books, item) : books;
+  if (req.query.json) {
+    return res.status(200).json(result);
+  }
   const [pageDocs, pageData] = paginate(req, result);
   const title = `Search for Books - ${item}`;
   res.render("books/list", {
@@ -288,9 +228,7 @@ module.exports.showBook = async (req, res) => {
   }
 
   const { books: limit } = require("../utils/lib/limits");
-  const title = `${capitalize(book.title)} by ${
-    book.author
-  } - Free pdf download`;
+  const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
   res.render("books/show", {
     book,
     title,
@@ -346,17 +284,12 @@ module.exports.show2 = async (req, res) => {
 module.exports.similarBooks = async (req, res) => {
   const advSearch = require("../utils/search");
   const books = await Book.find({ isApproved: true });
-  const book = books.find((book) => book._id == req.params.id);
+  let book = books.find((book) => book._id == req.params.id);
+  if (!book) { book = await Book.findById(req.params.id); }
   if (!book) return res.status(404).end();
   const item = `${book.title} ${book.author}`;
-  const search = advSearch(books, item).filter((b) => b.uid != book.uid);
-  const similarBooks = [];
-  for (const book of search) {
-    if (similarBooks.length >= 10) break;
-    if (!similarBooks.some((bk) => bk.uid === book.uid))
-      similarBooks.push(book);
-  }
-  res.status(200).json(similarBooks);
+  const search = advSearch(books, item).filter((b) => b.uid != book.uid).slice(0, 10);
+  res.status(200).json(search);
 }
 
 module.exports.renderImageUpload = (req, res) => {
@@ -518,6 +451,27 @@ module.exports.suggest = async (req, res) => {
   transporter.sendMail(mailOptions);
   res.status(200).send("Success");
 };
+
+module.exports.sendLink = async (req, res) => {
+  const book = await Book.findById(req.params.id).populate({
+    path: "reviews",
+    populate: { path: "author" },
+  });
+  const request = await Review.findById(req.query.requestId).populate("author");
+
+  if (book && request) {
+    await sendBookResponseMail(request, book, req);
+    
+    const { books: limit } = require("../utils/lib/limits");
+    const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
+    res.render("books/show", {
+      book, title, limit,
+      canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
+    });
+  } else {
+    throw new ExpressError("Book or request not found");
+  }
+}
 
 module.exports.writexml = async (req, res) => {
   const books = await Book.find({});

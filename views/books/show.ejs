@@ -181,7 +181,7 @@
             listDom.innerHTML = '';
             response.data.map((book) => {
                 const anchor = document.createElement('a');
-                anchor.href = `/books/2/${book.uid}`;
+                anchor.href = `/books/${book._id}`;
                 anchor.classList.add('d-flex','flex-column','justify-content-between','h-auto','pe-5');
 
                 const img = document.createElement('img');

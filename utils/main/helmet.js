@@ -85,7 +85,7 @@ module.exports.helmetDirectives = {
     scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
     styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
     workerSrc: ["'self'", "blob:"],
-    frameSrc: ["*","'self'", "blob:", ...frameSrcUrls],
+    frameSrc: ["*","'self'", "data:", "blob:", ...frameSrcUrls],
     objectSrc: [],
     mediaSrc: [
         "'self'", 

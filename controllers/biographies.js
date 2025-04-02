@@ -69,7 +69,7 @@ module.exports.search = async (req, res) => {
     const advSearch = require("../utils/search");
     const item = req.query.search;
     const biographies = await Doc.find({docType: 'biography'});
-    const result = advSearch(biographies, item);
+    const result = item.trim() ? advSearch(biographies, item) : biographies;
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Biographies -${item}`;
     res.render('biographies/list', {category: `🔍: ${item}`, biographies: pageDocs, pageData, title});
@@ -152,6 +152,7 @@ module.exports.uploadBiographyImage = async function(req, res) {
         biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
         await uploadCompressedImage(req.file.path, biography.image.key);
         await biography.save(); 
+        fs.unlinkSync(req.file.path);
         req.flash('success', 'Successfully posted biography, awaiting approval.');
     } else {
         req.flash('error', 'Biography already has an image.');

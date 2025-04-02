@@ -47,7 +47,7 @@ const BookScema = new Schema({
     affiliates: { amazon: { type: String, } },
     datetime: {
         type: Date,
-        default: new Date(2022, 3, 15)
+        default: new Date()
     },
     contributor: {
         type: Schema.Types.ObjectId,

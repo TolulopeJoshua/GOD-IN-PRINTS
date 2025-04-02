@@ -1,0 +1,192 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="col-10 offset-1 overflow-auto">
+    <h2 class="text-center my-4">Upload</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="bg-light mb-3">
+                <label class="btn btn-outline-secondary" for="documents">Choose files</label>
+                <span id="numFiles" class="ms-2"></span>
+                <input hidden type="file" accept="application/pdf" multiple="multiple" id="documents" name="documents">
+                <!-- <input class="form-control" id="search_book" name="search_book" placeholder="search"> -->
+            </div>
+            <% if (booktitle) { %>
+             <strong class="small d-block mb-3">Requested Book - <%= booktitle %></strong>
+            <% } %>
+            <form id="bookUpload" action="/books/new" method="POST" class="card p-3 mb-3" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" id="title" name="book[title]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="author">Author</label>
+                    <input class="form-control" id="author" name="book[author]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cover">Cover page</label>
+                    <!-- <button id="current" type="button" class="btn btn-outline ms-5">Current</button> -->
+                    <input class="form-control" type="number" value="1" id="cover" name="cover">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="affiliate">Amazon link</label>
+                    <input class="form-control" id="affiliate" name="affiliate">
+                </div>
+            </form>
+            <div class="mb-3">
+                <h5 class="text-underline">
+                    <span class="mr-5">Similar Books</span>
+                    <small id="similarSearch" class="btn btn-sm btn-secondary">Search</small>
+                </h5>
+                <div id="similar" class="card p-2" style="height: 100px; overflow: auto;"></div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <iframe id="view" style="min-height: 500px;" class="h-100 w-100 mb-3 card"></iframe>
+        </div>
+    </div>
+    <div class="flex justify-content-center my-4">
+        <button id="Next" class="mx-3 px-3 py-2 btn btn-info">Next</button>
+        <!-- <button id="Disapprove" class="mx-3 px-3 py-2 btn btn-warning">Disapprove</button> -->
+        <button id="Delete" class="mx-3 px-3 py-2 btn btn-danger">Delete</button>
+        <button id="Save" class="mx-3 px-3 py-2 btn btn-success">Upload</button>
+    </div>
+</div>
+
+<script>
+    const pageTitle = "Books";
+</script>
+
+<script>
+    let files = [], currentFileIndex = 0;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const requestId = (searchParams.get("requestId")); // for book requests
+
+    const documents = document.getElementById("documents");
+    const numFiles = document.getElementById("numFiles");
+    const view = document.getElementById("view");
+    const title = document.getElementById("title");
+    const author = document.getElementById("author");
+    const cover = document.getElementById("cover");
+    const similar = document.getElementById("similar");
+    const form = document.querySelector("#bookUpload");
+
+    // document.getElementById("current").addEventListener("click", currentPage);
+    document.getElementById("similarSearch").addEventListener("click", getSimilarBooks);
+    document.getElementById("Next").addEventListener("click", next);
+    document.getElementById("Delete").addEventListener("click", deleteFile);
+    document.getElementById("Save").addEventListener("click", save);
+
+    documents.addEventListener("change", function (e) {
+        files = e.target.files;
+        if (requestId && files.length > 1) {
+            swal("You can only upload one file at a time for book requests.");
+            return files = [];
+        }
+        if (files.length > 0) {
+            currentFileIndex = -1;
+            next();
+        }
+    });
+
+    function next() {
+        scrollTo(0, 0);
+        if (files.length === 0) return;
+
+        currentFileIndex++;
+        if (currentFileIndex >= files.length) currentFileIndex = 0;
+        
+        numFiles.innerText = (currentFileIndex + 1) + " / " + files.length + " file(s)";
+        form.reset();
+
+        const file = files[currentFileIndex];
+        title.value = file.name.replace(/\.pdf$/, '');
+        view.src = URL.createObjectURL(file);
+
+        getSimilarBooks();
+    }
+
+    function currentPage() {
+        cover.value = view.contentWindow.document.getElementById('pageNumber').value;;
+    }
+
+    function deleteFile() {
+        if (currentFileIndex >= 0 && currentFileIndex < files.length) {
+            const file = files[currentFileIndex];
+            const fileName = file.name.replace(/\.pdf$/, '');
+            files = Array.from(files).filter((_, index) => index !== currentFileIndex);
+            numFiles.innerText = " - " + files.length + " file(s) selected";
+            if (files.length > 0) {
+                currentFileIndex -= 1;
+                next();
+            } else {
+                view.src = "";
+                numFiles.innerText = " - No files selected";
+            }
+        }
+    }
+
+    function save() {
+        const formData = new FormData(form);
+        if (!files[currentFileIndex]) {
+            swal("No file selected for upload.");
+            return;
+        }
+        formData.append("document", files[currentFileIndex]);
+        swal("Uploading...")
+        fetch("/books/new" + requestId ? `?requestId=${requestId}` : '', {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (requestId) return window.location.replace(`/books/${data.bookId}`);
+                swal(`Book uploaded successfully! <a target="_blank" href="/books/${data.bookId}">View Book</a>`);
+                deleteFile();
+            } else {
+                swal("Error uploading file");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            swal("An error occurred while uploading the file.");
+        })
+        .finally(() => {
+            swal.close();
+        });
+    }
+
+    const searches = [];
+    function getSimilarBooks() {
+        let titleValue = title.value + " " + author.value;
+        titleValue = titleValue.trim() || '<%= booktitle %>'
+        if (titleValue.trim()) {
+            searches.push(titleValue);
+            similar.innerHTML = "<p>Searching...</p>";
+            fetch(`/books/search?search=${encodeURIComponent(titleValue)}&json=1`)
+                .then(response => response.json())
+                .then(data => {
+                    searches.shift();
+                    if (searches.length) return;
+                    if (data.length === 0) {
+                        similar.innerHTML = "<p>No similar books found</p>";
+                        return;
+                    }
+                    similar.innerHTML = data.map(book => (
+                        `<li class="text-capitalize">
+                            <a target="_blank" href="/books/${book._id}">${book.title} - ${book.author}</a>
+                            ${requestId ?
+                            `<a href="/books/sendLink/${book._id}?requestId=${requestId}" class="btn btn-sm btn-primary ms-2">Send Link</a>` : ''}
+                        </li>`
+                    )).join('');
+                })
+                .catch(() => {
+                    similar.innerHTML = "<p>Error fetching similar books</p>";
+                });
+        } else {
+            similar.innerHTML = "";
+        }
+    }
+    if (requestId) getSimilarBooks();
+</script>

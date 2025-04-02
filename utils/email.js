@@ -94,6 +94,23 @@ const sendBookReviewsRequest = async (user, book) => {
   return sendPersonalMail(options);
 };
 
+const sendBookResponseMail = async (request, book, req) => {
+  request.likes[0] = req.user._id;
+  await request.save();
+  let mailOptions = {
+    from: '"God-In-Prints Libraries" <godinprintslibraries@gmail.com>',
+    to: [request.author.email, "gipteam@hotmail.com"],
+    subject: "Book Request",
+    html: `<p>Hello ${request.author.firstName.toUpperCase()},<p/><br>
+            <p>Your request for the book - <b>${request.text}</b> has been responded to. 
+            <br>
+            Kindly check out the resource at <a href="https://godinprints.org/books/${book._id}">this link</a>
+            <br>
+            <p>Regards,<p/><br><b>GIP Library</b>`,
+  };
+  transporter.sendMail(mailOptions);
+}
+
 const sendWelcomeMail = async (user) => {
   const picks = await generateSortedResources();
 
@@ -149,6 +166,7 @@ module.exports = {
   sendWelcomeMail,
   sendWeeklyMails,
   sendBookReviewsRequest,
+  sendBookResponseMail,
 };
 
 async function generateSortedResources() {

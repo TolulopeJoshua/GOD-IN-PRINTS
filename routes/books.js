@@ -49,15 +49,6 @@ router.delete("/:id/read", isLoggedIn, catchAsync(books.deletePDF));
 
 // router.delete('/reads', isLoggedIn, catchAsync(books.clearPDFs));
 
-router.get("/adminUpload", isAdmin, books.renderAdminUpload);
-
-router.post(
-  "/adminUpload",
-  isAdmin,
-  upload0.array("documents"),
-  catchAsync(books.adminUpload)
-);
-
 router.get("/search", setRedirect, catchAsync(books.search));
 
 router.get("/downloads", isLoggedIn, catchAsync(books.downloadsList));
@@ -120,6 +111,8 @@ router.delete(
 );
 
 router.post("/suggest", isLoggedIn, validateReview, catchAsync(books.suggest));
+
+router.get("/sendLink/:id", isLoggedIn, isAdmin, catchAsync(books.sendLink));
 
 router.post("/writexml", isAdmin, catchAsync(books.writexml));
 

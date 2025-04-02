@@ -91,7 +91,7 @@ module.exports.search = async (req, res) => {
     const advSearch = require("../utils/search");
     const item = req.query.search;
     const articles = await Doc.find({docType: 'article'});
-    const result = advSearch(articles, item);
+    const result = item.trim() ? advSearch(articles, item) : articles;
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Articles - ${item}`;
     res.render('articles/list', {category: `🔍: ${item}`, articles: pageDocs, pageData, title});
@@ -164,6 +164,7 @@ module.exports.uploadArticleImage = async function(req, res) {
         article.image.key = 'article-img/' + Date.now().toString() + '_' + req.file.originalname;
         await uploadCompressedImage(req.file.path, article.image.key);
         await article.save();
+        fs.unlinkSync(req.file.path);
         req.flash('success', 'Successfully saved article.');
     } else {
         req.flash('error', 'Article already has an image.');

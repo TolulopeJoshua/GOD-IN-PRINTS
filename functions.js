@@ -1,4 +1,5 @@
-const fs = require('fs');
+const fs = require('fs-extra');
+const sharp = require('sharp');
 const aws = require('aws-sdk'),
       bodyParser = require('body-parser'),
       multer = require('multer'),
@@ -47,15 +48,10 @@ const putImage = async (key, body) => {
 }
 module.exports.putImage = putImage;
 
-module.exports.uploadCompressedImage = async (imgPath, key) => {
-    var Jimp = require('jimp');
-    const image = await Jimp.read(imgPath);
-    image.resize(640, Jimp.AUTO);
-    image.quality(20);
-    await image.writeAsync('output.jpg');
-    const myBuffer = fs.readFileSync('output.jpg');
-    await putImage(key, myBuffer);
-    fs.unlinkSync(imgPath);
+module.exports.uploadCompressedImage = async (imgPath, key, width = 480) => {
+    const image = fs.readFileSync(imgPath);
+    const buffer = await sharp(image).resize(width).webp().toBuffer();
+    await putImage(key, buffer);
 }
 
 module.exports.encode = (data) => {
