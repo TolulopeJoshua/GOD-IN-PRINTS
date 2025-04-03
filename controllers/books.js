@@ -6,7 +6,7 @@ const BookTicket = require("../models/bookTicket");
 
 const fs = require("fs-extra");
 const path = require("path");
-const pdfConverter = require("pdf-poppler");
+// const pdfConverter = require("pdf-poppler");
 
 const {
   getImage,
@@ -104,9 +104,9 @@ module.exports.renderNewForm = async (req, res) => {
   let booktitle = "";
   if (req.query.requestId) {
     const request = await Review.findById(req.query.requestId);
+    if (request.likes.length) req.flash("error", "Request has been attended to.");
     booktitle = request.text + (request.info ? ` by ${request.info}` : '');
   }
-  if (request.likes.length) throw new ExpressError("Request has been attended to.", 400);
   res.render("books/upload", { booktitle, title });
 };
 
@@ -137,24 +137,19 @@ module.exports.createBook = async (req, res) => {
   await putImage(key, myBuffer);
   await book.save();
   res.status(200).send({ success: true, bookId: book._id });
-
-  let option = {
-    out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
-    format: "jpeg", out_dir: "uploads2", page: Number(req.body.cover) || 1,
-  };
-  await pdfConverter.convert(pdfPath, option);
   fs.unlinkSync(pdfPath);
 
-  const file = fs.readdirSync("uploads2").find((f) => f.includes(path.basename(pdfPath, path.extname(pdfPath))));
-  if (!file) return console.log("File not found - ", req.file.originalname);
+  const { bufferFromUri } = require("../utils/books/imageFunctions");
   book.image.key = "book-img/" + Date.now().toString() + "_" + book.title + ".webp";
   book.image["480"] = book.image.key;
-  await uploadCompressedImage(`uploads2/${file}`, book.image.key);
+  let buffer = bufferFromUri(req.body.coverImage);
+  await putImage(book.image.key, buffer);
   await book.save();
+
   book.image["160"] = book.image.key.replace(".webp", "-160.webp");
-  await uploadCompressedImage(`uploads2/${file}`, book.image.key, 160);
+  buffer = bufferFromUri(req.body.smallImage);
+  await putImage(book.image["160"], buffer);
   await book.save();
-  fs.unlinkSync(`uploads2/${file}`);
 
   if (req.query.requestId) {
     const request = await Review.findById(req.query.requestId).populate("author");

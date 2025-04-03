@@ -29,8 +29,9 @@ module.exports.bookSchema = Joi.object({
         title: Joi.string().required().escapeHTML(),
         author: Joi.string().required().escapeHTML(),
     }).required(),
-    cover: Joi.number(),
     affiliate: Joi.string().allow('').escapeHTML(),
+    coverImage: Joi.string().escapeHTML(),
+    smallImage: Joi.string().escapeHTML(),
 });
 
 module.exports.readSchema = Joi.object({

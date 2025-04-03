@@ -1,5 +1,4 @@
 const fs = require('fs-extra');
-const sharp = require('sharp');
 const aws = require('aws-sdk'),
       bodyParser = require('body-parser'),
       multer = require('multer'),
@@ -49,6 +48,7 @@ const putImage = async (key, body) => {
 module.exports.putImage = putImage;
 
 module.exports.uploadCompressedImage = async (imgPath, key, width = 480) => {
+    const sharp = require('sharp');
     const image = fs.readFileSync(imgPath);
     const buffer = await sharp(image).resize(width).webp().toBuffer();
     await putImage(key, buffer);
