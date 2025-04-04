@@ -89,26 +89,26 @@
 
     <div id="similar" class="row overflow-hidden mt-5">
         <h5 class="d-flex justify-content-between align-items-center">
-            <span>Others you might like</span>
-            <small><a href="/books">Features >></a></small>
+            <span class="text-truncate">Others like <small class="text-capitalize"><%= book.title.toLowerCase() %></small></span>
+            <small class="text-nowrap"><a href="/books">Features >></a></small>
         </h5>
         <hr class="mt-2 mb-3" style="height: 2px;">
         <div class="overflow-auto scroll-xy">
             <div id="list" class="flex align-items-start">
                 <div class="fade-animate" style="width: 150px; margin-right: 15px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
-                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
-                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                    <span class="bg-secondary d-block h6 w-75" style="height: 20px;"></span>
+                    <span class="bg-secondary d-block h6 w-50" style="height: 20px;"></span>
                 </div>
                 <div class="fade-animate" style="width: 150px; margin-right: 15px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
-                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
-                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                    <span class="bg-secondary d-block h6 w-75" style="height: 20px;"></span>
+                    <span class="bg-secondary d-block h6 w-50" style="height: 20px;"></span>
                 </div>
                 <div class="fade-animate" style="width: 150px;">
                     <div class="bg-secondary w-100 mb-2" style="height: 180px;"></div>
-                    <h6 class="bg-secondary w-75" style="height: 20px;"></h6>
-                    <h6 class="bg-secondary w-50" style="height: 20px;"></h6>
+                    <span class="bg-secondary d-block h6 w-75" style="height: 20px;"></span>
+                    <span class="bg-secondary d-block h6 w-50" style="height: 20px;"></span>
                 </div>
             </div>    
         </div>
@@ -147,6 +147,13 @@
         </div>
     </div>
     <% } %>
+</div>
+
+<div class="col-md-9 col-lg-6 offset-md-3 overflow-x-hidden my-5">
+    <div class="flex flex-wrap justify-content-space-around mt-5 p-md-5" style="gap: 40px;">
+        <%- include('../partials/ad/art') %>  
+        <%- include('../partials/ad/bio2') %>  
+    </div>
 </div>
     
 <div class="modal fade" id="downloadsModal" tabindex="-1" aria-labelledby="downloadsModal" aria-hidden="true">

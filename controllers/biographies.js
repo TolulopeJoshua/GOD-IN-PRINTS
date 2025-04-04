@@ -69,7 +69,7 @@ module.exports.search = async (req, res) => {
     const advSearch = require("../utils/search");
     const item = req.query.search;
     const biographies = await Doc.find({docType: 'biography'});
-    const result = item.trim() ? advSearch(biographies, item) : biographies;
+    const result = item?.trim() ? advSearch(biographies, item) : biographies;
     const [pageDocs, pageData] = paginate(req, result)
     const title = `Search for Biographies -${item}`;
     res.render('biographies/list', {category: `🔍: ${item}`, biographies: pageDocs, pageData, title});

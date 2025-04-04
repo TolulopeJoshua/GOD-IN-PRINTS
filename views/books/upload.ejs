@@ -139,13 +139,46 @@
         }
     }
 
+    const searches = [];
+    function getSimilarBooks() {
+        let titleValue = title.value + " " + author.value;
+        titleValue = titleValue.trim() || '<%= booktitle %>'
+        if (titleValue.trim()) {
+            searches.push(titleValue);
+            similar.innerHTML = "<p>Searching...</p>";
+            fetch(`/books/search?search=${encodeURIComponent(titleValue)}&json=1`)
+                .then(response => response.json())
+                .then(data => {
+                    searches.shift();
+                    if (searches.length) return;
+                    swal.close();
+                    if (data.length === 0) {
+                        similar.innerHTML = "<p>No similar books found</p>";
+                        return;
+                    }
+                    similar.innerHTML = data.map(book => (
+                        `<li class="text-capitalize">
+                            <a target="_blank" href="/books/${book._id}">${book.title} - ${book.author}</a>
+                            ${requestId ?
+                            `<a href="/books/sendLink/${book._id}?requestId=${requestId}" class="btn btn-sm btn-primary ms-2">Send Link</a>` : ''}
+                        </li>`
+                    )).join('');
+                })
+                .catch(() => {
+                    similar.innerHTML = "<p>Error fetching similar books</p>";
+                });
+        } else {
+            similar.innerHTML = "";
+        }
+    }
+    if (requestId) getSimilarBooks();
+
     async function save() {
         const formData = new FormData(form);
         const file = files[currentFileIndex];
-        if (!file) {
-            swal("No file selected for upload.");
-            return;
-        }
+        if (!file) return swal("No file selected for upload.");
+        if (searches.length) return swal("Please wait for the similar books search to finish.");
+
         const coverImage = (canvasImage.src);
         const smallImage = (await writeImageBuffer(file, cover.value, 160));
         formData.append("document", file);
@@ -176,39 +209,6 @@
             swal.close();
         });
     }
-
-    const searches = [];
-    function getSimilarBooks() {
-        let titleValue = title.value + " " + author.value;
-        titleValue = titleValue.trim() || '<%= booktitle %>'
-        if (titleValue.trim()) {
-            searches.push(titleValue);
-            similar.innerHTML = "<p>Searching...</p>";
-            fetch(`/books/search?search=${encodeURIComponent(titleValue)}&json=1`)
-                .then(response => response.json())
-                .then(data => {
-                    searches.shift();
-                    if (searches.length) return;
-                    if (data.length === 0) {
-                        similar.innerHTML = "<p>No similar books found</p>";
-                        return;
-                    }
-                    similar.innerHTML = data.map(book => (
-                        `<li class="text-capitalize">
-                            <a target="_blank" href="/books/${book._id}">${book.title} - ${book.author}</a>
-                            ${requestId ?
-                            `<a href="/books/sendLink/${book._id}?requestId=${requestId}" class="btn btn-sm btn-primary ms-2">Send Link</a>` : ''}
-                        </li>`
-                    )).join('');
-                })
-                .catch(() => {
-                    similar.innerHTML = "<p>Error fetching similar books</p>";
-                });
-        } else {
-            similar.innerHTML = "";
-        }
-    }
-    if (requestId) getSimilarBooks();
 
     const { pdfjsLib } = globalThis;
     pdfjsLib.GlobalWorkerOptions.workerSrc = "//mozilla.github.io/pdf.js/build/pdf.worker.mjs";

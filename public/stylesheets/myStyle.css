@@ -60,6 +60,7 @@ a {
 
 .artAd, .bioAd, .bookAd {
     width: 100%;
+    min-width: 15rem;
     min-height: 15rem;
 }
 

@@ -2,12 +2,12 @@
 
 <div class="d-none offset-md-3 col-md-5">
 <div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading"><%= err %> </h4>
+    <h4 class="alert-heading"><%= err.message %> </h4>
 </div>
 </div>
 <script>
     let mydiv = document.createElement('div');
-    mydiv.innerHTML = '<%= err %>';
+    mydiv.innerHTML = '<%= err.message %>';
     swal('', '', 'error', {content: mydiv}).then(() => history.back())
 </script>
 

@@ -199,7 +199,7 @@ module.exports.search = async (req, res) => {
   const advSearch = require("../utils/search");
   const item = req.query.search;
   const books = await Book.find({ isApproved: true });
-  const result = item.trim() ? advSearch(books, item) : books;
+  const result = item?.trim() ? advSearch(books, item) : books;
   if (req.query.json) {
     return res.status(200).json(result);
   }

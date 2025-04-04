@@ -83,7 +83,7 @@ module.exports.userShema = Joi.object({
     firstName: Joi.string().min(2).max(20).required().escapeHTML(),
     lastName: Joi.string().min(2).max(20).required().escapeHTML(),
     email: Joi.string().email().required().escapeHTML(),
-    password: Joi.string().min(8).max(100).required().escapeHTML(),
+    password: Joi.string().min(6).max(100).required().escapeHTML(),
     loginType: Joi.string().escapeHTML(),
     accessToken: Joi.string().escapeHTML(),
     facebookId: Joi.string().escapeHTML(),
@@ -98,8 +98,8 @@ module.exports.profileSchema = Joi.object({
     newEmail: Joi.string().email().escapeHTML(),
     phone: Joi.string().min(0).max(20).escapeHTML(),
     address: Joi.string().min(0).max(200).escapeHTML(),
-    password: Joi.string().min(8).max(100).escapeHTML(),
-    newPassword: Joi.string().min(8).max(100).escapeHTML(),
+    password: Joi.string().min(6).max(100).escapeHTML(),
+    newPassword: Joi.string().min(6).max(100).escapeHTML(),
 })
 
 module.exports.subscriptionSchema = Joi.object({
