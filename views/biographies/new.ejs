@@ -54,8 +54,9 @@
                 <input class="form-control" type="text" id="source" name="source" placeholder="name or url?">
             </div>
             <div class="col-12">
-                <label class="form-label" for="">Story:</label>
-                <%- include('../partials/textEditor') %> 
+                <label class="form-label" for="text">Story:</label>
+                <textarea class="form-control" id="text" name="text" rows="10" placeholder="Write biography here..." required></textarea>
+                <!-- <- include('../partials/textEditor') %>  -->
             </div>
         </div>
 
@@ -66,7 +67,7 @@
     <%- include('../partials/loginModal') %> 
 </div>
 
-<script>
+<!-- <script>
     const docuForm = document.getElementById('docuForm');
     docuForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -85,7 +86,7 @@
           swal('Error', 'An unknown error occured.');
       });
     })
-  </script>
+  </script> -->
     
 <script>
     const pageTitle = "Biographies";

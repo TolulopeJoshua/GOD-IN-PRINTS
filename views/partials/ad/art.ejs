@@ -1,9 +1,19 @@
-<a>
-    <div id="" class="artAd card text-dark shadow p-4 text-center">
-        <h5 class="text-decoration-underline text-capitalize"> </h5>
-        <p class="small justify lh-lg p-0 m-0"></p>
-    </div>
-</a>
+
+<% if (typeof randomArticle != "undefined") { %>
+    <a href="/articles/1/<%= randomArticle.name %>">
+        <div id="" class="artAd card text-dark shadow p-4 text-center">
+            <h5 class="text-decoration-underline text-capitalize"><%= randomArticle.name %></h5>
+            <p class="small justify lh-lg p-0 m-0"><%= randomArticle.text.replace(/<[^>]*>/g, " ").substring(0, 450) + '...' %></p>
+        </div>
+    </a>
+<% } else { %>
+    <a>
+        <div id="" class="artAd card text-dark shadow p-4 text-center">
+            <h5 class="text-decoration-underline text-capitalize"> </h5>
+            <p class="small justify lh-lg p-0 m-0"></p>
+        </div>
+    </a>
+<% } %>
 
 <script>
     const artAds = document.getElementsByClassName('artAd');

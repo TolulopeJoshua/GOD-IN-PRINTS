@@ -1,10 +1,29 @@
-<a>
-    <div class="bioAd card text-dark shadow p-4 text-center">
-        <h5 class="text-decoration-underline"> </h5>
-        <p class="small justify lh-lg p-0 m-0"></p>
-        <canvas id="canvas" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
-    </div>
-</a>
+
+<% if (typeof randomBiography != "undefined") { %>
+    <a href="/biographies/1/<%= randomBiography.name %>">
+      <div class="bioAd card text-dark shadow p-4 text-center">
+          <h5 class="text-decoration-underline text-capitalize"><%= randomBiography.name %></h5>
+          <p class="small justify lh-lg p-0 m-0">
+            <img 
+              style="max-width: 8em;" 
+              class='card-img-top float-end p-2' 
+              src="/assets/images/<%= randomBiography.gender %>.png" 
+              alt="${response.data.name}" class="card-img-top"
+            >
+            <%= randomBiography.text.replace(/<[^>]*>/g, " ").substring(0, 400) + '...' %>
+          </p>
+          <canvas id="canvas" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
+      </div>
+    </a>
+  <% } else { %>
+    <a>
+      <div class="bioAd card text-dark shadow p-4 text-center">
+          <h5 class="text-decoration-underline"> </h5>
+          <p class="small justify lh-lg p-0 m-0"></p>
+          <canvas id="canvas" class="w-100 h-100 position-absolute start-0 top-0 canvas"></canvas>
+      </div>
+    </a>
+  <% } %>
 
 <script>
 </script>

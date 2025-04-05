@@ -61,24 +61,23 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createArticle = async (req, res) => {
     const article = new Doc(req.body.article)
-    article.text = sanitizeHtml(article.story, {
-        allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
-        allowedAttributes: { 'img': ['src'], '*': ['style'] },
-    });
+    // article.text = sanitizeHtml(article.story, {
+    //     allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+    //     allowedAttributes: { 'img': ['src'], '*': ['style'] },
+    // });
     article.name = article.name.toLowerCase().replace(/\?/g, '');
-    article.uid = article.name.toLowerCase().replace(/ /g, '-');
+    article.uid = encodeURIComponent(article.name.toLowerCase().replace(/ /g, '-'));
     article.docType = 'article' 
     article.dateTime = Date.now();
     article.contributor = req.user._id;
     article.isApproved = (req.user.admin == 5);
-    fs.writeFileSync('outputText.txt', article.text);
-    article.story = 'article/' + Date.now().toString() + '_' + article.name + '.txt';
-    const myBuffer = fs.readFileSync('outputText.txt');
+    article.story = 'article/' + Date.now().toString() + '_' + article.uid + '.txt';
+    const myBuffer = Buffer.from(article.text, 'utf8');
     await article.save();
     await putImage(article.story, myBuffer);
     req.flash('success', `${article.name.toUpperCase()} saved successfully, awaiting approval.`);
-    // res.redirect(`/articles/${article._id}`)
-    res.status(200).send({message: `${article.name.toUpperCase()} posted successfully, awaiting approval.`, redirectUrl: `/articles/${article._id}`})
+    res.redirect(`/articles/${article._id}`)
+    // res.status(200).send({message: `${article.name.toUpperCase()} posted successfully, awaiting approval.`, redirectUrl: `/articles/${article._id}`})
     
     if (req.query.requestId) {
         const request = await Review.findById(req.query.requestId);
@@ -136,14 +135,15 @@ module.exports.show2 = async (req, res) => {
 module.exports.story = async (req, res) => {    
     const q = req.query.q;
     const article = await Doc.findById(req.params.id);
-    const data = await getImage(article.story);
-    const story = data.Body.toString().replace(/<[^>]*>/g, " ");
+    // const data = await getImage(article.story);
+    const story = article.text.replace(/<[^>]*>/g, " ");
     if (Number(q)) {
         return res.send(story.substring(0, q) + '...');
     }
     res.send(story);
 };
 
+// not in use
 module.exports.image = async (req, res) => {    
     const article = await Doc.findById(req.params.id);
     const data = await getImage(article.image.key);
@@ -162,13 +162,11 @@ module.exports.uploadArticleImage = async function(req, res) {
     const article = await Doc.findById(req.params.id);
     if (article.image.key == 'none') {
         article.image.key = 'article-img/' + Date.now().toString() + '_' + req.file.originalname;
-        await uploadCompressedImage(req.file.path, article.image.key);
-        await article.save();
-        fs.unlinkSync(req.file.path);
-        req.flash('success', 'Successfully saved article.');
-    } else {
-        req.flash('error', 'Article already has an image.');
     }
+    await uploadCompressedImage(req.file.path, article.image.key);
+    await article.save();
+    fs.unlinkSync(req.file.path);
+    req.flash('success', 'Successfully saved article.');
     res.redirect(`/articles/${article._id}`)
 };
 

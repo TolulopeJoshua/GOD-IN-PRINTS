@@ -46,7 +46,7 @@ module.exports.biographySchema = Joi.object({
         birthYear: Joi.number().required(),
         deathYear: Joi.number(),
         gender: Joi.string().required().escapeHTML(),
-        story: Joi.string().required(),
+        text: Joi.string().required().escapeHTML(),
         source: Joi.string().escapeHTML()
     }).required()
 })
@@ -55,7 +55,7 @@ module.exports.articleSchema = Joi.object({
     article: Joi.object({
         name: Joi.string().required().escapeHTML(),
         role: Joi.string().required().escapeHTML(),
-        story: Joi.string().required(),
+        text: Joi.string().required().escapeHTML(),
         source: Joi.string().escapeHTML()
     }).required()
 })

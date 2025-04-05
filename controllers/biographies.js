@@ -40,23 +40,22 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createBiography = async (req, res) => {
     const biography = new Doc(req.body.biography)
-    biography.text = sanitizeHtml(biography.story, {
-        allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
-        allowedAttributes: { 'img': ['src'], '*': ['style'] },
-    });
+    // biography.text = sanitizeHtml(biography.story, {
+    //     allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'b', 'i', 'sub', 'sup', 'img', 'ol', 'ul', 'li', 'span', 'strike', 'u', 'blockquote', 'div', 'br'],
+    //     allowedAttributes: { 'img': ['src'], '*': ['style'] },
+    // });
     biography.name = biography.name.replace('?', '');
-    biography.uid = biography.name.toLowerCase().replace(/ /g, '-');
+    biography.uid = encodeURIComponent(biography.name.toLowerCase().replace(/ /g, '-'));
     biography.docType = 'biography' 
     biography.dateTime = Date.now();
     biography.contributor = req.user._id;
-    fs.writeFileSync('outputText.txt', biography.text);
     biography.story = 'bio/' + Date.now().toString() + '_' + biography.name + '.txt';
-    const myBuffer = fs.readFileSync('outputText.txt');
+    const myBuffer = Buffer.from(biography.text, 'utf8');
     await biography.save();
     await putImage(biography.story, myBuffer);
     req.flash('success', `${biography.name.toUpperCase()}'s biography posted. Kindly upload picture`);
-    // res.redirect(`/biographys/${biography._id}`)
-    res.status(200).send({message: 'success', redirectUrl: `/biographies/${biography._id}/imageUpload`})
+    res.redirect(`/biographies/${biography._id}/imageUpload`)
+    // res.status(200).send({message: 'success', redirectUrl: `/biographies/${biography._id}/imageUpload`})
     
     if (req.query.requestId) {
         const request = await Review.findById(req.query.requestId);
@@ -124,14 +123,15 @@ module.exports.story = async (req, res) => {
     const {q} = req.query;
     // console.log(q)
     const biography = await Doc.findById(req.params.id);
-    const data = await getImage(biography.story);
-    const story = data.Body.toString().replace(/<[^>]*>/g, " ");
+    // const data = await getImage(biography.story);
+    const story = biography.text.replace(/<[^>]*>/g, " ");
     if (Number(q)) {
         return res.send(story.substring(0, q) + '...');
     }
     res.send(story);
 };
 
+// not in use
 module.exports.image = async (req, res) => {    
     const biography = await Doc.findById(req.params.id);
     const data = await getImage(biography.image.key);
@@ -150,13 +150,11 @@ module.exports.uploadBiographyImage = async function(req, res) {
     const biography = await Doc.findById(req.params.id);
     if (biography.image.key == 'none') {
         biography.image.key = 'bio-image/' + Date.now().toString() + '_' + req.file.originalname;
-        await uploadCompressedImage(req.file.path, biography.image.key);
-        await biography.save(); 
-        fs.unlinkSync(req.file.path);
-        req.flash('success', 'Successfully posted biography, awaiting approval.');
-    } else {
-        req.flash('error', 'Biography already has an image.');
     }
+    await uploadCompressedImage(req.file.path, biography.image.key);
+    await biography.save(); 
+    fs.unlinkSync(req.file.path);
+    req.flash('success', 'Successfully posted biography, awaiting approval.');
     res.redirect(`/biographies/${biography._id}`);
 };
 

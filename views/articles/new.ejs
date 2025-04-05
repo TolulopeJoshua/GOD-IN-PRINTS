@@ -43,8 +43,9 @@
                 <!-- <input class="form-control" type="text" id="role" name="article[role]" placeholder="e.g Prayer, Faith" required> -->
             </div>
             <div class="col-12">
-                <label class="form-label" for="story">Text:</label>
-                <%- include('../partials/textEditor') %> 
+                <label class="form-label" for="text">Text:</label>
+                <textarea class="form-control" id="text" name="text" rows="10" placeholder="Write article here..." required></textarea>
+                <!-- <- include('../partials/textEditor') %>  -->
             </div>
         </div>
         
@@ -55,7 +56,7 @@
     <%- include('../partials/loginModal') %> 
 </div>
 
-<script>
+<!-- <script>
   const docuForm = document.getElementById('docuForm');
   docuForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -73,7 +74,7 @@
         swal('Error', 'An unknown error occured.');
     });
   })
-</script>
+</script> -->
 
 <script>
     const pageTitle = "Articles";

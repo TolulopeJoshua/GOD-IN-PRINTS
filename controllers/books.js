@@ -213,24 +213,29 @@ module.exports.search = async (req, res) => {
   });
 };
 
-module.exports.showBook = async (req, res) => {
-  const book = await Book.findById(req.params.id).populate({
-    path: "reviews",
-    populate: { path: "author" },
-  });
+const renderBook = (book, req, res) => {
   if (!book) {
     req.flash("error", "Cannot find that book!");
     return res.redirect("/books?refresh=1");
   }
 
   const { books: limit } = require("../utils/lib/limits");
+  const { getRandomArticle, getRandomBiography } = require("../utils/docsData");
   const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
   res.render("books/show", {
-    book,
-    title,
-    limit,
+    book, title, limit,
+    randomArticle: getRandomArticle(),
+    randomBiography: getRandomBiography(),
     canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
   });
+}
+
+module.exports.showBook = async (req, res) => {
+  const book = await Book.findById(req.params.id).populate({
+    path: "reviews",
+    populate: { path: "author" },
+  });
+  renderBook(book, req, res);
 };
 
 module.exports.show = async (req, res) => {
@@ -238,21 +243,7 @@ module.exports.show = async (req, res) => {
     path: "reviews",
     populate: { path: "author" },
   });
-  if (!book) {
-    req.flash("error", "Cannot find that book!");
-    return res.redirect("/books?refresh=1");
-  }
-
-  const { books: limit } = require("../utils/lib/limits");
-  const title = `${capitalize(book.title)} by ${
-    book.author
-  } - Free pdf download`;
-  res.render("books/show", {
-    book,
-    title,
-    limit,
-    canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
-  });
+  renderBook(book, req, res);
 };
 
 module.exports.show2 = async (req, res) => {
@@ -260,21 +251,7 @@ module.exports.show2 = async (req, res) => {
     path: "reviews",
     populate: { path: "author" },
   });
-  if (!book) {
-    req.flash("error", "Cannot find that book!");
-    return res.redirect("/books?refresh=1");
-  }
-
-  const { books: limit } = require("../utils/lib/limits");
-  const title = `${capitalize(book.title)} by ${
-    book.author
-  } - Free pdf download`;
-  res.render("books/show", {
-    book,
-    title,
-    limit,
-    canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
-  });
+  renderBook(book, req, res);
 };
 
 module.exports.similarBooks = async (req, res) => {
