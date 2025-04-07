@@ -145,6 +145,8 @@ module.exports.getBookReviews = async (req, res) => {
   req.flash('success', 'Mails in Progress!');
   res.redirect('/profile');
 
+  const { batch = 0, limit = 50 } = req.query;
+
   const start = moment().subtract(40, 'days').startOf('day').toDate();
   const end = moment().subtract(40, 'days').endOf('day').toDate();
 
@@ -164,22 +166,41 @@ module.exports.getBookReviews = async (req, res) => {
       },
     ]
   })
+  .skip(batch * limit)
+  .limit(parseInt(limit))
+  .select('email downloads tktdownloads')
   .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
   .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
 
-  let c = 0;
-  for (const user of users) {
-    console.log(user.email, user.downloads.length);
-    const downloads = user.downloads.concat(user.tktdownloads)
-    for (const d of downloads) {
-      if (d.downloadTime > start && d.downloadTime < end) {
-        console.log(d.downloadTime);
-        if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
-          await sendBookReviewsRequest(user, d.bookId);
-          c += 1; break;
+  // let c = 0;
+  let c = parseInt(req.query.c) || 0;
+  try {
+    if (users.length) {
+      for (const user of users) {
+        // console.log(user.email, user.downloads.length);
+        const downloads = user.downloads.concat(user.tktdownloads)
+        for (const d of downloads) {
+          if (d.downloadTime > start && d.downloadTime < end) {
+            // console.log(d.downloadTime);
+            if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
+              await sendBookReviewsRequest(user, d.bookId);
+              c += 1; break;
+            }
+          }
         }
       }
+      const url = req.headers.host + req.baseUrl + req.path, nextBatch = parseInt(batch) + 1;
+      const next = `${req.protocol}://${url}?batch=${nextBatch}&limit=${limit}&c=${c}`;
+      console.log('next: ', next);
+      axios.post(next, null, { headers: { pass: process.env.AP } }).then((res) => {
+        // console.log('next batch sent:', nextBatch, 'c:', c);
+      }).catch(err => {
+        console.log('error sending next batch:', err.message);
+      })
+      return;
     }
+  } catch (error) {
+    console.log('error:', error.message);
   }
   await sendPersonalMail({email: 'babtol235@gmail.com', name: 'Josh', subject: 'Review Mails Sent', 
     message:[`Mails sent: ${c}`]});
