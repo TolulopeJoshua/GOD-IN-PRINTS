@@ -69,7 +69,7 @@ const sendBookReviewsRequest = async (user, book) => {
     message: [
       `You downloaded the book: <i>${book.title.toUpperCase()}</i> a few days ago.`,
       "We would love to know how the book has blessed you.",
-      "You can select from our list of template responses or select 'Respond in your own words'.",
+      "You can select from our list of template responses or select 'Respond in my own words'.",
       `<p style="text-align: center;"><img width="160px" src="https://godinprintsdocuments.s3.amazonaws.com/${book.image.key.replace(
         / /g,
         "+"
@@ -84,7 +84,7 @@ const sendBookReviewsRequest = async (user, book) => {
             .join("")}
           <li style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #ccc;"><a href="https://godinprints.org/books/mailReview/${
             user._id
-          }/${book._id}/0"><i>Respond in your own words</i></a></li>
+          }/${book._id}/0"><i>Respond in my own words</i></a></li>
       </ul>
       </form>`,
       similarBooks,

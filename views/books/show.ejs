@@ -40,7 +40,10 @@
             <h1 class="h5 card-title"><%= book.title.toUpperCase() %></h1>
             <% if (book.affiliates?.amazon) { %>
                 <a href="<%= book.affiliates?.amazon %>" target="_blank" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Buy on Amazon</em><i class="bi bi-cart-fill"></i></a>
+            <% } else { %>
+                <a href="https://www.amazon.com/s?k=<%= (book.title + " by " + book.author).replace(/ /g, "+") %>&tag=godinprints23-20" target="_blank" class="btn btn-sm btn-light text-secondary border px-4"><em class="pe-2">Buy on Amazon</em><i class="bi bi-cart-fill"></i></a>
             <% } %>
+            <!-- https://www.amazon.com/Benjamin-Generation-Joseph-Prince-ebook/dp/B0065QX2XU?dib=eyJ2IjoiMSJ9.AzBKNUrD5kP3gO_dGYXBnuY-95xYi_j8m27yusQl6s20VQyx1Xvv9_tfpDSRg_d6v-HcPqAZtwTkfea3QJj7-XwYSCIbzvy0Je85f-dXVto5Ltn1__e03uwfW_ZCDAApaml9nGnuY9H6jgAolKInHqHZdrXv79d5AzprGwSfLaFWD8sOo0iDuraR5eznfo57CLJSlVvl26AhZ6VuuRI4qMw8vxO3ZIf3s6u2W1dG4AM.kkCIHdmthjMGe0V31uEkqFzBXACs8u7uc9ypchmRPN8&dib_tag=se&keywords=Benjamin+Generation&qid=1744032396&sr=8-1&linkCode=ll1&tag=godinprints23-20&linkId=a8f7a13c3d6d2f4aea447a86c1c106ee&language=en_US&ref_=as_li_ss_tl -->
             <!-- <img src="/images/buy-on-amazon-button.png" alt="Buy on Amazon" class="img-fluid" style="width: 150px; height: auto;"> -->
             <!-- <div class="d-flex justify-content-center"></div> -->
             <!-- <p class="card-text text-capitalize"><em>by </em>book.author.toLowerCase()</p> -->
