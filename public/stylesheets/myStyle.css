@@ -308,7 +308,7 @@ article:hover span.play {
 }
 
 .col-md-9 > .footer-item {
-    min-width: 75%;
+    width: 100%;
 }
 
 .advert {
