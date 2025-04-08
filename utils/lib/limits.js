@@ -13,18 +13,18 @@ module.exports = {
     },
     prices: {
         classic: 'free',
-        starter: '750',
-        medium: '1,450',
-        premium: '2,150',
-        ticket: '250',
+        starter: '2,250',
+        medium: '4,350',
+        premium: '6,450',
+        ticket: '750',
         duration: 'quarterly',
     },
     prices_usd: {
         classic: 'free',
-        starter: '1.00',
-        medium: '2.00',
-        premium: '3.00',
-        ticket: '0.30',
+        starter: '3.00',
+        medium: '6.00',
+        premium: '9.00',
+        ticket: '0.99',
         duration: 'quarterly',
     } 
 }  
