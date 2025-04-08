@@ -168,7 +168,7 @@ module.exports.getBookReviews = async (req, res) => {
   })
   .skip(batch * limit)
   .limit(parseInt(limit))
-  .select('email downloads tktdownloads')
+  .select('email firstName downloads tktdownloads')
   .populate({path: 'downloads.bookId', populate: {path: 'reviews', select: 'author'}})
   .populate({path: 'tktdownloads.bookId', populate: {path: 'reviews', select: 'author'}});
 

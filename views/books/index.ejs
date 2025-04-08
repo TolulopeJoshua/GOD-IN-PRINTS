@@ -74,11 +74,11 @@
                         </a>
                         <!-- <p><small class="text-muted text-capitalize"> books[index].author.toLowerCase()</small></p> -->
                         <a class="text-capitalize text-truncate d-block" href="/books/2/<%= books[index].uid %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
+                            <p style="font-weight: 500;" class="px-3 mb-0 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </p>
                         </a>
                         <a class="text-capitalize anime" href="/books/2/<%= books[index].uid %>">
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
-                            <strong class="px-3 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </strong>
+                            <p style="font-weight: 500;" class="px-3 mb-0 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </p>
+                            <p style="font-weight: 500;" class="px-3 mb-0 text-center"><%= books[index].title.toLowerCase() %> <%= books[index].author === ' '? '': ' - ' + books[index].author.toLowerCase() %> </p>
                         </a>
                         <% } %> 
                     </td>
@@ -105,7 +105,7 @@
 
 <div class="col-lg-6 col-md-9 offset-md-3 py-5 d-flex justify-content-center">
     <div class="footer-item p-2">
-        <p class="text-muted small pt-2 text-center"><strong id="gender"></strong></p>
+        <p class="text-muted small pt-2 text-center"><strong id="gender">There was a man</strong></p>
         <%- include('../partials/ad/bio2') %>
     </div>
 </div>

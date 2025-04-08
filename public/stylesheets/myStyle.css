@@ -60,7 +60,6 @@ a {
 
 .artAd, .bioAd, .bookAd {
     width: 100%;
-    min-width: 15rem;
     min-height: 15rem;
 }
 
@@ -306,6 +305,10 @@ article:hover span.play {
 .footer-item {
     max-width: 640px;
     margin-bottom: 32px;
+}
+
+.col-md-9 > .footer-item {
+    min-width: 75%;
 }
 
 .advert {
