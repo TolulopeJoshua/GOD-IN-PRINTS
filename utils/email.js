@@ -48,7 +48,7 @@ const sendPersonalMail = ({
   });
 };
 
-const sendBookReviewsRequest = async (user, book) => {
+const sendBookReviewsRequest = async (user, book, books) => {
   const templateReviews = [
     "Book has incomplete/poor content.",
     "Not very interesting/inspiring.",
@@ -60,7 +60,7 @@ const sendBookReviewsRequest = async (user, book) => {
     "Exceptional piece. Highly recommended!",
   ];
 
-  const similarBooks = await generateSimilarBooks(book._id);
+  const similarBooks = await generateSimilarBooks(book._id, books);
 
   const options = {
     email: user.email,
@@ -312,11 +312,8 @@ async function generateSortedResources() {
         </div>`;
 }
 
-async function generateSimilarBooks(bookId) {
-  const Book = require("../models/book");
+async function generateSimilarBooks(bookId, books) {
   const advSearch = require('./search');
-  
-  const books = await Book.find({ isApproved: true });
   const book = books.find((book) => book._id.toString() == bookId.toString());
 
   if (book) {

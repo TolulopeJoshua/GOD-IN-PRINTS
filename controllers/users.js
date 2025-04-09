@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Book = require("../models/book");
 const Review = require('../models/review');
 const BookTicket = require('../models/bookTicket');
 const bcrypt = require ('bcrypt');
@@ -145,7 +146,7 @@ module.exports.getBookReviews = async (req, res) => {
   req.flash('success', 'Mails in Progress!');
   res.redirect('/profile');
 
-  const { batch = 0, limit = 50 } = req.query;
+  const { batch = 0, limit = 30 } = req.query;
 
   const start = moment().subtract(40, 'days').startOf('day').toDate();
   const end = moment().subtract(40, 'days').endOf('day').toDate();
@@ -176,6 +177,7 @@ module.exports.getBookReviews = async (req, res) => {
   let c = parseInt(req.query.c) || 0;
   try {
     if (users.length) {
+      const books = await Book.find({ isApproved: true });
       for (const user of users) {
         // console.log(user.email, user.downloads.length);
         const downloads = user.downloads.concat(user.tktdownloads)
@@ -183,7 +185,7 @@ module.exports.getBookReviews = async (req, res) => {
           if (d.downloadTime > start && d.downloadTime < end) {
             // console.log(d.downloadTime);
             if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
-              await sendBookReviewsRequest(user, d.bookId);
+              await sendBookReviewsRequest(user, d.bookId, books);
               c += 1; break;
             }
           }
