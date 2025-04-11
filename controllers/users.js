@@ -184,8 +184,9 @@ module.exports.getBookReviews = async (req, res) => {
         for (const d of downloads) {
           if (d.downloadTime > start && d.downloadTime < end) {
             // console.log(d.downloadTime);
-            if (d.bookId && !d.bookId.reviews.some(rev => rev.author._id.toString() == user._id.toString())) {
-              await sendBookReviewsRequest(user, d.bookId, books);
+            if (d.bookId && !d.bookId.reviews.some(rev => rev.author.equals(user._id))) {
+              sendBookReviewsRequest(user, d.bookId, books);
+              await new Promise((resolve) => setTimeout(resolve, 1000));
               c += 1; break;
             }
           }
