@@ -186,7 +186,7 @@ module.exports.getBookReviews = async (req, res) => {
             // console.log(d.downloadTime);
             if (d.bookId && !d.bookId.reviews.some(rev => rev.author.equals(user._id))) {
               sendBookReviewsRequest(user, d.bookId, books);
-              await new Promise((resolve) => setTimeout(resolve, 1000));
+              await new Promise((resolve) => setTimeout(resolve, 2000));
               c += 1; break;
             }
           }
