@@ -124,7 +124,7 @@
         <div class="mb-3">
             <label class="form-label ms-2" for="review-text"><strong>Review:</strong></label>
             <textarea class="form-control bg-transparent" id="review-text" name="review[text]" rows="3" required></textarea>
-            <button class="btn-primary btn-sm d-block ms-auto py-0 px-2"><span>POST</span></button>
+            <button class="btn btn-primary btn-sm d-block ms-auto py-0 px-2"><span>POST</span></button>
         </div>
     </form>
     <% } else { %> 
@@ -153,11 +153,11 @@
 </div>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-x-hidden my-3">
-    <div class="flex flex-wrap justify-content-space-around mt-5 p-md-5 d-md-none" style="gap: 40px;">
+    <div class="flex flex-wrap flex-column mt-5 p-md-5 d-md-none" style="gap: 40px;">
         <%- include('../partials/ad/art') %>  
         <%- include('../partials/ad/bio2') %>  
     </div>
-    <div class="flex flex-wrap justify-content-space-around mt-5 p-md-5 d-none d-md-block" style="gap: 40px;">
+    <div class="flex flex-wrap flex-column mt-5 p-md-5 d-none d-md-block" style="gap: 40px;">
         <%- include('../partials/ad/art') %>  
         <%- include('../partials/ad/bio2') %>  
     </div>

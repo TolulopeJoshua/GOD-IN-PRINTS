@@ -126,6 +126,11 @@ app.get('/about', async (req, res) => {
     res.render('about');
 });
 
+app.get('/faq', async (req, res) => {
+    const title = 'GIP Library - Frequently Asked Questions'
+    res.render('faq', { title });
+});
+
 app.get('/terms', async (req, res) => {
     res.render('terms');
 });

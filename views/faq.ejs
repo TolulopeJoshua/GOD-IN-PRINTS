@@ -1,0 +1,168 @@
+<% layout('layouts/boilerplate')%>
+
+<style>
+    #faq div {
+        font-size: large;
+    }
+    #faq h2 button {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+</style>
+
+<section id="faq" class="offset-md-3 col-md-9 col-lg-6">
+    <h2 class="my-4 text-center">Frequently Asked Questions (FAQs)</h2>
+  
+    <div class="accordion" id="faqAccordion">
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading1">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+            1. What is God In Prints (GIP)?
+          </button>
+        </h2>
+        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            God In Prints is a virtual library and knowledge repository that provides biographies, books, scriptures, articles, songs, and resources to support personal and spiritual growth—especially for Christians and faith seekers.
+          </div>
+        </div>
+      </div>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+            2. Is the content on GIP free to access?
+          </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, all resources on GIP are available for free (or near-free) to ensure everyone can benefit from the platform, regardless of financial status.
+          </div>
+        </div>
+      </div>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+            3. What kind of resources can I find here?
+          </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <ul>
+              <li>Biographies of notable Christians</li>
+              <li>Classic and modern Christian books</li>
+              <li>Multi-version scriptures</li>
+              <li>Articles on spiritual growth and godly living</li>
+              <li>Inspirational songs and movies</li>
+              <li>Tools for personal development and ministry support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading4">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+            4. How can I suggest a topic or contribute content?
+          </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Each document page includes a suggestion form where you can:
+            <ul>
+              <li>Recommend new topics or resources</li>
+              <li>Submit articles, books, or biographies for review and possible inclusion</li>
+            </ul>
+            We welcome your contributions to help grow this repository!
+          </div>
+        </div>
+      </div>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading5">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+            5. Can I submit my own writings or materials to GIP?
+          </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes! You can use the post forms available on the site to submit your work. While we're working on a full admin portal for contributors, submissions via the form are reviewed and appreciated.
+          </div>
+        </div>
+      </div>
+  
+      <!-- <div class="accordion-item">
+        <h2 class="accordion-header" id="heading6">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+            6. Do I need to create an account to access the content?
+          </button>
+        </h2>
+        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            No account is required to browse or access materials on GIP. However, we may add user accounts in the future for personalized features and easier contributions.
+          </div>
+        </div>
+      </div> -->
+  
+      <!-- <div class="accordion-item">
+        <h2 class="accordion-header" id="heading7">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+            7. Is there a way to support GIP financially?
+          </button>
+        </h2>
+        <div id="collapse7" class="accordion-collapse collapse" aria-labelledby="heading7" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes. GIP relies on donations to cover service and maintenance costs. You can support us via 
+            <a href="https://paystack.com" target="_blank">this donation link</a>. Your support helps keep the platform free and growing!
+          </div>
+        </div>
+      </div> -->
+  
+      <!-- <div class="accordion-item">
+        <h2 class="accordion-header" id="heading8">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+            8. How often is new content added?
+          </button>
+        </h2>
+        <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="heading8" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            New content is added regularly. Follow us on 
+            <a href="https://web.facebook.com" target="_blank">Facebook</a> to stay updated on recent additions and updates.
+          </div>
+        </div>
+      </div> -->
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading9">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+            6. Who runs God In Prints?
+          </button>
+        </h2>
+        <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            The platform is managed by a team of believers committed to sharing Kingdom knowledge and spiritual resources with the world. You can reach us via email at 
+            <a href="mailto:GIPTeam@hotmail.com">GIPTeam@hotmail.com</a>.
+          </div>
+        </div>
+      </div>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading10">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+            7. I’m having trouble finding a specific book/resource. What can I do?
+          </button>
+        </h2>
+        <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="heading10" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Use the search feature to locate specific titles or authors. If it’s not available, you can suggest it using our feedback or suggestion forms—we’ll do our best to add it soon!
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</section>
+  
+<script>
+    const pageTitle = "FAQ";
+</script>
