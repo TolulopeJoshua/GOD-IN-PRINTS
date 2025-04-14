@@ -153,12 +153,14 @@
 </div>
 
 <div class="col-md-9 col-lg-6 offset-md-3 overflow-x-hidden my-3">
-    <div class="flex flex-wrap flex-column mt-5 p-md-5 d-md-none" style="gap: 40px;">
+    <div class="flex flex-wrap flex-column mt-5 p-5 d-md-none">
         <%- include('../partials/ad/art') %>  
+        <div style="height: 60px;"></div>
         <%- include('../partials/ad/bio2') %>  
     </div>
-    <div class="flex flex-wrap flex-column mt-5 p-md-5 d-none d-md-block" style="gap: 40px;">
+    <div class="flex flex-wrap flex-column mt-5 p-5 d-none d-md-block">
         <%- include('../partials/ad/art') %>  
+        <div style="height: 60px;"></div>
         <%- include('../partials/ad/bio2') %>  
     </div>
 </div>
@@ -200,7 +202,7 @@
 
                 const img = document.createElement('img');
                 img.style.height = '180px';
-                img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image["160"].replace(/\ /g, "+");
+                if (book.image["160"] != 'none') img.src = 'https://godinprintsdocuments.s3.amazonaws.com/' + book.image["160"].replace(/\ /g, "+");
                 img.alt = book.title;
 
                 const h6 = document.createElement('h6');

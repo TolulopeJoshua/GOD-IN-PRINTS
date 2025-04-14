@@ -264,6 +264,10 @@ article:hover span.play {
     form {
         margin: 0;
     }
+
+    .footer-item {
+        margin-bottom: 32px;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -304,7 +308,6 @@ article:hover span.play {
 
 .footer-item {
     max-width: 640px;
-    margin-bottom: 32px;
 }
 
 .col-md-9 > .footer-item {

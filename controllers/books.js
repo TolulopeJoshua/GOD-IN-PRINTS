@@ -164,6 +164,10 @@ module.exports.readOnline = async (req, res) => {
     req.flash("error", "Book not found.");
     return res.redirect("/books?refresh=1");
   }
+  if (book.filetype !== "pdf") {
+    req.flash("error", "This book is not a pdf file.");
+    return res.redirect(`/books/${book._id}`);
+  }
   const data = await getImage(book.document.key);
   const pdfPath = "public/pdfs";
   fs.ensureDirSync(pdfPath);
@@ -297,7 +301,7 @@ module.exports.download = async (req, res) => {
     Bucket: "godinprintsdocuments",
     Key: key,
   };
-  res.attachment(book.title.replace(".pdf", "") + ".pdf"); // Use ( + '.' + book.filetype) to add file extension
+  res.attachment(book.title.replace(".pdf", "") + '.' + book.filetype); // Use ( + '.' + book.filetype) to add file extension
   const fileStream = s3.getObject(options).createReadStream();
   fileStream.pipe(res);
 
@@ -322,7 +326,7 @@ module.exports.ticketDownload = async (req, res) => {
     Bucket: "godinprintsdocuments",
     Key: key,
   };
-  res.attachment(book.title.replace(".pdf", "") + ".pdf"); // Use ( + '.' + book.filetype) to add file extension
+  res.attachment(book.title.replace(".pdf", "") + '.' + book.filetype); // Use ( + '.' + book.filetype) to add file extension
   const fileStream = s3.getObject(options).createReadStream();
   fileStream.pipe(res);
 
@@ -434,13 +438,7 @@ module.exports.sendLink = async (req, res) => {
 
   if (book && request) {
     await sendBookResponseMail(request, book, req);
-    
-    const { books: limit } = require("../utils/lib/limits");
-    const title = `${capitalize(book.title)} by ${book.author} - Free pdf download`;
-    res.render("books/show", {
-      book, title, limit,
-      canonicalUrl: `https://godinprints.org/books/2/${book.uid}`,
-    });
+    renderBook(book, req, res); 
   } else {
     throw new ExpressError("Book or request not found");
   }
