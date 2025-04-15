@@ -126,10 +126,13 @@ module.exports.weeklyMails = async (req, res) => {
     ]);
     const mails = users.map(u => u.email);
     // console.log(`batch: ${i}: `, mails);
-    await sendWeeklyMails(mails); 
-
-    currIndex += batchSize; count += batchSize;
-    if (users.length < batchSize) currIndex = 0;
+    try {
+      await sendWeeklyMails(mails); 
+      currIndex += batchSize; count += batchSize;
+      if (users.length < batchSize) currIndex = 0;
+    } catch (e) {
+      console.log(e);
+    }
   }
   await putIndex(currIndex);
 
@@ -195,6 +198,7 @@ module.exports.getBookReviews = async (req, res) => {
       const url = req.headers.host + req.baseUrl + req.path, nextBatch = parseInt(batch) + 1;
       const next = `${req.protocol}://${url}?batch=${nextBatch}&limit=${limit}&c=${c}`;
       console.log('next: ', next);
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       axios.post(next, null, { headers: { pass: process.env.AP } }).then((res) => {
         // console.log('next batch sent:', nextBatch, 'c:', c);
       }).catch(err => {

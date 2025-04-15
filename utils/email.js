@@ -37,10 +37,10 @@ const sendPersonalMail = ({
             </em></section>`,
   };
   const transport = ses ? transporter2 : transporter;
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     transport.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
+        return reject(error.message);
       }
       console.log(info.accepted);
       resolve();
