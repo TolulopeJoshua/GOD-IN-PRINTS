@@ -61,7 +61,7 @@ module.exports.register = async (req, res) => {
             delete req.session.returnTo;
             res.redirect(redirectUrl);
         })
-        await getUserLocation(req, registeredUser);
+        getUserLocation(req, registeredUser);
 }
 
 module.exports.renderLogin = (req, res) => {
@@ -84,7 +84,7 @@ module.exports.login = async (req, res) => {
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
-    await getUserLocation(req, user);
+    getUserLocation(req, user);
 }; 
 
 module.exports.socialLogin = async (req, res) => {
@@ -96,7 +96,7 @@ module.exports.socialLogin = async (req, res) => {
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
-    await getUserLocation(req, user);
+    getUserLocation(req, user);
 };
 
 module.exports.logout = async (req, res) => {
@@ -189,7 +189,7 @@ module.exports.getBookReviews = async (req, res) => {
             // console.log(d.downloadTime);
             if (d.bookId && !d.bookId.reviews.some(rev => rev.author.equals(user._id))) {
               sendBookReviewsRequest(user, d.bookId, books);
-              await new Promise((resolve) => setTimeout(resolve, 2000));
+              await new Promise((resolve) => setTimeout(resolve, 3000));
               c += 1; break;
             }
           }

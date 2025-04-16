@@ -194,20 +194,21 @@
     div.innerHTML = "";
     loadedPages = [];
     canvasObserver?.disconnect();
-    const min = page -2, max = page + 4;
+    const min = page - 2, max = page + 4;
     for (let i = min; i <= max; i++) {
         await renderPage(i);
     }
     if (page > 1) {
       scrollTo(page);
-      setTimeout(showTopLoader, 1000);      
+      setTimeout(() => showTopLoader(), 1000);      
     }
     if (max <= pdf.numPages) {
       showBottomLoader();
     }
   }
-  async function renderNextPage(page) {
+  async function renderNextPage(pg) {
     hideBottomLoader();
+    const page = pg || Math.max(...loadedPages) || pageNumber;
     await renderPage(page + 1);
     await renderPage(page + 2);
     await renderPage(page + 3);
@@ -216,7 +217,8 @@
       showBottomLoader();
     }
   }
-  async function renderPrevPage(page) {
+  async function renderPrevPage(pg) {
+    const page = pg || Math.min(...loadedPages) || pageNumber;
     hideTopLoader();
     await renderPage(page - 1, true);
     await renderPage(page - 2, true);
@@ -255,9 +257,9 @@
     for (const entry of entries) {
       const { isIntersecting, target } = entry;
       if (target === topLoader && isIntersecting) {
-        renderPrevPage(pageNumber);
+        renderPrevPage();
       } else if (target === bottomLoader && isIntersecting) {
-        renderNextPage(pageNumber);
+        renderNextPage();
       }
     }
   }, { rootMargin: '200px' });
@@ -273,7 +275,7 @@
         debouncedSavePage();
       }
     }
-  }, { threshold: 0.6 });
+  }, { threshold: 0.51 });
 
   // Zoom
   const zoomSelect = document.getElementById("zoom");

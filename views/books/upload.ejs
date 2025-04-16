@@ -141,7 +141,7 @@
 
     const searches = [];
     function getSimilarBooks() {
-        let titleValue = title.value + " " + author.value;
+        let titleValue = title.value + " " + author.value || '';
         titleValue = titleValue.trim() || '<%= booktitle %>'
         if (titleValue.trim()) {
             searches.push(titleValue);
@@ -150,8 +150,8 @@
                 .then(response => response.json())
                 .then(data => {
                     searches.shift();
+                    console.log(titleValue)
                     if (searches.length) return;
-                    swal.close();
                     if (data.length === 0) {
                         similar.innerHTML = "<p>No similar books found</p>";
                         return;
@@ -164,7 +164,9 @@
                         </li>`
                     )).join('');
                 })
-                .catch(() => {
+                .catch((e) => {
+                    searches.shift();
+                    console.log("Error fetching similar books:", e);
                     similar.innerHTML = "<p>Error fetching similar books</p>";
                 });
         } else {
@@ -185,7 +187,11 @@
         formData.append("coverImage", coverImage);
         formData.append("smallImage", smallImage);
 
-        swal("Uploading...")
+        swal("Uploading...", {
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+        });
         fetch("/books/new" + (requestId  ? `?requestId=${requestId}` : ''), {
             method: "POST",
             body: formData,
@@ -194,7 +200,7 @@
         .then(data => {
             if (data.success) {
                 if (requestId) return window.location.replace(`/books/${data.bookId}`);
-                swal(`Book uploaded successfully! ID: ${data.bookId}`);
+                swal(`Book uploaded successfully! Link: https://godinprints.org/books/${data.bookId}`);
                 deleteFile();
             } else {
                 swal("Error uploading file. " + data.message);
@@ -204,9 +210,6 @@
         .catch(error => {
             console.error("Error:", error);
             swal("An error occurred. " + error.message);
-        })
-        .finally(() => {
-            swal.close();
         });
     }
 
@@ -240,9 +243,5 @@
         const file = files[currentFileIndex];
         if (!file) return;
         canvasImage.src = await writeImageBuffer(file, cover.value, 480);
-    }
-
-    function getDataFromDataUrl(url) {
-        return url.split(",")[1];
     }
 </script>
