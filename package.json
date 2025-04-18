@@ -8,6 +8,7 @@
     "getVideos": "node utils/lib/getVideos",
     "getBookPreviews": "node utils/books/getPreviews",
     "getBookImages": "node utils/books/getImages",
+    "writeXml": "node utils/writeXml",
     "backup": "node backup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,8 +1,8 @@
 module.exports = {
     books: {
-        classic: 2,
-        starter: 4,
-        medium: 6,
+        classic: 1,
+        starter: 3,
+        medium: 5,
         premium: 8,
     },
     videos: {
