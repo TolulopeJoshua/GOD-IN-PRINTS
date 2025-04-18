@@ -159,9 +159,9 @@
         <%- include('../partials/ad/bio2') %>  
     </div>
     <div class="flex flex-wrap flex-column mt-5 p-5 d-none d-md-block">
-        <%- include('../partials/ad/art') %>  
+        <%- include('../partials/ad/art2') %>  
         <div style="height: 60px;"></div>
-        <%- include('../partials/ad/bio2') %>  
+        <%- include('../partials/ad/bio') %>  
     </div>
 </div>
     
@@ -242,6 +242,51 @@
             swal.close();
         }, 8000);
     }, { once: true })
-
+    
+    document.getElementById('downloads')?.addEventListener('click', () => {
+        const listDom = document.getElementById('downloadsModal').querySelector('.modal-body');
+        axios.get('/books/downloads').then(response => {
+            if (!response.data.last30.length && !response.data.other.length) {
+                listDom.innerHTML = 'There are no books in your downloads folder!';
+            } else {
+                listDom.innerHTML = '';
+            }
+            if (response.data.last30.length) {
+                const title1 = document.createElement('h6');
+                title1.classList.add('text-center','text-secondary','p-3');
+                title1.innerHTML = 'Last 30 days';
+                listDom.appendChild(title1);
+                response.data.last30.forEach((download, index) => {
+                    if (download) {
+                        const title = document.createElement('h6');
+                        title.classList.add('text-capitalize','text-dark','pt-3');
+                        title.style.borderTop = '1px dotted #ddd'
+                        title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
+                        const info = document.createElement('p');
+                        info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
+                        info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
+                        listDom.appendChild(title); listDom.appendChild(info);
+                    }
+                })
+            }
+            if (response.data.other.length) {
+                const title1 = document.createElement('h6');
+                title1.classList.add('text-center','text-secondary','p-3');
+                title1.innerHTML = 'Over 30 days';
+                listDom.appendChild(title1);
+                response.data.other.forEach((download, index) => {
+                    if (download) {
+                        const title = document.createElement('h6');
+                        title.classList.add('text-capitalize','text-dark','border-top','border-secondary','pt-3');
+                        title.innerHTML = `${index + 1}. ` + download.title.toLowerCase() + (download.author == ' ' ? '' : ' by ' + download.author.toLowerCase());
+                        const info = document.createElement('p');
+                        info.classList.add('d-flex','justify-content-between','text-muted','small','mt-1');
+                        info.innerHTML = `<span>${(new Date(download.downloadTime)).toString().slice(0,33)}</span><i>${download.ticket ? '- with Ticket' : ''}</i>`;
+                        listDom.appendChild(title); listDom.appendChild(info);
+                    }
+                })
+            }
+        }).catch(err => listDom.innerHTML = '<i class="bi bi-bug pe-3 text-danger"></i>An unknown error occured!')
+    })
 </script>
  
